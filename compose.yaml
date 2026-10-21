@@ -70,7 +70,8 @@ services:
       - ./docker/clamd.conf:/etc/clamav/clamd.conf:ro
     networks: [backend, updates]
     healthcheck:
-      test: ["CMD", "clamdcheck.sh"]
+      # Match clamd's IPv4 listener; localhost may resolve to IPv6 first.
+      test: ["CMD-SHELL", "printf 'nPING\\n' | nc -w 5 127.0.0.1 3310 | grep -qx PONG"]
       interval: 30s
       timeout: 10s
       retries: 10

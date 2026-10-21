@@ -53,6 +53,8 @@ jobs:
       - run: docker compose exec -T -e RUN_CLAMAV_INTEGRATION=1 app python manage.py test vault.tests.test_antivirus_live --noinput
       - run: docker compose run --rm --no-deps caddy caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
       - if: failure()
-        run: docker compose logs --tail=120
+        run: |
+          docker compose logs --tail=120
+          docker compose ps -q clamav | xargs -r docker inspect --format '{{json .State.Health}}'
       - if: always()
         run: docker compose down --volumes
