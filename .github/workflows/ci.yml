@@ -28,7 +28,7 @@ jobs:
       POSTGRES_HOST: ${{ matrix.database == 'postgres' && '127.0.0.1' || '' }}
       POSTGRES_PASSWORD: ci-only-password
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v6
         with:
           python-version: '3.13'
@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: python3 scripts/configure.py --domain files.example.com
       - run: docker compose config --quiet
       - run: docker compose build app
