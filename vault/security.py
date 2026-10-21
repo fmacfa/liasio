@@ -25,7 +25,7 @@ def verify_capability(purpose, token):
         if not hmac.compare_digest(capability(purpose, parsed), token):
             raise ValueError
         return parsed
-    except (ValueError, AttributeError):
+    except (ValueError, AttributeError, TypeError):
         raise Http404 from None
 
 

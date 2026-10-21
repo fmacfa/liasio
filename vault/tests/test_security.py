@@ -58,6 +58,9 @@ class AccountTests(IsolatedFiles, TestCase):
         data = {"email": "Admin@EXAMPLE.com", "display_name": "Camille", "password": PASSWORD, "password_confirm": PASSWORD, "setup_token": "incorrect"}
         self.assertEqual(self.client.post("/setup/", data).status_code, 200)
         self.assertFalse(User.objects.exists())
+        data["setup_token"] = "clé incorrecte"
+        self.assertEqual(self.client.post("/setup/", data).status_code, 200)
+        self.assertFalse(User.objects.exists())
         data["setup_token"] = settings.SETUP_TOKEN
         self.assertRedirects(self.client.post("/setup/", data), "/")
         admin = User.objects.get()
@@ -221,6 +224,7 @@ class SharingTests(IsolatedFiles, TestCase):
         token = capability("share", self.link.pk)
         tampered = token[:-1] + ("0" if token[-1] != "0" else "1")
         self.assertEqual(self.client.get(reverse("share", args=[tampered])).status_code, 404)
+        self.assertEqual(self.client.get(reverse("share", args=[token + "é"])).status_code, 404)
         self.assertEqual(self.client.get(reverse("share", args=[capability("invite", self.link.pk)])).status_code, 404)
 
     def test_other_account_including_admin_cannot_access_resources(self):

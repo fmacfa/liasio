@@ -63,7 +63,7 @@ def setup(request):
     if request.method == "POST":
         if limited(request, "setup", 5):
             return too_many(request)
-        valid_token = len(settings.SETUP_TOKEN) >= 32 and hmac.compare_digest(request.POST.get("setup_token", ""), settings.SETUP_TOKEN)
+        valid_token = len(settings.SETUP_TOKEN) >= 32 and hmac.compare_digest(request.POST.get("setup_token", "").encode(), settings.SETUP_TOKEN.encode())
         if not valid_token:
             form.add_error(None, "Clé d’installation incorrecte.")
         elif form.is_valid():

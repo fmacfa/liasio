@@ -70,7 +70,7 @@ docker compose build app
 docker compose up -d db
 # Attendre que db soit healthy dans docker compose ps.
 docker compose exec -T db psql -U linkvault -d linkvault < backups/DATE/database.sql
-docker compose run --rm --no-deps --entrypoint tar app -xzf - -C /data < backups/DATE/files.tar.gz
+docker compose run -T --rm --no-deps --entrypoint tar app -xzf - -C /data < backups/DATE/files.tar.gz
 docker compose up -d
 docker compose ps
 ```
