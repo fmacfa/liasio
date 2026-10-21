@@ -2686,3 +2686,21 @@ summary {
     margin-top: 13px;
   }
 }
+
+.mfa-qr { display:block; max-width:100%; width:240px; height:auto; margin:24px 0; }
+.recovery-codes { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; padding:20px; background:var(--mint); }
+.break-word { overflow-wrap:anywhere; }
+[data-pending-uploads] { text-align:left; margin:20px 0; }
+[data-pending-uploads] .button { margin:8px; }
+@media (max-width:600px) { .recovery-codes { grid-template-columns:1fr; } .file-row:has(form.button-row) { flex-wrap:wrap; } }
+
+.sidebar { overflow-y: auto; }
+.operations-panel > h2 { margin-bottom: 12px; }
+.operations-panel > p { font-size: 12px; color: var(--muted); }
+.operations-panel .notice { flex-wrap: wrap; gap: 5px 12px; }
+.quota-row { flex-wrap: wrap; padding: 20px 0; gap: 18px; }
+.quota-row .file-info { flex-basis: 280px; }
+.quota-form { align-items: flex-end; margin-top: 0; }
+.quota-field { display: grid; gap: 6px; font-size: 10px; color: var(--muted); }
+.quota-field input { width: 120px; min-height: 42px; border: 1px solid var(--line); border-radius: 7px; padding: 8px 10px; background: var(--paper); color: var(--ink); }
+@media (max-width: 650px) { .sidebar { overflow-y: visible; } }

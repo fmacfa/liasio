@@ -33,7 +33,7 @@ Pour modifier le modèle, générez une migration et incluez-la dans la PR. Les 
 
 - Contrôler les droits côté serveur à chaque accès ; tester les accès entre comptes.
 - Ne jamais introduire de `csrf_exempt`, d’HTML utilisateur non échappé ou de URL publique de blob.
-- Garder les règles de quota et de consommation transactionnelles, avec l’ordre de verrouillage utilisateur → dossier → lien/fichier.
+- Garder les règles de quota et de consommation transactionnelles, avec l’ordre de verrouillage utilisateur → dossier → lien/fichier. Une admission reprenable prend d’abord le verrou global de capacité, puis Instance, puis utilisateur ; ne jamais prendre ce verrou global en tenant un verrou utilisateur. Les imports classiques et ZIP prennent leur réservation avant leur transaction métier.
 - Préférer une amélioration ciblée à l’ajout d’un service obligatoire.
 - Décrire les limites observables sans promesse de sécurité absolue.
 - Vérifier les formulaires et la page reçue sur desktop et mobile. Respecter les préférences de mouvement réduit et l’usage clavier.

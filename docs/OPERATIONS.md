@@ -6,7 +6,7 @@
 Internet :443 → Caddy → Gunicorn / Django → PostgreSQL (réseau privé)
                                       → fichiers (volume Docker privé)
                                       → ClamAV (réseau privé)
-                        maintenance horaire → purge des métadonnées et orphelins
+                        maintenance toutes les 5 minutes → purge des métadonnées et orphelins
 ```
 
 Seuls Caddy et les ports 80/443 sont accessibles depuis Internet. ClamAV dispose d’une sortie réseau pour mettre à jour ses signatures. Le service applicatif sort sur le réseau frontal pour le SMTP éventuel. Le serveur doit avoir suffisamment de disque pour les fichiers, les ZIP temporaires, la base et les sauvegardes.
@@ -54,10 +54,10 @@ Les sauvegardes doivent contenir **la base PostgreSQL**, **le volume de fichiers
 Le script ci-dessous arrête les écritures applicatives et la maintenance pendant l’export puis les relance, y compris si une commande échoue :
 
 ```sh
-bash scripts/backup.sh
+scripts/backup-and-verify.sh
 ```
 
-Il écrit `backups/<date-UTC>/database.sql` et `files.tar.gz`. Ces fichiers contiennent des données privées, ne sont **pas chiffrés** par le script et doivent être chiffrés puis copiés sur un autre support avec votre solution de sauvegarde. Testez régulièrement la restauration. Ne supprimez pas les sauvegardes après une simple vérification d’existence.
+Il écrit `backups/<date-UTC>/database.sql` et `files.tar.gz`, ainsi que `checksums.json`. Les archives incluent la corbeille et les envois temporaires. Ces fichiers contiennent des données privées, ne sont **pas chiffrés** par le script et doivent être chiffrés puis copiés sur un autre support avec votre solution de sauvegarde. Testez régulièrement la restauration. Ne supprimez pas les sauvegardes après une simple vérification d’existence.
 
 La page Stockage mesure le volume contenant `/data/files`. Si PostgreSQL ou les sauvegardes résident sur un autre disque, contrôlez aussi leur capacité. Un quota est une limite logique, pas une réservation de disque.
 
@@ -69,7 +69,7 @@ Ces commandes supposent une **nouvelle installation sans données à préserver*
 docker compose build app
 docker compose up -d db
 # Attendre que db soit healthy dans docker compose ps.
-docker compose exec -T db psql -U linkvault -d linkvault < backups/DATE/database.sql
+docker compose exec -T db psql -v ON_ERROR_STOP=1 -U linkvault -d linkvault < backups/DATE/database.sql
 docker compose run -T --rm --no-deps --entrypoint tar app -xzf - -C /data < backups/DATE/files.tar.gz
 docker compose up -d
 docker compose ps
@@ -82,7 +82,7 @@ Les sauvegardes peuvent contenir des données supprimées depuis. Leur durée de
 ## Mise à jour
 
 ```sh
-bash scripts/backup.sh
+scripts/backup-and-verify.sh
 git pull --ff-only
 docker compose pull
 docker compose build --pull app
@@ -94,7 +94,7 @@ L’application lance les migrations avant Gunicorn. Le lockfile Python fixe les
 
 ## Maintenance et secrets
 
-Le conteneur `maintenance` exécute la purge chaque heure : sessions expirées, limites de fréquence, anciennes invitations, événements au-delà de la rétention, fichiers orphelins de plus de 24 h. Une expiration de lien ne détruit **pas** les fichiers, qui peuvent être utilisés par d’autres liens.
+Le conteneur `maintenance` exécute la purge toutes les cinq minutes : sessions expirées, limites de fréquence, anciennes invitations, événements au-delà de la rétention, fichiers orphelins de plus de 24 h. Une expiration de lien ne détruit **pas** les fichiers, qui peuvent être utilisés par d’autres liens.
 
 Ne changez pas `SECRET_KEY` à chaque déploiement : sa rotation invalide sessions, invitations et liens de partage. Après suspicion de fuite, changez-la volontairement, redémarrez les services et rediffusez de nouveaux liens. Gardez une politique de sauvegarde des secrets indépendante de celle du dépôt public.
 
@@ -102,11 +102,16 @@ Ne changez pas `SECRET_KEY` à chaque déploiement : sa rotation invalide sessio
 
 Si vous remplacez Caddy, maintenez HTTPS et HSTS, la limite de corps, les délais de réception, le remplacement des en-têtes proxy et l’isolation réseau de Gunicorn. N’activez pas de journalisation des URL de capacités. Ne placez pas un cache public devant les pages privées ou les téléchargements. N’ajoutez pas `null` ou des origines génériques à `CSRF_TRUSTED_ORIGINS`.
 
-## Limites de la version 0.1
+## Limites de la version 0.2
 
 - Déploiement sur un seul hôte, stockage local ; pas de haute disponibilité ou d’API publique.
-- 100 Mio par fichier / 500 Mio par dossier par défaut, pas de reprise après coupure.
+- 1 Gio par fichier / 5 Gio par dossier par défaut ; reprise pendant 24 h en resélectionnant les mêmes fichiers.
 - ZIP global uniquement ; pas de téléchargement individuel ou d’aperçus actifs.
-- Pas de chiffrement de bout en bout, SSO, TOTP ou vérification de boîte e-mail indépendante de l’invitation.
+- Pas de chiffrement de bout en bout, SSO ou vérification de boîte e-mail indépendante de l’invitation.
 - Pas de notification d’ouverture ni de mesure de réception complète.
-- Toute suppression définitive nécessite une sauvegarde pour restauration ; pas de corbeille.
+- La corbeille est conservée 30 jours ; après purge définitive, seule une sauvegarde permet la restauration.
+
+
+## Guide de fiabilité 0.2
+
+[RELIABILITY.md](RELIABILITY.md) décrit en anglais les nouvelles options, la MFA, les alertes, le contrôle de restauration isolé et les tests de charge. `MFA_ENCRYPTION_KEY` doit rester stable ; en son absence, la clé MFA dépend de `SECRET_KEY`. Sauvegardez cette configuration avant toute rotation. La commande de récupération du mot de passe ne désactive pas la MFA.

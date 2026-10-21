@@ -2,7 +2,7 @@ name: linkvault
 services:
   app:
     build: .
-    image: linkvault:local
+    image: ${LINKVAULT_IMAGE:-linkvault:local}
     restart: unless-stopped
     env_file: .env
     environment:
@@ -29,7 +29,7 @@ services:
       retries: 5
       start_period: 60s
   maintenance:
-    image: linkvault:local
+    image: ${LINKVAULT_IMAGE:-linkvault:local}
     restart: unless-stopped
     env_file: .env
     environment:
@@ -39,7 +39,7 @@ services:
       DATA_DIR: /data
     command: ["python", "manage.py", "housekeeping", "--loop"]
     volumes: ["files:/data"]
-    networks: [backend]
+    networks: [backend, updates]
     depends_on:
       app: {condition: service_healthy}
     security_opt: ["no-new-privileges:true"]

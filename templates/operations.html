@@ -1,0 +1,23 @@
+{% extends "layout.html" %}{% block breadcrumb %}Administration / Exploitation{% endblock %}{% block content %}
+<div class="page-heading">
+    <div>
+        <div class="eyebrow">GARDER UNE LONGUEUR D’AVANCE</div>
+        <h1>
+            L’état de votre instance<span class="green">.</span>
+        </h1>
+        <p>Capacité, alertes et quotas, réunis au même endroit.</p>
+    </div>
+    <span class="badge">Administration</span>
+</div>
+<div class="stats-grid"><article class="stat"><span class="spread">Fichiers conservés</span><strong>{{ file_count }}</strong><small>Corbeille comprise</small></article><article class="stat"><span class="spread">Disque disponible</span><strong>{{ disk.free|filesizeformat }}</strong><small>Sur {{ disk.total|filesizeformat }} du volume</small></article><article class="stat"><span class="spread">Dans la corbeille</span><strong>{{ trash_bytes|filesizeformat }}</strong><small>Purge après {{ trash_retention }} jours</small></article><article class="stat"><span class="spread">Restauration vérifiée</span><strong class="storage-number">{% if backup %}{{ backup.updated_at|date:'d/m/Y' }}{% else %}À configurer{% endif %}</strong><small>{% if backup %}{{ backup.updated_at|date:'H:i' }}{% else %}Voir le guide d’exploitation{% endif %}</small></article></div>
+<section class="panel spaced operations-panel"><h2>Surveillance</h2>{% if health %}<p>Dernier contrôle : {{ health.updated_at|date:'d/m/Y à H:i' }} · Base : {{ health.data.database|yesno:'disponible,indisponible' }} · Antivirus : {{ health.data.antivirus|yesno:'disponible,indisponible' }}</p>{% else %}<p>En attente du premier passage du service de maintenance.</p>{% endif %}<p class="footnote">Alertes e-mail : {{ mail_enabled|yesno:'activées,désactivées' }}. Les alertes restent consultables ici.</p>{% for alert in alerts %}<div class="notice"><strong>{{ alert.message }}</strong><small> Depuis {{ alert.first_seen|date:'d/m/Y à H:i' }}</small></div>{% empty %}<p>Aucune alerte enregistrée.</p>{% endfor %}</section>
+<section class="panel spaced operations-panel"><h2>Quotas des membres</h2><p class="muted">Le quota inclut la corbeille et les envois réservés. Il ne peut pas descendre sous cette utilisation.</p>{% for member in members %}<div class="file-row quota-row"><div class="file-info"><strong>{{ member.display_name }}</strong><small>{{ member.email }} · {{ member.used_bytes|filesizeformat }} conservés + {{ member.reserved_bytes|filesizeformat }} réservés / {{ member.quota_bytes|filesizeformat }}</small><small>MFA : {{ member.mfa_secret|yesno:'activée,désactivée' }}</small></div><form class="button-row quota-form"
+      method="post"
+      action="{% url 'member_quota' member.pk %}">{% csrf_token %}<label class="quota-field">Quota (Gio)<input type="number"
+       name="quota_gib"
+       min="0"
+       max="1048576"
+       step="0.01"
+       required
+       aria-label="Quota de {{ member.display_name }} en Gio"></label><button class="button secondary">Mettre à jour</button></form></div>{% endfor %}</section>
+{% endblock %}

@@ -1,40 +1,31 @@
 # Évolutions proposées
 
-Cette liste présente des pistes ; seules les fonctions décrites comme disponibles dans le README font partie de la version 0.1.
+La [version 0.2](CHANGELOG.md) ajoute TOTP, codes de récupération, corbeille, transferts reprenables, quotas administrables, surveillance, restauration testée et publication des images.
 
-## Priorité 1 — renforcer et faciliter l’exploitation
+## Prochaines priorités
 
-- Double authentification TOTP puis passkeys, codes de récupération et écran des sessions actives.
-- Audit indépendant de sécurité et tests de charge documentés avant une version 1.0.
-- Quotas modifiables dans l’interface d’administration, alertes de saturation et espace réservé minimal.
-- Logo et image de couverture, décodés puis réencodés en images sûres ; styles de présentation supplémentaires.
-- Image Docker publiée et signée, nomenclature de versions stable et rapports de dépendances automatisés.
-- Procédure de restauration testée automatiquement et sauvegardes chiffrées vers un stockage externe.
+- Passkeys, obligation de MFA par politique d’équipe et écran des sessions actives.
+- Audit humain indépendant avant une version 1.0 et exercices de restauration hors du serveur d’origine.
+- Sauvegardes chiffrées vers un stockage externe, avec rétention configurable.
+- Mesures de charge sur plusieurs tailles de serveurs et tests de réseaux instables.
+- Logo et couverture, décodés puis réencodés en images sûres.
 
-## Priorité 2 — échanges clients plus complets
+## Échanges clients
 
-- **Demande de fichiers** : lien de dépôt temporaire, quota dédié, antivirus obligatoire, sans accès aux autres fichiers.
-- Téléversements reprenables et découpés en blocs pour les fichiers de plusieurs gigaoctets.
-- Stockage S3 compatible, séparation du service de téléchargement et du serveur applicatif.
-- Vérification du destinataire par code e-mail à durée limitée, avec affichage clair du niveau d’identité réellement vérifié.
-- Notifications facultatives au premier téléchargement et avant expiration ; pas d’e-mails imposés à chaque accès.
-- Versions de dossiers immuables et remplacement explicite de documents, avec historique des changements.
-- Corbeille avec délai configurable, distincte de la suppression définitive et de la révocation immédiate des liens.
-- Politique de suppression automatique des dossiers après une date, séparée de l’expiration d’un lien. Plusieurs liens peuvent partager les mêmes fichiers.
+- Liens de demande de fichiers, temporaires, avec quota dédié et antivirus obligatoire.
+- Stockage S3 compatible et service de téléchargement séparé.
+- Vérification du destinataire par code e-mail et notifications facultatives de téléchargement.
+- Versions immuables des dossiers et remplacement explicite des documents.
+- Politique de suppression des dossiers distincte de l’expiration de leurs liens.
 
-## Priorité 3 — organisations et intégrations
+## Organisations et intégrations
 
-- Espaces d’équipe avec droits explicites, au-delà des bibliothèques personnelles actuelles.
-- SSO OIDC, rôles plus fins et politiques centralisées d’expiration et de mot de passe.
-- API avec jetons à portée limitée et webhooks signés.
-- Internationalisation FR/EN et personnalisation des textes de confidentialité/contact.
-- Aperçus de fichiers générés dans un service isolé ; jamais de contenu actif directement sur le domaine de l’application.
-- Mode de **chiffrement de bout en bout** conçu séparément : gestion de clés côté navigateur, récupération explicitée et limites assumées. Un serveur qui ne peut pas lire le contenu ne peut pas l’analyser avec ClamAV de la même manière.
+- Espaces d’équipe, SSO OIDC et rôles plus fins.
+- API à jetons de portée limitée et webhooks signés.
+- Interface disponible en français et en anglais.
+- Aperçus générés dans un service isolé, sans contenu actif sur le domaine de l’application.
+- Chiffrement de bout en bout conçu séparément, avec gestion de clés et récupération explicites. Il change les possibilités d’analyse antivirus côté serveur.
 
 ## Choix à conserver
 
-- Aucun accès anonyme aux imports par défaut.
-- Une ouverture de page ne consomme jamais un lien à téléchargement unique.
-- Ne pas présenter un transfert autorisé comme une preuve de réception.
-- Aucun suivi publicitaire ni requête tierce sur les pages de partage.
-- Des défauts protecteurs et un comportement documenté quand un service échoue.
+Pas d’import anonyme par défaut, pas de consommation d’un lien par une simple ouverture, aucune prétention de preuve de réception, pas de suivi publicitaire et des comportements d’échec documentés.

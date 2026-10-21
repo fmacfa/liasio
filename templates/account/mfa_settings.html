@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block breadcrumb %}Mon compte / Double authentification{% endblock %}
+{% block content %}
+    <div class="page-heading">
+        <div>
+            <div class="eyebrow">PROTÉGER VOTRE COMPTE</div>
+            <h1>
+                Un accès mieux protégé<span class="green">.</span>
+            </h1>
+            <p>Une application d’authentification ajoute une seconde vérification à votre mot de passe.</p>
+        </div>
+    </div>
+    {% if error %}<div class="notice" role="alert">{{ error }}</div>{% endif %}
+    {% if codes %}
+        <section class="panel form-panel narrow spaced"><h2>Conservez ces codes de récupération</h2><p>Ils ne seront affichés qu’une fois. Enregistrez-les dans votre gestionnaire de mots de passe. Chaque code remplace un code d’application une seule fois.</p><ul class="recovery-codes">{% for code in codes %}<li><code>{{ code }}</code></li>{% endfor %}</ul><p class="footnote">Les anciens codes sont désormais invalides. Ne partagez jamais ces codes.</p></section>
+    {% endif %}
+    <section class="panel form-panel narrow spaced">
+        {% if user.mfa_secret %}
+            <h2>Double authentification activée</h2>
+            <p>{{ user.recovery_codes|length }} code(s) de récupération disponible(s). Attendez un nouveau code de l’application si le précédent vient d’être utilisé.</p>
+            <form method="post">{% csrf_token %}{% include "components/form.html" with form=password_form %}{% include "components/form.html" with form=code_form %}<div class="button-row"><button class="button" name="action" value="regenerate">Renouveler les codes</button><button class="button danger" name="action" value="disable">Désactiver</button></div></form>
+        {% elif setup_secret %}
+            <h2>Associez votre application</h2><p>Scannez ce QR code avec votre application TOTP, puis confirmez avec le code à six chiffres. La configuration expire après dix minutes.</p><img class="mfa-qr"
+     src="{% url 'mfa_qr' %}"
+     alt="QR code de configuration TOTP"><details><summary>Saisir une clé manuellement</summary><code class="break-word">{{ setup_secret }}</code></details><form method="post">{% csrf_token %}{% include "components/form.html" with form=password_form %}{% include "components/form.html" with form=code_form %}<button class="button" name="action" value="enable">Activer et obtenir mes codes</button></form>
+        {% else %}
+            <h2>Activez la double authentification</h2><p>Préparez votre application (par exemple Aegis, 2FAS ou votre gestionnaire de mots de passe). La clé reste chiffrée sur le serveur.</p><form method="post">{% csrf_token %}{% include "components/form.html" with form=password_form %}<button class="button" name="action" value="begin">Configurer mon application</button></form>
+        {% endif %}
+    </section>
+{% endblock %}
