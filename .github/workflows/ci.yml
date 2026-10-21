@@ -1,0 +1,57 @@
+name: Checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        database: [sqlite, postgres]
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: linkvault
+          POSTGRES_PASSWORD: ci-only-password
+          POSTGRES_DB: linkvault
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U linkvault -d linkvault"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      POSTGRES_HOST: ${{ matrix.database == 'postgres' && '127.0.0.1' || '' }}
+      POSTGRES_PASSWORD: ci-only-password
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: '3.13'
+          enable-cache: true
+      - run: python3 scripts/configure.py --dev
+      - run: uv sync --frozen
+      - run: uv run --env-file .env python manage.py collectstatic --noinput
+      - run: uv run --env-file .env python manage.py test --noinput
+      - run: uv run --env-file .env python manage.py makemigrations --check --dry-run
+      - run: uv run --env-file .env pip-audit --local --progress-spinner off
+  containers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/configure.py --domain files.example.com
+      - run: docker compose config --quiet
+      - run: docker compose build app
+      - run: docker compose up -d --wait --wait-timeout 600 db clamav app
+      - run: docker compose exec -T app python manage.py check --deploy --fail-level ERROR
+      - run: docker compose exec -T -e RUN_CLAMAV_INTEGRATION=1 app python manage.py test vault.tests.test_antivirus_live --noinput
+      - run: docker compose run --rm --no-deps caddy caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+      - if: failure()
+        run: docker compose logs --tail=120
+      - if: always()
+        run: docker compose down --volumes
