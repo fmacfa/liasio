@@ -58,6 +58,14 @@
               <small>
                 {% if link.max_downloads == 1 %}Usage unique{% elif link.max_downloads %}{{ link.max_downloads }} téléchargements max.{% else %}Téléchargements illimités{% endif %}
               </small>
+              <small>Aperçus {% if link.allow_previews %}activés{% else %}désactivés{% endif %}</small>
+              {% if link.status == "Actif" %}
+                <form method="post" action="{% url 'link_previews' link.pk %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="enabled" value="{% if link.allow_previews %}0{% else %}1{% endif %}">
+                  <button class="text-button" title="Les aperçus sont visibles avant téléchargement et peuvent être copiés.">{% if link.allow_previews %}Masquer les aperçus{% else %}Activer les aperçus{% endif %}</button>
+                </form>
+              {% endif %}
             </td>
             <td>
               <a class="activity-numbers"
@@ -108,4 +116,5 @@
   </div>
   {% include "components/pagination.html" %}
   <p class="footnote">Une ouverture est une page servie au navigateur, dédupliquée pendant 30 minutes par session. Le compteur de téléchargements indique les transferts autorisés.</p>
+  <p class="footnote">Les aperçus montrent une image réduite ou la première page d’un PDF, avant téléchargement. Ils ne consomment pas le lien et peuvent être copiés.</p>
 {% endblock %}

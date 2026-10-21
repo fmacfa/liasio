@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.3.0 — 2026-10-21
+
+### Added
+
+- Optional file galleries on sharing pages, with image thumbnails, a first-page PDF preview, keyboard navigation and a responsive lightbox.
+- Per-link preview controls. New links offer previews by default; existing links remain opted out until their owner enables them.
+- Reduced JPEG derivatives for JPEG, PNG, WebP, GIF and PDF files up to 20 MiB. Image metadata is removed; originals and download counters remain unchanged by previews.
+- A networkless, read-only renderer container with no application secrets or source-file volume, bounded disposable decoder processes, and a private Unix socket.
+- A private, regenerable cache bounded to 256 MiB / 256 entries, with expiry, purge cleanup and authorization checks before every response.
+
+### Upgrade notes
+
+- Use the updated Compose file, which adds the `preview` service and socket volume. Pull the same 0.3.0 image for `app`, `maintenance` and `preview`, then start the stack. The new migration defaults existing links to previews disabled.
+- A visible preview can be copied. Preview access never consumes a download, including on single-use links. Disable previews for links that should reveal no content before download.
+- See [file previews](docs/PREVIEWS.md) for supported formats, limits and deployment details.
+
 ## 0.2.0 — 2026-10-21
 
 ### Added

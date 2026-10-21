@@ -42,7 +42,7 @@ jobs:
       - run: uv run --env-file .env python manage.py makemigrations --check --dry-run
       - run: uv run --env-file .env pip-audit --local --progress-spinner off
       - run: uv run bandit -r vault linkvault -x vault/tests,vault/migrations -ll
-      - run: node --check static/app.js && node --check static/upload.js
+      - run: node --check static/app.js && node --check static/upload.js && node --check static/previews.js
   containers:
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -54,6 +54,23 @@ jobs:
       - run: docker compose up -d --wait --wait-timeout 600 db clamav app
       - run: docker compose exec -T app python manage.py check --deploy --fail-level ERROR
       - run: docker compose exec -T -e RUN_CLAMAV_INTEGRATION=1 app python manage.py test vault.tests.test_antivirus_live --noinput
+      - run: docker compose exec -T -e RUN_PREVIEW_INTEGRATION=1 app python manage.py test vault.tests.test_previews.LiveRendererTests --noinput
+      - name: Check renderer isolation
+        run: |
+          docker compose ps -q preview | xargs docker inspect > /tmp/preview-container.json
+          python3 - <<'PY'
+          import json
+          container = json.load(open('/tmp/preview-container.json'))[0]
+          host = container['HostConfig']
+          assert host['NetworkMode'] == 'none'
+          assert host['ReadonlyRootfs']
+          assert host['Memory'] == 512 * 1024**2
+          assert host['CapDrop'] == ['ALL']
+          assert container['Config']['User'] == '10001:10001'
+          assert {m['Destination'] for m in container['Mounts'] if m['Type'] != 'tmpfs'} == {'/run/linkvault-preview'}
+          assert '/tmp' in host['Tmpfs'] and 'noexec' in host['Tmpfs']['/tmp']
+          assert not any(e.startswith(('SECRET_KEY=', 'POSTGRES_PASSWORD=', 'MFA_ENCRYPTION_KEY=')) for e in container['Config']['Env'])
+          PY
       - run: docker compose exec -T -e DEBUG=true -e ANTIVIRUS_REQUIRED=false -e CLAMAV_HOST= -e DEMO_PASSWORD=Disposable-backup-fixture-2026! app python manage.py seed_demo
       - run: docker compose exec -T app python scripts/load_test.py --database postgres --workers 4 --mib 256 --output /tmp/load-report.json
       - run: mkdir -p .local && docker compose cp app:/tmp/load-report.json .local/load-report-postgres-clamav.json

@@ -122,6 +122,7 @@ def purge(owner, kind, identifier):
                 deleted_at__isnull=False,
             )
             assets = list(Asset.all_objects.filter(collection=item))
+            preview_ids = [asset.pk for asset in assets]
             item.delete()
         elif kind == "asset":
             item = get_object_or_404(
@@ -131,6 +132,7 @@ def purge(owner, kind, identifier):
                 deleted_at__isnull=False,
             )
             assets = [item]
+            preview_ids = [item.pk]
             item.delete()
         else:
             raise Http404
@@ -141,6 +143,9 @@ def purge(owner, kind, identifier):
         transaction.on_commit(
             lambda: [default_storage.delete(a.blob.name) for a in assets]
         )
+        from .previews import cleanup_cache
+
+        transaction.on_commit(lambda: cleanup_cache(preview_ids))
         return size
 
 

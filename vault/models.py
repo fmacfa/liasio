@@ -137,6 +137,12 @@ class Asset(models.Model):
     def extension(self):
         return self.path.rsplit(".", 1)[-1].upper()[:5]
 
+    @property
+    def preview_kind(self):
+        from .previews import preview_kind
+
+        return preview_kind(self)
+
 
 class ShareLink(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -145,6 +151,7 @@ class ShareLink(models.Model):
     )
     label = models.CharField(max_length=80)
     password_hash = models.CharField(max_length=256, blank=True)
+    allow_previews = models.BooleanField(default=False)
     expires_at = models.DateTimeField(null=True, blank=True)
     max_downloads = models.PositiveIntegerField(
         null=True,

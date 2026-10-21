@@ -30,6 +30,11 @@ class Command(BaseCommand):
                     "blob", flat=True
                 )
             )
+            asset_ids = list(
+                Asset.all_objects.filter(collection__owner=user).values_list(
+                    "pk", flat=True
+                )
+            )
             Invitation.objects.filter(email__iexact=user.email).delete()
             Audit.objects.filter(actor=user).delete()
             from django.contrib.sessions.models import Session
@@ -41,6 +46,9 @@ class Command(BaseCommand):
             transaction.on_commit(
                 lambda: [default_storage.delete(blob) for blob in blobs]
             )
+            from vault.previews import cleanup_cache
+
+            transaction.on_commit(lambda: cleanup_cache(asset_ids))
         self.stdout.write(
             "Account and files erased. Remember the retention policy for your backups."
         )

@@ -102,11 +102,11 @@ Ne changez pas `SECRET_KEY` à chaque déploiement : sa rotation invalide sessio
 
 Si vous remplacez Caddy, maintenez HTTPS et HSTS, la limite de corps, les délais de réception, le remplacement des en-têtes proxy et l’isolation réseau de Gunicorn. N’activez pas de journalisation des URL de capacités. Ne placez pas un cache public devant les pages privées ou les téléchargements. N’ajoutez pas `null` ou des origines génériques à `CSRF_TRUSTED_ORIGINS`.
 
-## Limites de la version 0.2
+## Limites de la version 0.3
 
 - Déploiement sur un seul hôte, stockage local ; pas de haute disponibilité ou d’API publique.
 - 1 Gio par fichier / 5 Gio par dossier par défaut ; reprise pendant 24 h en resélectionnant les mêmes fichiers.
-- ZIP global uniquement ; pas de téléchargement individuel ou d’aperçus actifs.
+- ZIP global uniquement ; galerie d’images réduites et première page des PDF, sans prévisualisation active des originaux. Voir [les aperçus](PREVIEWS.md).
 - Pas de chiffrement de bout en bout, SSO ou vérification de boîte e-mail indépendante de l’invitation.
 - Pas de notification d’ouverture ni de mesure de réception complète.
 - La corbeille est conservée 30 jours ; après purge définitive, seule une sauvegarde permet la restauration.

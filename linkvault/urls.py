@@ -1,5 +1,5 @@
 from django.urls import path
-from vault import views, mfa, trash, resumable, operations
+from vault import views, mfa, trash, resumable, operations, previews
 
 urlpatterns = [
     path("", views.dashboard, name="dashboard"),
@@ -49,6 +49,7 @@ urlpatterns = [
     path("collections/<uuid:pk>/link/", views.link_create, name="link_create"),
     path("links/", views.links, name="links"),
     path("links/<uuid:pk>/revoke/", views.link_revoke, name="link_revoke"),
+    path("links/<uuid:pk>/previews/", previews.toggle, name="link_previews"),
     path("activity/", views.activity, name="activity"),
     path("branding/", views.branding, name="branding"),
     path("trash/", trash.index, name="trash"),
@@ -65,6 +66,7 @@ urlpatterns = [
     path("s/<str:token>/", views.share, name="share"),
     path("s/<str:token>/unlock/", views.unlock, name="unlock"),
     path("s/<str:token>/download/", views.download, name="download"),
+    path("s/<str:token>/preview/<uuid:asset_id>/", previews.image, name="file_preview"),
     path("operations/", operations.index, name="operations"),
     path("operations/members/<int:pk>/quota/", operations.quota, name="member_quota"),
     path("ready/", operations.readiness, name="readiness"),

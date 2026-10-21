@@ -1,6 +1,6 @@
 # Politique de sécurité
 
-La branche principale de LinkVault 0.2 reçoit les correctifs. Le projet est jeune et n’a pas encore fait l’objet d’un audit humain indépendant.
+La branche principale de LinkVault 0.3 reçoit les correctifs. Le projet est jeune et n’a pas encore fait l’objet d’un audit humain indépendant.
 
 ## Signaler une vulnérabilité
 

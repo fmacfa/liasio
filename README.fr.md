@@ -8,19 +8,20 @@ LinkVault est une application open source de partage de fichiers à installer su
 
 Interface en français · Licence **MIT** · Python / Django · Docker Compose
 
-> **Version 0.2 — protection des comptes et fiabilité.** TOTP, transferts reprenables, corbeille et restauration testée sont disponibles. Le projet reste jeune, sans audit humain indépendant ni chiffrement de bout en bout.
+> **Version 0.3 — voir avant de télécharger.** La galerie de fichiers complète TOTP, les transferts reprenables, la corbeille et la restauration testée. Le projet reste jeune, sans audit humain indépendant ni chiffrement de bout en bout.
 
 ![Tableau de bord LinkVault, avec des données fictives](docs/screenshots/dashboard.png)
 
 ## Ce que vous pouvez faire
 
-| Besoin | Disponible dans la version 0.2 |
+| Besoin | Disponible dans la version 0.3 |
 | --- | --- |
 | Première connexion | Assistant protégé par une clé d’installation, création du compte administrateur avec e-mail et mot de passe |
 | Plusieurs comptes | Invitations personnelles, valables 7 jours, usage unique, révocables ; comptes membres isolés |
 | Bibliothèque | Import de fichiers ou d’un dossier avec son arborescence, titre, présentation et message au destinataire |
 | Page Importer | Choix du dossier, liste des fichiers et tailles, progression, pause et reprise pendant 24 h, puis vérification |
 | Page de partage | Nom, signature, palette de couleurs et pied de page propres à chaque compte ; aperçu en direct |
+| Aperçus des fichiers | Galerie d’images et première page des PDF, visionneuse et navigation au clavier ; option par lien |
 | Plusieurs liens par dossier | Nom interne, mot de passe facultatif, date d’expiration, nombre maximal de téléchargements |
 | Usage unique | Un seul téléchargement autorisé, y compris en cas de requêtes simultanées |
 | Suivi | Ouvertures et téléchargements autorisés datés, filtre par lien, export CSV |
@@ -123,7 +124,15 @@ Limites par défaut : **1 Gio par fichier, 5 Gio par dossier et 100 fichiers**. 
 
 Lisez le [guide de mise à niveau et d’exploitation de la version 0.2](docs/RELIABILITY.md) (anglais), notamment avant toute modification des clés MFA. Le [changelog](CHANGELOG.md) et les [releases](https://github.com/fmacfa/linkvault/releases) décrivent les versions publiées.
 
-Pour une image précompilée, ajoutez `LINKVAULT_IMAGE=ghcr.io/fmacfa/linkvault:0.2.0` dans `.env`, puis exécutez `docker compose pull app maintenance` et `docker compose up -d --no-build`.
+Pour une image précompilée, ajoutez `LINKVAULT_IMAGE=ghcr.io/fmacfa/linkvault:0.3.0` dans `.env`, puis exécutez `docker compose pull app maintenance preview` et `docker compose up -d --no-build`.
+
+## Voir les fichiers avant de télécharger
+
+Activez les aperçus à la création du lien ou depuis **Mes liens** pour un lien existant. Les destinataires voient les vignettes des images et la première page des PDF, puis peuvent les agrandir avant de télécharger le ZIP. JPEG, PNG, WebP, GIF et PDF jusqu’à 20 Mio sont éligibles ; les autres fichiers conservent leur nom, leur type et leur taille.
+
+Les aperçus sont des JPEG réduits, sans métadonnées, générés par un moteur isolé. Ils respectent le mot de passe, la révocation, l’expiration et l’épuisement du lien, sans consommer de téléchargement. **Un aperçu visible peut être copié.** Désactivez cette option si le contenu doit rester caché jusqu’au téléchargement. Après mise à niveau, les liens existants restent sans aperçu jusqu’à leur activation. Consultez le [guide des aperçus et du déploiement](docs/PREVIEWS.md) (anglais).
+
+![Galerie LinkVault avec des images, la première page d’un PDF et un fichier sans aperçu](docs/screenshots/previews.png)
 
 ## Sécurité et confidentialité
 
