@@ -1,2 +1,37 @@
-{% extends 'base.html' %}{% block body_class %}auth-body{% endblock %}
-{% block body %}<div class="auth-layout"><aside class="auth-story"><a class="brand" href="{% url 'login' %}">{% include 'components/logo.html' %}</a><div class="auth-story-content"><span class="pill light">LE PARTAGE VOUS APPARTIENT</span><h1>Le bon fichier.<br>La bonne personne.<br><span>Vos conditions.</span></h1><p>Un espace indépendant pour vos fichiers,<br>des liens que vous maîtrisez de bout en bout.</p><div class="auth-lines"><span>{% include 'components/icon.html' with name='folder' %}Vos fichiers sur votre serveur</span><span>{% include 'components/icon.html' with name='link' %}Des liens adaptés à chaque envoi</span><span>{% include 'components/icon.html' with name='shield' %}Un accès sur invitation</span></div></div><span class="auth-footer">Open source · Licence MIT · Auto-hébergé</span></aside><main id="main" class="auth-main"><div class="auth-card">{% include 'components/messages.html' %}{% block auth_content %}{% endblock %}</div><div class="auth-main-footer">LinkVault — Vos fichiers ont trouvé leur place.</div></main></div>{% endblock %}
+{% extends "base.html" %}
+{% block body_class %}auth-body{% endblock %}
+{% block body %}
+  <div class="auth-layout">
+    <aside class="auth-story">
+      <a class="brand" href="{% url 'login' %}">{% include "components/logo.html" %}</a>
+      <div class="auth-story-content">
+        <span class="pill light">LE PARTAGE VOUS APPARTIENT</span>
+        <h1>
+          Le bon fichier.
+          <br>
+          La bonne personne.
+          <br>
+          <span>Vos conditions.</span>
+        </h1>
+        <p>
+          Un espace indépendant pour vos fichiers,
+          <br>
+          des liens que vous maîtrisez de bout en bout.
+        </p>
+        <div class="auth-lines">
+          <span>{% include "components/icon.html" with name="folder" %}Vos fichiers sur votre serveur</span>
+          <span>{% include "components/icon.html" with name="link" %}Des liens adaptés à chaque envoi</span>
+          <span>{% include "components/icon.html" with name="shield" %}Un accès sur invitation</span>
+        </div>
+      </div>
+      <span class="auth-footer">Open source · Licence MIT · Auto-hébergé</span>
+    </aside>
+    <main id="main" class="auth-main">
+      <div class="auth-card">
+        {% include "components/messages.html" %}
+        {% block auth_content %}{% endblock %}
+      </div>
+      <div class="auth-main-footer">LinkVault — Vos fichiers ont trouvé leur place.</div>
+    </main>
+  </div>
+{% endblock %}

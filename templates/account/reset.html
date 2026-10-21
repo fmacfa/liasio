@@ -1,1 +1,18 @@
-{% extends 'account/layout.html' %}{% block auth_content %}<span class="eyebrow">RETROUVER VOTRE ACCÈS</span><h2>Un nouveau départ.</h2><p class="muted">Saisissez l’adresse de votre compte pour recevoir un lien de réinitialisation.</p>{% if smtp_enabled %}<form method="post" class="auth-form">{% csrf_token %}{% include 'components/form.html' %}<button class="button full">Demander un lien</button></form>{% else %}<div class="notice"><p>L’envoi d’e-mails n’est pas configuré sur ce serveur. Contactez votre administrateur pour récupérer votre accès.</p></div>{% endif %}<a class="forgot-link" href="{% url 'login' %}">← Retour à la connexion</a>{% endblock %}
+{% extends "account/layout.html" %}
+{% block auth_content %}
+  <span class="eyebrow">RETROUVER VOTRE ACCÈS</span>
+  <h2>Un nouveau départ.</h2>
+  <p class="muted">Saisissez l’adresse de votre compte pour recevoir un lien de réinitialisation.</p>
+  {% if smtp_enabled %}
+    <form method="post" class="auth-form">
+      {% csrf_token %}
+      {% include "components/form.html" %}
+      <button class="button full">Demander un lien</button>
+    </form>
+  {% else %}
+    <div class="notice">
+      <p>L’envoi d’e-mails n’est pas configuré sur ce serveur. Contactez votre administrateur pour récupérer votre accès.</p>
+    </div>
+  {% endif %}
+  <a class="forgot-link" href="{% url 'login' %}">← Retour à la connexion</a>
+{% endblock %}

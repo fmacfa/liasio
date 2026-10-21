@@ -1,2 +1,111 @@
-{% extends 'layout.html' %}{% block breadcrumb %}Mes liens{% endblock %}
-{% block content %}<div class="page-heading"><div><div class="eyebrow">PARTAGER, AVEC PRÉCISION</div><h1>Mes liens<span class="green">.</span></h1><p>Chaque destinataire, chaque condition, chaque accès : tout est ici.</p></div><a class="button" href="{% url 'collections' %}">{% include 'components/icon.html' with name='plus' %}Créer un lien</a></div><div class="toolbar"><div class="tabs"><a href="{% url 'links' %}" class="{% if not status %}selected{% endif %}">Tous les liens</a><a href="?status=active" class="{% if status == 'active' %}selected{% endif %}">Actifs</a></div><form class="search-form small" method="get"><label class="sr-only" for="q">Rechercher un lien</label>{% include 'components/icon.html' with name='search' %}<input id="q" name="q" value="{{ query }}" placeholder="Rechercher un lien…"><input type="hidden" name="status" value="{{ status }}"><button class="button secondary">Rechercher</button></form></div><div class="table-panel"><table><thead><tr><th>Lien et dossier</th><th>Conditions</th><th>Activité</th><th>Statut</th><th>Actions</th></tr></thead><tbody>{% for link in links %}<tr><td><strong>{{ link.label }}</strong><small><a href="{% url 'collection' link.collection_id %}">{{ link.collection.title }}</a></small><small>Créé le {{ link.created_at|date:'d/m/Y à H:i' }}</small></td><td><span class="condition">{% include 'components/icon.html' with name='lock' %}{% if link.password_hash %}Mot de passe{% else %}Sans mot de passe{% endif %}</span><small>{% if link.expires_at %}Jusqu’au {{ link.expires_at|date:'d/m/Y H:i' }}{% else %}Sans expiration{% endif %}</small><small>{% if link.max_downloads == 1 %}Usage unique{% elif link.max_downloads %}{{ link.max_downloads }} téléchargements max.{% else %}Téléchargements illimités{% endif %}</small></td><td><a class="activity-numbers" href="{% url 'activity' %}?link={{ link.pk }}">{% include 'components/icon.html' with name='eye' %} {{ link.open_count }} <span>·</span> {% include 'components/icon.html' with name='download' %} {{ link.downloads }}</a></td><td><span class="badge {% if link.status == 'Actif' %}success{% endif %}">{{ link.status }}</span></td><td><div class="row-actions"><button class="icon-button" data-copy="{{ link.public_url }}" title="Copier le lien" aria-label="Copier le lien {{ link.label }}">{% include 'components/icon.html' with name='copy' %}</button><a class="icon-button" href="{{ link.public_url }}" target="_blank" rel="noreferrer" title="Ouvrir la page (comptabilisé)" aria-label="Ouvrir {{ link.label }}">{% include 'components/icon.html' with name='arrow' %}</a>{% if link.status == 'Actif' %}<form method="post" action="{% url 'link_revoke' link.pk %}" data-confirm="Révoquer ce lien ? Les prochains téléchargements seront bloqués.">{% csrf_token %}<button class="text-button danger-text">Révoquer</button></form>{% endif %}</div></td></tr>{% empty %}<tr><td colspan="5"><div class="empty-panel"><h3>Aucun lien à afficher</h3><p>Ouvrez un dossier pour créer un lien de partage.</p><a class="button secondary" href="{% url 'collections' %}">Mes dossiers →</a></div></td></tr>{% endfor %}</tbody></table></div>{% include 'components/pagination.html' %}<p class="footnote">Une ouverture est une page servie au navigateur, dédupliquée pendant 30 minutes par session. Le compteur de téléchargements indique les transferts autorisés.</p>{% endblock %}
+{% extends "layout.html" %}
+{% block breadcrumb %}Mes liens{% endblock %}
+{% block content %}
+  <div class="page-heading">
+    <div>
+      <div class="eyebrow">PARTAGER, AVEC PRÉCISION</div>
+      <h1>
+        Mes liens<span class="green">.</span>
+      </h1>
+      <p>Chaque destinataire, chaque condition, chaque accès : tout est ici.</p>
+    </div>
+    <a class="button" href="{% url 'collections' %}">{% include "components/icon.html" with name="plus" %}Créer un lien</a>
+  </div>
+  <div class="toolbar">
+    <div class="tabs">
+      <a href="{% url 'links' %}"
+         class="{% if not status %}selected{% endif %}">Tous les liens</a>
+      <a href="?status=active"
+         class="{% if status == 'active' %}selected{% endif %}">Actifs</a>
+    </div>
+    <form class="search-form small" method="get">
+      <label class="sr-only" for="q">Rechercher un lien</label>
+      {% include "components/icon.html" with name="search" %}
+      <input id="q" name="q" value="{{ query }}" placeholder="Rechercher un lien…">
+      <input type="hidden" name="status" value="{{ status }}">
+      <button class="button secondary">Rechercher</button>
+    </form>
+  </div>
+  <div class="table-panel">
+    <table>
+      <thead>
+        <tr>
+          <th>Lien et dossier</th>
+          <th>Conditions</th>
+          <th>Activité</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for link in links %}
+          <tr>
+            <td>
+              <strong>{{ link.label }}</strong>
+              <small>
+                <a href="{% url 'collection' link.collection_id %}">{{ link.collection.title }}</a>
+              </small>
+              <small>Créé le {{ link.created_at|date:'d/m/Y à H:i' }}</small>
+            </td>
+            <td>
+              <span class="condition">
+                {% include "components/icon.html" with name="lock" %}
+                {% if link.password_hash %}Mot de passe{% else %}Sans mot de passe{% endif %}
+              </span>
+              <small>
+                {% if link.expires_at %}Jusqu’au {{ link.expires_at|date:'d/m/Y H:i' }}{% else %}Sans expiration{% endif %}
+              </small>
+              <small>
+                {% if link.max_downloads == 1 %}Usage unique{% elif link.max_downloads %}{{ link.max_downloads }} téléchargements max.{% else %}Téléchargements illimités{% endif %}
+              </small>
+            </td>
+            <td>
+              <a class="activity-numbers"
+                 href="{% url 'activity' %}?link={{ link.pk }}">
+              {% include "components/icon.html" with name="eye" %} {{ link.open_count }} <span>·</span> {% include "components/icon.html" with name="download" %} {{ link.downloads }}</a>
+            </td>
+            <td>
+              <span class="badge {% if link.status == 'Actif' %}success{% endif %}">{{ link.status }}</span>
+            </td>
+            <td>
+              <div class="row-actions">
+                <button class="icon-button"
+                        data-copy="{{ link.public_url }}"
+                        title="Copier le lien"
+                        aria-label="Copier le lien {{ link.label }}">
+                  {% include "components/icon.html" with name="copy" %}
+                </button>
+                <a class="icon-button"
+                   href="{{ link.public_url }}"
+                   target="_blank"
+                   rel="noreferrer"
+                   title="Ouvrir la page (comptabilisé)"
+                   aria-label="Ouvrir {{ link.label }}">{% include "components/icon.html" with name="arrow" %}</a>
+                {% if link.status == "Actif" %}
+                  <form method="post"
+                        action="{% url 'link_revoke' link.pk %}"
+                        data-confirm="Révoquer ce lien ? Les prochains téléchargements seront bloqués.">
+                    {% csrf_token %}
+                    <button class="text-button danger-text">Révoquer</button>
+                  </form>
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="5">
+              <div class="empty-panel">
+                <h3>Aucun lien à afficher</h3>
+                <p>Ouvrez un dossier pour créer un lien de partage.</p>
+                <a class="button secondary" href="{% url 'collections' %}">Mes dossiers →</a>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% include "components/pagination.html" %}
+  <p class="footnote">Une ouverture est une page servie au navigateur, dédupliquée pendant 30 minutes par session. Le compteur de téléchargements indique les transferts autorisés.</p>
+{% endblock %}

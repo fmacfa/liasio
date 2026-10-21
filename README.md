@@ -145,6 +145,10 @@ Nous avons étudié [Pingvin Share](https://github.com/stonith404/pingvin-share)
 
 LinkVault privilégie les dossiers réutilisables, la présentation et des règles de liens explicites dans une application compacte. Cette version ne prétend pas remplacer toutes les fonctions de ces projets plus anciens. Le code applicatif et les éléments graphiques de LinkVault ont été créés pour ce projet ; aucun code de ces quatre projets n’a été repris.
 
+### Aperçu de l’import
+
+![Page d’import LinkVault avec un fichier de démonstration sélectionné](docs/screenshots/upload.png)
+
 ## Licence
 
 [MIT](LICENSE), copyright 2026 Filippo Maria Celi et contributeurs. Les dépendances et images de conteneurs conservent leurs propres licences. Voir [THIRD_PARTY.md](THIRD_PARTY.md).

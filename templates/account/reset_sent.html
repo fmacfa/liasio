@@ -1,1 +1,7 @@
-{% extends 'account/layout.html' %}{% block auth_content %}<span class="eyebrow">DEMANDE ENREGISTRÉE</span><h2>Consultez votre messagerie.</h2><p class="muted">Si un compte actif correspond à cette adresse et si l’envoi est disponible, un lien de réinitialisation vous sera envoyé. Il sera valable une heure.</p><a class="button secondary" href="{% url 'login' %}">Retour à la connexion</a>{% endblock %}
+{% extends "account/layout.html" %}
+{% block auth_content %}
+  <span class="eyebrow">DEMANDE ENREGISTRÉE</span>
+  <h2>Consultez votre messagerie.</h2>
+  <p class="muted">Si un compte actif correspond à cette adresse et si l’envoi est disponible, un lien de réinitialisation vous sera envoyé. Il sera valable une heure.</p>
+  <a class="button secondary" href="{% url 'login' %}">Retour à la connexion</a>
+{% endblock %}

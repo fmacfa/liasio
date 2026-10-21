@@ -1,2 +1,47 @@
-{% extends 'layout.html' %}{% block breadcrumb %}Mes dossiers / Présentation{% endblock %}
-{% block content %}<a class="back-link" href="{% url 'collections' %}">← Mes dossiers</a><div class="page-heading"><div><h1>{% if creating %}Un nouveau dossier{% else %}La bonne présentation{% endif %}<span class="green">.</span></h1><p>Ces informations seront affichées sur la page de partage.</p></div></div><div class="editor-grid"><form method="post" class="panel form-panel">{% csrf_token %}{% include 'components/form.html' %}<button class="button">{% if creating %}Créer le dossier{% else %}Enregistrer la présentation{% endif %}{% include 'components/icon.html' with name='arrow' %}</button></form><aside class="editor-note"><span class="step-label">01 / PRÉSENTER</span><h2>Un peu de contexte<br>fait la différence.</h2><p>Donnez un titre clair à votre dossier et expliquez ce que le destinataire y trouvera.</p><div class="step"><b>02</b><div><strong>Ajoutez vos fichiers</strong><p>Fichiers ou dossier entier, avec son arborescence.</p></div></div><div class="step"><b>03</b><div><strong>Choisissez vos conditions</strong><p>Un lien par destinataire, avec ses propres règles.</p></div></div></aside></div>{% endblock %}
+{% extends "layout.html" %}
+{% block breadcrumb %}Mes dossiers / Présentation{% endblock %}
+{% block content %}
+  <a class="back-link" href="{% url 'collections' %}">← Mes dossiers</a>
+  <div class="page-heading">
+    <div>
+      <h1>
+        {% if creating %}Un nouveau dossier{% else %}La bonne présentation{% endif %}
+        <span class="green">.</span>
+      </h1>
+      <p>Ces informations seront affichées sur la page de partage.</p>
+    </div>
+  </div>
+  <div class="editor-grid">
+    <form method="post" class="panel form-panel">
+      {% csrf_token %}
+      {% include "components/form.html" %}
+      <button class="button">
+        {% if creating %}Créer le dossier{% else %}Enregistrer la présentation{% endif %}
+        {% include "components/icon.html" with name="arrow" %}
+      </button>
+    </form>
+    <aside class="editor-note">
+      <span class="step-label">01 / PRÉSENTER</span>
+      <h2>
+        Un peu de contexte
+        <br>
+        fait la différence.
+      </h2>
+      <p>Donnez un titre clair à votre dossier et expliquez ce que le destinataire y trouvera.</p>
+      <div class="step">
+        <b>02</b>
+        <div>
+          <strong>Ajoutez vos fichiers</strong>
+          <p>Fichiers ou dossier entier, avec son arborescence.</p>
+        </div>
+      </div>
+      <div class="step">
+        <b>03</b>
+        <div>
+          <strong>Choisissez vos conditions</strong>
+          <p>Un lien par destinataire, avec ses propres règles.</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+{% endblock %}

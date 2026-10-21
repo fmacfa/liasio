@@ -1,1 +1,13 @@
-<a class="collection-card" href="{% url 'collection' item.pk %}"><div class="spread"><span class="folder-icon">{% include 'components/icon.html' with name='folder' %}</span><span class="card-arrow">↗</span></div><h3>{{ item.title }}</h3><p>{{ item.description|default:'Votre prochain partage commence ici.'|truncatechars:86 }}</p><div class="card-meta"><span>{{ item.files.count }} fichier{{ item.files.count|pluralize }} · {{ item.total_bytes|filesizeformat }}</span><span>{{ item.link_count }} lien{{ item.link_count|pluralize }}</span></div><div class="card-bottom">Modifié le {{ item.updated_at|date:'d M Y' }}</div></a>
+<a class="collection-card" href="{% url 'collection' item.pk %}">
+  <div class="spread">
+    <span class="folder-icon">{% include "components/icon.html" with name="folder" %}</span>
+    <span class="card-arrow">↗</span>
+  </div>
+  <h3>{{ item.title }}</h3>
+  <p>{{ item.description|default:'Votre prochain partage commence ici.'|truncatechars:86 }}</p>
+  <div class="card-meta">
+    <span>{{ item.files.count }} fichier{{ item.files.count|pluralize }} · {{ item.total_bytes|filesizeformat }}</span>
+    <span>{{ item.link_count }} lien{{ item.link_count|pluralize }}</span>
+  </div>
+  <div class="card-bottom">Modifié le {{ item.updated_at|date:'d M Y' }}</div>
+</a>

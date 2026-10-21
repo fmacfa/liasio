@@ -1,2 +1,21 @@
-{% extends 'base.html' %}{% block title %}Partage protégé · LinkVault{% endblock %}{% block body_class %}public-body{% endblock %}
-{% block body %}<header class="public-header"><a class="brand" href="{% url 'login' %}">{% include 'components/logo.html' %}</a><span class="badge">Partage protégé</span></header><main id="main" class="unlock-card panel"><span class="empty-icon">{% include 'components/icon.html' with name='lock' %}</span><span class="eyebrow">CE PARTAGE VOUS EST RÉSERVÉ</span><h1>Une clé pour entrer.</h1><p class="muted">Saisissez le mot de passe communiqué par l’expéditeur pour découvrir les fichiers.</p><form method="post" action="{% url 'unlock' token %}">{% csrf_token %}{% include 'components/form.html' %}<button class="button full">Ouvrir le partage {% include 'components/icon.html' with name='arrow' %}</button></form><small class="footnote">L’ouverture de la page ne consomme aucun téléchargement.</small></main>{% endblock %}
+{% extends "base.html" %}
+{% block title %}Partage protégé · LinkVault{% endblock %}
+{% block body_class %}public-body{% endblock %}
+{% block body %}
+  <header class="public-header">
+    <a class="brand" href="{% url 'login' %}">{% include "components/logo.html" %}</a>
+    <span class="badge">Partage protégé</span>
+  </header>
+  <main id="main" class="unlock-card panel">
+    <span class="empty-icon">{% include "components/icon.html" with name="lock" %}</span>
+    <span class="eyebrow">CE PARTAGE VOUS EST RÉSERVÉ</span>
+    <h1>Une clé pour entrer.</h1>
+    <p class="muted">Saisissez le mot de passe communiqué par l’expéditeur pour découvrir les fichiers.</p>
+    <form method="post" action="{% url 'unlock' token %}">
+      {% csrf_token %}
+      {% include "components/form.html" %}
+      <button class="button full">Ouvrir le partage {% include "components/icon.html" with name="arrow" %}</button>
+    </form>
+    <small class="footnote">L’ouverture de la page ne consomme aucun téléchargement.</small>
+  </main>
+{% endblock %}

@@ -1,1 +1,10 @@
-{% if messages %}<div class="messages" aria-live="polite">{% for message in messages %}<div class="message {{ message.tags }}">{% include 'components/icon.html' with name='info' %}<span>{{ message }}</span></div>{% endfor %}</div>{% endif %}
+{% if messages %}
+  <div class="messages" aria-live="polite">
+    {% for message in messages %}
+      <div class="message {{ message.tags }}">
+        {% include "components/icon.html" with name="info" %}
+        <span>{{ message }}</span>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}

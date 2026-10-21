@@ -1,1 +1,14 @@
-{% extends 'account/layout.html' %}{% block auth_content %}<h2>Votre nouveau mot de passe.</h2>{% if validlink %}<form method="post" class="auth-form">{% csrf_token %}{% include 'components/form.html' %}<button class="button full">Enregistrer le mot de passe</button></form>{% else %}<p>Ce lien est invalide ou a expiré.</p><a class="button secondary" href="{% url 'password_reset' %}">Demander un nouveau lien</a>{% endif %}{% endblock %}
+{% extends "account/layout.html" %}
+{% block auth_content %}
+  <h2>Votre nouveau mot de passe.</h2>
+  {% if validlink %}
+    <form method="post" class="auth-form">
+      {% csrf_token %}
+      {% include "components/form.html" %}
+      <button class="button full">Enregistrer le mot de passe</button>
+    </form>
+  {% else %}
+    <p>Ce lien est invalide ou a expiré.</p>
+    <a class="button secondary" href="{% url 'password_reset' %}">Demander un nouveau lien</a>
+  {% endif %}
+{% endblock %}

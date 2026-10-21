@@ -1,1 +1,41 @@
-<form class="upload-zone" method="post" enctype="multipart/form-data" action="{% url 'collection_upload' collection.pk %}" data-upload-form>{% csrf_token %}<span class="upload-icon">{% include 'components/icon.html' with name='upload' %}</span><h3>Faites de la place à vos fichiers.</h3><p>Glissez vos fichiers ici, ou sélectionnez-les.</p><div class="upload-actions"><label class="button secondary file-picker">Choisir des fichiers<input type="file" name="files" multiple data-file-input></label><label class="button secondary file-picker">Choisir un dossier<input type="file" webkitdirectory multiple data-folder-input></label></div><input type="hidden" name="paths" value=""><div class="upload-selection" aria-live="polite"></div><ul class="selected-files" aria-label="Fichiers sélectionnés"></ul><div class="progress-shell" hidden><div class="spread"><span data-upload-phase>Envoi des fichiers</span><strong data-upload-percent>0 %</strong></div><progress class="upload-progress" max="100" value="0" aria-label="Progression de l’envoi"></progress></div><button class="button upload-submit" type="submit">Importer les fichiers {% include 'components/icon.html' with name='upload' %}</button><small>{{ max_file_mb }} Mio par fichier · {{ max_upload_mb }} Mio par dossier · 100 fichiers par dossier.<br>Révoquez les liens actifs avant de modifier les fichiers.</small><noscript><p>Sans JavaScript, la sélection de fichiers fonctionne ; la barre de progression et l’import de dossiers nécessitent JavaScript.</p></noscript></form>
+<form class="upload-zone"
+      method="post"
+      enctype="multipart/form-data"
+      action="{% url 'collection_upload' collection.pk %}"
+      data-upload-form>
+  {% csrf_token %}
+  <span class="upload-icon">{% include "components/icon.html" with name="upload" %}</span>
+  <h3>Faites de la place à vos fichiers.</h3>
+  <p>Glissez vos fichiers ici, ou sélectionnez-les.</p>
+  <div class="upload-actions">
+    <label class="button secondary file-picker">
+      Choisir des fichiers<input type="file" name="files" multiple data-file-input>
+    </label>
+    <label class="button secondary file-picker">
+      Choisir un dossier<input type="file" webkitdirectory multiple data-folder-input>
+    </label>
+  </div>
+  <input type="hidden" name="paths" value="">
+  <div class="upload-selection" aria-live="polite"></div>
+  <ul class="selected-files" aria-label="Fichiers sélectionnés">
+  </ul>
+  <div class="progress-shell" hidden>
+    <div class="spread">
+      <span data-upload-phase>Envoi des fichiers</span>
+      <strong data-upload-percent>0 %</strong>
+    </div>
+    <progress class="upload-progress"
+              max="100"
+              value="0"
+              aria-label="Progression de l’envoi">
+    </progress>
+  </div>
+  <button class="button upload-submit"
+          type="submit">Importer les fichiers {% include "components/icon.html" with name="upload" %}</button>
+  <small>{{ max_file_mb }} Mio par fichier · {{ max_upload_mb }} Mio par dossier · 100 fichiers par dossier.
+    <br>
+  Révoquez les liens actifs avant de modifier les fichiers.</small>
+  <noscript>
+    <p>Sans JavaScript, la sélection de fichiers fonctionne ; la barre de progression et l’import de dossiers nécessitent JavaScript.</p>
+  </noscript>
+</form>
