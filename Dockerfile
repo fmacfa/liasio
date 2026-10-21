@@ -11,7 +11,7 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PATH="/app/.venv/bin:$PATH" DATA_DIR=/data
 COPY --from=builder /app/.venv /app/.venv
 COPY --chown=linkvault:linkvault . /app
-RUN mkdir -p /data/files /data/tmp /data/uploads /app/staticfiles && chown -R linkvault:linkvault /data /app/staticfiles && chmod 700 /data /data/files /data/tmp /data/uploads && chmod +x /app/docker/entrypoint.sh
+RUN mkdir -p /data/files /data/tmp /data/uploads /app/staticfiles /run/linkvault-preview && chown -R linkvault:linkvault /data /app/staticfiles /run/linkvault-preview && chmod 700 /data /data/files /data/tmp /data/uploads /run/linkvault-preview && chmod +x /app/docker/entrypoint.sh
 USER 10001:10001
 EXPOSE 8000
 ENTRYPOINT ["/app/docker/entrypoint.sh"]

@@ -1,6 +1,6 @@
 # Évolutions proposées
 
-La [version 0.2](CHANGELOG.md) ajoute TOTP, codes de récupération, corbeille, transferts reprenables, quotas administrables, surveillance, restauration testée et publication des images.
+La [version 0.3](CHANGELOG.md) ajoute une galerie d’images et des aperçus de la première page des PDF, avec un moteur isolé. Elle complète TOTP, les codes de récupération, la corbeille, les transferts reprenables, les quotas administrables, la surveillance, la restauration testée et la publication des images Docker de la version 0.2.
 
 ## Prochaines priorités
 
@@ -23,7 +23,7 @@ La [version 0.2](CHANGELOG.md) ajoute TOTP, codes de récupération, corbeille, 
 - Espaces d’équipe, SSO OIDC et rôles plus fins.
 - API à jetons de portée limitée et webhooks signés.
 - Interface disponible en français et en anglais.
-- Aperçus générés dans un service isolé, sans contenu actif sur le domaine de l’application.
+- Étendre les formats de prévisualisation en conservant l’isolation du moteur et l’absence de contenu actif.
 - Chiffrement de bout en bout conçu séparément, avec gestion de clés et récupération explicites. Il change les possibilités d’analyse antivirus côté serveur.
 
 ## Choix à conserver

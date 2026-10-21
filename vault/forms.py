@@ -103,6 +103,12 @@ class CollectionForm(forms.ModelForm):
 
 
 class LinkForm(forms.ModelForm):
+    allow_previews = forms.BooleanField(
+        label="Afficher les aperçus des images et PDF",
+        required=False,
+        initial=True,
+        help_text="Images réduites et première page des PDF jusqu’à 20 Mio, visibles avant téléchargement. Leur consultation ne consomme pas le lien et leur copie reste possible.",
+    )
     password = forms.CharField(
         label="Mot de passe du lien",
         required=False,
@@ -114,7 +120,7 @@ class LinkForm(forms.ModelForm):
 
     class Meta:
         model = ShareLink
-        fields = ["label", "expires_at", "max_downloads"]
+        fields = ["label", "expires_at", "max_downloads", "allow_previews"]
         labels = {
             "label": "Nom du lien (visible par vous)",
             "expires_at": "Date d’expiration",

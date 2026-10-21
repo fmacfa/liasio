@@ -1,4 +1,4 @@
-# Modèle de sécurité de LinkVault 0.2
+# Modèle de sécurité de LinkVault 0.3
 
 ## Frontières de confiance
 
@@ -30,7 +30,7 @@ La révocation et la réservation ont un ordre atomique en base : si la révocat
 
 Les limites sont appliquées à plusieurs niveaux : proxy, corps de requête, réception par blocs, fichier, dossier, nombre de fichiers et quota utilisateur sous verrou. Les imports non connectés ou sur un autre compte sont refusés avant le parsing multipart.
 
-L’extension est une première règle, pas une preuve du type réel. L’antivirus analyse les octets. Les archives ne sont jamais extraites par l’application. Les téléchargements sont `application/octet-stream` et `attachment` ; aucun contenu utilisateur actif n’est exécuté. La version 0.2 ne fait pas de validation sémantique intégrale de tous les formats.
+L’extension est une première règle, pas une preuve du type réel. L’antivirus analyse les octets. Les archives ne sont jamais extraites par l’application. Les téléchargements sont `application/octet-stream` et `attachment` ; aucun contenu utilisateur actif n’est exécuté. La version 0.3 ne fait pas de validation sémantique intégrale de tous les formats.
 
 ClamAV utilise INSTREAM sur un réseau Docker privé. Toute réponse autre que `stream: OK` bloque l’enregistrement. Les limites dépassées et archives chiffrées sont signalées via la configuration du démon. L’application n’enregistre un fichier comme analysé qu’après un résultat accepté.
 
@@ -62,3 +62,9 @@ Les fichiers supprimés restent privés dans la corbeille et dans le quota. La r
 La surveillance n’expose les métriques que sur une route à jeton Bearer ; les alertes e-mail nécessitent une configuration explicite. Les sauvegardes sont restaurées dans une instance isolée pour vérifier les octets, les compteurs et les clés MFA. Voir [RELIABILITY.md](RELIABILITY.md) pour les limites et hypothèses d’exploitation.
 
 La [revue de code préalable à 0.2](SECURITY_REVIEW.md) décrit les corrections et leurs tests.
+
+## Aperçus ajoutés en 0.3
+
+La galerie est optionnelle par lien et désactivée pour les liens créés avant la migration. Chaque dérivé est autorisé avant lecture du cache et après son rendu : mot de passe, appartenance du fichier, état du compte, corbeille, révocation, expiration et nombre de téléchargements. Consulter un aperçu ne consomme pas un téléchargement ; une copie du contenu affiché reste possible.
+
+Les originaux ne sont jamais renvoyés par la route d’aperçu. Pillow et PDFium produisent un JPEG réduit sans métadonnées dans un conteneur sans réseau, sans secret, sans volume de fichiers et avec racine en lecture seule. Le processus de rendu, le cache, les dimensions, les tailles et les durées sont bornés. Le [guide des aperçus](PREVIEWS.md) précise ces limites et le mode local de développement, qui ne possède pas l’isolation Docker. Cette nouvelle surface nécessite le maintien à jour des décodeurs natifs.

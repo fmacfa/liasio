@@ -38,6 +38,9 @@ class Command(BaseCommand):
 
             purge_expired()
             cleanup_expired()
+            from vault.previews import cleanup_cache
+
+            cleanup_cache()
             known = set(Asset.all_objects.values_list("blob", flat=True))
             removed = 0
             for path in Path(settings.MEDIA_ROOT).rglob("*"):

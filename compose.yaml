@@ -10,13 +10,16 @@ services:
       POSTGRES_DB: linkvault
       POSTGRES_USER: linkvault
       DATA_DIR: /data
+      PREVIEW_SOCKET: /run/linkvault-preview/render.sock
     volumes:
       - files:/data
+      - preview_socket:/run/linkvault-preview:ro
     expose: ["8000"]
     networks: [frontend, backend]
     depends_on:
       db: {condition: service_healthy}
       clamav: {condition: service_healthy}
+      preview: {condition: service_started}
     security_opt: ["no-new-privileges:true"]
     cap_drop: [ALL]
     mem_limit: 1g
@@ -28,6 +31,19 @@ services:
       timeout: 10s
       retries: 5
       start_period: 60s
+  preview:
+    image: ${LINKVAULT_IMAGE:-linkvault:local}
+    restart: unless-stopped
+    command: ["python", "scripts/preview_server.py", "/run/linkvault-preview/render.sock"]
+    network_mode: none
+    read_only: true
+    volumes: ["preview_socket:/run/linkvault-preview"]
+    tmpfs: ["/tmp:rw,noexec,nosuid,nodev,size=96m,uid=10001,gid=10001,mode=700"]
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: [ALL]
+    mem_limit: 512m
+    cpus: 1
+    pids_limit: 32
   maintenance:
     image: ${LINKVAULT_IMAGE:-linkvault:local}
     restart: unless-stopped
@@ -98,6 +114,7 @@ networks:
     internal: true
   updates:
 volumes:
+  preview_socket:
   files:
   database:
   signatures:

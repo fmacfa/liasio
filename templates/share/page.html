@@ -1,6 +1,8 @@
 {% extends "base.html" %}
+{% load static %}
+{% block scripts %}<script src="{% static 'previews.js' %}" defer></script>{% endblock %}
 {% block title %}{{ collection.title }} · {{ branding.name|default:'LinkVault' }}{% endblock %}
-{% block body_class %}public-body theme-{{ branding.theme|default:'forest' }}{% endblock %}
+{% block body_class %}public-body {% if link.allow_previews %}has-previews{% endif %} theme-{{ branding.theme|default:'forest' }}{% endblock %}
 {% block body %}
   <header class="public-header">
     <a class="public-brand" href="{% url 'share' token %}">
@@ -27,6 +29,31 @@
         <h2>Votre dossier</h2>
         <span>{{ collection.files.count }} fichier{{ collection.files.count|pluralize }} · {{ collection.total_bytes|filesizeformat }}</span>
       </div>
+      {% if link.allow_previews %}
+      <p class="gallery-intro">Un aperçu avant de télécharger. Ouvrez une image ou un PDF pour le regarder de plus près.</p>
+      <div class="file-gallery" data-file-gallery>
+        {% for file in collection.files.all %}
+        <article class="file-card">
+          {% if file.preview_kind %}
+          <a class="preview-tile" href="{% url 'file_preview' token file.pk %}" data-preview data-name="{{ file.path }}" data-detail="{{ file.size|filesizeformat }} · {% if file.preview_kind == 'pdf' %}Première page du PDF{% else %}Image réduite{% endif %}" aria-label="Aperçu de {{ file.path }}">
+            <span class="preview-fallback"><span class="file-type">{{ file.extension }}</span><span data-preview-state>Charger l’aperçu</span></span>
+            <img data-preview-src="{% url 'file_preview' token file.pk %}" alt="" decoding="async" hidden>
+            <span class="preview-zoom">{% include "components/icon.html" with name="eye" %}Agrandir</span>
+          </a>
+          {% else %}
+          <div class="preview-tile preview-unavailable">
+            <span class="preview-fallback"><span class="file-type">{{ file.extension }}</span><span>À découvrir après téléchargement</span></span>
+          </div>
+          {% endif %}
+          <div class="file-card-info">
+            <strong title="{{ file.path }}">{{ file.path }}</strong>
+            <span>{{ file.size|filesizeformat }}{% if file.preview_kind == 'pdf' %} · PDF, page 1{% endif %}</span>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+      <p class="preview-note">Aperçus des images et PDF jusqu’à 20 Mio. Leur consultation ne consomme pas de téléchargement. Les fichiers originaux sont dans le dossier ZIP.</p>
+      {% else %}
       {% for file in collection.files.all %}
         <div class="file-row">
           <span class="file-type">{{ file.extension }}</span>
@@ -41,6 +68,7 @@
           {% endif %}
         </div>
       {% endfor %}
+      {% endif %}
       <form method="post" action="{% url 'download' token %}">
         {% csrf_token %}
         <button class="button full download-button">
@@ -62,6 +90,23 @@
     </section>
     <p class="privacy-note">L’expéditeur peut consulter les dates d’ouverture de cette page et des téléchargements autorisés. Aucun outil publicitaire n’est utilisé.</p>
   </main>
+  {% if link.allow_previews %}
+  <dialog class="preview-dialog" data-preview-dialog aria-labelledby="preview-title" aria-describedby="preview-detail">
+    <div class="preview-dialog-bar">
+      <div><h2 id="preview-title"></h2><p id="preview-detail"></p></div>
+      <button type="button" class="preview-close" data-preview-close aria-label="Fermer l’aperçu">×</button>
+    </div>
+    <div class="preview-stage">
+      <p data-preview-message role="status">Chargement de l’aperçu…</p>
+      <img data-preview-image alt="" hidden>
+    </div>
+    <div class="preview-dialog-footer">
+      <button class="button secondary" data-preview-prev aria-label="Fichier précédent">← Précédent</button>
+      <span data-preview-position></span>
+      <button class="button secondary" data-preview-next aria-label="Fichier suivant">Suivant →</button>
+    </div>
+  </dialog>
+  {% endif %}
   <footer class="public-footer">
     <p>{{ branding.footer }}</p>
     <a class="powered-by"

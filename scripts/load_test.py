@@ -264,7 +264,7 @@ try:
             elapsed = time.monotonic() - started
             manage("verify_storage")
             report = {
-                "version": "0.2.0",
+                "version": "0.3.0",
                 "platform": platform.system(),
                 "python": platform.python_version(),
                 "database": args.database,

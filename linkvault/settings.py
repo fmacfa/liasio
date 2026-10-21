@@ -34,6 +34,8 @@ MEDIA_ROOT = DATA_DIR / "files"
 MEDIA_ROOT.mkdir(mode=0o700, parents=True, exist_ok=True)
 FILE_UPLOAD_TEMP_DIR = str(DATA_DIR / "tmp")
 Path(FILE_UPLOAD_TEMP_DIR).mkdir(mode=0o700, parents=True, exist_ok=True)
+PREVIEWS_ENABLED = os.environ.get("PREVIEWS_ENABLED", "true").lower() == "true"
+PREVIEW_SOCKET = os.environ.get("PREVIEW_SOCKET", "")
 
 INSTALLED_APPS = [
     "django.contrib.auth",
@@ -194,7 +196,7 @@ LOGGING = {
 }
 
 # Reliability and account protection (v0.2).
-APP_VERSION = "0.2.0"
+APP_VERSION = "0.3.0"
 MFA_ENCRYPTION_KEY = os.environ.get("MFA_ENCRYPTION_KEY", "")
 TRASH_RETENTION_DAYS = max(1, int(os.environ.get("TRASH_RETENTION_DAYS", 30)))
 UPLOAD_STAGING_ROOT = DATA_DIR / "uploads"
