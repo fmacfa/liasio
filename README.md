@@ -8,26 +8,26 @@ LinkVault is an open-source file-sharing application that you host on your own s
 
 French user interface · **MIT** license · Python / Django · Docker Compose
 
-> **Version 0.1 — initial functional release.** Security controls are tested, but the project has not undergone an independent security audit. End-to-end encryption and two-factor authentication are not yet available.
+> **Version 0.2 — account protection and operational reliability.** TOTP, resumable uploads, trash and restoration checks are available. This remains an early release; it has not undergone an independent human security audit and does not provide end-to-end encryption.
 
 ![LinkVault dashboard with fictional demo data](docs/screenshots/dashboard.png)
 
 ## Features
 
-| Need | Available in version 0.1 |
+| Need | Available in version 0.2 |
 | --- | --- |
 | First-time setup | Setup wizard protected by an installation key; create the administrator account with an email address and password |
 | Multiple accounts | Personal invitations valid for 7 days, single-use and revocable; isolated member accounts |
 | File library | Upload files or a complete directory while preserving its structure; add a title, description, and message to the recipient |
-| Upload page | Select a destination folder, review filenames and sizes, follow real upload progress, then see the verification stage |
+| Upload page | Destination, file/folder selection, progress, pause and resume for 24 hours, then antivirus verification |
 | Sharing page | Per-account name, tagline, color palette, and footer, with a live preview |
 | Multiple links per folder | Internal label, optional password, expiration date, and maximum download count |
 | Single-use links | One authorized download, including when requests arrive simultaneously |
 | Activity tracking | Dated page opens and authorized downloads, filtering by link, and CSV export |
-| Storage management | File counts, sizes, quotas, search, sorting by size/name/date, and individual or bulk deletion with confirmation |
-| Storage administration | Available disk space, total file count, and per-account usage; quotas adjustable from the command line |
-| Access management | Suspend members and revoke their links and sessions; password changes and recovery |
-| Operations | Automatic HTTPS through Caddy, PostgreSQL, ClamAV antivirus, hourly maintenance, and documented backup/restore procedures |
+| Storage management | File counts, sizes, quotas, search, sorting by size/name/date, and individual/bulk deletion to a recoverable 30-day trash |
+| Storage administration | Available disk space, total file count, and per-account usage; quotas editable in the administration page |
+| Access management | Suspend members and revoke their links and sessions; password changes/recovery, optional TOTP and one-use recovery codes |
+| Operations | Automatic HTTPS through Caddy, PostgreSQL, ClamAV antivirus, five-minute health checks, optional alerts, and automatically tested backup restoration |
 
 **A folder is stored only once.** Create a password-protected link for one client, another that expires tomorrow, and a third that allows a single download.
 
@@ -62,6 +62,14 @@ The configuration script creates `.env` with `0600` permissions and refuses to o
 
 Caddy obtains and renews the TLS certificate. If you use another reverse proxy, read the [operations guide](docs/OPERATIONS.md) (French) before changing the topology.
 
+### Prebuilt images and upgrades
+
+Versioned images are published by GitHub Actions with a software bill of materials (SBOM) and provenance. Releases also provide a compressed Docker archive for offline installation. See [releases](https://github.com/fmacfa/linkvault/releases) and the [changelog](CHANGELOG.md).
+
+Set `LINKVAULT_IMAGE=ghcr.io/fmacfa/linkvault:0.2.0` in `.env` to use the registry image, then `docker compose pull app maintenance` and `docker compose up -d --no-build`. For source builds, keep the default and use `--build`.
+
+Before upgrading from 0.1, preserve your original keys and take a complete backup. Read the [upgrade and reliability guide](docs/RELIABILITY.md), including MFA key handling, trash quotas, monitoring and restore verification.
+
 ## Try it locally
 
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/), then run:
@@ -94,8 +102,8 @@ Configure values in `.env`; [.env.example](.env.example) provides a template.
 | `APP_URL` / `DOMAIN` | Canonical HTTPS origin without a path / domain name |
 | `SECRET_KEY` | Random secret of at least 50 characters; signs sessions and access tokens |
 | `SETUP_TOKEN` | Secret of at least 32 characters for first-account creation |
-| `MAX_FILE_BYTES` | 104857600: 100 MiB per file |
-| `MAX_UPLOAD_BYTES` | 524288000: 500 MiB per upload **and per folder** |
+| `MAX_FILE_BYTES` | 1073741824: 1 GiB per file |
+| `MAX_UPLOAD_BYTES` | 5368709120: 5 GiB per folder; multipart fallback remains 500 MiB/request |
 | `DEFAULT_QUOTA_BYTES` | 5368709120: 5 GiB for each new account |
 | `EVENT_RETENTION_DAYS` | 90 days of activity and administrative history |
 | `TIME_ZONE` | `Europe/Berlin`; timestamps are stored in UTC and displayed in this time zone |
@@ -110,6 +118,17 @@ This version has a fixed limit of 100 files per folder. Accepted file extensions
 
 Invitations generate a link to copy and share. They do not send email automatically. Without SMTP, the server administrator can reset a password using `manage.py changepassword`.
 
+## Reliability
+
+- **MFA:** enable an authenticator app from **Mon compte** and securely save the ten recovery codes.
+- **Trash:** restore a file or folder for 30 days; permanently purging it frees the quota.
+- **Resumable transfers:** reselect the same files after a pause or reload; confirmed blocks are retained for 24 hours.
+- **Administration:** adjust quotas and inspect capacity, alerts and backup checks in **Exploitation**.
+- **Backups:** `scripts/backup-and-verify.sh` creates a backup and proves it can be restored in isolated Docker volumes. Schedule it on your server and keep encrypted off-server copies.
+- **Monitoring:** optional SMTP alerts and a bearer-protected `/ready/` endpoint; `/health/` remains a minimal liveness probe.
+
+See [RELIABILITY.md](docs/RELIABILITY.md) for configuration, limits, failure behavior and reproducible load-test evidence. New settings include `MFA_ENCRYPTION_KEY`, `TRASH_RETENTION_DAYS`, `MIN_FREE_DISK_BYTES`, `MONITORING_TOKEN`, `MONITOR_EMAIL` and `BACKUP_MAX_AGE_HOURS`.
+
 ## Security and privacy
 
 - **Argon2id** password hashing; web forms require at least 12 characters and accept at most 128.
@@ -122,7 +141,9 @@ Invitations generate a link to copy and share. They do not send email automatica
 - Mandatory ClamAV scanning in the production stack; unexpected responses, malware detections, scanning limits, or service outages block uploads.
 - Downloads served as attachments; HTML/SVG content is not previewed or executed.
 - Activity history without IP addresses, geolocation, or advertising identifiers; CSV exports neutralize formula injection.
-- File deletion revokes affected sharing links and releases quota; orphaned blobs are removed after a safety delay.
+- Deletion revokes sharing links immediately; trash retains quota until permanent purge.
+- TOTP secrets are encrypted; codes cannot be replayed, recovery codes are one-use, and pending logins expire.
+- Resumable uploads reserve quota, verify block checksums and publish only after complete antivirus verification.
 
 The operating-system administrator can read stored files: **this is not end-to-end encryption**. Use encrypted volumes and backups where needed. Antivirus scanning does not guarantee that a file is harmless. Extension checks do not fully validate the contents of every accepted format. This application is not designed for large-scale anonymous uploads.
 
@@ -136,6 +157,8 @@ uv run --env-file .env python manage.py test --noinput
 uv run --env-file .env python manage.py makemigrations --check --dry-run
 uv run --env-file .env pip-audit --local
 ```
+
+The [pre-release review summary](docs/SECURITY_REVIEW.md) records the automated source review, three corrected issues and regression evidence.
 
 The test suite covers account isolation, upload limits, invitations, CSRF, link passwords, path traversal, deletion, and concurrent access. The GitHub workflow tests SQLite and PostgreSQL, builds the container image, and checks antivirus behavior using the EICAR test signature.
 

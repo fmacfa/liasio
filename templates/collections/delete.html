@@ -1,17 +1,17 @@
 {% extends "layout.html" %}
 {% block breadcrumb %}Supprimer un dossier{% endblock %}
 {% block content %}
-  <div class="panel narrow form-panel">
-    <h1>Supprimer ce dossier ?</h1>
-    <p>
-      <strong>{{ collection.title }}</strong>, ses {{ collection.files.count }} fichier(s), ses liens et leur historique seront supprimés. Cette action est définitive.
-    </p>
-    <form method="post">
-      {% csrf_token %}
-      <div class="button-row">
-        <a class="button secondary" href="{% url 'collection' collection.pk %}">Conserver le dossier</a>
-        <button class="button danger">Supprimer définitivement</button>
-      </div>
-    </form>
-  </div>
+    <div class="panel narrow form-panel">
+        <h1>Placer ce dossier dans la corbeille ?</h1>
+        <p>
+            <strong>{{ collection.title }}</strong>, ses {{ collection.files.count }} fichier(s), seront conservés pendant {{ trash_retention }} jours. Ses liens seront révoqués. Le quota sera libéré après la suppression définitive.
+        </p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="button-row">
+                <a class="button secondary" href="{% url 'collection' collection.pk %}">Conserver le dossier</a>
+                <button class="button danger">Placer dans la corbeille</button>
+            </div>
+        </form>
+    </div>
 {% endblock %}

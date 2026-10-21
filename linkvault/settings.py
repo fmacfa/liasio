@@ -11,11 +11,21 @@ if len(SECRET_KEY) < 50:
     raise ImproperlyConfigured("Set SECRET_KEY to at least 50 random characters.")
 APP_URL = os.environ.get("APP_URL", "http://127.0.0.1:8000").rstrip("/")
 origin = urlparse(APP_URL)
-if not origin.hostname or origin.path or origin.query or origin.fragment or origin.username:
-    raise ImproperlyConfigured("APP_URL must be an origin, e.g. https://files.example.com.")
+if (
+    not origin.hostname
+    or origin.path
+    or origin.query
+    or origin.fragment
+    or origin.username
+):
+    raise ImproperlyConfigured(
+        "APP_URL must be an origin, e.g. https://files.example.com."
+    )
 if origin.scheme not in (["http", "https"] if DEBUG else ["https"]):
     raise ImproperlyConfigured("HTTPS is required outside development.")
-ALLOWED_HOSTS = [origin.hostname, "localhost", "127.0.0.1"] if DEBUG else [origin.hostname]
+ALLOWED_HOSTS = (
+    [origin.hostname, "localhost", "127.0.0.1"] if DEBUG else [origin.hostname]
+)
 CSRF_TRUSTED_ORIGINS = [APP_URL]
 SETUP_TOKEN = os.environ.get("SETUP_TOKEN", "")
 DATA_DIR = Path(os.environ.get("DATA_DIR", BASE_DIR / "data"))
@@ -26,8 +36,12 @@ FILE_UPLOAD_TEMP_DIR = str(DATA_DIR / "tmp")
 Path(FILE_UPLOAD_TEMP_DIR).mkdir(mode=0o700, parents=True, exist_ok=True)
 
 INSTALLED_APPS = [
-    "django.contrib.auth", "django.contrib.contenttypes", "django.contrib.sessions",
-    "django.contrib.messages", "django.contrib.staticfiles", "vault.apps.VaultConfig",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "vault.apps.VaultConfig",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -37,36 +51,48 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "vault.mfa.MFASessionMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 ROOT_URLCONF = "linkvault.urls"
 WSGI_APPLICATION = "linkvault.wsgi.application"
-TEMPLATES = [{
-    "BACKEND": "django.template.backends.django.DjangoTemplates",
-    "DIRS": [BASE_DIR / "templates"], "APP_DIRS": True,
-    "OPTIONS": {"context_processors": [
-        "django.template.context_processors.request",
-        "django.contrib.auth.context_processors.auth",
-        "django.contrib.messages.context_processors.messages",
-        "vault.context_processors.brand",
-    ]},
-}]
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "vault.context_processors.brand",
+            ]
+        },
+    }
+]
 if os.environ.get("POSTGRES_HOST"):
-    DATABASES = {"default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "HOST": os.environ["POSTGRES_HOST"],
-        "NAME": os.environ.get("POSTGRES_DB", "linkvault"),
-        "USER": os.environ.get("POSTGRES_USER", "linkvault"),
-        "PASSWORD": os.environ["POSTGRES_PASSWORD"],
-        "CONN_MAX_AGE": 60, "CONN_HEALTH_CHECKS": True,
-    }}
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "HOST": os.environ["POSTGRES_HOST"],
+            "NAME": os.environ.get("POSTGRES_DB", "linkvault"),
+            "USER": os.environ.get("POSTGRES_USER", "linkvault"),
+            "PASSWORD": os.environ["POSTGRES_PASSWORD"],
+            "CONN_MAX_AGE": 60,
+            "CONN_HEALTH_CHECKS": True,
+        }
+    }
 else:
-    DATABASES = {"default": {
-        "ENGINE": "django.db.backends.sqlite3", "NAME": DATA_DIR / "db.sqlite3",
-        "OPTIONS": {"timeout": 30, "transaction_mode": "IMMEDIATE"},
-        "TEST": {"NAME": str(DATA_DIR / "test.sqlite3")},
-    }}
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": DATA_DIR / "db.sqlite3",
+            "OPTIONS": {"timeout": 30, "transaction_mode": "IMMEDIATE"},
+            "TEST": {"NAME": str(DATA_DIR / "test.sqlite3")},
+        }
+    }
 
 AUTH_USER_MODEL = "vault.User"
 AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend"]
@@ -75,8 +101,13 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.PBKDF2PasswordHasher",
 ]
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator", "OPTIONS": {"min_length": 12}},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {"min_length": 12},
+    },
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
@@ -105,19 +136,31 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STORAGES = {
     "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
-    "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    },
 }
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 FILE_UPLOAD_PERMISSIONS = 0o600
 FILE_UPLOAD_DIRECTORY_PERMISSIONS = 0o700
-FILE_UPLOAD_HANDLERS = ["vault.uploads.BoundedUploadHandler", "django.core.files.uploadhandler.TemporaryFileUploadHandler"]
-DATA_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024
+FILE_UPLOAD_HANDLERS = [
+    "vault.uploads.BoundedUploadHandler",
+    "django.core.files.uploadhandler.TemporaryFileUploadHandler",
+]
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024
 DATA_UPLOAD_MAX_NUMBER_FILES = 100
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 300
-MAX_FILE_BYTES = int(os.environ.get("MAX_FILE_BYTES", 100 * 1024 * 1024))
-MAX_UPLOAD_BYTES = int(os.environ.get("MAX_UPLOAD_BYTES", 500 * 1024 * 1024))
+MAX_FILE_BYTES = int(os.environ.get("MAX_FILE_BYTES", 1024**3))
+MAX_UPLOAD_BYTES = int(os.environ.get("MAX_UPLOAD_BYTES", 5 * 1024**3))
 DEFAULT_QUOTA_BYTES = int(os.environ.get("DEFAULT_QUOTA_BYTES", 5 * 1024**3))
-ALLOWED_EXTENSIONS = set(os.environ.get("ALLOWED_EXTENSIONS", "pdf,txt,csv,md,json,jpg,jpeg,png,webp,gif,zip,docx,xlsx,pptx,odt,ods,mp3,mp4,mov").lower().split(","))
+ALLOWED_EXTENSIONS = set(
+    os.environ.get(
+        "ALLOWED_EXTENSIONS",
+        "pdf,txt,csv,md,json,jpg,jpeg,png,webp,gif,zip,docx,xlsx,pptx,odt,ods,mp3,mp4,mov",
+    )
+    .lower()
+    .split(",")
+)
 ANTIVIRUS_REQUIRED = os.environ.get("ANTIVIRUS_REQUIRED", "true").lower() == "true"
 CLAMAV_HOST = os.environ.get("CLAMAV_HOST", "")
 CLAMAV_PORT = int(os.environ.get("CLAMAV_PORT", 3310))
@@ -130,15 +173,36 @@ EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
 EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", "true").lower() == "true"
 EMAIL_USE_SSL = os.environ.get("EMAIL_USE_SSL", "false").lower() == "true"
 EMAIL_TIMEOUT = 10
-DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "LinkVault <noreply@example.com>")
+DEFAULT_FROM_EMAIL = os.environ.get(
+    "DEFAULT_FROM_EMAIL", "LinkVault <noreply@example.com>"
+)
 PASSWORD_RESET_TIMEOUT = 3600
 # Never log capability URLs, passwords, request bodies or cookies.
 LOGGING = {
-    "version": 1, "disable_existing_loggers": False,
+    "version": 1,
+    "disable_existing_loggers": False,
     "filters": {"redact": {"()": "vault.middleware.RedactURLs"}},
     "handlers": {"console": {"class": "logging.StreamHandler", "filters": ["redact"]}},
     "loggers": {
         "django": {"handlers": ["console"], "level": "WARNING", "propagate": False},
-        "gunicorn.error": {"handlers": ["console"], "level": "INFO", "propagate": False},
+        "gunicorn.error": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
     },
 }
+
+# Reliability and account protection (v0.2).
+APP_VERSION = "0.2.0"
+MFA_ENCRYPTION_KEY = os.environ.get("MFA_ENCRYPTION_KEY", "")
+TRASH_RETENTION_DAYS = max(1, int(os.environ.get("TRASH_RETENTION_DAYS", 30)))
+UPLOAD_STAGING_ROOT = DATA_DIR / "uploads"
+UPLOAD_STAGING_ROOT.mkdir(mode=0o700, parents=True, exist_ok=True)
+UPLOAD_CHUNK_BYTES = 4 * 1024 * 1024
+MIN_FREE_DISK_BYTES = int(os.environ.get("MIN_FREE_DISK_BYTES", 1024**3))
+MONITORING_TOKEN = os.environ.get("MONITORING_TOKEN", "")
+MONITOR_EMAIL = os.environ.get("MONITOR_EMAIL", "")
+BACKUP_MAX_AGE_HOURS = int(os.environ.get("BACKUP_MAX_AGE_HOURS", 48))
+
+MAX_MULTIPART_BYTES = 500 * 1024 * 1024

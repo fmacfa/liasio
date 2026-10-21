@@ -8,26 +8,26 @@ LinkVault est une application open source de partage de fichiers à installer su
 
 Interface en français · Licence **MIT** · Python / Django · Docker Compose
 
-> **Version 0.1 — première version fonctionnelle.** Les contrôles de sécurité sont testés, mais le projet n’a pas fait l’objet d’un audit de sécurité indépendant. Il n’offre pas encore de chiffrement de bout en bout ni de double authentification.
+> **Version 0.2 — protection des comptes et fiabilité.** TOTP, transferts reprenables, corbeille et restauration testée sont disponibles. Le projet reste jeune, sans audit humain indépendant ni chiffrement de bout en bout.
 
 ![Tableau de bord LinkVault, avec des données fictives](docs/screenshots/dashboard.png)
 
 ## Ce que vous pouvez faire
 
-| Besoin | Disponible dans la version 0.1 |
+| Besoin | Disponible dans la version 0.2 |
 | --- | --- |
 | Première connexion | Assistant protégé par une clé d’installation, création du compte administrateur avec e-mail et mot de passe |
 | Plusieurs comptes | Invitations personnelles, valables 7 jours, usage unique, révocables ; comptes membres isolés |
 | Bibliothèque | Import de fichiers ou d’un dossier avec son arborescence, titre, présentation et message au destinataire |
-| Page Importer | Choix du dossier, liste des fichiers et tailles, barre de progression réelle, état de vérification après transfert |
+| Page Importer | Choix du dossier, liste des fichiers et tailles, progression, pause et reprise pendant 24 h, puis vérification |
 | Page de partage | Nom, signature, palette de couleurs et pied de page propres à chaque compte ; aperçu en direct |
 | Plusieurs liens par dossier | Nom interne, mot de passe facultatif, date d’expiration, nombre maximal de téléchargements |
 | Usage unique | Un seul téléchargement autorisé, y compris en cas de requêtes simultanées |
 | Suivi | Ouvertures et téléchargements autorisés datés, filtre par lien, export CSV |
-| Stockage | Nombre de fichiers, tailles, quotas, recherche, tri par taille/nom/date, suppression individuelle ou multiple avec confirmation |
-| Administration du stockage | Volume disque disponible, total de fichiers, consommation par compte ; quotas ajustables en ligne de commande |
-| Gestion des accès | Suspension d’un membre, révocation de ses liens et sessions ; changement et récupération du mot de passe |
-| Exploitation | HTTPS automatique avec Caddy, PostgreSQL, antivirus ClamAV, maintenance horaire, sauvegarde/restauration documentée |
+| Stockage | Nombre de fichiers, tailles, quotas, recherche, tri par taille/nom/date, suppression individuelle ou multiple vers une corbeille récupérable de 30 jours |
+| Administration du stockage | Volume disque disponible, total de fichiers, consommation par compte ; quotas modifiables dans l’interface |
+| Gestion des accès | Suspension d’un membre, révocation de ses liens et sessions ; changement/récupération du mot de passe, TOTP et codes de récupération |
+| Exploitation | HTTPS automatique avec Caddy, PostgreSQL, antivirus ClamAV, surveillance toutes les cinq minutes, alertes facultatives, restauration testée |
 
 **Un dossier n’est stocké qu’une fois.** Vous pouvez créer un lien pour un client avec un mot de passe, un autre qui expire demain et un troisième utilisable une fois.
 
@@ -94,8 +94,8 @@ Toutes les valeurs sont configurées dans `.env` ; un modèle est fourni dans [.
 | `APP_URL` / `DOMAIN` | Origine HTTPS canonique, sans chemin / nom de domaine |
 | `SECRET_KEY` | Secret aléatoire d’au moins 50 caractères ; signe sessions et capacités |
 | `SETUP_TOKEN` | Secret d’au moins 32 caractères pour le premier compte |
-| `MAX_FILE_BYTES` | 104857600, soit 100 Mio par fichier |
-| `MAX_UPLOAD_BYTES` | 524288000, soit 500 Mio par envoi **et par dossier** |
+| `MAX_FILE_BYTES` | 1073741824, soit 1 Gio par fichier |
+| `MAX_UPLOAD_BYTES` | 5368709120, soit 5 Gio par dossier ; formulaire classique limité à 500 Mio par requête |
 | `DEFAULT_QUOTA_BYTES` | 5368709120, soit 5 Gio pour chaque nouveau compte |
 | `EVENT_RETENTION_DAYS` | 90 jours d’historique d’activité et d’administration |
 | `TIME_ZONE` | `Europe/Berlin`, dates stockées en UTC et affichées dans ce fuseau |
@@ -110,6 +110,21 @@ La limite de 100 fichiers par dossier est fixe dans cette version. Les formats a
 
 Les invitations créent un lien à copier et transmettre. Elles n’envoient pas d’e-mail automatiquement. Sans SMTP, l’administrateur du serveur peut réinitialiser un mot de passe via `manage.py changepassword`.
 
+## Fiabilité de la version 0.2
+
+- **Double authentification TOTP**, clé chiffrée, protection contre la réutilisation et dix codes de récupération à usage unique. Activation dans **Mon compte**.
+- **Corbeille de 30 jours**, restauration de fichiers et dossiers ; le quota est libéré seulement après purge définitive. Les anciens liens restent révoqués.
+- **Envois reprenables pendant 24 heures**, blocs de 4 Mio avec empreinte SHA-256, pause, annulation et réservation du quota. Resélectionnez les mêmes fichiers après une coupure.
+- **Page Exploitation** : quotas modifiables, état du disque et de l’antivirus, alertes et dernière restauration vérifiée. Alertes SMTP facultatives et endpoint `/ready/` protégé par jeton.
+- **Sauvegarde et restauration automatique de contrôle** avec `scripts/backup-and-verify.sh`, dans des volumes Docker isolés. Planifiez-la sur votre serveur et conservez des copies chiffrées hors serveur.
+- **Publication versionnée** : changelog, image Docker avec provenance et SBOM, archive téléchargeable dans les releases.
+
+Limites par défaut : **1 Gio par fichier, 5 Gio par dossier et 100 fichiers**. Le formulaire classique sans JavaScript reste limité à 500 Mio par requête. Les réglages existants dans `.env` sont conservés.
+
+Lisez le [guide de mise à niveau et d’exploitation de la version 0.2](docs/RELIABILITY.md) (anglais), notamment avant toute modification des clés MFA. Le [changelog](CHANGELOG.md) et les [releases](https://github.com/fmacfa/linkvault/releases) décrivent les versions publiées.
+
+Pour une image précompilée, ajoutez `LINKVAULT_IMAGE=ghcr.io/fmacfa/linkvault:0.2.0` dans `.env`, puis exécutez `docker compose pull app maintenance` et `docker compose up -d --no-build`.
+
 ## Sécurité et confidentialité
 
 - Mots de passe **Argon2id** ; minimum de 12 caractères, longueur maximale de 128 pour les formulaires web.
@@ -122,7 +137,7 @@ Les invitations créent un lien à copier et transmettre. Elles n’envoient pas
 - ClamAV obligatoire dans la pile de production ; réponse inattendue, virus, limite d’analyse ou indisponibilité bloquent l’import.
 - Téléchargements forcés en pièce jointe ; les contenus HTML/SVG ne sont pas prévisualisés ou exécutés.
 - Historique sans IP, géolocalisation ou identifiant publicitaire ; export CSV neutralisant les formules.
-- La suppression de fichiers révoque leurs liens et libère le quota ; les blobs orphelins sont purgés après un délai de sécurité.
+- La suppression révoque les liens ; la purge définitive de la corbeille libère le quota ; les blobs orphelins sont purgés après un délai de sécurité.
 
 Les fichiers sont lisibles par l’administrateur du système d’exploitation : **ce n’est pas du chiffrement de bout en bout**. Utilisez un volume et des sauvegardes chiffrés si nécessaire. Un antivirus ne garantit pas l’absence de menace. Le contrôle d’extension n’est pas une validation complète du contenu de tous les formats acceptés. L’application n’est pas conçue pour des dépôts anonymes massifs.
 
@@ -136,6 +151,8 @@ uv run --env-file .env python manage.py test --noinput
 uv run --env-file .env python manage.py makemigrations --check --dry-run
 uv run --env-file .env pip-audit --local
 ```
+
+La [synthèse de revue préalable](docs/SECURITY_REVIEW.md) (anglais) décrit la revue automatisée, les trois problèmes corrigés et leurs tests.
 
 La suite couvre notamment les droits entre comptes, les limites d’import, les invitations, le CSRF, les mots de passe de liens, la traversée de chemins, la suppression et les accès simultanés. Le workflow GitHub teste SQLite et PostgreSQL, construit l’image et vérifie l’antivirus avec sa signature de test EICAR.
 

@@ -3,7 +3,6 @@ import re
 
 from django.conf import settings
 from django.http import HttpResponse
-from django.shortcuts import redirect
 
 
 class RedactURLs(logging.Filter):
@@ -23,15 +22,39 @@ class RequestBoundaryMiddleware:
         try:
             length = int(request.META.get("CONTENT_LENGTH") or 0)
         except ValueError:
-            length = 0
-        ceiling = settings.MAX_UPLOAD_BYTES + 1024 * 1024 if request.path.endswith("/upload/") else 1024 * 1024
-        if length > ceiling:
+            length = -1
+        ceiling = (
+            settings.MAX_MULTIPART_BYTES + 1024 * 1024
+            if request.path.endswith("/upload/")
+            else 1024 * 1024
+        )
+        if request.path.endswith("/chunk/"):
+            ceiling = settings.UPLOAD_CHUNK_BYTES
+        if length < 0:
+            response = HttpResponse("Longueur invalide.", status=400)
+        elif length > ceiling:
             response = HttpResponse("Envoi trop volumineux.", status=413)
-        elif request.path.endswith("/upload/") and request.method == "POST" and not request.META.get("CONTENT_LENGTH"):
+        elif (
+            request.path.endswith("/upload/")
+            and request.method == "POST"
+            and not request.META.get("CONTENT_LENGTH")
+        ):
             response = HttpResponse("Content-Length requis.", status=411)
         else:
-            response = self.get_response(request)
-        response["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'; object-src 'none'"
+            try:
+                response = self.get_response(request)
+            finally:
+                lease = getattr(request, "upload_capacity_lease", None)
+                if lease:
+                    # Django normally closes uploaded files at response.close;
+                    # do so before returning this request's reserved disk budget.
+                    try:
+                        request.close()
+                    finally:
+                        lease.close()
+        response["Content-Security-Policy"] = (
+            "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'; object-src 'none'"
+        )
         response["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
         response["X-Robots-Tag"] = "noindex, nofollow, noarchive"
         response["Cache-Control"] = "no-store, private"
@@ -43,6 +66,28 @@ class RequestBoundaryMiddleware:
             # middleware has already populated request.user in its request phase.
             if not request.user.is_authenticated:
                 return HttpResponse("Authentification requise.", status=403)
-            from .models import Collection
-            if not Collection.objects.filter(pk=view_kwargs.get("pk"), owner=request.user).exists():
+            from .models import Collection, User
+            from .capacity import CapacityUnavailable, reserve_temporary
+            from .security import limited
+
+            if not Collection.objects.filter(
+                pk=view_kwargs.get("pk"), owner=request.user
+            ).exists():
                 return HttpResponse("Dossier introuvable.", status=404)
+
+            if limited(request, "upload", 60, 3600):
+                return HttpResponse("Trop d’envois. Réessayez plus tard.", status=429)
+            user = User.objects.get(pk=request.user.pk)
+            remaining = max(0, user.quota_bytes - user.used_bytes - user.reserved_bytes)
+            length = int(request.META.get("CONTENT_LENGTH") or 0)
+            if not user.is_active or remaining == 0 or length > remaining + 1024 * 1024:
+                return HttpResponse("Quota de stockage insuffisant.", status=413)
+            request.upload_byte_budget = min(
+                remaining, settings.MAX_MULTIPART_BYTES, length
+            )
+            try:
+                request.upload_capacity_lease = reserve_temporary(
+                    2 * length, owner_id=user.pk, kind="multipart"
+                )
+            except CapacityUnavailable as exc:
+                return HttpResponse(" ".join(exc.messages), status=503)

@@ -1,20 +1,21 @@
 {% extends "layout.html" %}
 {% block breadcrumb %}Mon compte{% endblock %}
 {% block content %}
-  <div class="page-heading">
-    <div>
-      <div class="eyebrow">VOTRE ACCÈS PERSONNEL</div>
-      <h1>
-        Mon compte<span class="green">.</span>
-      </h1>
-      <p>{{ user.display_name }} · {{ user.email }}</p>
+    <div class="page-heading">
+        <div>
+            <div class="eyebrow">VOTRE ACCÈS PERSONNEL</div>
+            <h1>
+                Mon compte<span class="green">.</span>
+            </h1>
+            <p>{{ user.display_name }} · {{ user.email }}</p>
+        </div>
     </div>
-  </div>
-  <form method="post" class="panel form-panel narrow">
-    {% csrf_token %}
-    <h2>Changer le mot de passe</h2>
-    <p class="muted">Les autres sessions seront déconnectées après ce changement.</p>
-    {% include "components/form.html" %}
-    <button class="button">Mettre à jour le mot de passe</button>
-  </form>
+    <section class="panel form-panel narrow spaced"><h2>Double authentification</h2><p>{% if user.mfa_secret %}Activée · votre application protège les nouvelles connexions.{% else %}Ajoutez un code temporaire et des codes de récupération à votre compte.{% endif %}</p><a href="{% url 'mfa_settings' %}" class="button secondary">Gérer la double authentification</a></section>
+    <form method="post" class="panel form-panel narrow">
+        {% csrf_token %}
+        <h2>Changer le mot de passe</h2>
+        <p class="muted">Les autres sessions seront déconnectées après ce changement.</p>
+        {% include "components/form.html" %}
+        <button class="button">Mettre à jour le mot de passe</button>
+    </form>
 {% endblock %}

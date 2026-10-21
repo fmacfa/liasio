@@ -2,7 +2,6 @@ from pathlib import Path
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
-from django.urls import reverse
 
 from vault.models import Asset, Event, ShareLink
 from vault.storage import add_files
@@ -14,7 +13,12 @@ class StoragePageTests(IsolatedFiles, TestCase):
         super().setUp()
         self.owner = self.account()
         self.item = self.collection(self.owner)
-        add_files(self.owner, self.item.pk, [SimpleUploadedFile("larger.txt", b"a" * 128)], ["larger.txt"])
+        add_files(
+            self.owner,
+            self.item.pk,
+            [SimpleUploadedFile("larger.txt", b"a" * 128)],
+            ["larger.txt"],
+        )
         self.client.force_login(self.owner)
 
     def test_list_counts_and_size_sort(self):
@@ -22,30 +26,36 @@ class StoragePageTests(IsolatedFiles, TestCase):
         self.assertContains(response, "Votre stockage, en clair")
         self.assertEqual(response.context["file_count"], 2)
         self.assertEqual(list(response.context["files"])[0].size, 128)
-        self.assertEqual(list(self.client.get("/storage/?sort=smallest").context["files"])[0].size, 5)
+        self.assertEqual(
+            list(self.client.get("/storage/?sort=smallest").context["files"])[0].size, 5
+        )
 
     def test_search_is_scoped_to_owner(self):
         other = self.account("other@example.com")
         self.collection(other)
-        self.assertEqual(self.client.get("/storage/?q=note").context["page"].paginator.count, 1)
+        self.assertEqual(
+            self.client.get("/storage/?q=note").context["page"].paginator.count, 1
+        )
 
-    def test_preview_does_not_delete_then_confirm_revokes_links_and_frees_bytes(self):
+    def test_preview_does_not_delete_then_confirm_revokes_links_and_retains_bytes(self):
         link = ShareLink.objects.create(collection=self.item, label="Active")
         asset = self.item.files.get(path="larger.txt")
         path = Path(asset.blob.path)
         data = {"selected": [str(asset.pk)]}
         preview = self.client.post("/storage/delete/", data)
-        self.assertContains(preview, "Supprimer définitivement")
+        self.assertContains(preview, "Placer dans la corbeille")
         self.assertEqual(preview.context["freed"], 128)
         self.assertEqual(preview.context["affected"], 1)
         self.assertTrue(Asset.objects.filter(pk=asset.pk).exists())
         data["confirm"] = "delete"
         with self.captureOnCommitCallbacks(execute=True):
-            self.assertRedirects(self.client.post("/storage/delete/", data), "/storage/")
+            self.assertRedirects(
+                self.client.post("/storage/delete/", data), "/storage/"
+            )
         self.owner.refresh_from_db()
         link.refresh_from_db()
-        self.assertEqual(self.owner.used_bytes, 5)
-        self.assertFalse(path.exists())
+        self.assertEqual(self.owner.used_bytes, 133)
+        self.assertTrue(path.exists())
         self.assertEqual(self.item.files.count(), 1)
         self.assertIsNotNone(link.revoked_at)
         self.assertTrue(Event.objects.filter(link=link, kind="revoked").exists())
@@ -57,16 +67,23 @@ class StoragePageTests(IsolatedFiles, TestCase):
             self.client.post("/storage/delete/", data)
         self.assertFalse(self.item.files.exists())
         self.owner.refresh_from_db()
-        self.assertEqual(self.owner.used_bytes, 0)
+        self.assertEqual(self.owner.used_bytes, 133)
         self.assertEqual(self.client.post("/storage/delete/", data).status_code, 404)
 
     def test_cross_account_delete_and_forged_id_fail(self):
         other = self.account("other@example.com")
         foreign = self.collection(other).files.get()
-        response = self.client.post("/storage/delete/", {"selected": [str(foreign.pk)], "confirm": "delete"})
+        response = self.client.post(
+            "/storage/delete/", {"selected": [str(foreign.pk)], "confirm": "delete"}
+        )
         self.assertEqual(response.status_code, 404)
         self.assertTrue(Asset.objects.filter(pk=foreign.pk).exists())
-        self.assertRedirects(self.client.post("/storage/delete/", {"selected": ["invalid"], "confirm": "delete"}), "/storage/")
+        self.assertRedirects(
+            self.client.post(
+                "/storage/delete/", {"selected": ["invalid"], "confirm": "delete"}
+            ),
+            "/storage/",
+        )
 
     def test_server_statistics_admin_only(self):
         self.assertNotContains(self.client.get("/storage/"), "Stockage du serveur")
@@ -83,5 +100,10 @@ class StoragePageTests(IsolatedFiles, TestCase):
         self.assertContains(response, "Choisir un dossier")
         other = self.account("other@example.com")
         foreign = self.collection(other)
-        self.assertEqual(self.client.get("/upload/", {"collection": str(foreign.pk)}).status_code, 404)
-        self.assertEqual(self.client.get("/upload/", {"collection": "invalid"}).status_code, 404)
+        self.assertEqual(
+            self.client.get("/upload/", {"collection": str(foreign.pk)}).status_code,
+            404,
+        )
+        self.assertEqual(
+            self.client.get("/upload/", {"collection": "invalid"}).status_code, 404
+        )

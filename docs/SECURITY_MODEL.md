@@ -1,4 +1,4 @@
-# Modèle de sécurité de LinkVault 0.1
+# Modèle de sécurité de LinkVault 0.2
 
 ## Frontières de confiance
 
@@ -30,11 +30,11 @@ La révocation et la réservation ont un ordre atomique en base : si la révocat
 
 Les limites sont appliquées à plusieurs niveaux : proxy, corps de requête, réception par blocs, fichier, dossier, nombre de fichiers et quota utilisateur sous verrou. Les imports non connectés ou sur un autre compte sont refusés avant le parsing multipart.
 
-L’extension est une première règle, pas une preuve du type réel. L’antivirus analyse les octets. Les archives ne sont jamais extraites par l’application. Les téléchargements sont `application/octet-stream` et `attachment` ; aucun contenu utilisateur actif n’est exécuté. La version 0.1 ne fait pas de validation sémantique intégrale de tous les formats.
+L’extension est une première règle, pas une preuve du type réel. L’antivirus analyse les octets. Les archives ne sont jamais extraites par l’application. Les téléchargements sont `application/octet-stream` et `attachment` ; aucun contenu utilisateur actif n’est exécuté. La version 0.2 ne fait pas de validation sémantique intégrale de tous les formats.
 
 ClamAV utilise INSTREAM sur un réseau Docker privé. Toute réponse autre que `stream: OK` bloque l’enregistrement. Les limites dépassées et archives chiffrées sont signalées via la configuration du démon. L’application n’enregistre un fichier comme analysé qu’après un résultat accepté.
 
-Les ZIP temporaires sont bornés par la taille d’un dossier (500 Mio par défaut). Chaque requête peut nécessiter cette place temporaire en plus des fichiers persistants. La limitation de fréquence par IP et les limites du serveur réduisent l’abus sans remplacer une protection DDoS. Il n’y a pas encore de budget global de bande passante ni de file d’attente de génération d’archives.
+Les ZIP temporaires sont bornés par la taille d’un dossier (5 Gio par défaut). Chaque requête nécessite une réservation d’espace temporaire avant création, conservée jusqu’à la fermeture du transfert. Un verrou POSIX partagé sérialise les admissions sur le même hôte et tient compte des autres ZIP, imports classiques et réservations reprenables. Les imports classiques contrôlent aussi quota et capacité avant le parsing puis pendant la réception. La limitation de fréquence par IP et les limites du serveur réduisent l’abus sans remplacer une protection DDoS. Il n’y a pas encore de budget global de bande passante ni de file d’attente de génération d’archives.
 
 La suppression SQL et la suppression physique ne forment pas une transaction distribuée. Les blobs sont supprimés après validation SQL ; un échec système peut laisser un blob inaccessible. La maintenance supprime les blobs orphelins vieux de plus de 24 h. Après un crash pendant import, le même mécanisme récupère les fichiers écrits avant un rollback.
 
@@ -51,3 +51,14 @@ Les logs d’accès Caddy/Gunicorn sont désactivés par défaut. Les logs Djang
 Tests automatisés sur le modèle d’autorisations, mots de passe, invitations, quotas, CSRF, chemins, absence de consommation sur GET/HEAD, révocation, concurrence, suppression et export CSV. Tests du protocole ClamAV avec réponses propres, malveillantes et invalides ; test d’intégration EICAR en CI.
 
 Ces tests ne remplacent ni un audit indépendant, ni une surveillance des versions, ni un test de charge adapté à votre hébergement.
+
+
+## Protection et fiabilité ajoutées en 0.2
+
+TOTP utilise une clé chiffrée avec Fernet, des étapes temporelles non réutilisables et des codes de récupération hachés à usage unique. La connexion par mot de passe ne crée qu’une session provisoire de cinq minutes. Les changements de MFA révoquent les autres sessions.
+
+Les fichiers supprimés restent privés dans la corbeille et dans le quota. La restauration ne réactive jamais les liens. Les envois par blocs réservent leur quota sous verrou, contrôlent leurs empreintes et publient le lot uniquement après analyse antivirus. Les blocs temporaires expirent après 24 h. Les noms de fichiers de la corbeille restent réservés.
+
+La surveillance n’expose les métriques que sur une route à jeton Bearer ; les alertes e-mail nécessitent une configuration explicite. Les sauvegardes sont restaurées dans une instance isolée pour vérifier les octets, les compteurs et les clés MFA. Voir [RELIABILITY.md](RELIABILITY.md) pour les limites et hypothèses d’exploitation.
+
+La [revue de code préalable à 0.2](SECURITY_REVIEW.md) décrit les corrections et leurs tests.

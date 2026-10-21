@@ -1,98 +1,98 @@
 {% extends "layout.html" %}
 {% block breadcrumb %}Importer{% endblock %}
 {% block content %}
-  <div class="page-heading">
-    <div>
-      <div class="eyebrow">UNE PLACE POUR VOS FICHIERS</div>
-      <h1>
-        Déposez. Vérifiez. Partagez<span class="green">.</span>
-      </h1>
-      <p>Ajoutez vos fichiers ou un dossier complet et suivez l’envoi en temps réel.</p>
+    <div class="page-heading">
+        <div>
+            <div class="eyebrow">UNE PLACE POUR VOS FICHIERS</div>
+            <h1>
+                Déposez. Vérifiez. Partagez<span class="green">.</span>
+            </h1>
+            <p>Ajoutez vos fichiers ou un dossier complet et suivez l’envoi en temps réel.</p>
+        </div>
+        <a class="button secondary" href="{% url 'collection_create' %}">
+        {% include "components/icon.html" with name="plus" %}Nouveau dossier</a>
     </div>
-    <a class="button secondary" href="{% url 'collection_create' %}">
-    {% include "components/icon.html" with name="plus" %}Nouveau dossier</a>
-  </div>
-  <div class="editor-grid">
-    <section>
-      <div class="panel">
-        <div class="section-heading">
-          <h2>
-            <span class="count">1</span> Choisissez la destination
-          </h2>
-        </div>
-        <form method="get" class="destination-form">
-          <div class="field">
-            <label for="destination">Dossier de destination</label>
-            <select name="collection" id="destination" required>
-              <option value="">Choisir un dossier…</option>
-              {% for item in destinations %}
-                <option value="{{ item.pk }}"
-                        {% if collection.pk == item.pk %}selected{% endif %}>{{ item.title }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <button class="button secondary">Utiliser ce dossier {% include "components/icon.html" with name="arrow" %}</button>
-        </form>
-        {% if not destinations %}
-          <p class="footnote">Créez votre premier dossier pour commencer à importer.</p>
-        {% endif %}
-      </div>
-      {% if collection %}
-        <div class="section-heading spaced">
-          <h2>
-            <span class="count">2</span> Ajoutez vos fichiers
-          </h2>
-          <a class="text-link" href="{% url 'collection' collection.pk %}">{{ collection.title }} ↗</a>
-        </div>
-        {% include "components/upload_form.html" %}
-      {% else %}
-        <div class="empty-panel spaced">
-          <span class="empty-icon">{% include "components/icon.html" with name="upload" %}</span>
-          <h3>Prêt pour le prochain envoi.</h3>
-          <p>Choisissez un dossier ci-dessus pour sélectionner vos fichiers.</p>
-        </div>
-      {% endif %}
-    </section>
-    <aside class="editor-note">
-      <span class="tip-icon">{% include "components/icon.html" with name="shield" %}</span>
-      <h2>
-        Un envoi suivi,
-        <br>
-        du début à la fin.
-      </h2>
-      <div class="step">
-        <b>01</b>
-        <div>
-          <strong>Sélection</strong>
-          <p>Vérifiez les noms, les chemins et les tailles avant d’envoyer.</p>
-        </div>
-      </div>
-      <div class="step">
-        <b>02</b>
-        <div>
-          <strong>Transfert</strong>
-          <p>La barre indique le pourcentage transmis au serveur. Gardez cette page ouverte.</p>
-        </div>
-      </div>
-      <div class="step">
-        <b>03</b>
-        <div>
-          <strong>Vérification</strong>
-          <p>Après 100 %, l’antivirus et le quota sont vérifiés avant confirmation de l’enregistrement.</p>
-        </div>
-      </div>
-      <div class="step">
-        <b>04</b>
-        <div>
-          <strong>Partage</strong>
-          <p>Les fichiers sont dans votre dossier. Créez alors un lien à vos conditions.</p>
-        </div>
-      </div>
-      {% if development %}
-        <div class="notice">
-          <p>En mode local de développement, l’antivirus peut être désactivé. Les fichiers non analysés restent identifiés comme tels.</p>
-        </div>
-      {% endif %}
-    </aside>
-  </div>
+    <div class="editor-grid">
+        <section>
+            <div class="panel">
+                <div class="section-heading">
+                    <h2>
+                        <span class="count">1</span> Choisissez la destination
+                    </h2>
+                </div>
+                <form method="get" class="destination-form">
+                    <div class="field">
+                        <label for="destination">Dossier de destination</label>
+                        <select name="collection" id="destination" required>
+                            <option value="">Choisir un dossier…</option>
+                            {% for item in destinations %}
+                                <option value="{{ item.pk }}"
+                                        {% if collection.pk == item.pk %}selected{% endif %}>{{ item.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button class="button secondary">Utiliser ce dossier {% include "components/icon.html" with name="arrow" %}</button>
+                </form>
+                {% if not destinations %}
+                    <p class="footnote">Créez votre premier dossier pour commencer à importer.</p>
+                {% endif %}
+            </div>
+            {% if collection %}
+                <div class="section-heading spaced">
+                    <h2>
+                        <span class="count">2</span> Ajoutez vos fichiers
+                    </h2>
+                    <a class="text-link" href="{% url 'collection' collection.pk %}">{{ collection.title }} ↗</a>
+                </div>
+                {% include "components/upload_form.html" %}
+            {% else %}
+                <div class="empty-panel spaced">
+                    <span class="empty-icon">{% include "components/icon.html" with name="upload" %}</span>
+                    <h3>Prêt pour le prochain envoi.</h3>
+                    <p>Choisissez un dossier ci-dessus pour sélectionner vos fichiers.</p>
+                </div>
+            {% endif %}
+        </section>
+        <aside class="editor-note">
+            <span class="tip-icon">{% include "components/icon.html" with name="shield" %}</span>
+            <h2>
+                Un envoi suivi,
+                <br>
+                du début à la fin.
+            </h2>
+            <div class="step">
+                <b>01</b>
+                <div>
+                    <strong>Sélection</strong>
+                    <p>Vérifiez les noms, les chemins et les tailles avant d’envoyer.</p>
+                </div>
+            </div>
+            <div class="step">
+                <b>02</b>
+                <div>
+                    <strong>Transfert</strong>
+                    <p>La barre indique le pourcentage transmis au serveur. Vous pouvez mettre en pause et reprendre pendant 24 h, en sélectionnant les mêmes fichiers.</p>
+                </div>
+            </div>
+            <div class="step">
+                <b>03</b>
+                <div>
+                    <strong>Vérification</strong>
+                    <p>Après 100 %, l’antivirus et le quota sont vérifiés avant confirmation de l’enregistrement.</p>
+                </div>
+            </div>
+            <div class="step">
+                <b>04</b>
+                <div>
+                    <strong>Partage</strong>
+                    <p>Les fichiers sont dans votre dossier. Créez alors un lien à vos conditions.</p>
+                </div>
+            </div>
+            {% if development %}
+                <div class="notice">
+                    <p>En mode local de développement, l’antivirus peut être désactivé. Les fichiers non analysés restent identifiés comme tels.</p>
+                </div>
+            {% endif %}
+        </aside>
+    </div>
 {% endblock %}

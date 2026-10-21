@@ -15,11 +15,13 @@ class Command(BaseCommand):
             raise CommandError("Quota must be at least 1 GiB.")
         with transaction.atomic():
             try:
-                user = User.objects.select_for_update().get(email__iexact=options["email"])
+                user = User.objects.select_for_update().get(
+                    email__iexact=options["email"]
+                )
             except User.DoesNotExist:
                 raise CommandError("Unknown account.") from None
             user.quota_bytes = options["gib"] * 1024**3
-            if user.quota_bytes < user.used_bytes:
+            if user.quota_bytes < (user.used_bytes + user.reserved_bytes):
                 raise CommandError("Quota cannot be lower than current usage.")
             user.save(update_fields=["quota_bytes"])
             Audit.objects.create(action="quota_updated", target=str(user.pk))
