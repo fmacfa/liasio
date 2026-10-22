@@ -370,7 +370,7 @@ class APIToken(models.Model):
     credential_version = models.CharField(max_length=64)
     scopes = models.JSONField(default=list)
     created_at = models.DateTimeField(auto_now_add=True)
-    expires_at = models.DateTimeField()
+    expires_at = models.DateTimeField(null=True, blank=True)
     revoked_at = models.DateTimeField(null=True, blank=True)
     last_used_at = models.DateTimeField(null=True, blank=True)
 

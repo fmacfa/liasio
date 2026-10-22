@@ -12,22 +12,34 @@ document.querySelectorAll("[data-copy]").forEach((button) => {
   button.addEventListener("click", async () => {
     try {
       await navigator.clipboard.writeText(button.dataset.copy);
-      toast(gettext("Lien copié. Prêt à être partagé."));
+      toast(button.dataset.copyMessage || gettext("Lien copié. Prêt à être partagé."));
     } catch {
       // A selectable value remains available without Clipboard API permission.
       const existing = button.parentElement.querySelector(".copy-fallback");
       if (existing) { existing.focus(); existing.select(); return; }
-      const field = document.createElement("input");
+      const field = document.createElement(button.dataset.copy.includes("\n") ? "textarea" : "input");
       field.className = "copy-fallback";
       field.value = button.dataset.copy;
       field.readOnly = true;
-      field.setAttribute("aria-label", gettext("Lien à copier"));
+      field.setAttribute("aria-label", button.dataset.copyLabel || gettext("Lien à copier"));
       button.after(field);
       field.focus(); field.select();
-      toast(gettext("Copiez le lien sélectionné avec votre clavier."));
+      toast(gettext("Copiez le texte sélectionné avec votre clavier."));
     }
   });
 });
+
+const tokenForm = document.querySelector("[data-token-form]");
+if (tokenForm) {
+  const validity = tokenForm.elements.validity, days = tokenForm.elements.days;
+  const update = () => {
+    const required = validity.value !== "never";
+    days.closest(".field").hidden = !required;
+    days.disabled = !required;
+    days.required = required;
+  };
+  validity.addEventListener("change", update); update();
+}
 
 document.querySelectorAll("form[data-confirm]").forEach((form) => {
   form.addEventListener("submit", (event) => {

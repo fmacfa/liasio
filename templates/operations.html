@@ -14,11 +14,8 @@
 <section class="panel spaced operations-panel"><h2>{% translate "Surveillance" %}</h2>{% if health %}<p>{% translate "Dernier contrôle :" %} {{ health.updated_at|date:"SHORT_DATETIME_FORMAT" }} {% translate "· Base :" %} {{ health.data.database|yesno:_('disponible,indisponible') }} {% translate "· Antivirus :" %} {{ health.data.antivirus|yesno:_('disponible,indisponible') }}</p>{% else %}<p>{% translate "En attente du premier passage du service de maintenance." %}</p>{% endif %}<p class="footnote">{% translate "Alertes e-mail :" %} {{ mail_enabled|yesno:_('activées,désactivées') }}{% translate ". Les alertes restent consultables ici." %}</p>{% for alert in alerts %}<div class="notice"><strong>{% translate alert.message %}</strong><small> {% translate "Depuis" %} {{ alert.first_seen|date:"SHORT_DATETIME_FORMAT" }}</small></div>{% empty %}<p>{% translate "Aucune alerte enregistrée." %}</p>{% endfor %}</section>
 <section class="panel spaced operations-panel"><h2>{% translate "Quotas des membres" %}</h2><p class="muted">{% translate "Le quota inclut la corbeille et les envois réservés. Il ne peut pas descendre sous cette utilisation." %}</p>{% for member in members %}<div class="file-row quota-row"><div class="file-info"><strong>{{ member.display_name }}</strong><small>{{ member.email }} · {{ member.used_bytes|filesizeformat }} {% translate "conservés +" %} {{ member.reserved_bytes|filesizeformat }} {% translate "réservés /" %} {{ member.quota_bytes|filesizeformat }}</small><small>{% translate "MFA :" %} {{ member.mfa_secret|yesno:_('activée,désactivée') }}</small></div><form class="button-row quota-form"
       method="post"
-      action="{% url 'member_quota' member.pk %}">{% csrf_token %}<label class="quota-field">{% translate "Quota (Gio)" %}<input type="number"
+      action="{% url 'member_quota' member.pk %}">{% csrf_token %}<label class="quota-field">{% translate "Quota (Gio)" %}<input type="text" inputmode="decimal" pattern="[0-9]+([.,][0-9]{1,2})?"
        name="quota_gib"
-       min="0"
-       max="1048576"
-       step="0.01"
        required
        aria-label="{% blocktranslate with name=member.display_name %}Quota de {{ name }} en Gio{% endblocktranslate %}"></label><button class="button secondary">{% translate "Mettre à jour" %}</button></form></div>{% endfor %}</section>
 {% endblock %}

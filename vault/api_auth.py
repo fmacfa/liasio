@@ -34,7 +34,7 @@ def valid(token, user):
     return (
         user.is_active
         and not token.revoked_at
-        and token.expires_at > timezone.now()
+        and (token.expires_at is None or token.expires_at > timezone.now())
         and hmac.compare_digest(token.credential_version, credential_version(user))
     )
 

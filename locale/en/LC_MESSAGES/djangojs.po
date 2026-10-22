@@ -208,3 +208,7 @@ msgstr ""
 #: static/upload.js:187
 msgid "En attente"
 msgstr "Pending"
+
+#| msgid "Copiez le lien sélectionné avec votre clavier."
+msgid "Copiez le texte sélectionné avec votre clavier."
+msgstr "Copy the selected text with your keyboard."

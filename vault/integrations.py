@@ -1,21 +1,26 @@
 """Session-only management; automation keys cannot mint more credentials."""
 
 import secrets
+import shlex
+from uuid import UUID
 from datetime import timedelta
 
 from django import forms
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
+from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.decorators.http import require_http_methods, require_POST
 from .api_auth import credential_version, digest, valid
 from .mfa import cipher, consume_code
-from .models import APIToken, Audit, User, Webhook, WebhookDelivery
+from .models import APIToken, Audit, Collection, User, Webhook
 from .security import limited
 from .webhooks import EVENTS, enqueue, parse_destination, pause_hook
 
@@ -45,10 +50,38 @@ class TokenForm(ConfirmForm):
     scopes = forms.MultipleChoiceField(
         label=_("Permissions"), choices=SCOPES, widget=forms.CheckboxSelectMultiple
     )
-    days = forms.IntegerField(
-        label=_("Validité en jours"), min_value=1, max_value=365, initial=90
+    validity = forms.ChoiceField(
+        label=_("Expiration"),
+        choices=[
+            ("days", _("Dans un nombre de jours")),
+            ("never", _("Sans expiration")),
+        ],
+        initial="days",
+        required=False,
+        help_text=_(
+            "Sans expiration : la clé reste utilisable jusqu’à sa révocation ou un changement de mot de passe/MFA."
+        ),
     )
-    field_order = ["name", "scopes", "days", "password", "code"]
+    days = forms.IntegerField(
+        label=_("Validité en jours"),
+        min_value=1,
+        max_value=365,
+        initial=90,
+        required=False,
+        widget=forms.TextInput(attrs={"inputmode": "numeric", "pattern": "[0-9]*"}),
+    )
+    field_order = ["name", "scopes", "validity", "days", "password", "code"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.is_bound and self.data.get("validity") == "never":
+            self.fields["days"].disabled = True
+
+    def clean(self):
+        data = super().clean()
+        if data.get("validity") != "never" and not data.get("days"):
+            self.add_error("days", _("Indiquez une validité de 1 à 365 jours."))
+        return data
 
 
 class WebhookForm(ConfirmForm):
@@ -58,7 +91,7 @@ class WebhookForm(ConfirmForm):
         max_length=2000,
         widget=forms.URLInput,
         help_text=_(
-            "HTTPS public, port 443. Les adresses internes et les redirections sont refusées."
+            "Collez l’URL fournie par votre outil (n8n, votre serveur…). Elle doit déjà accepter les notifications POST en HTTPS public sur le port 443."
         ),
     )
     events = forms.MultipleChoiceField(
@@ -86,6 +119,16 @@ def confirmed(user, form):
 @require_http_methods(["GET", "POST"])
 @sensitive_post_parameters()
 def index(request):
+    collections = Collection.objects.filter(owner=request.user)
+    selected = request.GET.get("collection")
+    if selected:
+        try:
+            UUID(selected)
+        except ValueError:
+            raise Http404
+    collection = (
+        get_object_or_404(collections, pk=selected) if selected else collections.first()
+    )
     action = request.POST.get("action")
     token_form = TokenForm(
         request.POST if action == "token" else None, auto_id="token_%s"
@@ -117,8 +160,12 @@ def index(request):
                             APIToken.objects.filter(
                                 owner=user,
                                 revoked_at__isnull=True,
-                                expires_at__gt=timezone.now(),
-                            ).count()
+                            )
+                            .filter(
+                                Q(expires_at__isnull=True)
+                                | Q(expires_at__gt=timezone.now())
+                            )
+                            .count()
                             >= 10
                         ):
                             form.add_error(
@@ -132,8 +179,12 @@ def index(request):
                                 owner=user,
                                 name=form.cleaned_data["name"],
                                 scopes=form.cleaned_data["scopes"],
-                                expires_at=timezone.now()
-                                + timedelta(days=form.cleaned_data["days"]),
+                                expires_at=(
+                                    None
+                                    if form.cleaned_data["validity"] == "never"
+                                    else timezone.now()
+                                    + timedelta(days=form.cleaned_data["days"])
+                                ),
                                 credential_version=credential_version(user),
                             )
                             secret = f"lv_{token.pk.hex}.{secrets.token_urlsafe(32)}"
@@ -180,6 +231,22 @@ def index(request):
     heartbeat = ServiceState.objects.filter(
         key="webhooks", updated_at__gte=timezone.now() - timedelta(minutes=10)
     ).exists()
+    base_url = settings.APP_URL.rstrip("/")
+    endpoint, command = None, None
+    if collection:
+        endpoint = base_url + reverse("api_link_batch_create", args=[collection.pk])
+        # No credential is ever inserted into an example. The shell reads it from
+        # the user's environment, and the trusted URL is quoted as shell data.
+        command = " \\\n  ".join(
+            [
+                "curl --fail-with-body --silent --show-error",
+                "--request POST " + shlex.quote(endpoint),
+                '--header "Authorization: Bearer ${LINKVAULT_API_KEY}"',
+                "--header 'Content-Type: application/json'",
+                "--header 'Idempotency-Key: " + secrets.token_hex(16) + "'",
+                '--data \'{"name":"Clients","names":["A","B"]}\'',
+            ]
+        )
     return render(
         request,
         "integrations/index.html",
@@ -192,6 +259,11 @@ def index(request):
             "secret": secret,
             "secret_kind": secret_kind,
             "worker_running": heartbeat,
+            "api_base_url": base_url + "/api/v1/",
+            "api_collections": collections,
+            "api_collection": collection,
+            "api_batch_endpoint": endpoint,
+            "api_batch_command": command,
         },
     )
 
@@ -268,6 +340,14 @@ def webhook_detail(request, pk):
     page = Paginator(hook.deliveries.order_by("-created_at"), 25).get_page(
         request.GET.get("page")
     )
+    for delivery in page:
+        delivery.explanation = delivery_explanation(delivery.http_status)
+    from cryptography.fernet import InvalidToken
+
+    try:
+        destination = cipher().decrypt(hook.destination.encode()).decode()
+    except (InvalidToken, UnicodeError):
+        destination = None
     return render(
         request,
         "integrations/webhook.html",
@@ -277,5 +357,28 @@ def webhook_detail(request, pk):
             "page": page,
             "form": form,
             "secret": secret,
+            "destination": destination,
         },
     )
+
+
+def delivery_explanation(status):
+    if status == 404:
+        return _(
+            "Adresse introuvable : vérifiez le chemin et activez le workflow destinataire."
+        )
+    if status == 405:
+        return _(
+            "Cette adresse n’accepte pas POST. Utilisez une URL de réception de webhook."
+        )
+    if status in (401, 403):
+        return _(
+            "Le destinataire refuse l’accès. Vérifiez sa configuration et le secret de signature."
+        )
+    if status and 300 <= status < 400:
+        return _("Redirection refusée. Enregistrez directement l’URL HTTPS finale.")
+    if status == 429 or (status and status >= 500):
+        return _(
+            "Destinataire temporairement indisponible. Une reprise est prévue si des tentatives restent disponibles."
+        )
+    return ""

@@ -2,11 +2,21 @@
 
 The **API receives commands** from your tools: create a collection, upload its files and create a link. **Webhooks send notifications** back to your tools when events occur. A webhook URL alone does not authorize uploads.
 
+## Which feature do I need?
+
+| Your goal | Feature | Result |
+| --- | --- | --- |
+| Send A and B and receive link A and link B | **API key**, then a batch creation command | JSON response and a saved list in **My links → My batches** |
+| Find out when a link was opened or downloaded | **Outgoing webhook** | POST notification to the URL supplied by your tool |
+| Download the shared files | `/s/…/` URL from the API response or **My links** | Public collection presentation page |
+
+**You do not need a webhook to create a list.** In **Automations**, the **Send A and B, receive their links** section lets you choose a collection and copy a command with the correct address. The example creates links with no expiration or download limit. See the [batch API guide](bulk-links-api.md) to add conditions or export from a program.
+
 ![Automation settings](../../screenshots/user-guide/en/automations.png)
 
 ## 1. Create a scoped API key
 
-Open **Automations → Create an API key**. Give it a recognizable name, choose only the required permissions and a lifetime from 1 to 365 days (90 by default). Confirm your current password and, if enabled, a fresh MFA or recovery code.
+Open **Automations → Create an API key**. Give it a recognizable name, choose only the required permissions and **After a number of days** (1–365, 90 by default) or **No expiry**. Confirm your current password and, if enabled, a fresh MFA or recovery code.
 
 | Permission | Access |
 | --- | --- |
@@ -48,6 +58,10 @@ Send `names: ["A", "B"]` to the API to receive links A and B in order, saved in 
 
 Choose **Add a webhook**, enter a name and the receiver’s **public HTTPS URL**, select events, then confirm your password/MFA. Only port 443 is allowed. Internal/private IPs, credentials in URLs, query parameters, fragments and redirects are rejected. For n8n on the same VPS, use its public HTTPS domain, not a Docker service name or `localhost`.
 
+**Where does the URL come from?** First create a receiver in n8n or on your server. For example, n8n supplies a production URL after you create a Webhook trigger. Activate the workflow, then copy that URL into Liasio. Entering an address such as `https://files.example.com/test/` does not add a route to your instance. An ordinary web page is not necessarily a POST receiver.
+
+The webhook detail page shows the complete URL with **Copy receiver URL**, followed by delivery attempts. This address may contain a private path: do not publish it. Creating a webhook does not produce a new download link.
+
 Copy the **signing secret** once and configure your receiver to verify it. It is different from the API key. Destinations and signing secrets are encrypted in the database. Payloads contain event/collection/link IDs; they exclude share URLs, passwords, emails and file contents. A receiver can fetch additional information with a separately scoped API key if necessary.
 
 Events: `collection.created`, `files.uploaded`, `link.created`, `link.revoked`, `link.opened`, `download.started`. `files.uploaded` means final storage succeeded, after applicable scanning; `download.started` means an authorized transfer, not proven receipt. Deleting/trashing a collection can produce revocation events. Automatic expiry does not produce `link.revoked`.
@@ -57,6 +71,18 @@ Events: `collection.created`, `files.uploaded`, `link.created`, `link.revoked`, 
 ![Webhook status and delivery history](../../screenshots/user-guide/en/webhook.png)
 
 Open the webhook and choose **Send a test**. This queues a real `webhook.test` event for your URL. Refresh the page to see its state, HTTP status and attempts. The dedicated worker must be running; see [Operations](operations.md).
+
+| State or code | Meaning and action |
+| --- | --- |
+| Pending | The delivery service has not sent the notification yet; refresh the page. |
+| Delivered, HTTP 2xx | The receiver accepted the notification. |
+| HTTP 404 | Address not found: check the path and activate the receiving workflow. |
+| HTTP 405 | The address does not support POST; use the webhook trigger URL. |
+| HTTP 401 / 403 | The receiver denied access; check its configuration and signing secret. |
+| HTTP 3xx | Redirect refused; use the final HTTPS URL directly. |
+| HTTP 429 / 5xx | Receiver temporarily unavailable; remaining attempts will be retried. |
+
+Opening a URL in a browser normally sends GET, while **Send a test** sends POST: these are different operations.
 
 The receiver must verify the exact raw bytes before parsing:
 
@@ -86,3 +112,9 @@ Accounts take turns, regardless of their number of endpoints. At most one delive
 **Pause** cancels queued deliveries; an in-flight request may still finish. **Reactivate** requires password/MFA and only subscribes to future events. **Rotate secret** invalidates the old signing secret immediately; all future attempts, including retries, use the new one. Coordinate the receiver update. To change URL/events, create and test a replacement webhook, then delete the old one. Deletion removes its history. None of these actions deletes your collections or API keys.
 
 n8n references: [Webhook trigger](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook/) · [HTTP Request credentials](https://docs.n8n.io/integrations/builtin/credentials/httprequest/).
+
+## If a key or secret was shared
+
+In **Automations**, revoke the affected API key, create a replacement and update your tool’s secret store. For a webhook, open its detail page → **Security and configuration → Rotate secret**, then update the receiver’s verifier. Do not share the new value in a conversation or screenshot. Rotating a webhook secret does not replace an API key: they are separate credentials.
+
+Non-expiring keys count toward the same limit of ten unexpired, unrevoked keys. Existing keys keep their expiry dates; create a new key to change the lifetime. No expiration does not bypass revocation, password/MFA invalidation or account suspension.

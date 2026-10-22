@@ -2931,3 +2931,17 @@ summary { cursor: pointer; font-weight: 600; padding: 12px 0; }
   .file-tree .file-tree .file-tree .file-tree { margin-left: 0; padding-left: 4px; }
   .file-tree .file-row { flex-wrap: wrap; }
 }
+
+/* Automation examples remain readable on mobile and never expose a key. */
+.automation-overview { margin-bottom: 24px; }
+.automation-overview p, .automation-steps { line-height: 1.65; }
+.automation-overview .button { margin-top: 8px; }
+.api-start { margin-top: 24px; scroll-margin-top: 24px; }
+.api-address { overflow-wrap: anywhere; }
+.automation-code { white-space: pre-wrap; overflow-wrap: anywhere; padding: 18px; background: #f2f4ef; border-radius: 10px; line-height: 1.6; }
+.automation-steps { padding-left: 24px; }
+.automation-steps li + li { margin-top: 8px; }
+.api-example-form { display: flex; align-items: end; gap: 16px; margin: 20px 0; }
+.api-example-form .field { flex: 1; margin: 0; min-width: 0; }
+.api-start details p, .api-start h3 { margin-top: 18px; }
+@media (max-width: 760px) { .api-example-form { flex-direction: column; align-items: stretch; } }

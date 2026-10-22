@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib.sessions.models import Session
 from django.core.management.base import BaseCommand
 from django.db import close_old_connections
+from django.db.models import Q
 from django.utils import timezone
 
 from vault.models import Asset, Audit, Event, Invitation, RateBucket, ServiceState
@@ -30,7 +31,10 @@ class Command(BaseCommand):
             from vault.models import APIReceipt, APIToken, WebhookDelivery
 
             APIReceipt.objects.filter(created_at__lt=now - timedelta(hours=24)).delete()
-            APIToken.objects.filter(expires_at__lt=now - timedelta(days=30)).delete()
+            APIToken.objects.filter(
+                Q(expires_at__lt=now - timedelta(days=30))
+                | Q(revoked_at__lt=now - timedelta(days=30))
+            ).delete()
             WebhookDelivery.objects.filter(
                 created_at__lt=now - timedelta(days=30)
             ).delete()

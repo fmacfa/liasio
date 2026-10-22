@@ -4,6 +4,16 @@ From Codex, a terminal, n8n or your website's server, send names to Liasio and r
 
 ![A saved batch with names, links and exports in My batches](../../screenshots/user-guide/en/batch-api.jpg)
 
+## Start without looking up addresses
+
+Open **Automations → Prepare my command**. Select the collection and click **Show command**: the URL already includes your instance’s domain and collection ID. The section explains how to load your key in a macOS/Linux terminal without writing it to command history, then copy the command. Replace A and B with your names. No webhook is needed.
+
+For a lasting key, choose **No expiry** when creating it. This lifetime applies to the API key; expiry of the created links is configured separately in `conditions`. The interface example omits these conditions, creating links with no expiration or download limit.
+
+The response pairs `items[].label` with `items[].url`. For a browser export, open **My links → My batches**, select the batch and choose **Download Excel** or **Download CSV**. An `/api/v1/…` export URL always requires the Bearer header and cannot be opened directly using login cookies.
+
+![Collection-specific command in Automations](../../screenshots/user-guide/en/api-quickstart.png)
+
 ## 1. Prepare access
 
 In **Automations → Create API key**, select `links:write` to create and `read` to consult and export. Keep the key in the private `LINKVAULT_API_KEY` environment variable. This name is retained for API v1 compatibility. Never put the key in Git, a URL or JavaScript delivered to your site's visitors.
