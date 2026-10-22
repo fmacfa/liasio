@@ -230,7 +230,7 @@ def csv_text(value):
 
 
 def spreadsheet_response(
-    headers, rows, format, *, filename="linkvault-links", url_column=None
+    headers, rows, format, *, filename="liasio-links", url_column=None
 ):
     """Create a new plain table, with no imported formulas or external content."""
     if format == "csv":
@@ -244,7 +244,7 @@ def spreadsheet_response(
     else:
         book = Workbook()
         sheet = book.active
-        sheet.title = "LinkVault"
+        sheet.title = "Liasio"
         for row_number, row in enumerate([headers, *rows], 1):
             for column, value in enumerate(row, 1):
                 cell = sheet.cell(row_number, column)

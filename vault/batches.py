@@ -426,13 +426,13 @@ def export(request, pk, format):
         return throttled()
     headers = list(batch.headers)
     for header in (
-        "LinkVault name",
-        "LinkVault URL",
-        "LinkVault status",
-        "LinkVault created at (UTC)",
-        "LinkVault expires at (UTC)",
-        "LinkVault max downloads",
-        "LinkVault downloads",
+        "Liasio name",
+        "Liasio URL",
+        "Liasio status",
+        "Liasio created at (UTC)",
+        "Liasio expires at (UTC)",
+        "Liasio max downloads",
+        "Liasio downloads",
     ):
         unique, suffix = header, 2
         while unique.casefold() in {h.casefold() for h in headers}:
@@ -458,7 +458,7 @@ def export(request, pk, format):
         headers,
         rows,
         format,
-        filename="linkvault-links-" + batch.pk.hex[:12],
+        filename="liasio-links-" + batch.pk.hex[:12],
         url_column=len(batch.headers) + 1,
     )
 
@@ -477,7 +477,7 @@ def template(request, format):
             ["Alex", "alex@example.com", "CLIENT-002"],
         ],
         format,
-        filename="linkvault-list-template",
+        filename="liasio-list-template",
     )
 
 

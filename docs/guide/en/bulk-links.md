@@ -31,7 +31,7 @@ Click **Create the X links**. Creation is atomic: either every link is created o
 
 ![Created batch and list export](../../screenshots/user-guide/en/batch-result.jpg)
 
-Copy individual URLs, or use **Download Excel** / **Download CSV**. The export contains the original columns followed by the current LinkVault name, URL, status, UTC dates and counters. URLs are clickable in Excel.
+Copy individual URLs, or use **Download Excel** / **Download CSV**. The export contains the original columns followed by the current Liasio name, URL, status, UTC dates and counters. URLs are clickable in Excel.
 
 Cells are exported as values, without the original workbook's formulas, macros, styles or additional sheets. Identifiers entered as text, such as `00127`, remain text. CSV uses UTF-8 with a BOM and semicolons; cells that could be interpreted as formulas receive a protective apostrophe. **The password entered in the conditions is never exported**: communicate it separately.
 

@@ -31,7 +31,7 @@ Cliquez sur **Créer les X liens**. La création est atomique : tous les liens s
 
 ![Lot créé et export de la liste](../../screenshots/user-guide/fr/batch-result.jpg)
 
-Copiez une URL avec son bouton, ou téléchargez l’ensemble via **Télécharger Excel** / **Télécharger CSV**. La liste comprend les colonnes importées puis le nom actuel, l’URL, le statut, les dates UTC et les compteurs LinkVault. Les liens sont cliquables dans le fichier Excel.
+Copiez une URL avec son bouton, ou téléchargez l’ensemble via **Télécharger Excel** / **Télécharger CSV**. La liste comprend les colonnes importées puis le nom actuel, l’URL, le statut, les dates UTC et les compteurs Liasio. Les liens sont cliquables dans le fichier Excel.
 
 Les cellules sont exportées comme valeurs, sans formules, macros, styles ou feuilles supplémentaires du classeur d’origine. Les identifiants saisis comme texte, par exemple `00127`, restent du texte. Le CSV utilise UTF-8 avec BOM et le point-virgule ; les cellules susceptibles d’être interprétées comme des formules reçoivent une apostrophe de protection. **Le mot de passe défini dans les conditions n’est jamais exporté** : communiquez-le séparément.
 
