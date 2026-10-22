@@ -201,10 +201,6 @@ strong {
   font-size: 13px;
   font-weight: 600;
 }
-.workspace-chevron {
-  margin-left: auto;
-  color: var(--muted);
-}
 .nav-caption {
   font-size: 9px;
   letter-spacing: 1.3px;
