@@ -11,7 +11,7 @@ MAX_OUTPUT = 2 * 1024**2
 WORKER = Path(__file__).with_name("preview_worker.py")
 
 
-def render(source, kind, directory):
+def render(source, kind, directory, *, isolated=False):
     if (
         kind not in {"image", "pdf"}
         or not 0 < Path(source).stat().st_size <= MAX_SOURCE
@@ -21,7 +21,8 @@ def render(source, kind, directory):
     os.close(descriptor)
     try:
         result = subprocess.run(
-            [sys.executable, "-I", str(WORKER), str(source), name, kind],
+            [sys.executable, "-I", str(WORKER), str(source), name, kind]
+            + (["--sandbox"] if isolated else []),
             env={"LANG": "C.UTF-8"},
             cwd=directory,
             stdin=subprocess.DEVNULL,

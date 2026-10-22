@@ -99,6 +99,8 @@ def start(request, pk):
             {"error": _("Trop d’envois. Réessayez plus tard.")}, status=429
         )
     data = json.loads(request.body)
+    if not isinstance(data, dict):
+        raise ValidationError(_("Envoi invalide."))
     manifest = data.get("files")
     if not isinstance(manifest, list) or not 1 <= len(manifest) <= 100:
         raise ValidationError(_("Sélectionnez entre 1 et 100 fichiers."))

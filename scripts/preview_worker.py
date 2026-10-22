@@ -2,8 +2,10 @@
 
 import math
 import resource
+import runpy
 import sys
 import warnings
+from pathlib import Path
 
 # Bound work before importing native parsers. Docker supplies the stronger
 # network/filesystem/memory boundary; local development is not a sandbox.
@@ -14,11 +16,17 @@ resource.setrlimit(resource.RLIMIT_NOFILE, (64, 64))
 if sys.platform.startswith("linux"):
     resource.setrlimit(resource.RLIMIT_AS, (384 * 1024**2, 384 * 1024**2))
 
+source, output, kind = sys.argv[1:4]
+if sys.argv[4:] == ["--sandbox"]:
+    sandbox = runpy.run_path(str(Path(__file__).with_name("preview_sandbox.py")))
+    sandbox["confine"](Path(output).parent)
+elif sys.argv[4:]:
+    raise ValueError("Invalid renderer options")
+
 from PIL import Image, ImageOps  # noqa: E402
 
 Image.MAX_IMAGE_PIXELS = 24_000_000
 warnings.simplefilter("error", Image.DecompressionBombWarning)
-source, output, kind = sys.argv[1:]
 
 
 def save(image):

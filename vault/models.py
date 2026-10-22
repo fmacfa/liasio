@@ -41,6 +41,9 @@ class User(AbstractUser):
     mfa_version = models.UUIDField(default=uuid.uuid4, editable=False)
     mfa_last_step = models.BigIntegerField(default=-1)
     recovery_codes = models.JSONField(default=list, blank=True)
+    # Shared by all dispatch processes: one in-flight webhook per owner.
+    webhook_lease = models.UUIDField(null=True, editable=False)
+    webhook_lease_until = models.DateTimeField(null=True, editable=False)
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["display_name"]
     objects = UserManager()
@@ -356,3 +359,6 @@ class WebhookDelivery(models.Model):
     error = models.CharField(max_length=40, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     delivered_at = models.DateTimeField(null=True)
+
+    class Meta:
+        indexes = [models.Index(fields=["state", "next_at"], name="webhook_due_idx")]

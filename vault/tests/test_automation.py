@@ -373,7 +373,10 @@ class AutomationTests(IsolatedFiles, TestCase):
         hook.refresh_from_db()
         self.assertFalse(hook.active)
         self.assertEqual(hook.last_error, "queue_full")
-        self.assertEqual(hook.deliveries.filter(state="pending").count(), 1000)
+        self.assertEqual(hook.deliveries.filter(state="pending").count(), 0)
+        self.assertEqual(
+            hook.deliveries.filter(state="canceled", error="queue_full").count(), 1000
+        )
 
     def test_signed_payload_has_stable_id_and_no_secret_or_response_capture(self):
         import hmac

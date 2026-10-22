@@ -20,17 +20,21 @@ Always send `Authorization: Bearer YOUR_KEY` over HTTPS. Never put a key in a UR
 
 ## 2. Upload a file or entire directory and obtain a link
 
-The repository includes a Python 3.12+ client requiring no extra libraries. Set `LINKVAULT_API_KEY` through your private environment/secret manager, then run:
+The repository includes a Python 3.12+ client for Linux/macOS requiring no extra libraries. Set `LINKVAULT_API_KEY` through your private environment/secret manager, then run:
 
 ```sh
+mkdir -p .linkvault-state
+chmod 700 .linkvault-state
 python3 examples/upload.py ./delivery \
   --url https://files.example.com \
   --title "Client delivery" \
-  --state ./delivery-state.json \
+  --state .linkvault-state/delivery.json \
   --max-downloads 1 --hours 168 --previews
 ```
 
 Keep the state file **outside** the uploaded directory. Run the same command with the same files and state file to resume; use a fresh state file for a new delivery. Do not modify source files during the upload. The client prints the link details to standard output and progress to standard error. The output contains a private share URL: protect logs accordingly. An optional `LINKVAULT_LINK_PASSWORD` adds a link password of at least 12 characters.
+
+The state directory must belong to your account and have mode **0700**; existing state files must be private regular files (0600). Move older state files there before resuming. Only one client may use that directory at a time. State updates use exclusive, unpredictable temporary files and atomic replacement. Use a **trusted source tree** that other accounts cannot modify; copy shared incoming files into private storage first. The client retains opened files and rejects detected changes, but is not a sandbox for an untrusted local writer.
 
 Choose a title of up to 120 characters; its first 80 characters become the link label. Symbolic links are not supported.
 
@@ -61,7 +65,9 @@ HMAC key = the signing secret as UTF-8 bytes
 
 Use constant-time comparison and reject timestamps more than five minutes away from your clock. The tested [Python verifier](../../../examples/verify_webhook.py) implements both. Persist the payload’s `id` with your processing result under a unique database constraint: deliveries are **at least once**, may arrive out of order and must be deduplicated. `X-LinkVault-Delivery` identifies a delivery; the payload event ID is shared across subscribed endpoints. Return 2xx promptly after durable acceptance; process long work asynchronously.
 
-Six attempts maximum: immediate, then approximately 1 minute, 5 minutes, 30 minutes, 2 hours and 6 hours after each failure, with small jitter. Network errors and HTTP 408/425/429/5xx retry; redirects and other 4xx fail without retry. Each attempt is bounded to 20 seconds. No receiver response body is stored. History is retained for 30 days. A queue of 1,000 pending deliveries pauses that endpoint and displays an alert; events while paused are not retained.
+Six attempts maximum: immediate, then approximately 1 minute, 5 minutes, 30 minutes, 2 hours and 6 hours after each failure, with small jitter. Network errors and HTTP 408/425/429/5xx retry; redirects and other 4xx fail without retry. Each attempt is bounded to 20 seconds. No receiver response body is stored. History is retained for 30 days. Attempting to add an event to an endpoint with 1,000 pending deliveries pauses it, cancels its pending queue and displays an alert; events while paused are not retained.
+
+Accounts take turns, regardless of their number of endpoints. At most one delivery per account is in flight across all workers. Compose runs two processes, keeping a second send slot available to other accounts when one receiver is slow. Selection state survives restarts; a crashed worker's reservation expires after five minutes. Delivery time still depends on the number of active accounts, receiver latency and database capacity; it is not a delivery-time guarantee.
 
 ## 5. Connect n8n
 

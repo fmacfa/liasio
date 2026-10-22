@@ -132,6 +132,8 @@ Lisez le [guide de mise à niveau et d’exploitation de la version 0.2](docs/RE
 
 Pour une image précompilée, ajoutez `LINKVAULT_IMAGE=ghcr.io/fmacfa/linkvault:0.4.0` dans `.env`, puis exécutez `docker compose pull app maintenance preview webhooks` et `docker compose up -d --no-build`.
 
+Les sources après 0.4.0 incluent les [renforcements en préparation](CHANGELOG.md#unreleased) : équité des webhooks, protection des fichiers/états et isolation des aperçus. Arrêtez les processus de webhooks avant la migration `0006`, puis redémarrez toute la pile mise à jour. Les aperçus de production exigent Linux avec Landlock ABI 3+ ; consultez le [guide d’exploitation actualisé](docs/guide/fr/operations.md). L’image 0.4.0 existante ne contient pas ces changements. Les images fournisseur sont fixées par empreinte et nécessitent des mises à jour revues ; les prochaines notes de version préciseront la vérification des attestations par workflow, tag et commit ainsi que la référence immuable de l’image.
+
 ## Voir les fichiers avant de télécharger
 
 Activez les aperçus à la création du lien ou depuis **Mes liens** pour un lien existant. Les destinataires voient les vignettes des images et la première page des PDF, puis peuvent les agrandir avant de télécharger le ZIP. JPEG, PNG, WebP, GIF et PDF jusqu’à 20 Mio sont éligibles ; les autres fichiers conservent leur nom, leur type et leur taille.

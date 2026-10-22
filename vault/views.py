@@ -806,7 +806,9 @@ def member_toggle(request, pk):
         if member.is_staff or member.pk == request.user.pk:
             raise Http404
         member.is_active = not member.is_active
-        member.save(update_fields=["is_active"])
+        # Also invalidate password-verified sessions awaiting a second factor.
+        member.mfa_version = uuid.uuid4()
+        member.save(update_fields=["is_active", "mfa_version"])
         # Existing sessions must not become valid again after reactivation.
         from django.contrib.sessions.models import Session
 
@@ -817,11 +819,15 @@ def member_toggle(request, pk):
                 session.delete()
         if not member.is_active:
             from .models import APIToken, Webhook
+            from .webhooks import pause_hook
 
             APIToken.objects.filter(owner=member, revoked_at__isnull=True).update(
                 revoked_at=timezone.now()
             )
-            Webhook.objects.filter(owner=member).update(active=False)
+            for hook in (
+                Webhook.objects.select_for_update().filter(owner=member).order_by("pk")
+            ):
+                pause_hook(hook)
             ShareLink.objects.filter(
                 collection__owner=member, revoked_at__isnull=True
             ).update(revoked_at=timezone.now())

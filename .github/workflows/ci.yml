@@ -17,7 +17,7 @@ jobs:
         database: [sqlite, postgres]
     services:
       postgres:
-        image: postgres:17-alpine
+        image: postgres:17-alpine@sha256:1bcc18d81671b02906296aad470ec9778a6b71016ce953092024b680bad007b0
         env:
           POSTGRES_USER: linkvault
           POSTGRES_PASSWORD: ci-only-password

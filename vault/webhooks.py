@@ -17,14 +17,23 @@ from datetime import timedelta
 from urllib.parse import urlsplit
 
 from django.core.exceptions import ValidationError
-from django.db import transaction
+from django.db import connection, transaction
+from django.db.models import Exists, OuterRef, Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from .mfa import cipher
-from .models import Audit, Collection, Event, Webhook, WebhookDelivery
+from .models import (
+    Audit,
+    Collection,
+    Event,
+    ServiceState,
+    User,
+    Webhook,
+    WebhookDelivery,
+)
 
 EVENTS = [
     ("collection.created", _("Dossier créé")),
@@ -164,6 +173,16 @@ def send(delivery, hook):
             connection.close()
 
 
+def pause_hook(hook, *, error="endpoint_disabled"):
+    """Caller holds the hook lock; pause and cancellation commit together."""
+    hook.active = False
+    hook.last_error = error if error == "queue_full" else ""
+    hook.save(update_fields=["active", "last_error"])
+    hook.deliveries.filter(state="pending").update(
+        state="canceled", error=error, lease=None
+    )
+
+
 def enqueue(owner_id, kind, data, *, only=None):
     with transaction.atomic():
         hooks = (
@@ -184,8 +203,7 @@ def enqueue(owner_id, kind, data, *, only=None):
             if kind not in hook.events and kind != "webhook.test":
                 continue
             if hook.deliveries.filter(state="pending").count() >= 1000:
-                hook.active, hook.last_error = False, "queue_full"
-                hook.save(update_fields=["active", "last_error"])
+                pause_hook(hook, error="queue_full")
                 Audit.objects.create(
                     actor_id=owner_id, action="webhook_queue_full", target=str(hook.pk)
                 )
@@ -230,31 +248,83 @@ def link_event(sender, instance, created, raw=False, **kwargs):
         )
 
 
-def deliver_one():
-    """Lease a row atomically. A crashed worker retries after five minutes."""
+def claim_delivery():
+    """Rotate owners durably; lease only one delivery per owner across workers.
+
+    Lock order: scheduler -> user -> hook -> delivery. Never hold these locks
+    during I/O. SQLite IMMEDIATE transactions serialize the same short section.
+    """
     now = timezone.now()
     with transaction.atomic():
+        ServiceState.objects.get_or_create(key="webhook_scheduler")
+        scheduler = ServiceState.objects.select_for_update().get(
+            key="webhook_scheduler"
+        )
+        due = WebhookDelivery.objects.filter(
+            webhook__owner_id=OuterRef("pk"), state="pending", next_at__lte=now
+        )
+        owners = (
+            User.objects.filter(Exists(due))
+            .filter(
+                Q(webhook_lease_until__isnull=True) | Q(webhook_lease_until__lte=now)
+            )
+            .order_by("pk")
+            .select_for_update(
+                skip_locked=connection.features.has_select_for_update_skip_locked,
+                # Event producers may already hold Hook and insert an Audit FK
+                # to User. Do not block that key-share check while awaiting Hook.
+                no_key=connection.vendor == "postgresql",
+            )
+        )
+        cursor = scheduler.data.get("last_owner_id", 0)
+        owner = owners.filter(pk__gt=cursor).first() or owners.first()
+        if owner is None:
+            return None
+        scheduler.data = {"last_owner_id": owner.pk}
+        scheduler.save(update_fields=["data", "updated_at"])
         delivery = (
-            WebhookDelivery.objects.select_for_update()
-            .filter(state="pending", next_at__lte=now)
+            WebhookDelivery.objects.filter(
+                webhook__owner=owner, state="pending", next_at__lte=now
+            )
             .order_by("next_at", "pk")
             .first()
         )
         if delivery is None:
-            return False
-        hook = Webhook.objects.select_related("owner").get(pk=delivery.webhook_id)
-        if not hook.active or not hook.owner.is_active:
-            delivery.state, delivery.error = "canceled", "endpoint_disabled"
-            delivery.save(update_fields=["state", "error"])
-            return True
+            return ()  # Maintenance may remove expired history without an owner lock.
+        hook = Webhook.objects.select_for_update().get(pk=delivery.webhook_id)
+        delivery = (
+            WebhookDelivery.objects.select_for_update()
+            .filter(pk=delivery.pk, state="pending", next_at__lte=now)
+            .first()
+        )
+        if delivery is None:
+            return ()
+        if not hook.active or not owner.is_active:
+            pause_hook(hook)
+            return ()
         if delivery.attempts >= MAX_ATTEMPTS:
             delivery.state, delivery.error = "failed", "attempt_limit"
-            delivery.save(update_fields=["state", "error"])
-            return True
+            delivery.lease = None
+            delivery.save(update_fields=["state", "error", "lease"])
+            return ()
         delivery.lease = uuid.uuid4()
         delivery.attempts += 1
         delivery.next_at = now + timedelta(minutes=5)
         delivery.save(update_fields=["lease", "attempts", "next_at"])
+        owner.webhook_lease = delivery.lease
+        owner.webhook_lease_until = delivery.next_at
+        owner.save(update_fields=["webhook_lease", "webhook_lease_until"])
+        return delivery, hook, owner.pk
+
+
+def deliver_one():
+    """Fair, at-least-once delivery. Crashed workers release their slot in 5 min."""
+    claimed = claim_delivery()
+    if claimed is None:
+        return False
+    if not claimed:
+        return True
+    delivery, hook, owner_id = claimed
     status, error = None, ""
     try:
         status = send(delivery, hook)
@@ -282,7 +352,12 @@ def deliver_one():
         fields["next_at"] = timezone.now() + timedelta(
             seconds=RETRY_SECONDS[delivery.attempts - 1] + secrets.randbelow(20)
         )
-    WebhookDelivery.objects.filter(
-        pk=delivery.pk, lease=delivery.lease, state="pending"
-    ).update(**fields)
+    with transaction.atomic():
+        # Same order as claim/pause; an expired worker cannot release a new lease.
+        User.objects.filter(pk=owner_id, webhook_lease=delivery.lease).update(
+            webhook_lease=None, webhook_lease_until=None
+        )
+        WebhookDelivery.objects.filter(
+            pk=delivery.pk, lease=delivery.lease, state="pending"
+        ).update(**fields)
     return True

@@ -38,7 +38,7 @@ class Handler(socketserver.StreamRequestHandler):
                             return
                         output.write(block)
                         remaining -= len(block)
-                data = render(source, kind, directory)
+                data = render(source, kind, directory, isolated=True)
             self.wfile.write(
                 json.dumps({"size": len(data) if data else 0}).encode() + b"\n"
             )
