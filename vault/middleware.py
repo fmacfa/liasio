@@ -33,6 +33,10 @@ class RequestBoundaryMiddleware:
             ceiling = 3 * 1024 * 1024
         if request.path.endswith("/links/batch/"):
             ceiling = 1152 * 1024
+        if request.path.startswith("/api/v1/collections/") and request.path.endswith(
+            "/link-batches/"
+        ):
+            ceiling = 256 * 1024
         if request.path.endswith("/chunk/"):
             ceiling = settings.UPLOAD_CHUNK_BYTES
         if length < 0:

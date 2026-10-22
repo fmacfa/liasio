@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add authenticated batch creation, listing, detail and Excel/CSV export to API v1. Ordered name-to-link responses and quantity generation use the same saved batches as the interface, with atomic writes, encrypted idempotency receipts and shared limits. Include a Python command-line client and illustrated English/French guides for terminals, Codex and website backends. No database migration is required on top of `0008`.
+
 - Rename the GitHub repository to `fmacfa/liasio` and update source, help, security and future release links.
 
 - Rename the application to Liasio in French and English, including sharing pages, account e-mails, exports, monitoring messages, newly enrolled authenticator accounts and built-in guides.

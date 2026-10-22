@@ -44,6 +44,11 @@ GUIDES = [
         _("Quantité, import Excel ou CSV, noms et export des URL."),
     ),
     (
+        "bulk-links-api",
+        _("Automatiser les lots de liens"),
+        _("Envoyer des noms, recevoir les liens et exporter par API."),
+    ),
+    (
         "storage",
         _("Gérer le stockage"),
         _("Tailles, quotas, suppression et restauration."),

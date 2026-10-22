@@ -50,6 +50,8 @@ Pour n8n et vos scripts : [référence API](docs/API.md), [guide des automatisat
 
 Pour tout faire depuis l’interface, choisissez **Créer plusieurs liens** : indiquez une quantité ou importez une liste Excel/CSV, vérifiez les noms et conditions, puis téléchargez la liste complétée. Les colonnes et l’ordre d’origine sont conservés en valeurs. Le [guide des liens en lot](docs/guide/fr/bulk-links.md) détaille les étapes, le modèle à télécharger et les limites.
 
+L’[API des lots](docs/guide/fr/bulk-links-api.md) reçoit des noms ou une quantité et renvoie les liens correspondants dans l’ordre. Les lots apparaissent dans **Mes lots**, sont consultables et exportables en Excel/CSV, avec reprise sans doublons. Utilisez le [client Python](examples/batches.py) depuis un terminal ou Codex, ou appelez l’API depuis le serveur de votre site avec une clé privée.
+
 ## Installer sur votre domaine
 
 Prévoir un serveur Linux avec **Docker Engine et Docker Compose v2**, Git et Python 3 pour la configuration. Pour la pile complète, prévoir **8 Go de RAM** (dont jusqu’à 4 Go pour ClamAV), 2 vCPU et un disque adapté à vos fichiers. Ce dimensionnement est un point de départ, pas un résultat de test de charge.

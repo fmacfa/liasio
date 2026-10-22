@@ -25,7 +25,7 @@ from .security import limited, rate_allowed
 
 MAX_SAVED_BATCHES = 100
 SINGLE_LINE = RegexValidator(
-    r"[\x00-\x1f\x7f]",
+    r"[\x00-\x1f\x7f\ud800-\udfff\ufffe\uffff]",
     _("Utilisez un nom sur une seule ligne, sans caractères de contrôle."),
     inverse_match=True,
 )
@@ -98,6 +98,25 @@ def owner_batches(user):
 def owned_batch(request, pk):
     return get_object_or_404(
         owner_batches(request.user).select_related("collection"), pk=pk
+    )
+
+
+def check_batch_capacity(owner):
+    if LinkBatch.objects.filter(collection__owner=owner).count() >= MAX_SAVED_BATCHES:
+        raise ValidationError(
+            _(
+                "Vous avez atteint 100 lots. Supprimez une ancienne liste pour en préparer une autre ; ses liens seront conservés."
+            )
+        )
+
+
+def new_batch(owner, collection, name, headers, rows):
+    """Caller holds the owner and collection locks in a transaction."""
+    check_batch_capacity(owner)
+    if not collection.files.exists():
+        raise ValidationError(_("Ajoutez au moins un fichier avant de créer un lien."))
+    return LinkBatch.objects.create(
+        collection=collection, name=name, headers=headers, source_rows=rows
     )
 
 
@@ -191,24 +210,8 @@ def prepare(request, pk):
                     locked = get_object_or_404(
                         Collection.objects.select_for_update(), pk=pk, owner=owner
                     )
-                    if (
-                        LinkBatch.objects.filter(collection__owner=owner).count()
-                        >= MAX_SAVED_BATCHES
-                    ):
-                        raise ValidationError(
-                            _(
-                                "Vous avez atteint 100 lots. Supprimez une ancienne liste pour en préparer une autre ; ses liens seront conservés."
-                            )
-                        )
-                    if not locked.files.exists():
-                        raise ValidationError(
-                            _("Ajoutez au moins un fichier avant de créer un lien.")
-                        )
-                    batch = LinkBatch.objects.create(
-                        collection=locked,
-                        name=form.cleaned_data["name"],
-                        headers=headers,
-                        source_rows=rows,
+                    batch = new_batch(
+                        owner, locked, form.cleaned_data["name"], headers, rows
                     )
                 return redirect("link_batch", pk=batch.pk)
             except ValidationError as exc:
@@ -261,53 +264,62 @@ def create_links(request, batch, names, conditions):
         batch = get_object_or_404(
             LinkBatch.objects.select_for_update(), pk=batch.pk, collection=collection
         )
-        if batch.completed_at:
-            return  # Replayed or concurrent submission: exactly the existing lot.
-        if batch.created_at <= timezone.now() - timedelta(hours=24):
-            raise ValidationError(_("Ce brouillon a expiré. Préparez un nouveau lot."))
-        if not collection.files.exists():
-            raise ValidationError(
-                _("Ajoutez au moins un fichier avant de créer un lien.")
+        complete_batch(
+            batch,
+            owner,
+            [names.cleaned_data[f"label_{i}"] for i in range(len(batch.source_rows))],
+            conditions.cleaned_data,
+            password_hash,
+        )
+
+
+def complete_batch(batch, owner, labels, conditions, password_hash):
+    """Shared browser/API write path; caller holds owner, collection and batch locks.
+
+    A newly inserted batch is already private to the caller's transaction. Hashing
+    and input validation happen before these locks, on both entry points.
+    """
+    if batch.completed_at:
+        return
+    if batch.created_at <= timezone.now() - timedelta(hours=24):
+        raise ValidationError(_("Ce brouillon a expiré. Préparez un nouveau lot."))
+    collection = batch.collection
+    if not collection.files.exists():
+        raise ValidationError(_("Ajoutez au moins un fichier avant de créer un lien."))
+    if settings.ANTIVIRUS_REQUIRED and collection.files.filter(scanned=False).exists():
+        raise ValidationError(
+            _(
+                "Des fichiers n’ont pas été analysés par l’antivirus. Importez-les à nouveau dans un dossier avec l’antivirus activé."
             )
-        if (
-            settings.ANTIVIRUS_REQUIRED
-            and collection.files.filter(scanned=False).exists()
-        ):
-            raise ValidationError(
-                _(
-                    "Des fichiers n’ont pas été analysés par l’antivirus. Importez-les à nouveau dans un dossier avec l’antivirus activé."
-                )
-            )
-        links = [
-            ShareLink(
-                collection=collection,
-                label=names.cleaned_data[f"label_{position}"],
-                password_hash=password_hash,
-                expires_at=conditions.cleaned_data["expires_at"],
-                max_downloads=conditions.cleaned_data["max_downloads"],
-                allow_previews=conditions.cleaned_data["allow_previews"],
-            )
-            for position in range(len(batch.source_rows))
+        )
+    links = [
+        ShareLink(
+            collection=collection,
+            label=label,
+            password_hash=password_hash,
+            expires_at=conditions["expires_at"],
+            max_downloads=conditions["max_downloads"],
+            allow_previews=conditions["allow_previews"],
+        )
+        for label in labels
+    ]
+    ShareLink.objects.bulk_create(links)
+    LinkBatchItem.objects.bulk_create(
+        [
+            LinkBatchItem(batch=batch, link=link, position=position)
+            for position, link in enumerate(links)
         ]
-        ShareLink.objects.bulk_create(links)
-        LinkBatchItem.objects.bulk_create(
-            [
-                LinkBatchItem(batch=batch, link=link, position=position)
-                for position, link in enumerate(links)
-            ]
-        )
-        for link in links:
-            Event.objects.create(
-                link=link, kind="created"
-            )  # Keeps the transactional webhook outbox.
-        Audit.objects.bulk_create(
-            [
-                Audit(actor=owner, action="link_created", target=str(link.pk))
-                for link in links
-            ]
-        )
-        batch.completed_at = timezone.now()
-        batch.save(update_fields=["completed_at"])
+    )
+    for link in links:
+        Event.objects.create(link=link, kind="created")  # Transactional webhook outbox.
+    Audit.objects.bulk_create(
+        [
+            Audit(actor=owner, action="link_created", target=str(link.pk))
+            for link in links
+        ]
+    )
+    batch.completed_at = timezone.now()
+    batch.save(update_fields=["completed_at"])
 
 
 @login_required
@@ -424,6 +436,11 @@ def export(request, pk, format):
         raise Http404
     if rate_limited(request, "batch-export", 60):
         return throttled()
+    return export_response(batch, format)
+
+
+def export_response(batch, format):
+    """Export values after the caller has checked ownership, readiness and limits."""
     headers = list(batch.headers)
     for header in (
         "Liasio name",

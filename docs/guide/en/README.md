@@ -16,5 +16,6 @@ Version 0.4 · The same guides are available inside your instance under **User g
 10. [Operations and quotas](operations.md)
 11. [API, webhooks and n8n](automation.md)
 12. [Bulk links, Excel and CSV](bulk-links.md)
+13. [Create, read and export batches through the API](bulk-links-api.md)
 
 [English](../en/README.md) · [Français](../fr/README.md) · [API reference](../../API.md)
