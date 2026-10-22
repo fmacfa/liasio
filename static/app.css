@@ -155,18 +155,20 @@ strong {
   font-weight: 700;
   letter-spacing: -1.4px;
 }
-.brand-symbol {
-  width: 35px;
-  height: 35px;
+.brand-lockup {
+  display: block;
+  width: 146px;
+  height: auto;
+  flex-shrink: 0;
+}
+.powered-by {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--green-dark);
-  color: var(--lime);
-  border-radius: 10px;
+  gap: 5px;
 }
-.brand-dot {
-  color: #80a06d;
+.powered-by .brand-lockup {
+  width: 88px;
 }
 .sidebar > .brand {
   padding-left: 13px;

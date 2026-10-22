@@ -1,6 +1,6 @@
-# Get started with LinkVault
+# Get started with Liasio
 
-LinkVault lives on your server. Open its HTTPS address to create the first account on a new instance. Once installed, you need a personal invitation to join. A share link only gives access to its collection; it is not an account invitation.
+Liasio lives on your server. Open its HTTPS address to create the first account on a new instance. Once installed, you need a personal invitation to join. A share link only gives access to its collection; it is not an account invitation.
 
 ![Sign-in screen with the language selector](../../screenshots/user-guide/en/login.png)
 

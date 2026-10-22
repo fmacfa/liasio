@@ -1,12 +1,12 @@
-# English translations for LinkVault. MIT license.
+# English translations for Liasio. MIT license.
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: LinkVault 0.4.0\n"
+"Project-Id-Version: Liasio 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-22 17:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: LinkVault contributors\n"
+"Last-Translator: Liasio contributors\n"
 "Language-Team: English\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"

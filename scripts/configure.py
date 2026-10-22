@@ -9,7 +9,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 parser = argparse.ArgumentParser(
-    description="Préparer LinkVault (sans écraser de configuration existante)."
+    description="Préparer Liasio (sans écraser de configuration existante)."
 )
 parser.add_argument("--domain", help="Nom de domaine, par exemple fichiers.example.com")
 parser.add_argument("--dev", action="store_true", help="Développement local uniquement")

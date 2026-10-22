@@ -1,16 +1,18 @@
-# LinkVault
+# Liasio
+
+Liasio est le nouveau nom de LinkVault. Les adresses du dépôt, identifiants de déploiement et en-têtes de l’API v1 conservent leurs noms d’origine pour assurer la continuité des installations et intégrations existantes.
 
 [English](README.md) · **Français**
 
 **Vos fichiers, votre domaine, vos conditions.**
 
-LinkVault est une application open source de partage de fichiers à installer sur votre serveur. Constituez des dossiers, personnalisez leur présentation et créez plusieurs liens indépendants avec mot de passe, expiration ou limite de téléchargements.
+Liasio est une application open source de partage de fichiers à installer sur votre serveur. Constituez des dossiers, personnalisez leur présentation et créez plusieurs liens indépendants avec mot de passe, expiration ou limite de téléchargements.
 
 Interface français / anglais · Licence **MIT** · Python / Django · Docker Compose
 
 > **Version 0.4 — automatisations et interface bilingue.** API à permissions limitées, webhooks signés et guides illustrés complètent les aperçus, TOTP, les envois reprenables et la corbeille. Le projet reste jeune, sans audit humain indépendant ni chiffrement de bout en bout.
 
-![Tableau de bord LinkVault, avec des données fictives](docs/screenshots/dashboard.png)
+![Tableau de bord Liasio, avec des données fictives](docs/screenshots/dashboard.png)
 
 ## Ce que vous pouvez faire
 
@@ -139,7 +141,7 @@ Activez les aperçus à la création du lien ou depuis **Mes liens** pour un lie
 
 Les aperçus sont des JPEG réduits, sans métadonnées, générés par un moteur isolé. Ils respectent le mot de passe, la révocation, l’expiration et l’épuisement du lien, sans consommer de téléchargement. **Un aperçu visible peut être copié.** Désactivez cette option si le contenu doit rester caché jusqu’au téléchargement. Après mise à niveau, les liens existants restent sans aperçu jusqu’à leur activation. Consultez le [guide des aperçus et du déploiement](docs/PREVIEWS.md) (anglais).
 
-![Galerie LinkVault avec des images, la première page d’un PDF et un fichier sans aperçu](docs/screenshots/previews.png)
+![Galerie Liasio avec des images, la première page d’un PDF et un fichier sans aperçu](docs/screenshots/previews.png)
 
 ## Sécurité et confidentialité
 
@@ -176,13 +178,13 @@ Voir [CONTRIBUTING.md](CONTRIBUTING.md) pour l’organisation du code et [ROADMA
 
 ## Inspirations et positionnement
 
-Nous avons étudié [Pingvin Share](https://github.com/stonith404/pingvin-share), [ProjectSend](https://github.com/projectsend/projectsend), [Gokapi](https://github.com/Forceu/Gokapi) et [Send](https://github.com/timvisee/send). Le [comparatif](docs/COMPARISON.md) décrit ce que ces projets apportent et les choix de LinkVault.
+Nous avons étudié [Pingvin Share](https://github.com/stonith404/pingvin-share), [ProjectSend](https://github.com/projectsend/projectsend), [Gokapi](https://github.com/Forceu/Gokapi) et [Send](https://github.com/timvisee/send). Le [comparatif](docs/COMPARISON.md) décrit ce que ces projets apportent et les choix de Liasio.
 
-LinkVault privilégie les dossiers réutilisables, la présentation et des règles de liens explicites dans une application compacte. Cette version ne prétend pas remplacer toutes les fonctions de ces projets plus anciens. Le code applicatif et les éléments graphiques de LinkVault ont été créés pour ce projet ; aucun code de ces quatre projets n’a été repris.
+Liasio privilégie les dossiers réutilisables, la présentation et des règles de liens explicites dans une application compacte. Cette version ne prétend pas remplacer toutes les fonctions de ces projets plus anciens. Le code applicatif et les éléments graphiques de Liasio ont été créés pour ce projet ; aucun code de ces quatre projets n’a été repris.
 
 ### Aperçu de l’import
 
-![Page d’import LinkVault avec un fichier de démonstration sélectionné](docs/screenshots/user-guide/fr/upload.jpg)
+![Page d’import Liasio avec un fichier de démonstration sélectionné](docs/screenshots/user-guide/fr/upload.jpg)
 
 ## Licence
 

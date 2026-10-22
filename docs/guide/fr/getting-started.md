@@ -1,6 +1,6 @@
-# Premiers pas avec LinkVault
+# Premiers pas avec Liasio
 
-LinkVault est installé sur votre serveur. Ouvrez son adresse HTTPS pour créer le premier compte sur une instance neuve. Une fois l’installation terminée, une invitation personnelle est nécessaire pour rejoindre l’espace. Un lien de partage donne accès à un dossier ; ce n’est pas une invitation à créer un compte.
+Liasio est installé sur votre serveur. Ouvrez son adresse HTTPS pour créer le premier compte sur une instance neuve. Une fois l’installation terminée, une invitation personnelle est nécessaire pour rejoindre l’espace. Un lien de partage donne accès à un dossier ; ce n’est pas une invitation à créer un compte.
 
 ![Connexion et choix de la langue](../../screenshots/user-guide/fr/login.png)
 

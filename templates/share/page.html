@@ -2,15 +2,22 @@
 {% load i18n %}
 {% load static %}
 {% block scripts %}{% if branding %}<link rel="stylesheet" href="{% url 'share_brand_media' token 'style' %}">{% endif %}<script src="{% static 'previews.js' %}" defer></script>{% endblock %}
-{% block title %}{{ collection.title }} · {{ branding.name|default:_('LinkVault') }}{% endblock %}
+{% block title %}{{ collection.title }} · {{ branding.name|default:_('Liasio') }}{% endblock %}
 {% block body_class %}public-body branded-surface {% if link.allow_previews %}has-previews{% endif %} theme-{{ branding.theme|default:'forest' }}{% endblock %}
 {% block body %}
 <div class="brand-backdrop" aria-hidden="true"></div>
 <div class="public-language">{% include "components/language.html" %}</div>
   <header class="public-header">
     <a class="public-brand" href="{% url 'share' token %}">
-      {% if branding.logo_data %}<img class="brand-logo" src="{% url 'share_brand_media' token 'logo' %}" alt="">{% else %}<span class="preview-monogram">{{ branding.name|default:_('L')|slice:':1'|upper }}</span>{% endif %}
-      <span>{{ branding.name|default:_('LinkVault') }}</span>
+      {% if branding.logo_data %}
+        <img class="brand-logo" src="{% url 'share_brand_media' token 'logo' %}" alt="">
+        <span>{{ branding.name|default:_('Liasio') }}</span>
+      {% elif branding.name %}
+        <span class="preview-monogram">{{ branding.name|slice:':1'|upper }}</span>
+        <span>{{ branding.name }}</span>
+      {% else %}
+        {% include "components/logo.html" %}
+      {% endif %}
     </a>
     <span class="public-tagline">{{ branding.tagline }}</span>
     <span class="badge">{% include "components/icon.html" with name="lock" %}{% translate "Partage privé" %}</span>
@@ -103,7 +110,7 @@
     <a class="powered-by"
        href="https://github.com/fmacfa/linkvault"
        target="_blank"
-       rel="noreferrer">{% translate "Partagé avec" %} <strong>{% translate "linkvault." %}</strong>
+       rel="noreferrer">{% translate "Partagé avec" %} {% include "components/logo.html" %}
     </a>
   </footer>
 {% endblock %}

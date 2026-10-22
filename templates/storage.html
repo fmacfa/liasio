@@ -148,11 +148,11 @@
       <div class="server-stats">
         <div>
           <strong>{{ server_file_count }}</strong>
-          <small>{% translate "Fichiers dans LinkVault" %}</small>
+          <small>{% translate "Fichiers dans Liasio" %}</small>
         </div>
         <div>
           <strong>{{ server_bytes|filesizeformat }}</strong>
-          <small>{% translate "Total des fichiers LinkVault" %}</small>
+          <small>{% translate "Total des fichiers Liasio" %}</small>
         </div>
         <div>
           <strong>{{ disk.free|filesizeformat }}</strong>
@@ -164,7 +164,7 @@
         </div>
       </div>
       <progress value="{{ disk.used }}" max="{{ disk.total }}">{{ disk_percent }} %</progress>
-      <p class="footnote">{{ disk_percent }} {% translate "% du volume est occupé. Cette mesure inclut les autres données présentes sur le même disque ; elle peut différer des fichiers LinkVault." %}</p>
+      <p class="footnote">{{ disk_percent }} {% translate "% du volume est occupé. Cette mesure inclut les autres données présentes sur le même disque ; elle peut différer des fichiers Liasio." %}</p>
       <h3>{% translate "Utilisation par compte" %}</h3>
       <div class="table-scroll">
         <table>

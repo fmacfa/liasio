@@ -67,7 +67,7 @@ class LanguageTests(IsolatedFiles, TestCase):
                     self.assertContains(response, f'lang="{language}"')
                     if page.startswith("/help/"):
                         for source in re.findall(r'<img[^>]+src="([^"]+)"', response.content.decode()):
-                            self.assertTrue(source.startswith("/static/guide/"))
+                            self.assertTrue(source.startswith(("/static/guide/", "/static/brand/")))
                             self.assertIsNotNone(finders.find(source.removeprefix("/static/")), source)
         response = self.client.get("/help/getting-started/")
         self.assertContains(

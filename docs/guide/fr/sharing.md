@@ -14,7 +14,7 @@ Ouvrez un dossier contenant des fichiers puis cliquez sur **Créer un lien**.
 | Mot de passe du lien | Facultatif, sans minimum, 128 caractères maximum. Une phrase longue est plus difficile à deviner. Transmettez-le par un autre canal. |
 | Aperçus des images et PDF | Facultatifs. Activés par défaut dans le formulaire de création ; désactivés par défaut dans l’API. |
 
-Cliquez sur **Créer le lien**. Dans **Mes liens**, copiez l’URL et transmettez-la au destinataire. Le mot de passe protège aussi la présentation et la liste des fichiers. Le destinataire n’a pas besoin d’un compte LinkVault.
+Cliquez sur **Créer le lien**. Dans **Mes liens**, copiez l’URL et transmettez-la au destinataire. Le mot de passe protège aussi la présentation et la liste des fichiers. Le destinataire n’a pas besoin d’un compte Liasio.
 
 ## Voir ce que découvre le destinataire
 

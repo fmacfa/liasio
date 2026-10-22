@@ -21,7 +21,7 @@ notes = (
     .split(f"## {version}", 1)[1]
     .split("\n## ", 1)[0]
 )
-print(f"## LinkVault {version}\n" + notes.split("\n", 1)[1])
+print(f"## Liasio {version}\n" + notes.split("\n", 1)[1])
 print(f"""
 ### Container installation
 

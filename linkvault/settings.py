@@ -181,7 +181,7 @@ EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", "true").lower() == "true"
 EMAIL_USE_SSL = os.environ.get("EMAIL_USE_SSL", "false").lower() == "true"
 EMAIL_TIMEOUT = 10
 DEFAULT_FROM_EMAIL = os.environ.get(
-    "DEFAULT_FROM_EMAIL", "LinkVault <noreply@example.com>"
+    "DEFAULT_FROM_EMAIL", "Liasio <noreply@example.com>"
 )
 PASSWORD_RESET_TIMEOUT = 3600
 # Never log capability URLs, passwords, request bodies or cookies.

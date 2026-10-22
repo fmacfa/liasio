@@ -1,6 +1,6 @@
 # File previews
 
-LinkVault 0.3 can show a gallery before the recipient downloads the folder. Select **Afficher les aperçus des images et PDF** when creating a link. It is checked for new links. Links created before the upgrade stay disabled until their owner chooses **Activer les aperçus** in **Mes liens**. The owner can turn them off again there.
+Liasio 0.3 can show a gallery before the recipient downloads the folder. Select **Afficher les aperçus des images et PDF** when creating a link. It is checked for new links. Links created before the upgrade stay disabled until their owner chooses **Activer les aperçus** in **Mes liens**. The owner can turn them off again there.
 
 ## What recipients see
 
