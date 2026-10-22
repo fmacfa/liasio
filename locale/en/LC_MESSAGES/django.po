@@ -4084,6 +4084,10 @@ msgid ""
 msgstr ""
 "Receiver temporarily unavailable. A retry is scheduled if attempts remain."
 
+#: templates/integrations/webhook.html:5
+msgid "Retour aux automatisations"
+msgstr "Back to automations"
+
 #~ msgid "Partagé avec Liasio."
 #~ msgstr "Shared with Liasio."
 

@@ -449,6 +449,10 @@ progress::-moz-progress-bar {
   background: #edf3e9;
   border-color: #bacdb7;
 }
+.page-back-link {
+  align-self: flex-start;
+  margin-bottom: 24px;
+}
 .button.full {
   width: 100%;
 }
