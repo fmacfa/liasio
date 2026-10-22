@@ -1,12 +1,13 @@
 {% extends "account/layout.html" %}
-{% block title %}Première installation · LinkVault{% endblock %}
+{% load i18n %}
+{% block title %}{% translate "Première installation · LinkVault" %}{% endblock %}
 {% block auth_content %}
-  <span class="eyebrow">BIENVENUE CHEZ VOUS</span>
-  <h2>Créons votre espace.</h2>
-  <p class="muted">Ce premier compte administrateur vous permettra d’inviter votre équipe.</p>
+  <span class="eyebrow">{% translate "BIENVENUE CHEZ VOUS" %}</span>
+  <h2>{% translate "Créons votre espace." %}</h2>
+  <p class="muted">{% translate "Ce premier compte administrateur vous permettra d’inviter votre équipe." %}</p>
   <form method="post" class="auth-form">
     {% csrf_token %}
     {% include "components/form.html" %}
-    <button class="button full">Créer mon compte {% include "components/icon.html" with name="arrow" %}</button>
+    <button class="button full">{% translate "Créer mon compte" %} {% include "components/icon.html" with name="arrow" %}</button>
   </form>
 {% endblock %}

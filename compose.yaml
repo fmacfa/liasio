@@ -62,6 +62,25 @@ services:
     cap_drop: [ALL]
     mem_limit: 256m
     pids_limit: 50
+  webhooks:
+    image: ${LINKVAULT_IMAGE:-linkvault:local}
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_DB: linkvault
+      POSTGRES_USER: linkvault
+      DATA_DIR: /data
+    command: ["python", "manage.py", "deliver_webhooks", "--loop"]
+    tmpfs: ["/data:rw,noexec,nosuid,nodev,size=8m,uid=10001,gid=10001,mode=700"]
+    networks: [backend, updates]
+    depends_on:
+      app: {condition: service_healthy}
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: [ALL]
+    mem_limit: 192m
+    cpus: 0.5
+    pids_limit: 32
   db:
     image: postgres:17-alpine
     restart: unless-stopped

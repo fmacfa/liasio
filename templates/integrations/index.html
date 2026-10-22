@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% load i18n %}
+{% block title %}{% translate "Automatisations" %} {% translate "· LinkVault" %}{% endblock %}
+{% block breadcrumb %}{% translate "Automatisations" %}{% endblock %}
+{% block content %}
+<header class="page-heading"><div><p class="eyebrow">{% translate "API & WEBHOOKS" %}</p><h1>{% translate "Vos outils, connectés." %}</h1><p class="page-subtitle">{% translate "Importez des fichiers, créez des liens et recevez les événements dans vos workflows." %}</p></div><a class="button secondary" href="{% url 'guide' 'automation' %}">{% translate "Guide des automatisations" %} ↗</a></header>
+{% if secret %}<section class="panel secret-panel" role="status"><h2>{{ secret_kind }}</h2><p>{% translate "Copiez ce secret maintenant. Il ne sera plus affiché. Conservez-le dans le coffre de votre outil d’automatisation." %}</p><code class="secret-value">{{ secret }}</code></section>{% endif %}
+<div class="notice">{% translate "Les clés accèdent uniquement à votre espace. Un changement de mot de passe ou de double authentification les invalide. Aucun accès à la gestion des membres ou à la suppression définitive." %}</div>
+<div class="integration-grid">
+<section class="panel"><div class="panel-heading"><h2>{% translate "Clés API" %}</h2><span class="badge">{% translate "REST · v1" %}</span></div>
+{% for key in keys %}<div class="integration-row"><div><strong>{{ key.name }}</strong><small>{% if key.usable %}{% translate "Active" %}{% else %}{% translate "Inactive" %}{% endif %} · {{ key.expires_at|date:"SHORT_DATE_FORMAT" }}</small><small>{{ key.scopes|join:", " }}</small>{% if key.last_used_at %}<small>{% translate "Dernière utilisation" %} : {{ key.last_used_at|date:"SHORT_DATETIME_FORMAT" }}</small>{% endif %}</div>{% if not key.revoked_at %}<form method="post" action="{% url 'api_key_revoke' key.pk %}">{% csrf_token %}<button class="button subtle" type="submit">{% translate "Révoquer" %}</button></form>{% endif %}</div>{% empty %}<p class="muted">{% translate "Aucune clé API pour le moment." %}</p>{% endfor %}
+<details class="integration-create" {% if token_form.errors %}open{% endif %}><summary>{% translate "Créer une clé API" %}</summary><form method="post">{% csrf_token %}<input type="hidden" name="action" value="token">{% include "components/form.html" with form=token_form %}<button class="button primary" type="submit">{% translate "Créer la clé" %}</button></form></details>
+{% if token_form.errors %}<div class="notice">{{ token_form.errors }}</div>{% endif %}
+</section>
+<section class="panel"><div class="panel-heading"><h2>{% translate "Webhooks" %}</h2><span class="badge">{% translate "HMAC · SHA-256" %}</span></div>
+{% if not worker_running %}<p class="notice">{% translate "Le service de livraison n’a pas envoyé de signal récent. Les événements resteront en attente jusqu’à son démarrage." %}</p>{% endif %}
+{% for hook in hooks %}<a class="integration-row" href="{% url 'webhook' hook.pk %}"><div><strong>{{ hook.name }}</strong><small>{{ hook.hostname }} · {% if hook.active %}{% translate "Actif" %}{% else %}{% translate "En pause" %}{% endif %}</small></div><span>↗</span></a>{% empty %}<p class="muted">{% translate "Aucun webhook pour le moment." %}</p>{% endfor %}
+<details class="integration-create" {% if webhook_form.errors %}open{% endif %}><summary>{% translate "Ajouter un webhook" %}</summary><form method="post">{% csrf_token %}<input type="hidden" name="action" value="webhook">{% include "components/form.html" with form=webhook_form %}<button class="button primary" type="submit">{% translate "Créer le webhook" %}</button></form></details>
+{% if webhook_form.errors %}<div class="notice">{{ webhook_form.errors }}</div>{% endif %}
+</section></div>
+{% endblock %}

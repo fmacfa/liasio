@@ -1,5 +1,6 @@
 """Instance health, quota administration and deduplicated operational alerts."""
 
+from django.utils.translation import gettext_lazy as _
 import hmac
 import shutil
 import smtplib
@@ -86,26 +87,26 @@ def monitor():
         status["disk_used_percent"] >= 85
         or status["disk_free_bytes"] < settings.MIN_FREE_DISK_BYTES
     ):
-        wanted["disk"] = (
+        wanted["disk"] = _(
             "Le disque dépasse 85 % d’utilisation ou sa réserve minimale. Libérez de l’espace."
         )
     if not status["antivirus"]:
-        wanted["antivirus"] = (
+        wanted["antivirus"] = _(
             "L’antivirus ne répond plus. Les nouveaux fichiers ne peuvent pas être validés."
         )
     if not status["maintenance"]:
-        wanted["maintenance"] = (
+        wanted["maintenance"] = _(
             "La maintenance ne signale plus son activité depuis plus de quinze minutes."
         )
     if not status["backup_verified_recently"]:
-        wanted["backup"] = (
+        wanted["backup"] = _(
             "Aucune restauration de sauvegarde vérifiée récemment. Consultez le guide d’exploitation."
         )
     for user in User.objects.filter(is_active=True):
         if user.used_bytes + user.reserved_bytes >= user.quota_bytes * 0.9:
-            wanted[f"quota-{user.pk}"] = (
-                f"Le compte n° {user.pk} atteint au moins 90 % de son quota (envois réservés compris)."
-            )
+            wanted[f"quota-{user.pk}"] = _(
+                "Le compte n° %(id)s atteint au moins 90 %% de son quota (envois réservés compris)."
+            ) % {"id": user.pk}
     now = timezone.now()
     for key, message in wanted.items():
         alert, created = OperationalAlert.objects.get_or_create(
@@ -117,7 +118,7 @@ def monitor():
         if not alert.notified_at and settings.MONITOR_EMAIL and settings.EMAIL_HOST:
             try:
                 send_mail(
-                    "[LinkVault] Intervention nécessaire",
+                    _("[LinkVault] Intervention nécessaire"),
                     message + "\n" + settings.APP_URL + "/operations/",
                     settings.DEFAULT_FROM_EMAIL,
                     [settings.MONITOR_EMAIL],
@@ -167,14 +168,18 @@ def quota(request, pk):
             raise ValueError
         quota_bytes = int(value * 1024**3)
     except (InvalidOperation, ValueError):
-        messages.error(request, "Indiquez un quota valide, entre 0 et 1 048 576 Gio.")
+        messages.error(
+            request, _("Indiquez un quota valide, entre 0 et 1 048 576 Gio.")
+        )
         return redirect("operations")
     with transaction.atomic():
         user = get_object_or_404(User.objects.select_for_update(), pk=pk)
         if quota_bytes < user.used_bytes + user.reserved_bytes:
             messages.error(
                 request,
-                "Le quota doit couvrir les fichiers, la corbeille et les envois en attente.",
+                _(
+                    "Le quota doit couvrir les fichiers, la corbeille et les envois en attente."
+                ),
             )
         else:
             user.quota_bytes = quota_bytes
@@ -182,7 +187,7 @@ def quota(request, pk):
             Audit.objects.create(
                 actor=request.user, action="quota_changed", target=str(pk)
             )
-            messages.success(request, "Quota mis à jour.")
+            messages.success(request, _("Quota mis à jour."))
     return redirect("operations")
 
 

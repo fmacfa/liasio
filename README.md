@@ -6,15 +6,15 @@
 
 LinkVault is an open-source file-sharing application that you host on your own server. Organize files into folders, customize their presentation, and create independent sharing links with passwords, expiration dates, or download limits.
 
-French user interface · **MIT** license · Python / Django · Docker Compose
+French / English interface · **MIT** license · Python / Django · Docker Compose
 
-> **Version 0.3 — preview before downloading.** File galleries join TOTP, resumable uploads, trash and tested restoration. This remains an early release; it has not undergone an independent human security audit and does not provide end-to-end encryption.
+> **Version 0.4 — connected workflows, in two languages.** Scoped API keys, signed webhooks and illustrated in-app guides join galleries, TOTP, resumable uploads and recoverable trash. This remains an early release; it has not undergone an independent human security audit and does not provide end-to-end encryption.
 
 ![LinkVault dashboard with fictional demo data](docs/screenshots/dashboard.png)
 
 ## Features
 
-| Need | Available in version 0.3 |
+| Need | Available in version 0.4 |
 | --- | --- |
 | First-time setup | Setup wizard protected by an installation key; create the administrator account with an email address and password |
 | Multiple accounts | Personal invitations valid for 7 days, single-use and revocable; isolated member accounts |
@@ -28,6 +28,9 @@ French user interface · **MIT** license · Python / Django · Docker Compose
 | Storage management | File counts, sizes, quotas, search, sorting by size/name/date, and individual/bulk deletion to a recoverable 30-day trash |
 | Storage administration | Available disk space, total file count, and per-account usage; quotas editable in the administration page |
 | Access management | Suspend members and revoke their links and sessions; password changes/recovery, optional TOTP and one-use recovery codes |
+| Automations | Scoped, expiring API keys; resumable imports and link creation; signed webhooks, delivery history and bounded retries |
+| Illustrated help | 11 guides in English and French, available on GitHub and under User guide in the application |
+| Languages | French and English, including recipient pages, forms, messages and upload progress |
 | Operations | Automatic HTTPS through Caddy, PostgreSQL, ClamAV antivirus, five-minute health checks, optional alerts, and automatically tested backup restoration |
 
 **A folder is stored only once.** Create a password-protected link for one client, another that expires tomorrow, and a third that allows a single download.
@@ -38,6 +41,12 @@ French user interface · **MIT** license · Python / Django · Docker Compose
 - **Download authorized:** the server prepared the ZIP archive and reserved one use before sending it. This does not prove that the complete file was received. An interrupted transfer consumes that use; the owner can create a new link.
 - **Single-use:** opening the page does not consume a use. The download button sends a CSRF-protected POST request. An atomic database operation prevents simultaneous downloads from exceeding the limit.
 - **Revocation:** blocks future authorizations. It cannot recall files already received and does not necessarily interrupt a transfer already authorized.
+
+## User guides and automations
+
+Start with the **[illustrated English guide](docs/guide/en/README.md)** or **[guide français](docs/guide/fr/README.md)**. The same pages and screenshots are built into `/help/`.
+
+For n8n, scripts and other tools, see the [API reference](docs/API.md), the [automation walkthrough](docs/guide/en/automation.md), the [Python upload client](examples/upload.py) and the [webhook signature verifier](examples/verify_webhook.py). No public registration or anonymous upload is added.
 
 ## Install on your domain
 
@@ -57,7 +66,7 @@ docker compose ps
 
 4. Wait for ClamAV to become ready; its first startup may take several minutes.
 5. Open `https://files.example.com` and create your account using **SETUP_TOKEN** from your `.env` file, your name, email address, and password.
-6. Create a folder, upload files, then select **Créer un lien** (“Create a link”). The application interface is currently in French.
+6. Create a folder, upload files, then select **Create a link**. Choose **FR / EN** to change the interface language.
 
 The configuration script creates `.env` with `0600` permissions and refuses to overwrite an existing file. It contains secrets: never publish it. Once initialization is complete, first-account creation stays closed even if the setup key remains in the configuration.
 
@@ -67,7 +76,7 @@ Caddy obtains and renews the TLS certificate. If you use another reverse proxy, 
 
 Versioned images are published by GitHub Actions with a software bill of materials (SBOM) and provenance. Releases also provide a compressed Docker archive for offline installation. See [releases](https://github.com/fmacfa/linkvault/releases) and the [changelog](CHANGELOG.md).
 
-Set `LINKVAULT_IMAGE=ghcr.io/fmacfa/linkvault:0.3.0` in `.env` to use the registry image, then `docker compose pull app maintenance preview` and `docker compose up -d --no-build`. For source builds, keep the default and use `--build`.
+Set `LINKVAULT_IMAGE=ghcr.io/fmacfa/linkvault:0.4.0` in `.env` to use the registry image, then `docker compose pull app maintenance preview webhooks` and `docker compose up -d --no-build`. For source builds, keep the default and use `--build`.
 
 Before upgrading from 0.1, preserve your original keys and take a complete backup. Read the [upgrade and reliability guide](docs/RELIABILITY.md), including MFA key handling, trash quotas, monitoring and restore verification.
 

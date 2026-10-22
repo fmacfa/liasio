@@ -1,9 +1,10 @@
 {% extends "account/layout.html" %}
-{% block title %}Vérification · LinkVault{% endblock %}
+{% load i18n %}
+{% block title %}{% translate "Vérification · LinkVault" %}{% endblock %}
 {% block auth_content %}
-    <span class="eyebrow">UNE SECONDE VÉRIFICATION</span>
-    <h2>Confirmez que c’est vous.</h2>
-    <p class="muted">Saisissez le code de votre application d’authentification. Vous pouvez aussi utiliser un code de récupération, une seule fois.</p>
-    <form method="post" class="auth-form">{% csrf_token %}{% include "components/form.html" %}<button class="button full">Vérifier et se connecter</button></form>
-    <a class="forgot-link" href="{% url 'login' %}">Recommencer la connexion</a>
+    <span class="eyebrow">{% translate "UNE SECONDE VÉRIFICATION" %}</span>
+    <h2>{% translate "Confirmez que c’est vous." %}</h2>
+    <p class="muted">{% translate "Saisissez le code de votre application d’authentification. Vous pouvez aussi utiliser un code de récupération, une seule fois." %}</p>
+    <form method="post" class="auth-form">{% csrf_token %}{% include "components/form.html" %}<button class="button full">{% translate "Vérifier et se connecter" %}</button></form>
+    <a class="forgot-link" href="{% url 'login' %}">{% translate "Recommencer la connexion" %}</a>
 {% endblock %}

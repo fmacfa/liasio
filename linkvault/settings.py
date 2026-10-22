@@ -50,6 +50,7 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "vault.middleware.RequestBoundaryMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -129,13 +130,18 @@ X_FRAME_OPTIONS = "DENY"
 TRUST_PROXY = os.environ.get("TRUST_PROXY", "false").lower() == "true"
 if TRUST_PROXY:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-LANGUAGE_CODE = "fr-fr"
+LANGUAGE_CODE = "fr"
+LANGUAGES = [("fr", "Français"), ("en", "English")]
+LOCALE_PATHS = [BASE_DIR / "locale"]
+LANGUAGE_COOKIE_SECURE = not DEBUG
+LANGUAGE_COOKIE_HTTPONLY = True
+LANGUAGE_COOKIE_SAMESITE = "Lax"
 TIME_ZONE = os.environ.get("TIME_ZONE", "Europe/Berlin")
 USE_I18N = True
 USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_DIRS = [BASE_DIR / "static", ("guide", BASE_DIR / "docs" / "screenshots")]
 STORAGES = {
     "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
     "staticfiles": {
@@ -196,7 +202,7 @@ LOGGING = {
 }
 
 # Reliability and account protection (v0.2).
-APP_VERSION = "0.3.0"
+APP_VERSION = "0.4.0"
 MFA_ENCRYPTION_KEY = os.environ.get("MFA_ENCRYPTION_KEY", "")
 TRASH_RETENTION_DAYS = max(1, int(os.environ.get("TRASH_RETENTION_DAYS", 30)))
 UPLOAD_STAGING_ROOT = DATA_DIR / "uploads"

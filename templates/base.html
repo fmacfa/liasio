@@ -1,19 +1,22 @@
+{% load i18n %}
 {% load static %}
 <!DOCTYPE html>
-<html lang="fr">
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noindex,nofollow">
-        <title>{% block title %}LinkVault · Votre espace de partage{% endblock %}</title>
+        <title>{% block title %}{% translate "LinkVault · Votre espace de partage" %}{% endblock %}</title>
         <link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml">
         <link rel="stylesheet" href="{% static 'app.css' %}">
+        <script src="{% url 'javascript-catalog' %}" defer></script>
         <script src="{% static 'app.js' %}" defer></script>
         <script src="{% static 'upload.js' %}" defer></script>
         {% block scripts %}{% endblock %}
     </head>
     <body class="{% block body_class %} {% endblock %}">
-        <a class="skip-link" href="#main">Aller au contenu</a>
+        <a class="skip-link" href="#main">{% translate "Aller au contenu" %}</a>
         {% block body %}{% endblock %}
         <div id="toast" class="toast" role="status" hidden></div>
     </body>

@@ -4,6 +4,7 @@ POSIX locks live as long as their open descriptors, including across worker
 processes. A dead worker cannot leave a reservation permanently active.
 """
 
+from django.utils.translation import gettext_lazy as _
 import fcntl
 import json
 import os
@@ -69,7 +70,9 @@ def check_capacity(required, leases=None):
     )
     if shutil.disk_usage(settings.FILE_UPLOAD_TEMP_DIR).free < needed:
         raise CapacityUnavailable(
-            "Espace temporaire insuffisant. Réessayez après les transferts en cours ou contactez l’administrateur."
+            _(
+                "Espace temporaire insuffisant. Réessayez après les transferts en cours ou contactez l’administrateur."
+            )
         )
 
 
@@ -103,7 +106,7 @@ def reserve_temporary(size, *, owner_id=None, kind="archive"):
             >= 2
         ):
             raise CapacityUnavailable(
-                "Deux envois classiques sont déjà en cours pour ce compte."
+                _("Deux envois classiques sont déjà en cours pour ce compte.")
             )
         check_capacity(size, leases)
         path = lease_directory() / f"{uuid.uuid4().hex}.lease"

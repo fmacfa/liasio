@@ -44,11 +44,11 @@
     if (enqueued.has(image)) return;
     enqueued.add(image);
     const tile = image.closest("[data-preview]");
-    tile.querySelector("[data-preview-state]").textContent = "Préparation de l’aperçu…";
+    tile.querySelector("[data-preview-state]").textContent = gettext("Préparation de l’aperçu…");
     enqueue({image, url: image.dataset.previewSrc, attempt: 0, done: success => {
       image.hidden = !success;
       tile.classList.toggle("preview-ready", success);
-      tile.querySelector("[data-preview-state]").textContent = success ? "" : "Aperçu indisponible";
+      tile.querySelector("[data-preview-state]").textContent = success ? "" : gettext("Aperçu indisponible");
     }});
   };
   if ("IntersectionObserver" in window) {
@@ -75,7 +75,7 @@
     // Keep keyboard events inside the dialog when a navigation button disables.
     if (focused === next && next.disabled) previous.focus();
     if (focused === previous && previous.disabled) next.focus();
-    large.hidden = true; message.hidden = false; message.textContent = "Chargement de l’aperçu…";
+    large.hidden = true; message.hidden = false; message.textContent = gettext("Chargement de l’aperçu…");
     // A fresh authorized request also applies revocation to gallery navigation.
     const pendingImage = new Image();
     enqueue({image: pendingImage, url: link.href, attempt: 0, viewer: true, done: success => {
@@ -84,10 +84,10 @@
         large.replaceWith(pendingImage);
         large = pendingImage;
         pendingImage.dataset.previewImage = "";
-        pendingImage.alt = `Aperçu de ${link.dataset.name}`;
+        pendingImage.alt = interpolate(gettext("Aperçu de %(value1)s"), {value1: link.dataset.name}, true);
         pendingImage.hidden = false;
         message.hidden = true;
-      } else message.textContent = "Cet aperçu n’est pas disponible. Fermez cette fenêtre pour retrouver le téléchargement du dossier.";
+      } else message.textContent = gettext("Cet aperçu n’est pas disponible. Fermez cette fenêtre pour retrouver le téléchargement du dossier.");
     }}, true);
   };
   links.forEach((link, selected) => link.addEventListener("click", event => {

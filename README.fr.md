@@ -6,15 +6,15 @@
 
 LinkVault est une application open source de partage de fichiers à installer sur votre serveur. Constituez des dossiers, personnalisez leur présentation et créez plusieurs liens indépendants avec mot de passe, expiration ou limite de téléchargements.
 
-Interface en français · Licence **MIT** · Python / Django · Docker Compose
+Interface français / anglais · Licence **MIT** · Python / Django · Docker Compose
 
-> **Version 0.3 — voir avant de télécharger.** La galerie de fichiers complète TOTP, les transferts reprenables, la corbeille et la restauration testée. Le projet reste jeune, sans audit humain indépendant ni chiffrement de bout en bout.
+> **Version 0.4 — automatisations et interface bilingue.** API à permissions limitées, webhooks signés et guides illustrés complètent les aperçus, TOTP, les envois reprenables et la corbeille. Le projet reste jeune, sans audit humain indépendant ni chiffrement de bout en bout.
 
 ![Tableau de bord LinkVault, avec des données fictives](docs/screenshots/dashboard.png)
 
 ## Ce que vous pouvez faire
 
-| Besoin | Disponible dans la version 0.3 |
+| Besoin | Disponible dans la version 0.4 |
 | --- | --- |
 | Première connexion | Assistant protégé par une clé d’installation, création du compte administrateur avec e-mail et mot de passe |
 | Plusieurs comptes | Invitations personnelles, valables 7 jours, usage unique, révocables ; comptes membres isolés |
@@ -38,6 +38,12 @@ Interface en français · Licence **MIT** · Python / Django · Docker Compose
 - **Téléchargement autorisé** : le serveur a préparé le ZIP et réservé une utilisation avant de l’envoyer. Cela ne prouve pas la réception complète du fichier. Un transfert interrompu consomme l’utilisation ; le propriétaire peut créer un nouveau lien.
 - **Usage unique** : ouvrir la page ne consomme rien. Le bouton de téléchargement effectue un POST protégé par CSRF. Une réservation atomique en base empêche deux téléchargements simultanés de dépasser la limite.
 - **Révocation** : bloque les prochaines autorisations. Elle ne rappelle pas les fichiers déjà reçus et n’interrompt pas nécessairement un transfert déjà autorisé.
+
+## Guides et automatisations
+
+Le **[guide français illustré](docs/guide/fr/README.md)** et sa **[version anglaise](docs/guide/en/README.md)** sont aussi intégrés à l’application, menu **Guide d’utilisation** (`/help/`). Le sélecteur **FR / EN** traduit les formulaires, les messages, la progression et les pages destinataires.
+
+Pour n8n et vos scripts : [référence API](docs/API.md), [guide des automatisations](docs/guide/fr/automation.md), [client Python d’import](examples/upload.py) et [vérificateur de signature](examples/verify_webhook.py). Les clés sont limitées, expirables et révocables ; les webhooks disposent d’un historique et de nouvelles tentatives bornées.
 
 ## Installer sur votre domaine
 
@@ -124,7 +130,7 @@ Limites par défaut : **1 Gio par fichier, 5 Gio par dossier et 100 fichiers**. 
 
 Lisez le [guide de mise à niveau et d’exploitation de la version 0.2](docs/RELIABILITY.md) (anglais), notamment avant toute modification des clés MFA. Le [changelog](CHANGELOG.md) et les [releases](https://github.com/fmacfa/linkvault/releases) décrivent les versions publiées.
 
-Pour une image précompilée, ajoutez `LINKVAULT_IMAGE=ghcr.io/fmacfa/linkvault:0.3.0` dans `.env`, puis exécutez `docker compose pull app maintenance preview` et `docker compose up -d --no-build`.
+Pour une image précompilée, ajoutez `LINKVAULT_IMAGE=ghcr.io/fmacfa/linkvault:0.4.0` dans `.env`, puis exécutez `docker compose pull app maintenance preview webhooks` et `docker compose up -d --no-build`.
 
 ## Voir les fichiers avant de télécharger
 

@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _
 import uuid
 from datetime import timedelta
 
@@ -65,15 +66,15 @@ class Instance(models.Model):
 
 class Branding(models.Model):
     THEMES = [
-        ("forest", "Forêt"),
-        ("ocean", "Océan"),
-        ("plum", "Prune"),
-        ("ink", "Encre"),
+        ("forest", _("Forêt")),
+        ("ocean", _("Océan")),
+        ("plum", _("Prune")),
+        ("ink", _("Encre")),
     ]
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="branding"
     )
-    name = models.CharField(max_length=80, default="Mon espace")
+    name = models.CharField(max_length=80, default=_("Mon espace"))
     tagline = models.CharField(max_length=180, blank=True)
     theme = models.CharField(max_length=10, choices=THEMES, default="forest")
     footer = models.CharField(max_length=240, blank=True)
@@ -166,14 +167,23 @@ class ShareLink(models.Model):
         ordering = ["-created_at"]
 
     @property
-    def status(self):
+    def status_code(self):
         if self.revoked_at or self.collection.deleted_at:
-            return "Révoqué"
+            return "revoked"
         if self.expires_at and self.expires_at <= timezone.now():
-            return "Expiré"
+            return "expired"
         if self.max_downloads is not None and self.downloads >= self.max_downloads:
-            return "Épuisé"
-        return "Actif"
+            return "exhausted"
+        return "active"
+
+    @property
+    def status(self):
+        return {
+            "revoked": _("Révoqué"),
+            "expired": _("Expiré"),
+            "exhausted": _("Épuisé"),
+            "active": _("Actif"),
+        }[self.status_code]
 
     @property
     def public_url(self):
@@ -211,10 +221,10 @@ class Invitation(models.Model):
 
 class Event(models.Model):
     KINDS = [
-        ("opened", "Page ouverte"),
-        ("download_started", "Téléchargement autorisé"),
-        ("created", "Lien créé"),
-        ("revoked", "Lien révoqué"),
+        ("opened", _("Page ouverte")),
+        ("download_started", _("Téléchargement autorisé")),
+        ("created", _("Lien créé")),
+        ("revoked", _("Lien révoqué")),
     ]
     link = models.ForeignKey(ShareLink, on_delete=models.CASCADE, related_name="events")
     kind = models.CharField(max_length=24, choices=KINDS)
@@ -284,3 +294,65 @@ class OperationalAlert(models.Model):
     notified_at = models.DateTimeField(null=True, blank=True)
     first_seen = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class APIToken(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    name = models.CharField(max_length=80)
+    digest = models.CharField(max_length=64)
+    credential_version = models.CharField(max_length=64)
+    scopes = models.JSONField(default=list)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    revoked_at = models.DateTimeField(null=True, blank=True)
+    last_used_at = models.DateTimeField(null=True, blank=True)
+
+
+class APIReceipt(models.Model):
+    token = models.ForeignKey(APIToken, on_delete=models.CASCADE)
+    key = models.CharField(max_length=64)
+    fingerprint = models.CharField(max_length=64)
+    response = (
+        models.TextField()
+    )  # Encrypted: responses may contain share capabilities.
+    status = models.PositiveSmallIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["token", "key"], name="api_receipt_key")
+        ]
+
+
+class Webhook(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    name = models.CharField(max_length=80)
+    destination = models.TextField()  # Encrypted; paths can contain receiver secrets.
+    hostname = models.CharField(max_length=253)
+    secret = (
+        models.TextField()
+    )  # Encrypted signing key, shown only on creation/rotation.
+    events = models.JSONField(default=list)
+    active = models.BooleanField(default=True)
+    last_error = models.CharField(max_length=40, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class WebhookDelivery(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    webhook = models.ForeignKey(
+        Webhook, on_delete=models.CASCADE, related_name="deliveries"
+    )
+    event_id = models.UUIDField(default=uuid.uuid4)
+    kind = models.CharField(max_length=40)
+    payload = models.JSONField()
+    state = models.CharField(max_length=12, default="pending")
+    attempts = models.PositiveSmallIntegerField(default=0)
+    next_at = models.DateTimeField(default=timezone.now, db_index=True)
+    lease = models.UUIDField(null=True)
+    http_status = models.PositiveSmallIntegerField(null=True)
+    error = models.CharField(max_length=40, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    delivered_at = models.DateTimeField(null=True)

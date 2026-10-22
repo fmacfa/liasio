@@ -39,6 +39,7 @@ jobs:
       - run: uv sync --frozen
       - run: uv run --env-file .env python manage.py collectstatic --noinput
       - run: uv run --env-file .env python manage.py test --noinput
+      - run: uv run python scripts/check_documentation.py
       - run: uv run --env-file .env python manage.py makemigrations --check --dry-run
       - run: uv run --env-file .env pip-audit --local --progress-spinner off
       - run: uv run bandit -r vault linkvault -x vault/tests,vault/migrations -ll
@@ -51,8 +52,20 @@ jobs:
       - run: python3 scripts/configure.py --domain files.example.com
       - run: docker compose config --quiet
       - run: docker compose build app
-      - run: docker compose up -d --wait --wait-timeout 600 db clamav app
+      - run: docker compose up -d --wait --wait-timeout 600 db clamav app webhooks
       - run: docker compose exec -T app python manage.py check --deploy --fail-level ERROR
+      - name: Verify webhook worker heartbeat
+        run: |
+          docker compose exec -T app python manage.py shell <<'PY'
+          import time
+          from datetime import timedelta
+          from django.utils import timezone
+          from vault.models import ServiceState
+          deadline = time.monotonic() + 30
+          while not ServiceState.objects.filter(key='webhooks', updated_at__gte=timezone.now() - timedelta(minutes=1)).exists():
+              assert time.monotonic() < deadline, 'Webhook worker did not start'
+              time.sleep(1)
+          PY
       - run: docker compose exec -T -e RUN_CLAMAV_INTEGRATION=1 app python manage.py test vault.tests.test_antivirus_live --noinput
       - run: docker compose exec -T -e RUN_PREVIEW_INTEGRATION=1 app python manage.py test vault.tests.test_previews.LiveRendererTests --noinput
       - name: Check renderer isolation

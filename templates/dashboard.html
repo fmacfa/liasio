@@ -1,89 +1,90 @@
 {% extends "layout.html" %}
+{% load i18n %}
 {% block content %}
   <div class="page-heading">
     <div>
-      <div class="eyebrow">VOTRE ESPACE, SOUS CONTRÔLE</div>
+      <div class="eyebrow">{% translate "VOTRE ESPACE, SOUS CONTRÔLE" %}</div>
       <h1>
-        Le partage commence ici<span class="green">.</span>
+        {% translate "Le partage commence ici" %}<span class="green">.</span>
       </h1>
-      <p>Rassemblez vos fichiers. Créez un lien. Gardez la main.</p>
+      <p>{% translate "Rassemblez vos fichiers. Créez un lien. Gardez la main." %}</p>
     </div>
     <a class="button" href="{% url 'collection_create' %}">
-    {% include "components/icon.html" with name="plus" %}Nouveau dossier</a>
+    {% include "components/icon.html" with name="plus" %}{% translate "Nouveau dossier" %}</a>
   </div>
   <section class="hero-banner">
     <div>
-      <span class="pill light">SIMPLE À PARTAGER. FACILE À MAÎTRISER.</span>
+      <span class="pill light">{% translate "SIMPLE À PARTAGER. FACILE À MAÎTRISER." %}</span>
       <h2>
-        Vos fichiers ont
+        {% translate "Vos fichiers ont" %}
         <br>
-        trouvé leur place.
+        {% translate "trouvé leur place." %}
       </h2>
       <p>
-        Un espace à vous, des liens sur mesure.
+        {% translate "Un espace à vous, des liens sur mesure." %}
         <br>
-        La bonne présentation, pour chaque destinataire.
+        {% translate "La bonne présentation, pour chaque destinataire." %}
       </p>
       <a href="{% url 'branding' %}"
-         class="hero-link">Personnaliser ma page {% include "components/icon.html" with name="arrow" %}</a>
+         class="hero-link">{% translate "Personnaliser ma page" %} {% include "components/icon.html" with name="arrow" %}</a>
     </div>
     <div class="vault-illustration" aria-hidden="true">
       <div class="orbit orbit-one"></div>
       <div class="orbit orbit-two"></div>
-      <div class="float-label float-top">{% include "components/icon.html" with name="lock" %}Un accès maîtrisé</div>
+      <div class="float-label float-top">{% include "components/icon.html" with name="lock" %}{% translate "Un accès maîtrisé" %}</div>
       <div class="illustration-file back-file"></div>
       <div class="illustration-file front-file">
         <span class="illustration-file-icon">{% include "components/icon.html" with name="folder" %}</span>
         <div class="illus-line long"></div>
         <div class="illus-line"></div>
         <div class="illus-footer">
-          <span class="mini-check">✓</span> Prêt à partager
+          <span class="mini-check">✓</span> {% translate "Prêt à partager" %}
         </div>
       </div>
       <div class="float-label float-bottom">
-      {% include "components/icon.html" with name="link" %}Le bon lien, à la bonne personne</div>
+      {% include "components/icon.html" with name="link" %}{% translate "Le bon lien, à la bonne personne" %}</div>
     </div>
   </section>
-  <section class="stats-grid" aria-label="Statistiques">
+  <section class="stats-grid" aria-label="{% translate "Statistiques" %}">
     <article class="stat">
       <div class="spread">
-        <span>Dossiers</span>
+        <span>{% translate "Dossiers" %}</span>
         {% include "components/icon.html" with name="folder" %}
       </div>
       <strong>{{ collection_count }}</strong>
-      <small>Dans votre bibliothèque</small>
+      <small>{% translate "Dans votre bibliothèque" %}</small>
     </article>
     <article class="stat">
       <div class="spread">
-        <span>Liens actifs</span>
+        <span>{% translate "Liens actifs" %}</span>
         {% include "components/icon.html" with name="link" %}
       </div>
       <strong>{{ active_links }}</strong>
-      <small>Prêts à être partagés</small>
+      <small>{% translate "Prêts à être partagés" %}</small>
     </article>
     <article class="stat">
       <div class="spread">
-        <span>Pages ouvertes</span>
+        <span>{% translate "Pages ouvertes" %}</span>
         {% include "components/icon.html" with name="eye" %}
       </div>
       <strong>{{ opened_count }}</strong>
-      <small>Dans l’historique conservé</small>
+      <small>{% translate "Dans l’historique conservé" %}</small>
     </article>
     <article class="stat">
       <div class="spread">
-        <span>Téléchargements</span>
+        <span>{% translate "Téléchargements" %}</span>
         {% include "components/icon.html" with name="download" %}
       </div>
       <strong>{{ download_count }}</strong>
-      <small>Transferts autorisés</small>
+      <small>{% translate "Transferts autorisés" %}</small>
     </article>
   </section>
   <div class="section-heading">
     <h2>
-      Dossiers récents <span class="count">{{ collection_count }}</span>
+      {% translate "Dossiers récents" %} <span class="count">{{ collection_count }}</span>
     </h2>
     <a href="{% url 'collections' %}"
-       class="text-link">Voir tous les dossiers {% include "components/icon.html" with name="arrow" %}</a>
+       class="text-link">{% translate "Voir tous les dossiers" %} {% include "components/icon.html" with name="arrow" %}</a>
   </div>
   {% if collections %}
     <div class="collections-grid">
@@ -94,18 +95,18 @@
   {% else %}
     <div class="empty-panel">
       <span class="empty-icon">{% include "components/icon.html" with name="folder" %}</span>
-      <h3>Un premier dossier, mille possibilités.</h3>
-      <p>Une présentation, des photos ou un dossier complet : donnez un bel espace à vos fichiers.</p>
+      <h3>{% translate "Un premier dossier, mille possibilités." %}</h3>
+      <p>{% translate "Une présentation, des photos ou un dossier complet : donnez un bel espace à vos fichiers." %}</p>
       <a class="button secondary"
-         href="{% url 'collection_create' %}">Créer mon premier dossier {% include "components/icon.html" with name="arrow" %}
+         href="{% url 'collection_create' %}">{% translate "Créer mon premier dossier" %} {% include "components/icon.html" with name="arrow" %}
       </a>
     </div>
   {% endif %}
   <div class="dashboard-bottom">
     <section class="panel activity-panel">
       <div class="section-heading">
-        <h2>Dernière activité</h2>
-        <a href="{% url 'activity' %}" class="text-link">Tout voir ↗</a>
+        <h2>{% translate "Dernière activité" %}</h2>
+        <a href="{% url 'activity' %}" class="text-link">{% translate "Tout voir ↗" %}</a>
       </div>
       {% for event in events %}
         <div class="event-row">
@@ -124,17 +125,17 @@
         </div>
       {% empty %}
         <div class="quiet-empty">
-          Vos ouvertures et téléchargements apparaîtront ici.
+          {% translate "Vos ouvertures et téléchargements apparaîtront ici." %}
           <br>
-          Chaque lien garde son propre historique.
+          {% translate "Chaque lien garde son propre historique." %}
         </div>
       {% endfor %}
     </section>
     <aside class="tip-card">
       <span class="tip-icon">{% include "components/icon.html" with name="shield" %}</span>
-      <h3>Un lien, vos règles.</h3>
-      <p>Mot de passe, date d’expiration ou téléchargement unique : choisissez les conditions de chaque partage.</p>
-      <span class="text-link">Vous gardez le contrôle {% include "components/icon.html" with name="check" %}</span>
+      <h3>{% translate "Un lien, vos règles." %}</h3>
+      <p>{% translate "Mot de passe, date d’expiration ou téléchargement unique : choisissez les conditions de chaque partage." %}</p>
+      <span class="text-link">{% translate "Vous gardez le contrôle" %} {% include "components/icon.html" with name="check" %}</span>
     </aside>
   </div>
 {% endblock %}

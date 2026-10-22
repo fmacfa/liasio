@@ -1,21 +1,22 @@
 {% extends "layout.html" %}
-{% block breadcrumb %}Membres{% endblock %}
+{% load i18n %}
+{% block breadcrumb %}{% translate "Membres" %}{% endblock %}
 {% block content %}
   <div class="page-heading">
     <div>
-      <div class="eyebrow">VOTRE ÉQUIPE</div>
+      <div class="eyebrow">{% translate "VOTRE ÉQUIPE" %}</div>
       <h1>
-        Mieux partager, ensemble<span class="green">.</span>
+        {% translate "Mieux partager, ensemble" %}<span class="green">.</span>
       </h1>
-      <p>Chaque membre dispose de ses propres dossiers, liens et paramètres.</p>
+      <p>{% translate "Chaque membre dispose de ses propres dossiers, liens et paramètres." %}</p>
     </div>
-    <span class="badge success">{% include "components/icon.html" with name="lock" %}Sur invitation uniquement</span>
+    <span class="badge success">{% include "components/icon.html" with name="lock" %}{% translate "Sur invitation uniquement" %}</span>
   </div>
   <div class="team-grid">
     <section>
       <div class="panel">
         <div class="section-heading">
-          <h2>Membres</h2>
+          <h2>{% translate "Membres" %}</h2>
           <span class="count">{{ members.count }}</span>
         </div>
         {% for member in members %}
@@ -27,14 +28,14 @@
               <small>{{ member.used_bytes|filesizeformat }} / {{ member.quota_bytes|filesizeformat }}</small>
             </div>
             <span class="badge {% if member.is_active %}success{% endif %}">
-              {% if not member.is_active %}Suspendu{% elif member.is_staff %}Admin{% else %}Membre{% endif %}
+              {% if not member.is_active %}{% translate "Suspendu" %}{% elif member.is_staff %}{% translate "Admin" %}{% else %}{% translate "Membre" %}{% endif %}
             </span>
             {% if not member.is_staff %}
               <form method="post"
                     action="{% url 'member_toggle' member.pk %}"
-                    data-confirm="Modifier l’accès de ce membre ? La suspension révoque ses liens et ses sessions.">
+                    data-confirm="{% translate "Modifier l’accès de ce membre ? La suspension révoque ses liens et ses sessions." %}">
                 {% csrf_token %}
-                <button class="text-button">{% if member.is_active %}Suspendre{% else %}Réactiver{% endif %}</button>
+                <button class="text-button">{% if member.is_active %}{% translate "Suspendre" %}{% else %}{% translate "Réactiver" %}{% endif %}</button>
               </form>
             {% endif %}
           </div>
@@ -42,29 +43,29 @@
       </div>
       <div class="panel spaced">
         <div class="section-heading">
-          <h2>Invitations en attente</h2>
+          <h2>{% translate "Invitations en attente" %}</h2>
         </div>
         {% for invitation in invitations %}
           <div class="invitation-row">
             <div>
               <strong>{{ invitation.email }}</strong>
-              <small>Expire le {{ invitation.expires_at|date:'d/m/Y à H:i' }}</small>
+              <small>{% translate "Expire le" %} {{ invitation.expires_at|date:"SHORT_DATETIME_FORMAT" }}</small>
             </div>
             <div class="row-actions">
               <button class="icon-button"
                       data-copy="{{ invitation.public_url }}"
-                      title="Copier l’invitation"
-                      aria-label="Copier l’invitation pour {{ invitation.email }}">
+                      title="{% translate "Copier l’invitation" %}"
+                      aria-label="{% blocktranslate with name=invitation.email %}Copier l’invitation pour {{ name }}{% endblocktranslate %}">
                 {% include "components/icon.html" with name="copy" %}
               </button>
               <form method="post" action="{% url 'invitation_revoke' invitation.pk %}">
                 {% csrf_token %}
-                <button class="text-button danger-text">Révoquer</button>
+                <button class="text-button danger-text">{% translate "Révoquer" %}</button>
               </form>
             </div>
           </div>
         {% empty %}
-          <p class="quiet-empty">Aucune invitation en attente.</p>
+          <p class="quiet-empty">{% translate "Aucune invitation en attente." %}</p>
         {% endfor %}
       </div>
     </section>
@@ -72,33 +73,33 @@
       <form method="post" class="panel form-panel">
         {% csrf_token %}
         <span class="tip-icon">{% include "components/icon.html" with name="users" %}</span>
-        <h2>Inviter un membre</h2>
-        <p class="muted">Une invitation personnelle, valable 7 jours et utilisable une seule fois.</p>
+        <h2>{% translate "Inviter un membre" %}</h2>
+        <p class="muted">{% translate "Une invitation personnelle, valable 7 jours et utilisable une seule fois." %}</p>
         {% include "components/form.html" %}
-        <button class="button">Créer l’invitation {% include "components/icon.html" with name="arrow" %}</button>
+        <button class="button">{% translate "Créer l’invitation" %} {% include "components/icon.html" with name="arrow" %}</button>
       </form>
       <div class="notice">
-        <p>Le lien doit être transmis à la personne invitée. Son adresse est fixée par l’invitation ; elle choisit son mot de passe. Les comptes invités n’ont pas de droits administrateur.</p>
+        <p>{% translate "Le lien doit être transmis à la personne invitée. Son adresse est fixée par l’invitation ; elle choisit son mot de passe. Les comptes invités n’ont pas de droits administrateur." %}</p>
       </div>
     </aside>
   </div>
   <details class="panel spaced">
-    <summary>Journal d’administration · 10 derniers événements</summary>
+    <summary>{% translate "Journal d’administration · 10 derniers événements" %}</summary>
     <div class="table-scroll">
       <table>
         <thead>
           <tr>
-            <th>Action</th>
-            <th>Compte</th>
-            <th>Date</th>
+            <th>{% translate "Action" %}</th>
+            <th>{% translate "Compte" %}</th>
+            <th>{% translate "Date" %}</th>
           </tr>
         </thead>
         <tbody>
           {% for audit in audits %}
             <tr>
               <td>{{ audit.action }}</td>
-              <td>{{ audit.actor.display_name|default:'Compte supprimé' }}</td>
-              <td>{{ audit.created_at|date:'d/m/Y H:i' }}</td>
+              <td>{{ audit.actor.display_name|default:_('Compte supprimé') }}</td>
+              <td>{{ audit.created_at|date:"SHORT_DATETIME_FORMAT" }}</td>
             </tr>
           {% endfor %}
         </tbody>

@@ -1,7 +1,8 @@
 {% extends "account/layout.html" %}
+{% load i18n %}
 {% block auth_content %}
-  <span class="eyebrow">DEMANDE ENREGISTRÉE</span>
-  <h2>Consultez votre messagerie.</h2>
-  <p class="muted">Si un compte actif correspond à cette adresse et si l’envoi est disponible, un lien de réinitialisation vous sera envoyé. Il sera valable une heure.</p>
-  <a class="button secondary" href="{% url 'login' %}">Retour à la connexion</a>
+  <span class="eyebrow">{% translate "DEMANDE ENREGISTRÉE" %}</span>
+  <h2>{% translate "Consultez votre messagerie." %}</h2>
+  <p class="muted">{% translate "Si un compte actif correspond à cette adresse et si l’envoi est disponible, un lien de réinitialisation vous sera envoyé. Il sera valable une heure." %}</p>
+  <a class="button secondary" href="{% url 'login' %}">{% translate "Retour à la connexion" %}</a>
 {% endblock %}

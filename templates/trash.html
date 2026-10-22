@@ -1,23 +1,24 @@
 {% extends "layout.html" %}
-{% block breadcrumb %}Corbeille{% endblock %}
+{% load i18n %}
+{% block breadcrumb %}{% translate "Corbeille" %}{% endblock %}
 {% block content %}
     <div class="page-heading">
         <div>
-            <div class="eyebrow">UNE SECONDE CHANCE POUR VOS FICHIERS</div>
+            <div class="eyebrow">{% translate "UNE SECONDE CHANCE POUR VOS FICHIERS" %}</div>
             <h1>
-                La corbeille<span class="green">.</span>
+                {% translate "La corbeille" %}<span class="green">.</span>
             </h1>
-            <p>Restaurez vos éléments pendant {{ retention }} jours. Leurs anciens liens restent révoqués.</p>
+            <p>{% translate "Restaurez vos éléments pendant" %} {{ retention }} {% translate "jours. Leurs anciens liens restent révoqués." %}</p>
         </div>
-        <span class="badge">{{ trash_bytes|filesizeformat }} conservés</span>
+        <span class="badge">{{ trash_bytes|filesizeformat }} {% translate "conservés" %}</span>
     </div>
     <div class="notice">
-        <p>La corbeille compte dans votre quota. La suppression définitive, manuelle ou automatique après {{ retention }} jours, libère l’espace.</p>
+        <p>{% translate "La corbeille compte dans votre quota. La suppression définitive, manuelle ou automatique après" %} {{ retention }} {% translate "jours, libère l’espace." %}</p>
     </div>
-    <section class="panel spaced"><h2>Dossiers supprimés</h2>{% for item in folders %}<div class="file-row"><div class="file-info"><strong>{{ item.title }}</strong><small>Supprimé le {{ item.deleted_at|date:'d/m/Y à H:i' }}</small></div><form method="post"
+    <section class="panel spaced"><h2>{% translate "Dossiers supprimés" %}</h2>{% for item in folders %}<div class="file-row"><div class="file-info"><strong>{{ item.title }}</strong><small>{% translate "Supprimé le" %} {{ item.deleted_at|date:"SHORT_DATETIME_FORMAT" }}</small></div><form method="post"
       action="{% url 'trash_action' 'collection' item.pk %}"
-      class="button-row">{% csrf_token %}<button name="action" value="restore" class="button secondary">Restaurer</button><button name="action" value="purge" class="button danger">Supprimer</button></form></div>{% empty %}<p class="muted">Aucun dossier dans la corbeille.</p>{% endfor %}{% if folders.has_previous %}<a href="?folders={{ folders.previous_page_number }}">← Précédent</a>{% endif %}{% if folders.has_next %}<a href="?folders={{ folders.next_page_number }}">Suivant →</a>{% endif %}</section>
-    <section class="panel spaced"><h2>Fichiers supprimés individuellement</h2>{% for item in files %}<div class="file-row"><div class="file-info"><strong>{{ item.path }}</strong><small>{{ item.collection.title }} · {{ item.size|filesizeformat }} · {{ item.deleted_at|date:'d/m/Y à H:i' }}</small></div><form method="post"
+      class="button-row">{% csrf_token %}<button name="action" value="restore" class="button secondary">{% translate "Restaurer" %}</button><button name="action" value="purge" class="button danger">{% translate "Supprimer" %}</button></form></div>{% empty %}<p class="muted">{% translate "Aucun dossier dans la corbeille." %}</p>{% endfor %}{% if folders.has_previous %}<a href="?folders={{ folders.previous_page_number }}">{% translate "← Précédent" %}</a>{% endif %}{% if folders.has_next %}<a href="?folders={{ folders.next_page_number }}">{% translate "Suivant →" %}</a>{% endif %}</section>
+    <section class="panel spaced"><h2>{% translate "Fichiers supprimés individuellement" %}</h2>{% for item in files %}<div class="file-row"><div class="file-info"><strong>{{ item.path }}</strong><small>{{ item.collection.title }} · {{ item.size|filesizeformat }} · {{ item.deleted_at|date:"SHORT_DATETIME_FORMAT" }}</small></div><form method="post"
       action="{% url 'trash_action' 'asset' item.pk %}"
-      class="button-row">{% csrf_token %}<button name="action" value="restore" class="button secondary">Restaurer</button><button name="action" value="purge" class="button danger">Supprimer</button></form></div>{% empty %}<p class="muted">Aucun fichier dans la corbeille.</p>{% endfor %}{% if files.has_previous %}<a href="?files={{ files.previous_page_number }}">← Précédent</a>{% endif %}{% if files.has_next %}<a href="?files={{ files.next_page_number }}">Suivant →</a>{% endif %}</section>
+      class="button-row">{% csrf_token %}<button name="action" value="restore" class="button secondary">{% translate "Restaurer" %}</button><button name="action" value="purge" class="button danger">{% translate "Supprimer" %}</button></form></div>{% empty %}<p class="muted">{% translate "Aucun fichier dans la corbeille." %}</p>{% endfor %}{% if files.has_previous %}<a href="?files={{ files.previous_page_number }}">{% translate "← Précédent" %}</a>{% endif %}{% if files.has_next %}<a href="?files={{ files.next_page_number }}">{% translate "Suivant →" %}</a>{% endif %}</section>
 {% endblock %}

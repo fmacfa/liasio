@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _
 import logging
 import re
 
@@ -31,15 +32,15 @@ class RequestBoundaryMiddleware:
         if request.path.endswith("/chunk/"):
             ceiling = settings.UPLOAD_CHUNK_BYTES
         if length < 0:
-            response = HttpResponse("Longueur invalide.", status=400)
+            response = HttpResponse(_("Longueur invalide."), status=400)
         elif length > ceiling:
-            response = HttpResponse("Envoi trop volumineux.", status=413)
+            response = HttpResponse(_("Envoi trop volumineux."), status=413)
         elif (
             request.path.endswith("/upload/")
             and request.method == "POST"
             and not request.META.get("CONTENT_LENGTH")
         ):
-            response = HttpResponse("Content-Length requis.", status=411)
+            response = HttpResponse(_("Content-Length requis."), status=411)
         else:
             try:
                 response = self.get_response(request)
@@ -65,7 +66,7 @@ class RequestBoundaryMiddleware:
             # Runs before CsrfViewMiddleware parses multipart data. Authentication
             # middleware has already populated request.user in its request phase.
             if not request.user.is_authenticated:
-                return HttpResponse("Authentification requise.", status=403)
+                return HttpResponse(_("Authentification requise."), status=403)
             from .models import Collection, User
             from .capacity import CapacityUnavailable, reserve_temporary
             from .security import limited
@@ -73,15 +74,17 @@ class RequestBoundaryMiddleware:
             if not Collection.objects.filter(
                 pk=view_kwargs.get("pk"), owner=request.user
             ).exists():
-                return HttpResponse("Dossier introuvable.", status=404)
+                return HttpResponse(_("Dossier introuvable."), status=404)
 
             if limited(request, "upload", 60, 3600):
-                return HttpResponse("Trop d’envois. Réessayez plus tard.", status=429)
+                return HttpResponse(
+                    _("Trop d’envois. Réessayez plus tard."), status=429
+                )
             user = User.objects.get(pk=request.user.pk)
             remaining = max(0, user.quota_bytes - user.used_bytes - user.reserved_bytes)
             length = int(request.META.get("CONTENT_LENGTH") or 0)
             if not user.is_active or remaining == 0 or length > remaining + 1024 * 1024:
-                return HttpResponse("Quota de stockage insuffisant.", status=413)
+                return HttpResponse(_("Quota de stockage insuffisant."), status=413)
             request.upload_byte_budget = min(
                 remaining, settings.MAX_MULTIPART_BYTES, length
             )

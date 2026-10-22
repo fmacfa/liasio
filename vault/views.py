@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _
 import csv
 import hmac
 import io
@@ -73,8 +74,8 @@ def too_many(request):
         request,
         "error.html",
         {
-            "title": "Un instant…",
-            "detail": "Trop de tentatives. Réessayez dans quelques minutes.",
+            "title": _("Un instant…"),
+            "detail": _("Trop de tentatives. Réessayez dans quelques minutes."),
         },
         status=429,
     )
@@ -87,8 +88,10 @@ def unavailable(request):
         request,
         "error.html",
         {
-            "title": "Ce lien n’est plus disponible",
-            "detail": "Il a expiré, a été révoqué ou a atteint sa limite de téléchargements. Contactez la personne qui vous l’a envoyé.",
+            "title": _("Ce lien n’est plus disponible"),
+            "detail": _(
+                "Il a expiré, a été révoqué ou a atteint sa limite de téléchargements. Contactez la personne qui vous l’a envoyé."
+            ),
         },
         status=410,
     )
@@ -121,7 +124,7 @@ def setup(request):
             request.POST.get("setup_token", "").encode(), settings.SETUP_TOKEN.encode()
         )
         if not valid_token:
-            form.add_error(None, "Clé d’installation incorrecte.")
+            form.add_error(None, _("Clé d’installation incorrecte."))
         elif form.is_valid():
             with transaction.atomic():
                 instance = Instance.objects.select_for_update().get(pk=1)
@@ -170,7 +173,7 @@ def sign_in(request):
                     return redirect("mfa_challenge")
                 complete_login(request, user)
                 return redirect("dashboard")
-            form.add_error(None, "Adresse e-mail ou mot de passe incorrect.")
+            form.add_error(None, _("Adresse e-mail ou mot de passe incorrect."))
     return render(request, "account/login.html", {"form": form})
 
 
@@ -289,7 +292,7 @@ def account(request):
                 Audit.objects.create(actor=user, action="password_changed")
                 messages.success(
                     request,
-                    "Mot de passe modifié. Les autres sessions seront déconnectées.",
+                    _("Mot de passe modifié. Les autres sessions seront déconnectées."),
                 )
                 return redirect("account")
     return render(request, "account/settings.html", {"form": form, "nav": "account"})
@@ -348,10 +351,14 @@ def collection_create(request):
     if request.method == "POST" and form.is_valid():
         if limited(request, "create-collection", 60, 3600):
             return too_many(request)
-        item = form.save(commit=False)
-        item.owner = request.user
-        item.save()
-        messages.success(request, "Dossier créé. Ajoutez maintenant vos fichiers.")
+        with transaction.atomic():
+            owner = User.objects.select_for_update().get(pk=request.user.pk)
+            if not owner.is_active:
+                raise Http404
+            item = form.save(commit=False)
+            item.owner = owner
+            item.save()
+        messages.success(request, _("Dossier créé. Ajoutez maintenant vos fichiers."))
         return redirect("collection", pk=item.pk)
     return render(
         request,
@@ -409,7 +416,7 @@ def collection_edit(request, pk):
     form = CollectionForm(request.POST or None, instance=item)
     if request.method == "POST" and form.is_valid():
         form.save()
-        messages.success(request, "Présentation mise à jour.")
+        messages.success(request, _("Présentation mise à jour."))
         return redirect("collection", pk=pk)
     return render(
         request,
@@ -428,20 +435,23 @@ def collection_upload(request, pk):
         uploads = request.FILES.getlist("files")
         if getattr(request, "upload_limit_exceeded", False):
             raise ValidationError(
-                "Envoi trop volumineux. Aucun fichier n’a été conservé."
+                _("Envoi trop volumineux. Aucun fichier n’a été conservé.")
             )
         paths_json = request.POST.get("paths", "")
         paths = json.loads(paths_json) if paths_json else [f.name for f in uploads]
         if not isinstance(paths, list) or any(not isinstance(p, str) for p in paths):
-            raise ValidationError("Liste des chemins invalide.")
+            raise ValidationError(_("Liste des chemins invalide."))
         add_files(request.user, item.pk, uploads, paths, capacity_reserved=True)
-        messages.success(request, f"{len(uploads)} fichier(s) ajouté(s) au dossier.")
+        messages.success(
+            request,
+            _("%(count)s fichier(s) ajouté(s) au dossier.") % {"count": len(uploads)},
+        )
     except (ValidationError, ValueError) as exc:
         messages.error(
             request,
             " ".join(exc.messages)
             if isinstance(exc, ValidationError)
-            else "Envoi invalide.",
+            else _("Envoi invalide."),
         )
     return redirect("collection", pk=pk)
 
@@ -453,7 +463,8 @@ def collection_delete(request, pk):
     if request.method == "POST":
         delete_collection(request.user, pk)
         messages.success(
-            request, "Dossier placé dans la corbeille. Tous ses liens ont été révoqués."
+            request,
+            _("Dossier placé dans la corbeille. Tous ses liens ont été révoqués."),
         )
         return redirect("collections")
     return render(
@@ -482,7 +493,7 @@ def link_create(request, pk):
             )
             if not locked.files.exists():
                 form.add_error(
-                    None, "Ajoutez au moins un fichier avant de créer un lien."
+                    None, _("Ajoutez au moins un fichier avant de créer un lien.")
                 )
             elif (
                 settings.ANTIVIRUS_REQUIRED
@@ -490,7 +501,9 @@ def link_create(request, pk):
             ):
                 form.add_error(
                     None,
-                    "Des fichiers n’ont pas été analysés par l’antivirus. Importez-les à nouveau dans un dossier avec l’antivirus activé.",
+                    _(
+                        "Des fichiers n’ont pas été analysés par l’antivirus. Importez-les à nouveau dans un dossier avec l’antivirus activé."
+                    ),
                 )
             else:
                 link = form.save(commit=False)
@@ -503,7 +516,7 @@ def link_create(request, pk):
                     actor=request.user, action="link_created", target=str(link.pk)
                 )
                 messages.success(
-                    request, "Lien créé. Vous pouvez le copier et le partager."
+                    request, _("Lien créé. Vous pouvez le copier et le partager.")
                 )
                 return redirect("links")
     return render(
@@ -555,7 +568,7 @@ def link_revoke(request, pk):
                 actor=request.user, action="link_revoked", target=str(pk)
             )
     messages.success(
-        request, "Lien révoqué. Aucun nouveau téléchargement ne sera autorisé."
+        request, _("Lien révoqué. Aucun nouveau téléchargement ne sera autorisé.")
     )
     return redirect("links")
 
@@ -576,7 +589,9 @@ def activity(request):
         # Cap a single export; the UI always uses pagination.
         output = io.StringIO()
         writer = csv.writer(output)
-        writer.writerow(["Date (ISO 8601 UTC)", "Événement", "Lien", "Dossier"])
+        writer.writerow(
+            [_("Date (ISO 8601 UTC)"), _("Événement"), _("Lien"), _("Dossier")]
+        )
 
         def safe_csv(value):
             value = str(value)
@@ -619,13 +634,13 @@ def activity(request):
 @login_required
 @require_http_methods(["GET", "POST"])
 def branding(request):
-    item, _ = Branding.objects.get_or_create(
+    item, created = Branding.objects.get_or_create(
         user=request.user, defaults={"name": request.user.display_name}
     )
     form = BrandingForm(request.POST or None, instance=item)
     if request.method == "POST" and form.is_valid():
         form.save()
-        messages.success(request, "Votre page de partage a été personnalisée.")
+        messages.success(request, _("Votre page de partage a été personnalisée."))
         return redirect("branding")
     return render(
         request, "branding.html", {"nav": "branding", "form": form, "branding": item}
@@ -688,7 +703,7 @@ def storage_delete(request):
             raise ValueError
         identifiers = list({uuid.UUID(value) for value in raw})
     except ValueError:
-        messages.error(request, "Sélectionnez entre 1 et 100 fichiers.")
+        messages.error(request, _("Sélectionnez entre 1 et 100 fichiers."))
         return redirect("storage")
     files = list(
         Asset.objects.filter(
@@ -699,13 +714,16 @@ def storage_delete(request):
         raise Http404
     if request.POST.get("confirm") == "delete":
         try:
-            count, _ = delete_assets(request.user, identifiers)
+            count, deleted_bytes = delete_assets(request.user, identifiers)
         except ValidationError as exc:
             messages.error(request, " ".join(exc.messages))
         else:
             messages.success(
                 request,
-                f"{count} fichier(s) placé(s) dans la corbeille. Les liens des dossiers concernés ont été révoqués.",
+                _(
+                    "%(count)s fichier(s) placé(s) dans la corbeille. Les liens des dossiers concernés ont été révoqués."
+                )
+                % {"count": count},
             )
         return redirect("storage")
     affected = available_links(
@@ -746,7 +764,7 @@ def team(request):
             )
         messages.success(
             request,
-            "Invitation créée pour 7 jours. Copiez le lien et envoyez-le au membre.",
+            _("Invitation créée pour 7 jours. Copiez le lien et envoyez-le au membre."),
         )
         return redirect("team")
     return render(
@@ -776,7 +794,7 @@ def invitation_revoke(request, pk):
         Audit.objects.create(
             actor=request.user, action="invitation_revoked", target=str(pk)
         )
-    messages.success(request, "Invitation révoquée.")
+    messages.success(request, _("Invitation révoquée."))
     return redirect("team")
 
 
@@ -798,6 +816,12 @@ def member_toggle(request, pk):
             if str(session.get_decoded().get("_auth_user_id", "")) == str(member.pk):
                 session.delete()
         if not member.is_active:
+            from .models import APIToken, Webhook
+
+            APIToken.objects.filter(owner=member, revoked_at__isnull=True).update(
+                revoked_at=timezone.now()
+            )
+            Webhook.objects.filter(owner=member).update(active=False)
             ShareLink.objects.filter(
                 collection__owner=member, revoked_at__isnull=True
             ).update(revoked_at=timezone.now())
@@ -807,7 +831,8 @@ def member_toggle(request, pk):
             target=str(pk),
         )
     messages.success(
-        request, "Compte mis à jour. Une suspension révoque aussi les liens du membre."
+        request,
+        _("Compte mis à jour. Une suspension révoque aussi les liens du membre."),
     )
     return redirect("team")
 
@@ -832,7 +857,7 @@ def share(request, token):
     if limited(request, "share-page", 120, 60):
         return too_many(request)
     link = public_link(token)
-    if link.status != "Actif" or not link.collection.owner.is_active:
+    if link.status_code != "active" or not link.collection.owner.is_active:
         return unavailable(request)
     if not can_open(request, link):
         return render(
@@ -841,7 +866,8 @@ def share(request, token):
     now = timezone.now().timestamp()
     seen = request.session.get("seen_links", {})
     if request.method == "GET" and seen.get(str(link.pk), 0) < now - 1800:
-        Event.objects.create(link=link, kind="opened")
+        with transaction.atomic():
+            Event.objects.create(link=link, kind="opened")
         seen = {k: v for k, v in seen.items() if v > now - 1800}
         seen[str(link.pk)] = now
         request.session["seen_links"] = dict(list(seen.items())[-100:])
@@ -861,7 +887,7 @@ def share(request, token):
 @sensitive_post_parameters()
 def unlock(request, token):
     link = public_link(token)
-    if link.status != "Actif" or not link.collection.owner.is_active:
+    if link.status_code != "active" or not link.collection.owner.is_active:
         return unavailable(request)
     if limited(request, "unlock", 20) or not rate_allowed(
         "unlock-link", str(link.pk), 50
@@ -878,7 +904,7 @@ def unlock(request, token):
         request.session["grants"] = dict(list(grants.items())[-50:])
         request.session.cycle_key()
         return redirect("share", token=token)
-    form.add_error(None, "Mot de passe incorrect.")
+    form.add_error(None, _("Mot de passe incorrect."))
     return render(
         request, "share/unlock.html", {"form": form, "token": token}, status=403
     )
@@ -889,7 +915,7 @@ def download(request, token):
     if limited(request, "download", 20, 900):
         return too_many(request)
     link = public_link(token)
-    if link.status != "Actif" or not link.collection.owner.is_active:
+    if link.status_code != "active" or not link.collection.owner.is_active:
         return unavailable(request)
     if not can_open(request, link):
         return render(
@@ -905,8 +931,10 @@ def download(request, token):
             request,
             "error.html",
             {
-                "title": "Transfert en attente",
-                "detail": "Le serveur manque d’espace temporaire. Réessayez plus tard ou contactez l’expéditeur.",
+                "title": _("Transfert en attente"),
+                "detail": _(
+                    "Le serveur manque d’espace temporaire. Réessayez plus tard ou contactez l’expéditeur."
+                ),
             },
             status=503,
         )
@@ -917,8 +945,10 @@ def download(request, token):
             request,
             "error.html",
             {
-                "title": "Transfert indisponible",
-                "detail": "Le fichier n’a pas pu être préparé. Réessayez plus tard ou contactez l’expéditeur.",
+                "title": _("Transfert indisponible"),
+                "detail": _(
+                    "Le fichier n’a pas pu être préparé. Réessayez plus tard ou contactez l’expéditeur."
+                ),
             },
             status=503,
         )
@@ -941,8 +971,8 @@ def error404(request, exception=None):
         request,
         "error.html",
         {
-            "title": "Page introuvable",
-            "detail": "Cette adresse ne correspond à aucune page disponible.",
+            "title": _("Page introuvable"),
+            "detail": _("Cette adresse ne correspond à aucune page disponible."),
         },
         status=404,
     )
@@ -953,8 +983,8 @@ def error500(request):
         request,
         "error.html",
         {
-            "title": "Une erreur est survenue",
-            "detail": "Réessayez dans quelques instants.",
+            "title": _("Une erreur est survenue"),
+            "detail": _("Réessayez dans quelques instants."),
         },
         status=500,
     )

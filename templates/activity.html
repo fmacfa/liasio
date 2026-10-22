@@ -1,29 +1,30 @@
 {% extends "layout.html" %}
-{% block breadcrumb %}Activité{% endblock %}
+{% load i18n %}
+{% block breadcrumb %}{% translate "Activité" %}{% endblock %}
 {% block content %}
   <div class="page-heading">
     <div>
-      <div class="eyebrow">L’HISTORIQUE DE VOS PARTAGES</div>
+      <div class="eyebrow">{% translate "L’HISTORIQUE DE VOS PARTAGES" %}</div>
       <h1>
-        Chaque accès, sa date<span class="green">.</span>
+        {% translate "Chaque accès, sa date" %}<span class="green">.</span>
       </h1>
-      <p>Les événements sont conservés {{ retention_days }} jours. Aucun suivi publicitaire, aucune adresse IP dans cet historique.</p>
+      <p>{% translate "Les événements sont conservés" %} {{ retention_days }} {% translate "jours. Aucun suivi publicitaire, aucune adresse IP dans cet historique." %}</p>
     </div>
     <a class="button secondary"
        href="?export=csv&amp;link={{ link_id|urlencode }}">
-    {% include "components/icon.html" with name="download" %}Exporter en CSV</a>
+    {% include "components/icon.html" with name="download" %}{% translate "Exporter en CSV" %}</a>
   </div>
   {% if link_id %}
-    <a class="back-link" href="{% url 'activity' %}">← Afficher tous les liens</a>
+    <a class="back-link" href="{% url 'activity' %}">{% translate "← Afficher tous les liens" %}</a>
   {% endif %}
   <div class="table-panel">
     <table>
       <thead>
         <tr>
-          <th>Événement</th>
-          <th>Dossier</th>
-          <th>Lien</th>
-          <th>Date et heure</th>
+          <th>{% translate "Événement" %}</th>
+          <th>{% translate "Dossier" %}</th>
+          <th>{% translate "Lien" %}</th>
+          <th>{% translate "Date et heure" %}</th>
         </tr>
       </thead>
       <tbody>
@@ -51,8 +52,8 @@
           <tr>
             <td colspan="4">
               <div class="empty-panel">
-                <h3>Le début de l’histoire.</h3>
-                <p>L’activité de vos liens apparaîtra ici.</p>
+                <h3>{% translate "Le début de l’histoire." %}</h3>
+                <p>{% translate "L’activité de vos liens apparaîtra ici." %}</p>
               </div>
             </td>
           </tr>
@@ -63,6 +64,6 @@
   {% include "components/pagination.html" %}
   <div class="notice">
     {% include "components/icon.html" with name="info" %}
-    <p>« Téléchargement autorisé » signifie que le serveur a autorisé le transfert, pas que le fichier a été intégralement reçu. Les aperçus automatiques de messageries peuvent créer une ouverture.</p>
+    <p>{% translate "« Téléchargement autorisé » signifie que le serveur a autorisé le transfert, pas que le fichier a été intégralement reçu. Les aperçus automatiques de messageries peuvent créer une ouverture." %}</p>
   </div>
 {% endblock %}

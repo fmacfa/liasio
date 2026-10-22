@@ -1,3 +1,4 @@
+{% load i18n %}
 <form class="upload-zone"
       method="post"
       enctype="multipart/form-data"
@@ -7,41 +8,41 @@
       data-pending-url="{% url 'upload_pending' collection.pk %}">
     {% csrf_token %}
     <span class="upload-icon">{% include "components/icon.html" with name="upload" %}</span>
-    <h3>Faites de la place à vos fichiers.</h3>
-    <p>Glissez vos fichiers ici, ou sélectionnez-les.</p>
+    <h3>{% translate "Faites de la place à vos fichiers." %}</h3>
+    <p>{% translate "Glissez vos fichiers ici, ou sélectionnez-les." %}</p>
     <div class="upload-actions">
         <label class="button secondary file-picker">
-            Choisir des fichiers<input type="file" name="files" multiple data-file-input>
+            {% translate "Choisir des fichiers" %}<input type="file" name="files" multiple data-file-input>
         </label>
         <label class="button secondary file-picker">
-            Choisir un dossier<input type="file" webkitdirectory multiple data-folder-input>
+            {% translate "Choisir un dossier" %}<input type="file" webkitdirectory multiple data-folder-input>
         </label>
     </div>
     <input type="hidden" name="paths" value="">
     <div class="upload-selection" aria-live="polite"></div>
-    <ul class="selected-files" aria-label="Fichiers sélectionnés">
+    <ul class="selected-files" aria-label="{% translate "Fichiers sélectionnés" %}">
     </ul>
     <div class="progress-shell" hidden>
         <div class="spread">
-            <span data-upload-phase>Envoi des fichiers</span>
+            <span data-upload-phase>{% translate "Envoi des fichiers" %}</span>
             <strong data-upload-percent>0 %</strong>
         </div>
         <progress class="upload-progress"
                   max="100"
                   value="0"
-                  aria-label="Progression de l’envoi">
+                  aria-label="{% translate "Progression de l’envoi" %}">
         </progress>
     </div>
     <div data-pending-uploads class="notice" hidden></div>
-    <button type="button" class="button secondary" data-pause-upload hidden>Mettre en pause</button>
+    <button type="button" class="button secondary" data-pause-upload hidden>{% translate "Mettre en pause" %}</button>
     <button class="button upload-submit"
-            type="submit">Importer les fichiers {% include "components/icon.html" with name="upload" %}</button>
-    <small>{{ max_file_mb }} Mio par fichier · {{ max_upload_mb }} Mio par dossier · 100 fichiers par dossier.
+            type="submit">{% translate "Importer les fichiers" %} {% include "components/icon.html" with name="upload" %}</button>
+    <small>{{ max_file_mb }} {% translate "Mio par fichier ·" %} {{ max_upload_mb }} {% translate "Mio par dossier · 100 fichiers par dossier." %}
         <br>
-        Reprise disponible pendant 24 h : sélectionnez à nouveau les mêmes fichiers après une coupure.
+        {% translate "Reprise disponible pendant 24 h : sélectionnez à nouveau les mêmes fichiers après une coupure." %}
         <br>
-    Révoquez les liens actifs avant de modifier les fichiers.</small>
+    {% translate "Révoquez les liens actifs avant de modifier les fichiers." %}</small>
     <noscript>
-        <p>Sans JavaScript, la sélection de fichiers fonctionne ; la barre de progression et l’import de dossiers nécessitent JavaScript.</p>
+        <p>{% translate "Sans JavaScript, la sélection de fichiers fonctionne ; la barre de progression et l’import de dossiers nécessitent JavaScript." %}</p>
     </noscript>
 </form>

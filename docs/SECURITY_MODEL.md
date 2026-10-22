@@ -30,7 +30,7 @@ La révocation et la réservation ont un ordre atomique en base : si la révocat
 
 Les limites sont appliquées à plusieurs niveaux : proxy, corps de requête, réception par blocs, fichier, dossier, nombre de fichiers et quota utilisateur sous verrou. Les imports non connectés ou sur un autre compte sont refusés avant le parsing multipart.
 
-L’extension est une première règle, pas une preuve du type réel. L’antivirus analyse les octets. Les archives ne sont jamais extraites par l’application. Les téléchargements sont `application/octet-stream` et `attachment` ; aucun contenu utilisateur actif n’est exécuté. La version 0.3 ne fait pas de validation sémantique intégrale de tous les formats.
+L’extension est une première règle, pas une preuve du type réel. L’antivirus analyse les octets. Les archives ne sont jamais extraites par l’application. Les téléchargements sont `application/octet-stream` et `attachment` ; aucun contenu utilisateur actif n’est exécuté. La version 0.4 ne fait pas de validation sémantique intégrale de tous les formats.
 
 ClamAV utilise INSTREAM sur un réseau Docker privé. Toute réponse autre que `stream: OK` bloque l’enregistrement. Les limites dépassées et archives chiffrées sont signalées via la configuration du démon. L’application n’enregistre un fichier comme analysé qu’après un résultat accepté.
 
@@ -68,3 +68,12 @@ La [revue de code préalable à 0.2](SECURITY_REVIEW.md) décrit les corrections
 La galerie est optionnelle par lien et désactivée pour les liens créés avant la migration. Chaque dérivé est autorisé avant lecture du cache et après son rendu : mot de passe, appartenance du fichier, état du compte, corbeille, révocation, expiration et nombre de téléchargements. Consulter un aperçu ne consomme pas un téléchargement ; une copie du contenu affiché reste possible.
 
 Les originaux ne sont jamais renvoyés par la route d’aperçu. Pillow et PDFium produisent un JPEG réduit sans métadonnées dans un conteneur sans réseau, sans secret, sans volume de fichiers et avec racine en lecture seule. Le processus de rendu, le cache, les dimensions, les tailles et les durées sont bornés. Le [guide des aperçus](PREVIEWS.md) précise ces limites et le mode local de développement, qui ne possède pas l’isolation Docker. Cette nouvelle surface nécessite le maintien à jour des décodeurs natifs.
+
+
+## Automatisations ajoutées en 0.4
+
+L’API accepte uniquement un en-tête Bearer explicite, jamais les cookies de session. Chaque clé appartient à un compte, possède des permissions et une expiration, et n’est conservée que sous empreinte HMAC. Les écritures revérifient la clé sous le même verrou utilisateur que sa révocation. Un changement de mot de passe/MFA invalide les clés existantes ; une suspension les révoque définitivement et met les webhooks en pause. Les imports réutilisent les contrôles de fichiers, antivirus et quotas de l’interface. Les reçus d’idempotence sont chiffrés, bornés et supprimés après 24 heures.
+
+Les webhooks transmettent uniquement des identifiants et le type d’événement. URL et secrets de signature sont chiffrés avec la clé de chiffrement de l’instance. Chaque tentative résout et vérifie toutes les adresses DNS, fixe une IP publique pour la connexion TLS au nom d’origine, interdit les redirections et ignore les proxys d’environnement. Le processus dédié dispose de PostgreSQL et d’un accès HTTPS sortant, sans volume de fichiers. Les signatures HMAC, horodatages et identifiants permettent au destinataire de vérifier l’origine et de rejeter les répétitions ; il doit implémenter ces vérifications. Files d’attente, durées, tentatives et rétention sont bornées. Voir la [référence API](API.md) pour le contrat et ses limites.
+
+Les guides affichés dans l’application proviennent uniquement de Markdown versionné dans le dépôt, avec HTML brut désactivé. Les traductions portent sur l’interface, pas sur les contenus des utilisateurs.

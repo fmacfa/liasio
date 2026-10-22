@@ -6,4 +6,4 @@ class VaultConfig(AppConfig):
     name = "vault"
 
     def ready(self):
-        from . import checks  # noqa: F401
+        from . import checks, webhooks  # noqa: F401

@@ -1,18 +1,19 @@
 {% extends "account/layout.html" %}
+{% load i18n %}
 {% block auth_content %}
-  <span class="eyebrow">RETROUVER VOTRE ACCÈS</span>
-  <h2>Un nouveau départ.</h2>
-  <p class="muted">Saisissez l’adresse de votre compte pour recevoir un lien de réinitialisation.</p>
+  <span class="eyebrow">{% translate "RETROUVER VOTRE ACCÈS" %}</span>
+  <h2>{% translate "Un nouveau départ." %}</h2>
+  <p class="muted">{% translate "Saisissez l’adresse de votre compte pour recevoir un lien de réinitialisation." %}</p>
   {% if smtp_enabled %}
     <form method="post" class="auth-form">
       {% csrf_token %}
       {% include "components/form.html" %}
-      <button class="button full">Demander un lien</button>
+      <button class="button full">{% translate "Demander un lien" %}</button>
     </form>
   {% else %}
     <div class="notice">
-      <p>L’envoi d’e-mails n’est pas configuré sur ce serveur. Contactez votre administrateur pour récupérer votre accès.</p>
+      <p>{% translate "L’envoi d’e-mails n’est pas configuré sur ce serveur. Contactez votre administrateur pour récupérer votre accès." %}</p>
     </div>
   {% endif %}
-  <a class="forgot-link" href="{% url 'login' %}">← Retour à la connexion</a>
+  <a class="forgot-link" href="{% url 'login' %}">{% translate "← Retour à la connexion" %}</a>
 {% endblock %}
