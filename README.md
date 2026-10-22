@@ -1,6 +1,6 @@
 # Liasio
 
-Liasio is the new name of LinkVault. Existing repository URLs, deployment identifiers and API v1 headers keep their original names so existing installations and integrations continue to work.
+Liasio is the new name of LinkVault. The repository is now `fmacfa/liasio`. Published LinkVault container images, deployment identifiers and API v1 headers keep their existing names so existing installations and integrations continue to work.
 
 **English** · [Français](README.fr.md)
 
@@ -59,8 +59,8 @@ Use a Linux server with **Docker Engine and Docker Compose v2**, Git, and Python
 3. Clone the repository and generate unique secrets:
 
 ```sh
-git clone https://github.com/fmacfa/linkvault.git
-cd linkvault
+git clone https://github.com/fmacfa/liasio.git
+cd liasio
 python3 scripts/configure.py --domain files.example.com
 docker compose up -d --build
 docker compose ps
@@ -76,7 +76,7 @@ Caddy obtains and renews the TLS certificate. If you use another reverse proxy, 
 
 ### Prebuilt images and upgrades
 
-Versioned images are published by GitHub Actions with a software bill of materials (SBOM) and provenance. Releases also provide a compressed Docker archive for offline installation. See [releases](https://github.com/fmacfa/linkvault/releases) and the [changelog](CHANGELOG.md).
+Versioned images are published by GitHub Actions with a software bill of materials (SBOM) and provenance. Releases also provide a compressed Docker archive for offline installation. See [releases](https://github.com/fmacfa/liasio/releases) and the [changelog](CHANGELOG.md).
 
 Set `LINKVAULT_IMAGE=ghcr.io/fmacfa/linkvault:0.4.0` in `.env` to use the registry image, then `docker compose pull app maintenance preview webhooks` and `docker compose up -d --no-build`. For source builds, keep the default and use `--build`.
 
@@ -89,8 +89,8 @@ Source builds after 0.4.0 include the [unreleased hardening changes](CHANGELOG.m
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/), then run:
 
 ```sh
-git clone https://github.com/fmacfa/linkvault.git
-cd linkvault
+git clone https://github.com/fmacfa/liasio.git
+cd liasio
 python3 scripts/configure.py --dev
 uv sync --frozen
 uv run --env-file .env python manage.py migrate

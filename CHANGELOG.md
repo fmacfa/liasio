@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Rename the GitHub repository to `fmacfa/liasio` and update source, help, security and future release links.
+
 - Rename the application to Liasio in French and English, including sharing pages, account e-mails, exports, monitoring messages, newly enrolled authenticator accounts and built-in guides.
 - Use the approved geometric logo throughout the interface, sharing-page credit, favicon and home-screen icon. Custom workspace branding remains available.
 - Preserve existing share signatures, MFA encryption keys, API v1 header names, deployment identifiers and repository URLs for upgrade compatibility.

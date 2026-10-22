@@ -1,6 +1,6 @@
 # Liasio
 
-Liasio est le nouveau nom de LinkVault. Les adresses du dépôt, identifiants de déploiement et en-têtes de l’API v1 conservent leurs noms d’origine pour assurer la continuité des installations et intégrations existantes.
+Liasio est le nouveau nom de LinkVault. Le dépôt se trouve désormais sous `fmacfa/liasio`. Les images de conteneur LinkVault déjà publiées, les identifiants de déploiement et les en-têtes de l’API v1 conservent leurs noms pour assurer la continuité des installations et intégrations existantes.
 
 [English](README.md) · **Français**
 
@@ -56,8 +56,8 @@ Prévoir un serveur Linux avec **Docker Engine et Docker Compose v2**, Git et Py
 3. Installez le dépôt et générez des secrets uniques :
 
 ```sh
-git clone https://github.com/fmacfa/linkvault.git
-cd linkvault
+git clone https://github.com/fmacfa/liasio.git
+cd liasio
 python3 scripts/configure.py --domain fichiers.example.com
 docker compose up -d --build
 docker compose ps
@@ -76,8 +76,8 @@ Caddy obtient et renouvelle le certificat TLS. Si vous utilisez un autre proxy, 
 Installer [uv](https://docs.astral.sh/uv/getting-started/installation/), puis :
 
 ```sh
-git clone https://github.com/fmacfa/linkvault.git
-cd linkvault
+git clone https://github.com/fmacfa/liasio.git
+cd liasio
 python3 scripts/configure.py --dev
 uv sync --frozen
 uv run --env-file .env python manage.py migrate
@@ -129,7 +129,7 @@ Les invitations créent un lien à copier et transmettre. Elles n’envoient pas
 
 Limites par défaut : **1 Gio par fichier, 5 Gio par dossier et 100 fichiers**. Le formulaire classique sans JavaScript reste limité à 500 Mio par requête. Les réglages existants dans `.env` sont conservés.
 
-Lisez le [guide de mise à niveau et d’exploitation de la version 0.2](docs/RELIABILITY.md) (anglais), notamment avant toute modification des clés MFA. Le [changelog](CHANGELOG.md) et les [releases](https://github.com/fmacfa/linkvault/releases) décrivent les versions publiées.
+Lisez le [guide de mise à niveau et d’exploitation de la version 0.2](docs/RELIABILITY.md) (anglais), notamment avant toute modification des clés MFA. Le [changelog](CHANGELOG.md) et les [releases](https://github.com/fmacfa/liasio/releases) décrivent les versions publiées.
 
 Pour une image précompilée, ajoutez `LINKVAULT_IMAGE=ghcr.io/fmacfa/linkvault:0.4.0` dans `.env`, puis exécutez `docker compose pull app maintenance preview webhooks` et `docker compose up -d --no-build`.
 

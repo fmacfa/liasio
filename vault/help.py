@@ -119,7 +119,7 @@ def guide(request, slug):
                 elif target.startswith("../../"):
                     token.attrSet(
                         "href",
-                        "https://github.com/fmacfa/linkvault/blob/main/"
+                        "https://github.com/fmacfa/liasio/blob/main/"
                         + posixpath.normpath(f"docs/guide/{language}/" + target)
                         + fragment,
                     )
@@ -133,6 +133,6 @@ def guide(request, slug):
             **context(request),
             "guide_title": item[1],
             "guide_html": rendered,
-            "source_url": f"https://github.com/fmacfa/linkvault/blob/main/docs/guide/{language}/{slug}.md",
+            "source_url": f"https://github.com/fmacfa/liasio/blob/main/docs/guide/{language}/{slug}.md",
         },
     )

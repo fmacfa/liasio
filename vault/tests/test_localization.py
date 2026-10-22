@@ -71,12 +71,12 @@ class LanguageTests(IsolatedFiles, TestCase):
                             self.assertIsNotNone(finders.find(source.removeprefix("/static/")), source)
         response = self.client.get("/help/getting-started/")
         self.assertContains(
-            response, "https://github.com/fmacfa/linkvault/blob/main/README.md"
+            response, "https://github.com/fmacfa/liasio/blob/main/README.md"
         )
         self.assertContains(response, "/static/guide/user-guide/en/login.png")
         self.assertContains(
             self.client.get("/help/automation/"),
-            "https://github.com/fmacfa/linkvault/blob/main/docs/API.md",
+            "https://github.com/fmacfa/liasio/blob/main/docs/API.md",
         )
 
     def test_public_help_and_javascript_catalog(self):

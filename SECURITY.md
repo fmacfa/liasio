@@ -4,7 +4,7 @@ La branche principale de Liasio 0.4 reçoit les correctifs. Le projet est jeune 
 
 ## Signaler une vulnérabilité
 
-Utilisez le [signalement privé GitHub](https://github.com/fmacfa/linkvault/security/advisories/new). N’ouvrez pas une issue publique contenant un secret, un lien réel, un fichier client ou une procédure d’exploitation contre une installation existante.
+Utilisez le [signalement privé GitHub](https://github.com/fmacfa/liasio/security/advisories/new). N’ouvrez pas une issue publique contenant un secret, un lien réel, un fichier client ou une procédure d’exploitation contre une installation existante.
 
 Incluez la version/commit, les conditions de reproduction sur une installation de test, le résultat attendu, le résultat observé et l’impact potentiel. Ne testez que les systèmes que vous êtes autorisé à examiner.
 
