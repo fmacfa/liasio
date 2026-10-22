@@ -2901,6 +2901,31 @@ summary { cursor: pointer; font-weight: 600; padding: 12px 0; }
 .branded-surface.public-body .public-footer { background: #fffffff2; padding: 24px; }
 
 .selected-files .selection-file { font-size: 12px; }
+.batch-start, .batch-mapping { display: flex; flex-wrap: wrap; align-items: end; gap: 18px; margin-bottom: 26px; }
+.batch-start .field, .batch-mapping .field { flex: 1; min-width: 180px; margin: 0; }
+.batch-mapping > p { flex-basis: 100%; margin: 0; font-size: 12px; }
+.batch-review-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(300px, 1fr); gap: 26px; align-items: start; }
+.batch-conditions { position: sticky; top: 24px; }
+.batch-conditions > h2 { margin-top: 0; }
+.batch-conditions > p { font-size: 13px; line-height: 1.7; }
+.batch-rows { min-width: 0; }
+.batch-row { display: flex; gap: 12px; padding: 18px 0; border-top: 1px solid var(--line, #e5e9e1); align-items: start; }
+.batch-number { color: var(--muted); font-size: 12px; width: 24px; padding-top: 14px; flex-shrink: 0; }
+.batch-row-content { flex: 1; min-width: 0; }
+.batch-row-content > input { width: 100%; padding: 12px 14px; border: 1px solid #dce2d6; border-radius: 6px; font: inherit; font-size: 14px; color: var(--ink); background: white; }
+.batch-row-content .errorlist { color: #a33a35; font-size: 12px; padding-left: 18px; }
+.batch-link-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
+.batch-url { min-width: 0; flex: 1 1 240px; width: 100%; border: 0; background: #f6f8f3; color: var(--muted); font-size: 11px; padding: 9px; border-radius: 4px; }
+.batch-link-actions .text-link { font-size: 12px; }
+.batch-source-detail { margin-top: 9px; font-size: 11px; color: var(--muted); }
+.batch-source-detail summary { cursor: pointer; }
+.batch-source-values { display: grid; gap: 5px; margin-top: 8px; overflow-wrap: anywhere; }
+.batch-submit { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; margin: 24px 0; }
+.batch-submit p { font-size: 12px; max-width: 520px; }
+.batch-footer { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; margin: 32px 0 12px; }
+.batch-footer p { flex: 1 1 300px; }
+@media (max-width: 1000px) { .batch-review-grid { grid-template-columns: 1fr; } .batch-conditions { position: static; } }
+@media (max-width: 600px) { .batch-row { gap: 6px; } .batch-number { width: 20px; } .batch-start > button { width: 100%; } .batch-submit > button { width: 100%; } }
 .upload-zone > button.text-link { border: 0; background: transparent; color: var(--green); padding: 8px; font: inherit; font-size: 12px; text-decoration: underline; cursor: pointer; }
 @media (max-width: 600px) {
   .file-tree .file-tree .file-tree .file-tree { margin-left: 0; padding-left: 4px; }

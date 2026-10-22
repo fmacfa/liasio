@@ -11,6 +11,7 @@
       </h1>
       <p>{% blocktranslate with title=collection.title %}Pour le dossier « {{ title }} ».{% endblocktranslate %}</p>
     </div>
+    <a class="button secondary" href="{% url 'link_batch_prepare' collection.pk %}">{% translate "Créer plusieurs liens" %}</a>
   </div>
   <div class="editor-grid">
     <form class="panel form-panel" method="post" data-link-form>

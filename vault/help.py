@@ -39,6 +39,11 @@ GUIDES = [
         _("Nom, signature, couleurs et pied de page."),
     ),
     (
+        "bulk-links",
+        _("Créer des liens en lot"),
+        _("Quantité, import Excel ou CSV, noms et export des URL."),
+    ),
+    (
         "storage",
         _("Gérer le stockage"),
         _("Tailles, quotas, suppression et restauration."),

@@ -1,5 +1,7 @@
 # Share links and previews
 
+To create several links at once, by quantity or from Excel/CSV, see the [bulk-link guide](bulk-links.md). **Rename** also changes an existing link's private name without changing its URL or conditions.
+
 ![Creating a protected link](../../screenshots/user-guide/en/link-create.jpg)
 
 ## Create a link with your conditions

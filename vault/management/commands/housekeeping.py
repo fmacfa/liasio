@@ -42,9 +42,11 @@ class Command(BaseCommand):
             Invitation.objects.filter(expires_at__lt=now - timedelta(days=7)).delete()
             from vault.trash import purge_expired
             from vault.resumable import cleanup_expired
+            from vault.batches import cleanup_drafts
 
             purge_expired()
             cleanup_expired()
+            cleanup_drafts()
             from vault.previews import cleanup_cache
 
             cleanup_cache()
