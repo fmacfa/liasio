@@ -4,6 +4,8 @@
 
 Base path: `/api/v1/`. HTTPS in production. Authentication: `Authorization: Bearer lv_<id>.<secret>`. Session cookies and query-string keys are never accepted. Keys belong to one user; all lookups enforce that ownership. Only the web interface can create/revoke keys, after account authentication.
 
+Keys can expire after 1–365 days (90 by default), or have no expiration when explicitly selected in Automations. Both count toward the ten-key limit and remain subject to revocation, account suspension and password/MFA changes. Existing keys retain their expiry. Key lifetime is separate from share-link lifetime. Automations also provides a collection-specific creation command with no embedded credential.
+
 Send JSON with `Content-Type: application/json`, except binary chunks. Use `Accept-Language: en` or `fr` for translated validation messages. Error **codes**, field names, status enums and event names remain stable, untranslated identifiers. Empty optional fields may be omitted. UUID path parameters are canonical UUID strings.
 
 ## Routes and permissions

@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Clarify API commands versus outgoing webhook notifications, show owner-only receiver URLs and delivery error explanations, and provide collection-specific batch commands in Automations.
+- Add optional non-expiring API keys with unchanged revocation, scope and account protections; migrate existing expiry dates unchanged.
+- Remove numeric spinners from all application inputs, including API validity and member quotas; document the workflow in French and English.
+
+
 - Add authenticated batch creation, listing, detail and Excel/CSV export to API v1. Ordered name-to-link responses and quantity generation use the same saved batches as the interface, with atomic writes, encrypted idempotency receipts and shared limits. Include a Python command-line client and illustrated English/French guides for terminals, Codex and website backends. No database migration is required on top of `0008`.
 
 - Rename the GitHub repository to `fmacfa/liasio` and update source, help, security and future release links.

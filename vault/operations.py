@@ -163,7 +163,7 @@ def index(request):
 @require_POST
 def quota(request, pk):
     try:
-        value = Decimal(request.POST.get("quota_gib", ""))
+        value = Decimal(request.POST.get("quota_gib", "").replace(",", "."))
         if not value.is_finite() or value < 0 or value > 1048576:
             raise ValueError
         quota_bytes = int(value * 1024**3)

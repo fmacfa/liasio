@@ -2,11 +2,21 @@
 
 L’**API reçoit les commandes** de vos outils : créer un dossier, envoyer ses fichiers et créer un lien. Les **webhooks envoient les notifications** à vos outils lorsque des événements se produisent. Une URL de webhook seule n’autorise pas les imports.
 
+## Quel outil utiliser ?
+
+| Votre objectif | Fonction à utiliser | Résultat |
+| --- | --- | --- |
+| J’envoie A et B, je reçois les liens A et B | **Clé API**, puis commande de création de lot | Réponse JSON et lot dans **Mes liens → Mes lots** |
+| Je veux savoir quand un lien a été ouvert ou téléchargé | **Webhook sortant** | Notification POST vers l’URL fournie par mon outil |
+| Je veux télécharger le fichier partagé | URL `/s/…/` de la réponse API ou de **Mes liens** | Page publique de présentation du dossier |
+
+**Vous n’avez pas besoin d’un webhook pour créer une liste.** Dans **Automatisations**, le bloc **Envoyer A et B, recevoir leurs liens** permet de sélectionner votre dossier et de copier une commande avec la bonne adresse. L’exemple crée des liens sans expiration et sans limite de téléchargement. Suivez le [guide des lots par API](bulk-links-api.md) pour ajouter des conditions ou exporter depuis un programme.
+
 ![Paramètres des automatisations](../../screenshots/user-guide/fr/automations.png)
 
 ## 1. Créer une clé API limitée
 
-Ouvrez **Automatisations → Créer une clé API**. Donnez-lui un nom clair, choisissez les seules permissions nécessaires et une validité de 1 à 365 jours (90 par défaut). Confirmez le mot de passe actuel et, si activée, un nouveau code MFA ou de récupération.
+Ouvrez **Automatisations → Créer une clé API**. Donnez-lui un nom clair, choisissez les seules permissions nécessaires et **Dans un nombre de jours** (1 à 365, 90 par défaut) ou **Sans expiration**. Confirmez le mot de passe actuel et, si activée, un nouveau code MFA ou de récupération.
 
 | Permission | Accès |
 | --- | --- |
@@ -14,7 +24,7 @@ Ouvrez **Automatisations → Créer une clé API**. Donnez-lui un nom clair, cho
 | `files:write` | Créer des dossiers, commencer/envoyer/finaliser/annuler des imports. |
 | `links:write` | Créer et révoquer des liens. |
 
-Copiez immédiatement la clé dans le coffre de votre outil. Elle n’est affichée qu’une fois ; seule une empreinte cryptographique est conservée. Dix clés non expirées et non révoquées maximum. Elles ne permettent ni de gérer les comptes, ni d’accorder des droits, ni de modifier la personnalisation, ni de supprimer les fichiers. **Révoquer** coupe les prochaines utilisations. Un changement de mot de passe/MFA invalide les clés ; une suspension les révoque définitivement.
+Copiez immédiatement la clé dans le coffre de votre outil. Elle n’est affichée qu’une fois ; seule une empreinte cryptographique est conservée. Dix clés non expirées et non révoquées maximum, y compris celles sans expiration. Les anciennes clés conservent leur échéance ; créez une nouvelle clé si vous voulez changer de validité. Elles ne permettent ni de gérer les comptes, ni d’accorder des droits, ni de modifier la personnalisation, ni de supprimer les fichiers. **Révoquer** coupe les prochaines utilisations. Un changement de mot de passe/MFA invalide les clés ; une suspension les révoque définitivement.
 
 Envoyez toujours `Authorization: Bearer VOTRE_CLE` en HTTPS. Ne placez jamais une clé dans une URL, Git, une capture ou un workflow public. Les cookies du navigateur n’authentifient pas l’API.
 
@@ -48,6 +58,10 @@ Envoyez `names: ["A", "B"]` à l’API pour recevoir les liens A et B dans l’o
 
 Cliquez sur **Ajouter un webhook**, indiquez un nom et l’**URL HTTPS publique** du destinataire, choisissez les événements puis confirmez le mot de passe/MFA. Seul le port 443 est autorisé. Les IP privées/internes, identifiants dans l’URL, paramètres de requête, fragments et redirections sont refusés. Pour n8n sur le même VPS, utilisez son domaine HTTPS public, pas un nom Docker ni `localhost`.
 
+**D’où vient l’URL ?** Créez d’abord le point de réception dans n8n ou sur votre serveur. Par exemple, n8n fournit une URL de production après création d’un déclencheur Webhook. Activez le workflow, puis copiez cette URL dans Liasio. Écrire une adresse telle que `https://fichiers.example.com/test/` n’ajoute pas de route à votre instance. Une page web ordinaire n’est pas forcément un point de réception POST.
+
+La fiche du webhook affiche l’URL complète avec **Copier l’URL de réception**, puis les tentatives de livraison. Cette URL peut contenir un chemin privé : ne la publiez pas. Liasio n’affiche pas de nouveau lien de téléchargement à la création du webhook.
+
 Copiez le **secret de signature** et configurez sa vérification chez le destinataire. Ce secret est distinct de la clé API. L’URL et le secret sont chiffrés en base. Les notifications contiennent les identifiants d’événement/dossier/lien, sans URL de partage, mot de passe, e-mail ni contenu de fichier. Une clé API séparée et limitée permet au destinataire de lire les détails si nécessaire.
 
 Événements : `collection.created`, `files.uploaded`, `link.created`, `link.revoked`, `link.opened`, `download.started`. `files.uploaded` indique un enregistrement final réussi, après l’analyse applicable ; `download.started` indique un transfert autorisé, pas une réception prouvée. La mise à la corbeille peut générer des révocations. L’expiration automatique ne produit pas `link.revoked`.
@@ -57,6 +71,18 @@ Copiez le **secret de signature** et configurez sa vérification chez le destina
 ![État du webhook et historique des livraisons](../../screenshots/user-guide/fr/webhook.png)
 
 Ouvrez le webhook et cliquez sur **Envoyer un test**. Un véritable événement `webhook.test` est mis en attente pour votre URL. Actualisez pour voir l’état, le statut HTTP et le nombre de tentatives. Le service de livraison doit fonctionner ; voir [Exploitation](operations.md).
+
+| État ou code | Signification et action |
+| --- | --- |
+| En attente | Le service de livraison n’a pas encore envoyé la notification ; actualisez la page. |
+| Livré, HTTP 2xx | Le destinataire a accepté la notification. |
+| HTTP 404 | Adresse introuvable : vérifiez le chemin et activez le workflow de réception. |
+| HTTP 405 | L’adresse ne prend pas en charge POST ; utilisez l’URL du déclencheur webhook. |
+| HTTP 401 / 403 | Le destinataire refuse l’accès ; vérifiez sa configuration et le secret de signature. |
+| HTTP 3xx | Redirection refusée ; utilisez directement l’URL HTTPS finale. |
+| HTTP 429 / 5xx | Destinataire temporairement indisponible ; les tentatives restantes sont réessayées. |
+
+Ouvrir l’URL dans un navigateur envoie généralement GET, alors que **Envoyer un test** effectue POST : ce sont deux opérations différentes.
 
 Le destinataire doit vérifier les octets bruts avant de lire le JSON :
 
@@ -86,3 +112,7 @@ Les comptes sont servis à tour de rôle, quel que soit leur nombre de webhooks.
 **Mettre en pause** annule la file ; une requête déjà partie peut se terminer. **Réactiver** exige mot de passe/MFA et concerne uniquement les futurs événements. **Renouveler le secret** invalide immédiatement l’ancien ; toutes les prochaines tentatives, y compris les reprises, utilisent le nouveau. Coordonnez la modification du destinataire. Pour changer l’URL ou les événements, créez et testez un remplaçant puis supprimez l’ancien. La suppression efface son historique. Ces actions ne suppriment ni vos dossiers ni vos clés API.
 
 Références n8n : [Webhook trigger](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook/) · [HTTP Request credentials](https://docs.n8n.io/integrations/builtin/credentials/httprequest/).
+
+## Si une clé ou un secret a été partagé
+
+Dans **Automatisations**, révoquez la clé API concernée, créez-en une nouvelle et mettez à jour le coffre de votre outil. Pour un webhook, ouvrez sa fiche → **Sécurité et configuration → Renouveler le secret**, puis mettez à jour le vérificateur chez le destinataire. Ne partagez pas la nouvelle valeur dans une conversation ou une capture. Renouveler le secret du webhook ne remplace pas la clé API : ce sont deux accès distincts.

@@ -46,6 +46,7 @@ class LanguageTests(IsolatedFiles, TestCase):
             "/collections/new/",
             f"/collections/{self.folder.pk}/",
             f"/collections/{self.folder.pk}/link/",
+            f"/collections/{self.folder.pk}/links/batch/",
             "/links/",
             "/activity/",
             "/branding/",
@@ -65,6 +66,7 @@ class LanguageTests(IsolatedFiles, TestCase):
                     response = self.client.get(page)
                     self.assertEqual(response.status_code, 200)
                     self.assertContains(response, f'lang="{language}"')
+                    self.assertNotContains(response, 'type="number"')
                     if page.startswith("/help/"):
                         for source in re.findall(r'<img[^>]+src="([^"]+)"', response.content.decode()):
                             self.assertTrue(source.startswith(("/static/guide/", "/static/brand/")))

@@ -4,6 +4,16 @@ Depuis Codex, un terminal, n8n ou le serveur de votre site, envoyez des noms à 
 
 ![Un lot disponible dans Mes lots, avec ses noms, liens et exports](../../screenshots/user-guide/fr/batch-api.jpg)
 
+## Démarrer sans chercher les adresses
+
+Ouvrez **Automatisations → Préparer ma commande**. Sélectionnez le dossier et cliquez sur **Afficher la commande** : l’URL contient déjà le domaine de votre instance et l’identifiant du dossier. Le bloc explique comment charger votre clé dans un terminal macOS/Linux sans l’inscrire dans l’historique, puis copier la commande. Remplacez les noms A et B par les vôtres. Aucun webhook n’est nécessaire.
+
+Pour une clé durable, choisissez **Sans expiration** lors de sa création. Cette validité concerne la clé API ; l’expiration des liens créés se règle séparément dans `conditions`. La commande proposée dans l’interface omet ces conditions et crée donc des liens sans expiration ni limite de téléchargement.
+
+La réponse associe `items[].label` à `items[].url`. Pour exporter facilement depuis le navigateur, ouvrez **Mes liens → Mes lots**, sélectionnez le lot et cliquez sur **Télécharger Excel** ou **Télécharger CSV**. Une adresse d’export `/api/v1/…` exige toujours l’en-tête Bearer et ne s’ouvre pas directement avec les cookies de connexion.
+
+![Commande adaptée au dossier dans Automatisations](../../screenshots/user-guide/fr/api-quickstart.png)
+
 ## 1. Préparer l’accès
 
 Dans **Automatisations → Créer une clé API**, cochez `links:write` pour créer et `read` pour consulter et exporter. Conservez la clé dans la variable d’environnement privée `LINKVAULT_API_KEY`. Ce nom est conservé pour la compatibilité de l’API v1. Ne la mettez ni dans Git, ni dans un lien, ni dans le JavaScript livré aux visiteurs de votre site.
