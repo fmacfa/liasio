@@ -43,7 +43,7 @@ jobs:
       - run: uv run --env-file .env python manage.py makemigrations --check --dry-run
       - run: uv run --env-file .env pip-audit --local --progress-spinner off
       - run: uv run bandit -r vault linkvault -x vault/tests,vault/migrations -ll
-      - run: node --check static/app.js && node --check static/upload.js && node --check static/previews.js
+      - run: node --check static/app.js && node --check static/upload.js && node --check static/previews.js && node --check static/setup.js
   containers:
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -54,6 +54,8 @@ jobs:
       - run: docker compose build app
       - run: docker compose up -d --wait --wait-timeout 600 db clamav app webhooks
       - run: docker compose exec -T app python manage.py check --deploy --fail-level ERROR
+      - name: Verify packaged guides and screenshots
+        run: docker compose exec -T app python manage.py test vault.tests.test_localization --noinput
       - name: Verify webhook worker heartbeat
         run: |
           docker compose exec -T app python manage.py shell <<'PY'

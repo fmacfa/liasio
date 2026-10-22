@@ -16,7 +16,7 @@ Interface français / anglais · Licence **MIT** · Python / Django · Docker Co
 
 | Besoin | Disponible dans la version 0.4 |
 | --- | --- |
-| Première connexion | Assistant protégé par une clé d’installation, création du compte administrateur avec e-mail et mot de passe |
+| Première connexion | Deux étapes courtes : e-mail et mot de passe, puis nom et confirmation ; le premier compte devient administrateur |
 | Plusieurs comptes | Invitations personnelles, valables 7 jours, usage unique, révocables ; comptes membres isolés |
 | Bibliothèque | Import de fichiers ou d’un dossier avec son arborescence, titre, présentation et message au destinataire |
 | Page Importer | Choix du dossier, liste des fichiers et tailles, progression, pause et reprise pendant 24 h, puis vérification |
@@ -62,10 +62,10 @@ docker compose ps
 ```
 
 4. Attendez que ClamAV soit prêt ; son premier démarrage peut prendre plusieurs minutes.
-5. Ouvrez `https://fichiers.example.com`, puis créez votre compte avec la valeur **SETUP_TOKEN** de votre fichier `.env`, votre nom, votre adresse e-mail et votre mot de passe.
+5. Ouvrez `https://fichiers.example.com`. Saisissez votre e-mail et un mot de passe, cliquez sur **Continuer**, puis renseignez votre nom et confirmez le mot de passe. Choisissez **Créer mon compte**. Aucune clé d’installation n’est nécessaire.
 6. Créez un dossier, importez les fichiers, puis choisissez **Créer un lien**.
 
-Le script crée `.env` avec des permissions `0600` et refuse de l’écraser. Le fichier contient des secrets : ne le publiez jamais. Après l’initialisation, la création du premier compte est fermée même si la clé est encore présente.
+Le script crée `.env` avec des permissions `0600` et refuse de l’écraser. Le fichier contient des secrets : ne le publiez jamais. La première personne qui termine l’installation devient administrateur : initialisez l’instance avant de diffuser son adresse. L’assistant se ferme définitivement après la création de ce compte ; les autres utilisateurs rejoignent l’espace sur invitation.
 
 Caddy obtient et renouvelle le certificat TLS. Si vous utilisez un autre proxy, consultez le [guide d’exploitation](docs/OPERATIONS.md) avant de modifier la topologie.
 
@@ -100,7 +100,6 @@ Toutes les valeurs sont configurées dans `.env` ; un modèle est fourni dans [.
 | --- | --- |
 | `APP_URL` / `DOMAIN` | Origine HTTPS canonique, sans chemin / nom de domaine |
 | `SECRET_KEY` | Secret aléatoire d’au moins 50 caractères ; signe sessions et capacités |
-| `SETUP_TOKEN` | Secret d’au moins 32 caractères pour le premier compte |
 | `MAX_FILE_BYTES` | 1073741824, soit 1 Gio par fichier |
 | `MAX_UPLOAD_BYTES` | 5368709120, soit 5 Gio par dossier ; formulaire classique limité à 500 Mio par requête |
 | `DEFAULT_QUOTA_BYTES` | 5368709120, soit 5 Gio pour chaque nouveau compte |

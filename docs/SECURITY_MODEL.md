@@ -10,7 +10,7 @@
 
 ## Comptes
 
-Le premier compte nécessite un secret d’installation fourni au serveur. Un singleton précréé et verrouillé empêche deux créations administrateur simultanées. La présence d’un compte ou l’état initialisé ferme l’assistant.
+Sur une instance neuve, la première inscription par e-mail et mot de passe crée l’administrateur, sans clé d’installation. Toute personne ayant accès à l’instance non initialisée peut revendiquer ce premier compte ; l’exploitant doit donc terminer l’assistant avant de diffuser l’adresse ou d’ouvrir l’accès à d’autres personnes. Cette inscription ne vérifie pas la maîtrise de la boîte e-mail. Un singleton précréé et verrouillé empêche deux créations administrateur simultanées. La présence d’un compte ou l’état initialisé ferme l’assistant, y compris après suppression du dernier compte. CSRF, limitation des tentatives et validation des mots de passe restent actifs. Les deux étapes ne transmettent les identifiants qu’à la validation finale ; aucun mot de passe n’est conservé dans le stockage du navigateur.
 
 Les invitations lient une adresse fixée par l’administrateur à une capacité signée. Leur acceptation consomme la ligne dans une transaction. Elles ne prouvent pas la maîtrise de la boîte e-mail si l’administrateur transmet le lien à la mauvaise personne. La vérification e-mail dédiée est prévue dans la roadmap.
 

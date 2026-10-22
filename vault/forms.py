@@ -54,21 +54,13 @@ class SetupForm(AccountForm):
     email = forms.EmailField(
         label=_("Adresse e-mail"),
         max_length=254,
-        widget=forms.EmailInput(attrs={"autocomplete": "email"}),
+        widget=forms.EmailInput(attrs={"autocomplete": "username"}),
     )
-    setup_token = forms.CharField(
-        label=_("Clé d’installation"),
-        max_length=200,
-        widget=forms.PasswordInput,
-        help_text=_("La valeur SETUP_TOKEN du fichier .env de votre serveur."),
-    )
-    field_order = [
-        "setup_token",
-        "display_name",
-        "email",
-        "password",
-        "password_confirm",
-    ]
+    field_order = ["email", "password", "display_name", "password_confirm"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["password"].widget.attrs["minlength"] = 12
 
 
 class LoginForm(forms.Form):

@@ -39,7 +39,6 @@ content = {
     "SECRET_KEY": secrets.token_urlsafe(64),
     "MFA_ENCRYPTION_KEY": base64.urlsafe_b64encode(secrets.token_bytes(32)).decode(),
     "MONITORING_TOKEN": secrets.token_urlsafe(32),
-    "SETUP_TOKEN": secrets.token_urlsafe(32),
     "POSTGRES_PASSWORD": secrets.token_urlsafe(32),
     "ANTIVIRUS_REQUIRED": "false" if args.dev else "true",
     "CLAMAV_HOST": "" if args.dev else "clamav",
@@ -51,9 +50,7 @@ with os.fdopen(fd, "w") as config:
     config.write("# Configuration privée. Ne jamais publier ce fichier.\n")
     config.writelines(f"{key}={value}\n" for key, value in content.items())
 print("Configuration créée dans .env (permissions 0600).")
-print(
-    "Au premier accès, renseignez la valeur SETUP_TOKEN de ce fichier dans l’assistant."
-)
+print("Ouvrez votre instance et créez le premier compte avec votre e-mail et un mot de passe.")
 if args.dev:
     print(
         "Mode local : l’antivirus est désactivé. N’y déposez pas de fichiers sensibles."

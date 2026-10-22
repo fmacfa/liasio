@@ -1,13 +1,42 @@
 {% extends "account/layout.html" %}
 {% load i18n %}
+{% load static %}
 {% block title %}{% translate "Première installation · LinkVault" %}{% endblock %}
+{% block body_class %}auth-body setup-body{% endblock %}
+{% block scripts %}<script src="{% static 'setup.js' %}" defer></script>{% endblock %}
 {% block auth_content %}
-  <span class="eyebrow">{% translate "BIENVENUE CHEZ VOUS" %}</span>
-  <h2>{% translate "Créons votre espace." %}</h2>
-  <p class="muted">{% translate "Ce premier compte administrateur vous permettra d’inviter votre équipe." %}</p>
-  <form method="post" class="auth-form">
+  <ol class="setup-progress" aria-label="{% translate 'Étapes de création du compte' %}" data-setup-progress hidden>
+    <li aria-current="step"><span>1</span>{% translate "Connexion" %}</li>
+    <li><span>2</span>{% translate "Votre profil" %}</li>
+  </ol>
+  <form method="post" class="auth-form setup-form" data-setup-form>
     {% csrf_token %}
-    {% include "components/form.html" %}
-    <button class="button full">{% translate "Créer mon compte" %} {% include "components/icon.html" with name="arrow" %}</button>
+    <section data-setup-panel aria-labelledby="setup-credentials-title">
+      <span class="eyebrow">{% translate "BIENVENUE CHEZ VOUS" %}</span>
+      <h2 id="setup-credentials-title" tabindex="-1">{% translate "Créons votre espace." %}</h2>
+      <p class="muted setup-intro">{% translate "Commencez par votre e-mail et un mot de passe." %}</p>
+      {% if form.errors %}
+        <div class="form-error" role="alert">
+          <p>{% translate "Vérifiez les informations ci-dessous et ressaisissez votre mot de passe." %}</p>
+          {{ form.non_field_errors }}
+          {% for error in form.display_name.errors %}<p>{{ form.display_name.label }} : {{ error }}</p>{% endfor %}
+          {% for error in form.password_confirm.errors %}<p>{{ error }}</p>{% endfor %}
+        </div>
+      {% endif %}
+      {% include "account/setup_field.html" with field=form.email %}
+      {% include "account/setup_field.html" with field=form.password %}
+      <button type="button" class="button full" data-setup-next hidden>{% translate "Continuer" %} {% include "components/icon.html" with name="arrow" %}</button>
+    </section>
+    <section data-setup-panel aria-labelledby="setup-profile-title">
+      <span class="eyebrow">{% translate "PRESQUE TERMINÉ" %}</span>
+      <h2 id="setup-profile-title" tabindex="-1">{% translate "Faisons connaissance." %}</h2>
+      <p class="muted setup-intro">{% translate "Ce premier compte administrateur vous permettra d’inviter votre équipe." %}</p>
+      {% include "account/setup_field.html" with field=form.display_name %}
+      {% include "account/setup_field.html" with field=form.password_confirm %}
+      <div class="setup-actions">
+        <button type="button" class="button secondary" data-setup-back hidden>{% translate "Retour" %}</button>
+        <button type="submit" class="button">{% translate "Créer mon compte" %} {% include "components/icon.html" with name="arrow" %}</button>
+      </div>
+    </section>
   </form>
 {% endblock %}
