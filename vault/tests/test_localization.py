@@ -65,6 +65,10 @@ class LanguageTests(IsolatedFiles, TestCase):
                     response = self.client.get(page)
                     self.assertEqual(response.status_code, 200)
                     self.assertContains(response, f'lang="{language}"')
+                    if page.startswith("/help/"):
+                        for source in re.findall(r'<img[^>]+src="([^"]+)"', response.content.decode()):
+                            self.assertTrue(source.startswith("/static/guide/"))
+                            self.assertIsNotNone(finders.find(source.removeprefix("/static/")), source)
         response = self.client.get("/help/getting-started/")
         self.assertContains(
             response, "https://github.com/fmacfa/linkvault/blob/main/README.md"
@@ -108,3 +112,6 @@ class LanguageTests(IsolatedFiles, TestCase):
         parser = Ids()
         parser.feed(self.client.get("/automations/").content.decode())
         self.assertEqual(len(parser.values), len(set(parser.values)))
+import re
+
+from django.contrib.staticfiles import finders

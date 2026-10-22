@@ -54,6 +54,8 @@ jobs:
       - run: docker compose build app
       - run: docker compose up -d --wait --wait-timeout 600 db clamav app webhooks
       - run: docker compose exec -T app python manage.py check --deploy --fail-level ERROR
+      - name: Verify packaged guides and screenshots
+        run: docker compose exec -T app python manage.py test vault.tests.test_localization --noinput
       - name: Verify webhook worker heartbeat
         run: |
           docker compose exec -T app python manage.py shell <<'PY'

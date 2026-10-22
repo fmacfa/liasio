@@ -28,6 +28,7 @@
 !docs/**/
 !docs/**/*.md
 !docs/screenshots/**/*.png
+!docs/screenshots/**/*.jpg
 !examples/
 !examples/*.py
 !docker/
