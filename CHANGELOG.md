@@ -4,6 +4,10 @@
 
 ### Changed
 
+- Share links can expire on a specific date or after 1–3,650 days. Download limits use a wheel-safe text field; optional link passwords have no minimum length (account requirements are unchanged). The API accepts `expires_in_days` and preserves the original deadline on an idempotent replay.
+- Mixed file/folder drops and successive selections accumulate in one queue. New resumable manifests preserve selection order, and sender/recipient pages show expandable directories. Upload progress now includes real in-flight bytes, server-confirmed bytes, speed and estimated remaining time; scanning is a separate phase. Empty folders and hidden files are explicitly excluded.
+- Branding supports an uploaded logo, background image and custom colors with a live preview and contrast-aware button text. Images are browser-optimized, strictly bounded/canonicalized PNGs, scanned and stored in the backed-up database (a separate 2.5 MiB/account ceiling). Brand media requires the same active, unlocked share link as the page. No native image decoder is added to the web process.
+
 - First-time setup now starts directly with email and password, followed by name and password confirmation in a compact two-step form. No installation key is needed. Server-side validation, CSRF, throttling and atomic first-administrator creation remain enforced; setup closes permanently after initialization. English/French guides and screenshots cover the new flow.
 - `SETUP_TOKEN` is no longer read or generated. Existing installations keep their accounts and remain closed to public signup. On a fresh instance, the first person to finish setup becomes the administrator; initialize it before sharing its address.
 
@@ -15,6 +19,8 @@
 - Production preview decoders use an additional Landlock filesystem boundary; unsupported hosts refuse previews. Runtime Docker contents are allowlisted and vendor images are pinned by digest. Releases test/export exact build digests, assemble and attest the index from those digests, and document workflow/tag/commit-bound attestation verification.
 
 ### Upgrade notes
+
+- Migration `0007` adds branding fields and upload-part ordering only; back up first and restart all writers with the updated code. Existing files, passwords and expiry dates stay unchanged. Existing pending uploads retain their prior path ordering. Branding images are included in database backups.
 
 - Back up the database, files and original keys. Stop webhook workers before migration `0006`, then restart the complete updated stack; do not run old and new dispatchers together. Use `deliver_webhooks --loop --workers 2` for a manual deployment. A single worker remains supported but waits for its current attempt.
 - Production previews require Linux Landlock ABI 3+ (normally Linux 6.2+ with Landlock enabled). Original downloads remain available if this boundary is unavailable. macOS development uses the existing local decoder only in debug mode.

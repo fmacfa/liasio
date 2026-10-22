@@ -54,6 +54,7 @@
     </div>
     <progress max="{{ user.quota_bytes }}" value="{{ user.used_bytes }}">{{ user.storage_percent }} %</progress>
   </div>
+  <p class="footnote">{% translate "Images de personnalisation :" %} {{ branding_bytes|filesizeformat }} {% translate "dans la base de données, avec une limite distincte de 2,5 Mio par compte." %} <a href="{% url 'branding' %}">{% translate "Gérer les images" %}</a></p>
   <div class="section-heading spaced">
     <h2>
       {% translate "Tous vos fichiers" %} <span class="count">{{ page.paginator.count }}</span>

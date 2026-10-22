@@ -32,7 +32,7 @@ python3 examples/upload.py ./delivery \
   --max-downloads 1 --hours 168 --previews
 ```
 
-Keep the state file **outside** the uploaded directory. Run the same command with the same files and state file to resume; use a fresh state file for a new delivery. Do not modify source files during the upload. The client prints the link details to standard output and progress to standard error. The output contains a private share URL: protect logs accordingly. An optional `LINKVAULT_LINK_PASSWORD` adds a link password of at least 12 characters.
+Keep the state file **outside** the uploaded directory. Run the same command with the same files and state file to resume; use a fresh state file for a new delivery. Do not modify source files during the upload. The client prints the link details to standard output and progress to standard error. The output contains a private share URL: protect logs accordingly. An optional `LINKVAULT_LINK_PASSWORD` adds a link password with no minimum length (128 characters maximum).
 
 The state directory must belong to your account and have mode **0700**; existing state files must be private regular files (0600). Move older state files there before resuming. Only one client may use that directory at a time. State updates use exclusive, unpredictable temporary files and atomic replacement. Use a **trusted source tree** that other accounts cannot modify; copy shared incoming files into private storage first. The client retains opened files and rejects detected changes, but is not a sandbox for an untrusted local writer.
 

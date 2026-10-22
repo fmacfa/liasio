@@ -19,10 +19,10 @@ Interface français / anglais · Licence **MIT** · Python / Django · Docker Co
 | Première connexion | Deux étapes courtes : e-mail et mot de passe, puis nom et confirmation ; le premier compte devient administrateur |
 | Plusieurs comptes | Invitations personnelles, valables 7 jours, usage unique, révocables ; comptes membres isolés |
 | Bibliothèque | Import de fichiers ou d’un dossier avec son arborescence, titre, présentation et message au destinataire |
-| Page Importer | Choix du dossier, liste des fichiers et tailles, progression, pause et reprise pendant 24 h, puis vérification |
-| Page de partage | Nom, signature, palette de couleurs et pied de page propres à chaque compte ; aperçu en direct |
+| Page Importer | Dépôt mixte de fichiers et dossiers, sélection cumulative, progression réelle en octets, pause et reprise pendant 24 h, puis vérification |
+| Page de partage | Logo, image de fond, couleurs libres, nom, signature et pied de page propres à chaque compte ; aperçu en direct |
 | Aperçus des fichiers | Galerie d’images et première page des PDF, visionneuse et navigation au clavier ; option par lien |
-| Plusieurs liens par dossier | Nom interne, mot de passe facultatif, date d’expiration, nombre maximal de téléchargements |
+| Plusieurs liens par dossier | Nom interne, mot de passe facultatif sans minimum, expiration par date ou durée, nombre maximal de téléchargements |
 | Usage unique | Un seul téléchargement autorisé, y compris en cas de requêtes simultanées |
 | Suivi | Ouvertures et téléchargements autorisés datés, filtre par lien, export CSV |
 | Stockage | Nombre de fichiers, tailles, quotas, recherche, tri par taille/nom/date, suppression individuelle ou multiple vers une corbeille récupérable de 30 jours |
@@ -82,7 +82,7 @@ uv run --env-file .env python manage.py migrate
 uv run --env-file .env python manage.py runserver 127.0.0.1:8000
 ```
 
-Ouvrez [http://127.0.0.1:8000](http://127.0.0.1:8000). La clé de première installation se trouve dans `.env`. Ce mode utilise SQLite, HTTP et un antivirus désactivé explicitement. Il est réservé à la machine locale et aux fichiers de démonstration.
+Ouvrez [http://127.0.0.1:8000](http://127.0.0.1:8000). Créez le premier compte avec votre e-mail et votre mot de passe, sans clé d’installation. Ce mode utilise SQLite, HTTP et un antivirus désactivé explicitement. Il est réservé à la machine locale et aux fichiers de démonstration.
 
 Pour créer des données fictives sur une **installation locale vide**, choisissez un mot de passe de démonstration et exécutez :
 
@@ -143,7 +143,7 @@ Les aperçus sont des JPEG réduits, sans métadonnées, générés par un moteu
 
 ## Sécurité et confidentialité
 
-- Mots de passe **Argon2id** ; minimum de 12 caractères, longueur maximale de 128 pour les formulaires web.
+- Mots de passe **Argon2id** ; minimum de 12 caractères pour les comptes. Les mots de passe facultatifs des liens n’ont pas de minimum ; tous les formulaires acceptent au maximum 128 caractères.
 - Aucune inscription publique ; initialisation protégée, invitations signées, expirables et consommées une seule fois.
 - Contrôle du propriétaire sur chaque ressource ; un administrateur web ne peut pas parcourir les fichiers d’un autre compte.
 - Sessions serveur, cookies HttpOnly/Secure en production, protection CSRF, validation d’hôte, CSP restrictive, protection contre l’encapsulation.
@@ -182,7 +182,7 @@ LinkVault privilégie les dossiers réutilisables, la présentation et des règl
 
 ### Aperçu de l’import
 
-![Page d’import LinkVault avec un fichier de démonstration sélectionné](docs/screenshots/upload.png)
+![Page d’import LinkVault avec un fichier de démonstration sélectionné](docs/screenshots/user-guide/fr/upload.jpg)
 
 ## Licence
 

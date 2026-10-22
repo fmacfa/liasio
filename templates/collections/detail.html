@@ -33,18 +33,7 @@
           </h2>
           <span>{{ collection.total_bytes|filesizeformat }}</span>
         </div>
-        {% for file in collection.files.all %}
-          <div class="file-row">
-            <span class="file-type">{{ file.extension }}</span>
-            <div class="file-info">
-              <strong>{{ file.path }}</strong>
-              <small>{% if file.scanned %}{% translate "Analysé par l’antivirus" %}{% else %}{% translate "Non analysé · développement" %}{% endif %}</small>
-            </div>
-            <span class="file-size">{{ file.size|filesizeformat }}</span>
-          </div>
-        {% empty %}
-          <div class="quiet-empty">{% translate "Aucun fichier pour le moment. Ajoutez les premiers ci-dessous." %}</div>
-        {% endfor %}
+        {% include "components/file_tree.html" with nodes=file_tree %}
       </div>
       {% include "components/upload_form.html" %}
     </section>

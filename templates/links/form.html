@@ -13,7 +13,7 @@
     </div>
   </div>
   <div class="editor-grid">
-    <form class="panel form-panel" method="post">
+    <form class="panel form-panel" method="post" data-link-form>
       {% csrf_token %}
       {% include "components/form.html" %}
       <button class="button">{% translate "Créer le lien" %} {% include "components/icon.html" with name="link" %}</button>

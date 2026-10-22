@@ -59,6 +59,7 @@ from .models import (
 )
 from .security import limited, rate_allowed, verify_capability
 from .mfa import begin_login, complete_login
+from .file_tree import file_tree
 from .storage import (
     add_files,
     available_links,
@@ -373,6 +374,7 @@ def collection_detail(request, pk):
         {
             "nav": "collections",
             "collection": item,
+            "file_tree": file_tree(item.files.all()),
             "max_file_mb": settings.MAX_FILE_BYTES // 1024**2,
             "max_upload_mb": settings.MAX_UPLOAD_BYTES // 1024**2,
         },
@@ -472,7 +474,11 @@ def link_create(request, pk):
     item = get_object_or_404(Collection, pk=pk, owner=request.user)
     form = LinkForm(
         request.POST or None,
-        initial={"expires_at": timezone.localtime() + timedelta(days=7)},
+        initial={
+            "expires_at": timezone.localtime() + timedelta(days=7),
+            "expiry_mode": "days",
+            "expires_in_days": 7,
+        },
     )
     if request.method == "POST" and form.is_valid():
         if limited(request, "link-create", 60, 3600):
@@ -631,9 +637,28 @@ def branding(request):
     item, created = Branding.objects.get_or_create(
         user=request.user, defaults={"name": request.user.display_name}
     )
-    form = BrandingForm(request.POST or None, instance=item)
+    form = BrandingForm(
+        request.POST if request.method == "POST" else None,
+        request.FILES or None,
+        instance=item,
+    )
+    if getattr(request, "upload_limit_exceeded", False):
+        form.add_error(None, _("L’image dépasse la taille autorisée."))
     if request.method == "POST" and form.is_valid():
-        form.save()
+        with transaction.atomic():
+            user = User.objects.select_for_update().get(pk=request.user.pk)
+            if not user.is_active:
+                raise Http404
+            updated = form.save(commit=False)
+            current = Branding.objects.select_for_update().get(user=user)
+            for field in BrandingForm.Meta.fields:
+                setattr(current, field, getattr(updated, field))
+            for kind in ("logo", "background"):
+                if form.cleaned_data.get(kind) or form.cleaned_data.get(
+                    f"remove_{kind}"
+                ):
+                    setattr(current, f"{kind}_data", getattr(updated, f"{kind}_data"))
+            current.save()
         messages.success(request, _("Votre page de partage a été personnalisée."))
         return redirect("branding")
     return render(
@@ -669,6 +694,9 @@ def storage(request):
         "sort": order,
         "file_count": owned.count(),
         "collection_count": request.user.collections.count(),
+        "branding_bytes": getattr(request.user, "branding", None).image_bytes
+        if hasattr(request.user, "branding")
+        else 0,
         "remaining": max(
             0,
             request.user.quota_bytes
@@ -877,6 +905,7 @@ def share(request, token):
         {
             "link": link,
             "collection": link.collection,
+            "file_tree": file_tree(link.collection.files.all()),
             "branding": getattr(link.collection.owner, "branding", None),
             "token": token,
         },
