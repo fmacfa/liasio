@@ -82,6 +82,8 @@ class Branding(models.Model):
     theme = models.CharField(max_length=10, choices=THEMES, default="forest")
     footer = models.CharField(max_length=240, blank=True)
     accent_color = models.CharField(
+        default="",
+        db_default="",
         max_length=7,
         blank=True,
         validators=[
@@ -91,6 +93,8 @@ class Branding(models.Model):
         ],
     )
     background_color = models.CharField(
+        default="",
+        db_default="",
         max_length=7,
         blank=True,
         validators=[
@@ -100,8 +104,8 @@ class Branding(models.Model):
         ],
     )
     # Small, canonical PNGs live in the backed-up database, never at a public URL.
-    logo_data = models.BinaryField(default=bytes, blank=True)
-    background_data = models.BinaryField(default=bytes, blank=True)
+    logo_data = models.BinaryField(default=bytes, db_default=b"", blank=True)
+    background_data = models.BinaryField(default=bytes, db_default=b"", blank=True)
 
     @property
     def image_bytes(self):
@@ -304,7 +308,7 @@ class UploadPart(models.Model):
     size = models.PositiveBigIntegerField()
     offset = models.PositiveBigIntegerField(default=0)
     fingerprint = models.CharField(max_length=64)
-    position = models.PositiveSmallIntegerField(default=0)
+    position = models.PositiveSmallIntegerField(default=0, db_default=0)
 
     class Meta:
         ordering = ["position", "path"]

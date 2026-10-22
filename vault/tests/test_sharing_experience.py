@@ -10,12 +10,13 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, SimpleTestCase, TestCase
+from django.db import connection
 from django.utils import timezone
 
 from vault.brand_media import SIGNATURE, canonical_png, chunk, contrast_color
 from vault.file_tree import file_tree
 from vault.forms import AccountForm, LinkForm
-from vault.models import Branding, Collection, ShareLink
+from vault.models import Branding, Collection, ShareLink, User
 from vault.security import capability
 from vault.storage import add_files, download_bundle
 from .test_security import IsolatedFiles
@@ -338,6 +339,19 @@ class BrandingAccessTests(IsolatedFiles, TestCase):
         other = self.account("other@example.com")
         self.client.force_login(other)
         self.assertEqual(self.client.get("/branding/media/logo/").status_code, 404)
+
+    def test_previous_release_can_still_insert_branding_after_additive_migration(self):
+        owner = User.objects.create_user(
+            "rollback@example.com", "test-only-password", display_name="Rollback"
+        )
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "INSERT INTO vault_branding (user_id, name, tagline, theme, footer) VALUES (%s, %s, %s, %s, %s)",
+                [owner.pk, "Previous release", "", "forest", ""],
+            )
+        brand = Branding.objects.get(user=owner)
+        self.assertEqual(brand.accent_color, "")
+        self.assertEqual(brand.image_bytes, 0)
 
     def test_auth_csrf_request_size_and_image_size_limits(self):
         guest = Client(enforce_csrf_checks=True)

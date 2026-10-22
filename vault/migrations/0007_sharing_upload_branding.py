@@ -26,6 +26,8 @@ class Migration(migrations.Migration):
             model_name="branding",
             name="accent_color",
             field=models.CharField(
+                default="",
+                db_default="",
                 blank=True,
                 max_length=7,
                 validators=[
@@ -40,6 +42,8 @@ class Migration(migrations.Migration):
             model_name="branding",
             name="background_color",
             field=models.CharField(
+                default="",
+                db_default="",
                 blank=True,
                 max_length=7,
                 validators=[
@@ -53,16 +57,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="branding",
             name="background_data",
-            field=models.BinaryField(blank=True, default=bytes),
+            field=models.BinaryField(blank=True, default=bytes, db_default=b""),
         ),
         migrations.AddField(
             model_name="branding",
             name="logo_data",
-            field=models.BinaryField(blank=True, default=bytes),
+            field=models.BinaryField(blank=True, default=bytes, db_default=b""),
         ),
         migrations.AddField(
             model_name="uploadpart",
             name="position",
-            field=models.PositiveSmallIntegerField(default=0),
+            field=models.PositiveSmallIntegerField(default=0, db_default=0),
         ),
     ]
