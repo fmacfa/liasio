@@ -614,7 +614,7 @@ def activity(request):
             "\ufeff" + output.getvalue(), content_type="text/csv; charset=utf-8"
         )
         response["Content-Disposition"] = (
-            'attachment; filename="linkvault-activity.csv"'
+            'attachment; filename="liasio-activity.csv"'
         )
         return response
     page = Paginator(events, 30).get_page(request.GET.get("page"))

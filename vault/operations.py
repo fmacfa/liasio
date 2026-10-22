@@ -118,7 +118,7 @@ def monitor():
         if not alert.notified_at and settings.MONITOR_EMAIL and settings.EMAIL_HOST:
             try:
                 send_mail(
-                    _("[LinkVault] Intervention nécessaire"),
+                    _("[Liasio] Intervention nécessaire"),
                     message + "\n" + settings.APP_URL + "/operations/",
                     settings.DEFAULT_FROM_EMAIL,
                     [settings.MONITOR_EMAIL],

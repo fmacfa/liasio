@@ -73,9 +73,9 @@ Accounts take turns, regardless of their number of endpoints. At most one delive
 
 1. Store your API key as a **Header Auth** credential: header `Authorization`, value `Bearer …`.
 2. Use **HTTP Request** nodes with the methods and JSON bodies in the [reference](../../API.md). Keep each creation’s `Idempotency-Key` stable when retrying the same operation. Use the resumable chunk protocol for binaries; never send a file as base64 JSON. The supplied Python client is useful in a supervised external upload job.
-3. Add an n8n **Webhook** trigger using POST. Use its **production URL** and publish/activate the workflow before registering it in LinkVault. Test URLs only listen temporarily.
+3. Add an n8n **Webhook** trigger using POST. Use its **production URL** and publish/activate the workflow before registering it in Liasio. Test URLs only listen temporarily.
 4. Verify the HMAC against the original raw body and check timestamp/deduplication **before side effects**. If your workflow cannot preserve the raw bytes, put a verifier in front of n8n using the supplied Python function. A secret-looking URL is not signature verification.
-5. Send a LinkVault test, confirm the received `webhook.test`, then subscribe to your real events. For workflows that create links, avoid looping on their own `link.created` events.
+5. Send a Liasio test, confirm the received `webhook.test`, then subscribe to your real events. For workflows that create links, avoid looping on their own `link.created` events.
 
 ## Pause, rotate or remove
 

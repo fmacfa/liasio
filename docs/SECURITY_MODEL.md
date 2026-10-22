@@ -1,4 +1,4 @@
-# Modèle de sécurité de LinkVault 0.3
+# Modèle de sécurité de Liasio 0.3
 
 ## Frontières de confiance
 

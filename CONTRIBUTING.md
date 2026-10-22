@@ -1,4 +1,4 @@
-# Contribuer à LinkVault
+# Contribuer à Liasio
 
 Merci de contribuer avec des problèmes reproductibles et des modifications ciblées. Pour une vulnérabilité, utilisez le canal privé décrit dans [SECURITY.md](SECURITY.md).
 

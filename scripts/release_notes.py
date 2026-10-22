@@ -21,11 +21,11 @@ notes = (
     .split(f"## {version}", 1)[1]
     .split("\n## ", 1)[0]
 )
-print(f"## LinkVault {version}\n" + notes.split("\n", 1)[1])
+print(f"## Liasio {version}\n" + notes.split("\n", 1)[1])
 print(f"""
 ### Container installation
 
-Registry: `ghcr.io/fmacfa/linkvault:{version}` (Linux amd64 and arm64).
+Registry: `ghcr.io/fmacfa/liasio:{version}` (Linux amd64 and arm64).
 
 Portable images are attached below. Verify `SHA256SUMS`, select your architecture, then:
 
@@ -40,8 +40,8 @@ GitHub artifact attestations accompany the archives. Obtain the expected tag and
 
 ```sh
 gh attestation verify linkvault-{version}-linux-amd64.tar.gz \\
-  --repo fmacfa/linkvault \\
-  --signer-workflow fmacfa/linkvault/.github/workflows/release.yml \\
+  --repo fmacfa/liasio \\
+  --signer-workflow fmacfa/liasio/.github/workflows/release.yml \\
   --source-ref refs/tags/v{version} \\
   --source-digest {source} \\
   --signer-digest {source}

@@ -227,7 +227,7 @@ def webhook_detail(request, pk):
             if not user.is_active:
                 raise Http404
             if action == "test" and hook.active:
-                enqueue(user.pk, "webhook.test", {"message": "LinkVault test"}, only=pk)
+                enqueue(user.pk, "webhook.test", {"message": "Liasio test"}, only=pk)
                 messages.success(
                     request, _("Événement de test ajouté à la file d’attente.")
                 )

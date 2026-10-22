@@ -1,4 +1,4 @@
-# LinkVault API v1
+# Liasio API v1
 
 [Illustrated English guide](guide/en/automation.md) · [Guide français illustré](guide/fr/automation.md)
 
@@ -95,6 +95,6 @@ Managed through **Automations**, separately from API keys. See the [illustrated 
 }
 ```
 
-Collection/upload events contain only `collection_id`; link events also contain `link_id`. The test event contains `message: "LinkVault test"`. Verify HMAC-SHA256 over `timestamp + "." + exact raw body` using the signing secret bytes, reject timestamps outside ±300 seconds, and deduplicate `id` durably. [Receiver verifier](../examples/verify_webhook.py) · [Upload client](../examples/upload.py).
+Collection/upload events contain only `collection_id`; link events also contain `link_id`. The test event contains `message: "Liasio test"`. Verify HMAC-SHA256 over `timestamp + "." + exact raw body` using the signing secret bytes, reject timestamps outside ±300 seconds, and deduplicate `id` durably. [Receiver verifier](../examples/verify_webhook.py) · [Upload client](../examples/upload.py).
 
 Security rationale: [OWASP SSRF prevention](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html). Each attempt revalidates all DNS answers, pins a public address while verifying TLS for the original hostname, ignores environment proxies and never follows redirects. A 20-second deadline covers DNS, connection, TLS and response headers. No response body is read or retained. Protect database and encryption keys in backups.

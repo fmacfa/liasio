@@ -159,7 +159,7 @@ def send(delivery, hook):
                 body=body,
                 headers={
                     "Content-Type": "application/json",
-                    "User-Agent": "LinkVault-Webhooks/1",
+                    "User-Agent": "Liasio-Webhooks/1",
                     "X-LinkVault-Event": delivery.kind,
                     "X-LinkVault-Delivery": str(delivery.pk),
                     "X-LinkVault-Timestamp": timestamp,

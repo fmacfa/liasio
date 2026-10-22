@@ -5,7 +5,7 @@
         <aside class="sidebar">
             <a class="brand"
                href="{% url 'dashboard' %}"
-               aria-label="{% translate "LinkVault, accueil" %}">{% include "components/logo.html" %}</a>
+               aria-label="{% translate "Liasio, accueil" %}">{% include "components/logo.html" %}</a>
             <div class="workspace-label">
                 <span class="workspace-avatar">{{ user.display_name|slice:':1'|upper }}</span>
                 <div>
@@ -88,7 +88,7 @@
                 {% include "components/messages.html" %}
                 {% block content %}{% endblock %}
                 <footer class="app-footer">
-                    <span>{% translate "LinkVault · Open source, sous licence MIT." %}</span>
+                    <span>{% translate "Liasio · Open source, sous licence MIT." %}</span>
                     <span>{% translate "Le partage, en toute simplicité." %}</span>
                 </footer>
             </main>

@@ -73,9 +73,9 @@ Les comptes sont servis à tour de rôle, quel que soit leur nombre de webhooks.
 
 1. Enregistrez la clé API dans une credential **Header Auth** : en-tête `Authorization`, valeur `Bearer …`.
 2. Utilisez des nœuds **HTTP Request** avec les méthodes et JSON de la [référence](../../API.md). Gardez la même `Idempotency-Key` lors d’une nouvelle tentative de la même création. Pour les fichiers, utilisez les blocs du protocole reprenable, jamais du base64 dans le JSON. Le client Python fourni peut servir dans un processus d’import externe supervisé.
-3. Ajoutez un déclencheur n8n **Webhook** en POST. Utilisez son **URL de production** et publiez/activez le workflow avant de l’enregistrer dans LinkVault. Les URL de test n’écoutent que temporairement.
+3. Ajoutez un déclencheur n8n **Webhook** en POST. Utilisez son **URL de production** et publiez/activez le workflow avant de l’enregistrer dans Liasio. Les URL de test n’écoutent que temporairement.
 4. Vérifiez le HMAC sur le corps brut, l’horodatage et les doublons **avant les actions**. Si le workflow ne conserve pas les octets d’origine, placez un vérificateur devant n8n avec la fonction Python fournie. Une URL difficile à deviner ne remplace pas la signature.
-5. Envoyez un test LinkVault, vérifiez `webhook.test`, puis abonnez-vous aux événements réels. Évitez une boucle si votre workflow crée lui-même des liens et écoute `link.created`.
+5. Envoyez un test Liasio, vérifiez `webhook.test`, puis abonnez-vous aux événements réels. Évitez une boucle si votre workflow crée lui-même des liens et écoute `link.created`.
 
 ## Mettre en pause, renouveler ou supprimer
 

@@ -1,12 +1,12 @@
-# English translations for LinkVault. MIT license.
+# English translations for Liasio. MIT license.
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: LinkVault 0.4.0\n"
+"Project-Id-Version: Liasio 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-22 17:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: LinkVault contributors\n"
+"Last-Translator: Liasio contributors\n"
 "Language-Team: English\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
@@ -15,16 +15,16 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: templates/account/invitation.html:3
-msgid "Votre invitation · LinkVault"
-msgstr "Your invitation · LinkVault"
+msgid "Votre invitation · Liasio"
+msgstr "Your invitation · Liasio"
 
 #: templates/account/invitation.html:5
 msgid "UNE PLACE VOUS ATTEND"
 msgstr "THERE’S A PLACE FOR YOU"
 
 #: templates/account/invitation.html:6
-msgid "Rejoignez LinkVault."
-msgstr "Join LinkVault."
+msgid "Rejoignez Liasio."
+msgstr "Join Liasio."
 
 #: templates/account/invitation.html:8
 msgid "Invitation pour"
@@ -88,12 +88,12 @@ msgid "Guide d’utilisation"
 msgstr "User guide"
 
 #: templates/account/layout.html:37
-msgid "LinkVault — Vos fichiers ont trouvé leur place."
-msgstr "LinkVault — A place for your files."
+msgid "Liasio — Vos fichiers ont trouvé leur place."
+msgstr "Liasio — A place for your files."
 
 #: templates/account/login.html:3
-msgid "Connexion · LinkVault"
-msgstr "Sign in · LinkVault"
+msgid "Connexion · Liasio"
+msgstr "Sign in · Liasio"
 
 #: templates/account/login.html:5
 msgid "HEUREUX DE VOUS RETROUVER"
@@ -122,8 +122,8 @@ msgid ""
 msgstr "Joining a team? Use the invitation link sent by your administrator."
 
 #: templates/account/mfa_challenge.html:3
-msgid "Vérification · LinkVault"
-msgstr "Verification · LinkVault"
+msgid "Vérification · Liasio"
+msgstr "Verification · Liasio"
 
 #: templates/account/mfa_challenge.html:5
 msgid "UNE SECONDE VÉRIFICATION"
@@ -287,8 +287,8 @@ msgid "Demander un nouveau lien"
 msgstr "Request a new link"
 
 #: templates/account/reset_email.txt:2
-msgid "Vous avez demandé la réinitialisation de votre mot de passe LinkVault."
-msgstr "You requested a password reset for your LinkVault account."
+msgid "Vous avez demandé la réinitialisation de votre mot de passe Liasio."
+msgstr "You requested a password reset for your Liasio account."
 
 #: templates/account/reset_email.txt:4
 msgid "Ouvrez ce lien personnel, valable une heure :"
@@ -319,8 +319,8 @@ msgid "Retour à la connexion"
 msgstr "Back to sign-in"
 
 #: templates/account/reset_subject.txt:1
-msgid "Réinitialiser votre mot de passe LinkVault"
-msgstr "Reset your LinkVault password"
+msgid "Réinitialiser votre mot de passe Liasio"
+msgstr "Reset your Liasio password"
 
 #: templates/account/settings.html:3 templates/account/settings.html:9
 #: templates/layout.html:45
@@ -361,8 +361,8 @@ msgid "Mettre à jour le mot de passe"
 msgstr "Update password"
 
 #: templates/account/setup.html:4
-msgid "Première installation · LinkVault"
-msgstr "First-time setup · LinkVault"
+msgid "Première installation · Liasio"
+msgstr "First-time setup · Liasio"
 
 #: templates/account/setup.html:8
 msgid "Étapes de création du compte"
@@ -479,8 +479,8 @@ msgstr ""
 " entire file was received. Email previews may generate a page-open event."
 
 #: templates/base.html:10
-msgid "LinkVault · Votre espace de partage"
-msgstr "LinkVault · Your sharing workspace"
+msgid "Liasio · Votre espace de partage"
+msgstr "Liasio · Your sharing workspace"
 
 #: templates/base.html:20
 msgid "Aller au contenu"
@@ -547,8 +547,8 @@ msgid "Télécharger le dossier"
 msgstr "Download collection"
 
 #: templates/branding.html:48
-msgid "Partagé avec LinkVault."
-msgstr "Shared with LinkVault."
+msgid "Partagé avec Liasio."
+msgstr "Shared with Liasio."
 
 #: templates/branding.html:50
 msgid ""
@@ -804,10 +804,6 @@ msgstr "Choose %(name)s"
 msgid "Langue"
 msgstr "Language"
 
-#: templates/components/logo.html:14
-msgid "linkvault"
-msgstr "linkvault"
-
 #: templates/components/pagination.html:3
 msgid "Pagination"
 msgstr "Pagination"
@@ -1039,8 +1035,8 @@ msgid "Vous gardez le contrôle"
 msgstr "You stay in control"
 
 #: templates/error.html:12
-msgid "Mon espace LinkVault"
-msgstr "My LinkVault workspace"
+msgid "Mon espace Liasio"
+msgstr "My Liasio workspace"
 
 #: templates/help/guide.html:1
 msgid "Tous les guides"
@@ -1068,8 +1064,8 @@ msgid "Automatisations"
 msgstr "Automations"
 
 #: templates/integrations/index.html:3
-msgid "· LinkVault"
-msgstr "· LinkVault"
+msgid "· Liasio"
+msgstr "· Liasio"
 
 #: templates/integrations/index.html:6
 msgid "API & WEBHOOKS"
@@ -1302,8 +1298,8 @@ msgid "Supprimer le webhook et son historique"
 msgstr "Delete webhook and its history"
 
 #: templates/layout.html:8
-msgid "LinkVault, accueil"
-msgstr "LinkVault home"
+msgid "Liasio, accueil"
+msgstr "Liasio home"
 
 #: templates/layout.html:12 vault/models.py:80
 msgid "Mon espace"
@@ -1387,8 +1383,8 @@ msgid "v"
 msgstr "v"
 
 #: templates/layout.html:91
-msgid "LinkVault · Open source, sous licence MIT."
-msgstr "LinkVault · Open source, MIT licensed."
+msgid "Liasio · Open source, sous licence MIT."
+msgstr "Liasio · Open source, MIT licensed."
 
 #: templates/layout.html:92
 msgid "Le partage, en toute simplicité."
@@ -1744,8 +1740,8 @@ msgid "Mettre à jour"
 msgstr "Update"
 
 #: templates/share/page.html:5 templates/share/page.html:13
-msgid "LinkVault"
-msgstr "LinkVault"
+msgid "Liasio"
+msgstr "Liasio"
 
 #: templates/share/page.html:12
 msgid "L"
@@ -1861,13 +1857,9 @@ msgstr "Next →"
 msgid "Partagé avec"
 msgstr "Shared with"
 
-#: templates/share/page.html:106
-msgid "linkvault."
-msgstr "linkvault."
-
 #: templates/share/unlock.html:3
-msgid "Partage protégé · LinkVault"
-msgstr "Protected share · LinkVault"
+msgid "Partage protégé · Liasio"
+msgstr "Protected share · Liasio"
 
 #: templates/share/unlock.html:9
 msgid "Partage protégé"
@@ -2057,12 +2049,12 @@ msgid "Stockage du serveur"
 msgstr "Server storage"
 
 #: templates/storage.html:151
-msgid "Fichiers dans LinkVault"
-msgstr "Files in LinkVault"
+msgid "Fichiers dans Liasio"
+msgstr "Files in Liasio"
 
 #: templates/storage.html:155
-msgid "Total des fichiers LinkVault"
-msgstr "Total LinkVault files"
+msgid "Total des fichiers Liasio"
+msgstr "Total Liasio files"
 
 #: templates/storage.html:159
 msgid "Disponible sur le volume"
@@ -2076,10 +2068,10 @@ msgstr "Volume capacity"
 #, python-format
 msgid ""
 "%% du volume est occupé. Cette mesure inclut les autres données présentes "
-"sur le même disque ; elle peut différer des fichiers LinkVault."
+"sur le même disque ; elle peut différer des fichiers Liasio."
 msgstr ""
 "%% of the volume is used. This includes other data on the same disk; it may "
-"differ from LinkVault file usage."
+"differ from Liasio file usage."
 
 #: templates/storage.html:168
 msgid "Utilisation par compte"
@@ -2306,10 +2298,10 @@ msgstr "and all its files"
 
 #: templates/trash_confirm.html:2
 msgid ""
-"ne pourront plus être restaurés depuis LinkVault. Cette action libérera le "
+"ne pourront plus être restaurés depuis Liasio. Cette action libérera le "
 "quota correspondant."
 msgstr ""
-"cannot be restored from LinkVault afterwards. This action releases the "
+"cannot be restored from Liasio afterwards. This action releases the "
 "corresponding quota."
 
 #: templates/trash_confirm.html:2
@@ -2997,8 +2989,8 @@ msgstr ""
 "uploads)."
 
 #: vault/operations.py:121
-msgid "[LinkVault] Intervention nécessaire"
-msgstr "[LinkVault] Action required"
+msgid "[Liasio] Intervention nécessaire"
+msgstr "[Liasio] Action required"
 
 #: vault/operations.py:172
 msgid "Indiquez un quota valide, entre 0 et 1 048 576 Gio."

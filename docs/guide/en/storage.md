@@ -6,7 +6,7 @@
 
 Open **Storage** to see file count, used space, remaining quota and a searchable file inventory. Sort by largest, smallest, newest or name. Administrators also see host disk usage and usage by account.
 
-This is **disk storage**, not live RAM consumption. Your quota includes retained files and trash. Pending uploads reserve additional space. Server free disk space includes all applications and temporary ZIP archives, so it can differ from LinkVault’s file totals.
+This is **disk storage**, not live RAM consumption. Your quota includes retained files and trash. Pending uploads reserve additional space. Server free disk space includes all applications and temporary ZIP archives, so it can differ from Liasio’s file totals.
 
 ## Remove selected files
 
@@ -22,6 +22,6 @@ This is **disk storage**, not live RAM consumption. Your quota includes retained
 
 Open **Trash**. Entire deleted collections and individually deleted files are listed separately. **Restore** returns an item to your library, with its old links still revoked. A file inside a deleted collection is restored through that collection.
 
-To release quota immediately, choose **Delete permanently**, review the confirmation and confirm. This removes the retained originals and cannot be undone through LinkVault. Otherwise maintenance purges trash after the configured retention (30 days by default). Restoring a collection only restores files deleted with it; files deleted earlier remain in the trash.
+To release quota immediately, choose **Delete permanently**, review the confirmation and confirm. This removes the retained originals and cannot be undone through Liasio. Otherwise maintenance purges trash after the configured retention (30 days by default). Restoring a collection only restores files deleted with it; files deleted earlier remain in the trash.
 
 For a larger quota, ask an administrator to change it under [Operations](operations.md). Emptying trash cannot fix another application’s disk usage; server-wide shortages need server administration.

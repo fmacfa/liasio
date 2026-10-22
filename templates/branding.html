@@ -45,7 +45,10 @@
             <span class="button preview-button">
             {% include "components/icon.html" with name="download" %}{% translate "Télécharger le dossier" %}</span>
           </div>
-          <div class="preview-footer" data-preview-footer>{{ branding.footer|default:_('Partagé avec LinkVault.') }}</div>
+          <div class="preview-footer">
+            <p data-preview-footer>{{ branding.footer }}</p>
+            <span class="powered-by">{% translate "Partagé avec" %} {% include "components/logo.html" %}</span>
+          </div>
         </div>
         <p class="footnote">{% translate "Contenu d’exemple. Le titre, la présentation et les fichiers proviennent de chaque dossier." %}</p>
       </aside>

@@ -1,8 +1,8 @@
-# LinkVault user guide
+# Liasio user guide
 
 Version 0.4 · The same guides are available inside your instance under **User guide**. Screenshots are actual local application captures with fictional demonstration data, in the matching interface language. They show a local development environment; antivirus and operational services depend on deployment configuration. No real credentials are shown.
 
-![LinkVault guide](../../screenshots/user-guide/en/help.png)
+![Liasio guide](../../screenshots/user-guide/en/help.png)
 
 1. [Getting started](getting-started.md)
 2. [Collections](collections.md)

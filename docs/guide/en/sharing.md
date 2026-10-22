@@ -14,7 +14,7 @@ Open a collection containing files and choose **Create a link**.
 | Link password | Optional, no minimum, up to 128 characters. A longer passphrase is harder to guess. Send it through a separate channel. |
 | Image and PDF previews | Optional. The creation form enables these by default; the API defaults to off. |
 
-Choose **Create link**. In **My links**, copy the URL and send it to the recipient. Passwords protect both the introduction and file list. A recipient does not need a LinkVault account.
+Choose **Create link**. In **My links**, copy the URL and send it to the recipient. Passwords protect both the introduction and file list. A recipient does not need a Liasio account.
 
 ## See what the recipient sees
 

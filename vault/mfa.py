@@ -267,7 +267,7 @@ def qr(request):
     except (KeyError, InvalidToken):
         raise Http404 from None
     uri = pyotp.TOTP(secret).provisioning_uri(
-        request.user.email, issuer_name="LinkVault"
+        request.user.email, issuer_name="Liasio"
     )
     output = io.BytesIO()
     segno.make(uri, micro=False).save(output, kind="svg", scale=5)

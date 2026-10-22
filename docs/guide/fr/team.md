@@ -8,7 +8,7 @@ Seul un administrateur peut ouvrir **Membres**. Chaque membre possède ses fichi
 
 1. Dans **Membres**, saisissez l’e-mail sous **Inviter un membre**.
 2. Cliquez sur **Créer l’invitation**.
-3. Copiez le nouveau lien et transmettez-le à la personne par le canal de votre choix. LinkVault n’envoie pas automatiquement les invitations par e-mail.
+3. Copiez le nouveau lien et transmettez-le à la personne par le canal de votre choix. Liasio n’envoie pas automatiquement les invitations par e-mail.
 4. Le destinataire ouvre le lien, vérifie l’adresse affichée puis choisit son nom et son mot de passe. Les invités ne sont pas administrateurs.
 
 L’invitation expire après sept jours et s’accepte une seule fois. L’adresse e-mail est fixée. Vous ne pouvez pas inviter une adresse déjà associée à un compte. Pour annuler une invitation inutilisée, cliquez sur **Révoquer** ; pour remplacer une invitation expirée, créez-en une nouvelle.
