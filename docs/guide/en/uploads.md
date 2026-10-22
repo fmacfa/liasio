@@ -1,25 +1,32 @@
-# Upload files or a folder
+# Upload files and folders
 
-![Upload page and destination](../../screenshots/user-guide/en/upload.png)
+![Upload page with a mixed selection](../../screenshots/user-guide/en/upload.jpg)
 
-## Select the destination and files
+## Choose a destination and prepare your selection
 
-1. Open **Upload**, select an existing collection and choose **Use this collection**. Create a collection first if none exists.
-2. Choose **Choose files** for individual files, or **Choose a folder** for an entire directory tree. You can also drop individual files onto the upload area. Use the folder picker to preserve a folder’s structure.
-3. Check the selected paths, sizes and total, then choose **Upload files**. The browser may ask you to confirm sharing the selected folder with the site.
+1. Open **Upload**, choose an existing collection, then **Use this collection**. Create one first if the list is empty.
+2. **Drop files and folders together** into the same area. Nested folders are read automatically. You can also use **Add files** or the smaller **Add a folder** action: the browser’s native picker distinguishes these two choices.
+3. Add more items whenever needed; they accumulate in the existing selection. An already selected path is kept without replacement. **×** removes one file from the selection; **Clear selection** starts over without deleting stored files.
+4. Review the directory tree, sizes and total, then choose **Upload files**. Your browser may ask you to confirm access to the selected folder.
 
-By default, each file may be up to 1 GiB, each collection up to 5 GiB, with at most 100 files. The administrator can change size limits; the page shows your instance’s values. Your personal quota, trash usage and pending reservations also apply. Hidden paths, traversal, duplicate names and disallowed extensions are rejected.
+Paths are retained in the owner’s view, recipient page and ZIP. Folders are grouped in first-appearance order; later imports follow earlier ones. Hidden files (including `.DS_Store`) and empty folders are excluded. If your browser cannot drop folders, use **Add a folder**.
 
-## Read progress and confirmation
+Defaults: 1 GiB per file, 5 GiB per collection and 100 files, including trash and pending uploads. Your instance limits appear on the page. Unsafe relative paths, file/folder collisions and forbidden extensions are rejected. Paths allow at most 20 components.
 
-![An upload in progress](../../screenshots/user-guide/en/upload-progress.png)
+## Follow real transfer progress
 
-The bar measures bytes accepted by the server in checksummed 4 MiB chunks. **100% does not yet mean finished**: antivirus scanning, quota checks and final storage follow. Success returns you to the collection with its files listed. Production rejects files when malware scanning fails or is unavailable.
+![An upload in progress](../../screenshots/user-guide/en/upload-progress.jpg)
+
+The meter follows bytes actually transmitted by your browser, including progress inside the current 4 MiB block. Details distinguish **sent** bytes from bytes **confirmed by the server** after integrity checks. Speed and remaining time are estimates based on your connection; no timer simulates progress.
+
+**100% completes the transfer, not the entire import.** Antivirus scanning and saving follow as a separate phase. Keep the page open, especially for large folders. After success, the collection shows your files. Production imports fail closed if antivirus rejects a file or is unavailable.
 
 ## Pause, resume or cancel
 
-Choose **Pause**; the current chunk finishes first. To resume after an interruption or reload, select the exact same files and click **Upload files**. Already received chunks are reused for up to 24 hours. The pending-upload area shows received progress and **Cancel this upload**. Canceling releases its reserved quota; expired uploads are removed by maintenance.
+**Pause** interrupts the current block request. Confirmed blocks are retained. Choose **Upload files** to resume. After reloading or losing connectivity, reselect the same files and folders: the server retains their offsets for 24 hours. An unconfirmed block may be retransmitted; it is not counted twice.
 
-A user can have five pending uploads. Revoke active links before adding files. If quota or disk space runs out, free space through [Storage](storage.md) or ask the administrator. For an antivirus refusal, inspect the original file; do not disable protection to force it through.
+Pending uploads offer **Cancel this upload**, which releases reserved quota. Maintenance removes expired sessions. Each account can have five pending sessions. Revoke active links before adding files to an already shared collection.
 
-Without JavaScript, a basic individual-file form is available, with a 500 MiB request limit. Progress, folder selection and resume require JavaScript. For automated transfers, use the [API](automation.md).
+If quota or disk space runs out, use [Storage](storage.md) or contact the administrator. Investigate an antivirus rejection without disabling protection.
+
+Without JavaScript, a basic individual-file form remains available, limited to 500 MiB per request. Folders, progress and resuming require JavaScript. For automation, see the [API guide](automation.md).

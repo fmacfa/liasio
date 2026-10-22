@@ -1,6 +1,5 @@
 """Versioned automation API. File ingestion delegates to the browser's pipeline."""
 
-import json
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
 from django.db import transaction
@@ -128,7 +127,14 @@ def create_collection(request):
 def create_link(request, pk):
     data = json_body(request)
     prepare_receipt(request)
-    text_fields(data, ["label", "password", "expires_at"])
+    text_fields(data, ["label", "password", "expires_at", "expiry_mode"])
+    if (
+        data.get("expires_in_days") is not None
+        and type(data["expires_in_days"]) is not int
+    ):
+        raise ValidationError(_("expires_in_days doit être un entier."))
+    if data.get("expires_at") and data.get("expires_in_days") is not None:
+        raise ValidationError(_("Choisissez une date ou une durée, pas les deux."))
     if "allow_previews" in data and type(data["allow_previews"]) is not bool:
         raise ValidationError(_("allow_previews doit être un booléen."))
     if data.get("max_downloads") is not None and type(data["max_downloads"]) is not int:

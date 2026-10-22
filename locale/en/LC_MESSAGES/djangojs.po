@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LinkVault 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-22 09:51+0200\n"
+"POT-Creation-Date: 2026-10-22 17:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: LinkVault contributors\n"
 "Language-Team: English\n"
@@ -26,18 +26,32 @@ msgstr "Link to copy"
 msgid "Copiez le lien sélectionné avec votre clavier."
 msgstr "Copy the selected link with your keyboard."
 
-#: static/app.js:42
-msgid "Mon espace"
-msgstr "My workspace"
-
-#: static/app.js:63
+#: static/app.js:60
 msgid ""
 "%(value1)s fichier(s) sélectionné(s) · %(value2)s octets vers la corbeille"
 msgstr "%(value1)s file(s) selected · %(value2)s bytes to move to the trash"
 
-#: static/app.js:63
+#: static/app.js:60
 msgid "Sélectionnez les fichiers à supprimer."
 msgstr "Select files to delete."
+
+#: static/branding.js:14
+msgid "Mon espace"
+msgstr "My workspace"
+
+#: static/branding.js:39
+msgid "Optimisation de l’image…"
+msgstr "Optimizing image…"
+
+#: static/branding.js:60
+msgid "Image prête. Enregistrez pour appliquer les changements."
+msgstr "Image ready. Save to apply your changes."
+
+#: static/branding.js:64
+msgid ""
+"Image non prise en charge. Choisissez un PNG, JPEG ou WebP de moins de 10 "
+"Mio."
+msgstr "Unsupported image. Choose a PNG, JPEG or WebP smaller than 10 MiB."
 
 #: static/previews.js:47
 msgid "Préparation de l’aperçu…"
@@ -63,19 +77,43 @@ msgstr ""
 "This preview is unavailable. Close this window to find the collection "
 "download."
 
-#: static/upload.js:27
-msgid "Envoi refusé (%(value1)s). Reconnectez-vous si votre session a expiré."
-msgstr "Upload rejected (%(value1)s). Sign in again if your session expired."
+#: static/upload.js:19
+msgid "octets"
+msgstr "bytes"
 
-#: static/upload.js:28
+#: static/upload.js:20
+#| msgid "Mio"
+msgid "Kio"
+msgstr "KiB"
+
+#: static/upload.js:20
+msgid "Mio"
+msgstr "MiB"
+
+#: static/upload.js:20
+#| msgid "Mio"
+msgid "Gio"
+msgstr "GiB"
+
+#: static/upload.js:28 static/upload.js:43
+msgid "Envoi refusé. Reconnectez-vous si votre session a expiré."
+msgstr "Upload refused. Sign in again if your session has expired."
+
+#: static/upload.js:29
 msgid "Envoi refusé."
 msgstr "Upload rejected."
 
-#: static/upload.js:33
+#: static/upload.js:46 static/upload.js:148 static/upload.js:167
+msgid ""
+"Envoi en pause. Cliquez sur Importer pour reprendre pendant les prochaines "
+"24 h."
+msgstr "Upload paused. Click Upload to resume within the next 24 hours."
+
+#: static/upload.js:51
 msgid "Impossible de retrouver les envois. Reconnectez-vous."
 msgstr "Could not retrieve uploads. Sign in again."
 
-#: static/upload.js:39
+#: static/upload.js:57
 msgid ""
 "%(value1)s fichier(s) en attente · %(value2)s % reçus. Resélectionnez les "
 "mêmes fichiers puis cliquez sur Importer pour reprendre."
@@ -83,55 +121,77 @@ msgstr ""
 "%(value1)s pending file(s) · %(value2)s % received. Select the same files "
 "and click Upload to resume."
 
-#: static/upload.js:40
+#: static/upload.js:58
 msgid "Annuler cet envoi"
 msgstr "Cancel this upload"
 
-#: static/upload.js:49
-msgid "%(count)s fichier(s) · %(size)s Mio"
-msgstr "%(count)s file(s) · %(size)s MiB"
+#: static/upload.js:70
+#| msgid "%(count)s fichier(s) · %(size)s Mio"
+msgid "%(count)s fichier(s) · %(size)s"
+msgstr "%(count)s file(s) · %(size)s"
 
-#: static/upload.js:52
-msgid "%(size)s octets"
-msgstr "%(size)s bytes"
+#: static/upload.js:94
+msgid "Retirer %(name)s"
+msgstr "Remove %(name)s"
 
-#: static/upload.js:55
-msgid "Sélectionnez au maximum 100 fichiers."
-msgstr "Select at most 100 files."
+#: static/upload.js:105
+msgid "Chemins déjà sélectionnés conservés, sans remplacement."
+msgstr "Already selected paths were kept without replacement."
 
-#: static/upload.js:60
-msgid "Pause après le bloc en cours…"
-msgstr "Pausing after the current chunk…"
+#: static/upload.js:107
+msgid "Maximum : 100 fichiers et 20 niveaux de dossiers par sélection."
+msgstr "Maximum: 100 files and 20 folder levels per selection."
 
-#: static/upload.js:65
-msgid "Utilisez « Choisir un dossier » pour conserver l’arborescence."
-msgstr "Use “Choose a folder” to preserve the directory structure."
+#: static/upload.js:107
+msgid "Impossible de lire cette sélection. Utilisez les boutons d’ajout."
+msgstr "Cannot read this selection. Use the add buttons."
 
-#: static/upload.js:71
+#: static/upload.js:127
+msgid "Lecture des dossiers…"
+msgstr "Reading folders…"
+
+#: static/upload.js:131
+msgid "Les dossiers vides et les fichiers cachés ne sont pas importés."
+msgstr "Empty folders and hidden files are not imported."
+
+#: static/upload.js:139
 msgid "Préparation de l’envoi…"
 msgstr "Preparing upload…"
 
-#: static/upload.js:91
-#| msgid ""
-#| "Envoi en pause avant vérification. Cliquez sur Importer pour terminer."
+#: static/upload.js:156
 msgid ""
-"Envoi en pause. Cliquez sur Importer pour reprendre pendant les prochaines "
-"24 h."
-msgstr "Upload paused. Click Upload to resume within the next 24 hours."
+"%(sent)s / %(total)s Mio transmis · %(confirmed)s Mio confirmés par le "
+"serveur"
+msgstr ""
+"%(sent)s / %(total)s MiB sent · %(confirmed)s MiB confirmed by the server"
 
-#: static/upload.js:92
+#: static/upload.js:159
+msgid "%(speed)s Mio/s · environ %(seconds)s s restantes"
+msgstr "%(speed)s MiB/s · about %(seconds)s s remaining"
+
+#: static/upload.js:168
 msgid "Envoi de %(value1)s"
 msgstr "Uploading %(value1)s"
 
-#: static/upload.js:100
+#: static/upload.js:174
+msgid "Position du transfert invalide. Rechargez la page pour reprendre."
+msgstr "Invalid upload offset. Reload the page to resume."
+
+#: static/upload.js:178
 msgid "Envoi en pause avant vérification. Cliquez sur Importer pour terminer."
 msgstr "Upload paused before verification. Click Upload to finish."
 
-#: static/upload.js:101
-msgid "Analyse antivirus et enregistrement…"
-msgstr "Scanning for malware and saving…"
+#: static/upload.js:179
+msgid "Transfert terminé · analyse antivirus et enregistrement…"
+msgstr "Upload complete · scanning and saving…"
 
-#: static/upload.js:106
+#: static/upload.js:180
+msgid ""
+"Gardez cette page ouverte. La vérification peut prendre du temps pour un "
+"dossier volumineux."
+msgstr "Keep this page open. Checking a large folder may take some time."
+
+#: static/upload.js:186
 msgid ""
 "Connexion interrompue. Vos blocs reçus sont conservés : cliquez sur Importer"
 " pour reprendre."
@@ -139,6 +199,6 @@ msgstr ""
 "Connection interrupted. Received chunks are retained: click Upload to "
 "resume."
 
-#: static/upload.js:107
+#: static/upload.js:187
 msgid "En attente"
 msgstr "Pending"

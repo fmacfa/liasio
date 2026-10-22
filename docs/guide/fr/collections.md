@@ -15,7 +15,7 @@ Un dossier regroupe des fichiers, une présentation destinée au destinataire et
 
 Dans **Mes dossiers**, recherchez un titre puis ouvrez le dossier. Sa fiche présente les textes, les chemins, les tailles, le statut antivirus et les liens existants. **Modifier** permet de changer la présentation. Les nouveaux textes sont visibles sur les liens existants.
 
-![Détail d’un dossier et actions](../../screenshots/user-guide/fr/collection-detail.png)
+![Détail d’un dossier et actions](../../screenshots/user-guide/fr/collection-detail.jpg)
 
 Pour modifier les fichiers, révoquez d’abord tous les liens actifs : un dossier déjà partagé doit garder un contenu cohérent. Un dossier peut contenir jusqu’à 100 fichiers, y compris ceux encore dans la corbeille ; les limites de taille dépendent du serveur.
 
@@ -26,3 +26,7 @@ Cliquez sur **Supprimer ce dossier**, vérifiez la confirmation puis placez-le d
 ## Créer un autre lien
 
 Une fois les fichiers prêts, choisissez **Créer un lien**. Vous pouvez créer plusieurs liens avec des noms, mots de passe, expirations et limites différents sans dupliquer les fichiers. Voir [Partage](sharing.md).
+
+## Arborescence des fichiers
+
+Les dossiers importés sont dépliables. Leur nom, le nombre de fichiers et leur taille sont affichés ; les fichiers individuels restent au niveau où ils ont été ajoutés. Le même chemin est conservé dans le ZIP et sur la page destinataire. Les dossiers vides ne sont pas stockés.

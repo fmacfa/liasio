@@ -9,19 +9,20 @@
     {% csrf_token %}
     <span class="upload-icon">{% include "components/icon.html" with name="upload" %}</span>
     <h3>{% translate "Faites de la place à vos fichiers." %}</h3>
-    <p>{% translate "Glissez vos fichiers ici, ou sélectionnez-les." %}</p>
+    <p>{% translate "Déposez ensemble vos fichiers et dossiers ici. Ajoutez-en autant de fois que nécessaire." %}</p>
     <div class="upload-actions">
         <label class="button secondary file-picker">
-            {% translate "Choisir des fichiers" %}<input type="file" name="files" multiple data-file-input>
+            {% translate "Ajouter des fichiers" %}<input type="file" name="files" multiple data-file-input>
         </label>
-        <label class="button secondary file-picker">
-            {% translate "Choisir un dossier" %}<input type="file" webkitdirectory multiple data-folder-input>
+        <label class="text-link file-picker">
+            {% translate "Ajouter un dossier" %}<input type="file" webkitdirectory multiple data-folder-input>
         </label>
     </div>
     <input type="hidden" name="paths" value="">
     <div class="upload-selection" aria-live="polite"></div>
-    <ul class="selected-files" aria-label="{% translate "Fichiers sélectionnés" %}">
+    <ul class="selected-files file-tree" aria-label="{% translate "Fichiers sélectionnés" %}">
     </ul>
+    <button type="button" class="text-link" data-clear-upload hidden>{% translate "Vider la sélection" %}</button>
     <div class="progress-shell" hidden>
         <div class="spread">
             <span data-upload-phase>{% translate "Envoi des fichiers" %}</span>
@@ -33,6 +34,7 @@
                   aria-label="{% translate "Progression de l’envoi" %}">
         </progress>
     </div>
+    <p class="upload-metrics" data-upload-metrics aria-live="off"></p>
     <div data-pending-uploads class="notice" hidden></div>
     <button type="button" class="button secondary" data-pause-upload hidden>{% translate "Mettre en pause" %}</button>
     <button class="button upload-submit"

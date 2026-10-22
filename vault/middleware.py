@@ -29,6 +29,8 @@ class RequestBoundaryMiddleware:
             if request.path.endswith("/upload/")
             else 1024 * 1024
         )
+        if request.path == "/branding/":
+            ceiling = 3 * 1024 * 1024
         if request.path.endswith("/chunk/"):
             ceiling = settings.UPLOAD_CHUNK_BYTES
         if length < 0:
@@ -62,6 +64,23 @@ class RequestBoundaryMiddleware:
         return response
 
     def process_view(self, request, view_func, view_args, view_kwargs):
+        if request.path == "/branding/" and request.method == "POST":
+            if not request.user.is_authenticated:
+                return HttpResponse(_("Authentification requise."), status=403)
+            from .capacity import CapacityUnavailable, reserve_temporary
+            from .security import limited
+
+            if limited(request, "branding", 30, 3600):
+                return HttpResponse(
+                    _("Trop d’envois. Réessayez plus tard."), status=429
+                )
+            request.upload_byte_budget = 2560 * 1024
+            try:
+                request.upload_capacity_lease = reserve_temporary(
+                    6 * 1024 * 1024, owner_id=request.user.pk, kind="branding"
+                )
+            except CapacityUnavailable as exc:
+                return HttpResponse(" ".join(exc.messages), status=503)
         if request.path.endswith("/upload/") and request.method == "POST":
             # Runs before CsrfViewMiddleware parses multipart data. Authentication
             # middleware has already populated request.user in its request phase.

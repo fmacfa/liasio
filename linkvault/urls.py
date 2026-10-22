@@ -10,6 +10,7 @@ from vault import (
     api,
     integrations,
     help,
+    brand_media,
 )
 
 urlpatterns = [
@@ -93,6 +94,8 @@ urlpatterns = [
     path("links/<uuid:pk>/previews/", previews.toggle, name="link_previews"),
     path("activity/", views.activity, name="activity"),
     path("branding/", views.branding, name="branding"),
+    path("branding/media/<str:kind>/", brand_media.own, name="brand_media"),
+    path("s/<str:token>/brand/<str:kind>/", brand_media.shared, name="share_brand_media"),
     path("trash/", trash.index, name="trash"),
     path("trash/<str:kind>/<uuid:pk>/", trash.action, name="trash_action"),
     path("storage/", views.storage, name="storage"),

@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
-{% load i18n %}
+{% load i18n static %}
+{% block scripts %}<link rel="stylesheet" href="{% url 'brand_media' 'style' %}"><script src="{% static 'branding.js' %}" defer></script>{% endblock %}
 {% block breadcrumb %}{% translate "Page de partage" %}{% endblock %}
 {% block content %}
   <div class="page-heading">
@@ -12,17 +13,21 @@
     </div>
   </div>
   <div class="editor-grid branding-editor">
-    <form class="panel form-panel" method="post" data-branding-form>
+    <form class="panel form-panel" method="post" enctype="multipart/form-data" data-branding-form>
       {% csrf_token %}
       {% include "components/form.html" %}
+      <noscript><p class="footnote">{% translate "Sans JavaScript : PNG RVB uniquement. Logo : 512 × 512 pixels et 512 Kio maximum. Fond : 1 600 × 1 600 pixels et 2 Mio maximum." %}</p></noscript>
+      <p data-brand-status role="status"></p>
       <button class="button">{% translate "Enregistrer les changements" %} {% include "components/icon.html" with name="check" %}</button>
     </form>
     <aside class="preview-wrap">
       <span class="preview-label">
         <span class="live-dot"></span>{% translate "APERÇU DE VOTRE PAGE" %}</span>
-        <div class="share-preview theme-{{ branding.theme }}" data-brand-preview>
+        <div class="share-preview branded-surface theme-{{ branding.theme }}" data-brand-preview>
+          <div class="brand-backdrop" aria-hidden="true"></div>
           <div class="preview-top">
-            <span class="preview-monogram" data-preview-monogram>{{ branding.name|slice:':1'|upper }}</span>
+            <img class="brand-logo" data-preview-logo {% if branding.logo_data %}src="{% url 'brand_media' 'logo' %}"{% else %}hidden{% endif %} alt="">
+            <span {% if branding.logo_data %}hidden{% endif %} class="preview-monogram" data-preview-monogram>{{ branding.name|slice:':1'|upper }}</span>
             <strong data-preview-name>{{ branding.name }}</strong>
           </div>
           <p class="preview-tagline"

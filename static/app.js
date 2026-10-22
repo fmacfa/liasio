@@ -35,20 +35,17 @@ document.querySelectorAll("form[data-confirm]").forEach((form) => {
   });
 });
 
-const brandForm = document.querySelector("[data-branding-form]");
-if (brandForm) {
-  const preview = document.querySelector("[data-brand-preview]");
+const linkForm = document.querySelector("[data-link-form]");
+if (linkForm) {
+  const mode = linkForm.elements.expiry_mode;
   const update = () => {
-    const name = brandForm.elements.name.value || gettext("Mon espace");
-    preview.querySelector("[data-preview-name]").textContent = name;
-    preview.querySelector("[data-preview-monogram]").textContent = name.slice(0, 1).toUpperCase();
-    preview.querySelector("[data-preview-tagline]").textContent = brandForm.elements.tagline.value;
-    preview.querySelector("[data-preview-footer]").textContent = brandForm.elements.footer.value;
-    const theme = brandForm.elements.theme.value;
-    if (["forest", "ocean", "plum", "ink"].includes(theme)) preview.className = `share-preview theme-${theme}`;
+    for (const [name, value] of [["expires_at", "date"], ["expires_in_days", "days"]]) {
+      const input = linkForm.elements[name], active = mode.value === value;
+      input.closest(".field").hidden = !active;
+      input.disabled = !active; input.required = active;
+    }
   };
-  brandForm.addEventListener("input", update);
-  brandForm.addEventListener("change", update);
+  mode.addEventListener("change", update); update();
 }
 
 const storageForm = document.querySelector("[data-storage-form]");

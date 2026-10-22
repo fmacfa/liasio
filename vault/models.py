@@ -4,7 +4,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from django.db import models
 from django.db.models.functions import Lower
 from django.utils import timezone
@@ -81,6 +81,35 @@ class Branding(models.Model):
     tagline = models.CharField(max_length=180, blank=True)
     theme = models.CharField(max_length=10, choices=THEMES, default="forest")
     footer = models.CharField(max_length=240, blank=True)
+    accent_color = models.CharField(
+        default="",
+        db_default="",
+        max_length=7,
+        blank=True,
+        validators=[
+            RegexValidator(
+                r"\A#[0-9a-fA-F]{6}\Z", _("Utilisez une couleur au format #123abc.")
+            )
+        ],
+    )
+    background_color = models.CharField(
+        default="",
+        db_default="",
+        max_length=7,
+        blank=True,
+        validators=[
+            RegexValidator(
+                r"\A#[0-9a-fA-F]{6}\Z", _("Utilisez une couleur au format #123abc.")
+            )
+        ],
+    )
+    # Small, canonical PNGs live in the backed-up database, never at a public URL.
+    logo_data = models.BinaryField(default=bytes, db_default=b"", blank=True)
+    background_data = models.BinaryField(default=bytes, db_default=b"", blank=True)
+
+    @property
+    def image_bytes(self):
+        return len(self.logo_data) + len(self.background_data)
 
 
 class LiveManager(models.Manager):
@@ -128,7 +157,7 @@ class Asset(models.Model):
     all_objects = models.Manager()
 
     class Meta:
-        ordering = ["path"]
+        ordering = ["created_at", "pk"]
         base_manager_name = "all_objects"
         default_manager_name = "objects"
         constraints = [
@@ -279,9 +308,10 @@ class UploadPart(models.Model):
     size = models.PositiveBigIntegerField()
     offset = models.PositiveBigIntegerField(default=0)
     fingerprint = models.CharField(max_length=64)
+    position = models.PositiveSmallIntegerField(default=0, db_default=0)
 
     class Meta:
-        ordering = ["path"]
+        ordering = ["position", "path"]
 
 
 class ServiceState(models.Model):

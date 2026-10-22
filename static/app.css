@@ -2852,3 +2852,55 @@ summary { cursor: pointer; font-weight: 600; padding: 12px 0; }
   .setup-form .eyebrow { display: none; }
   .setup-progress { margin-bottom: 12px; }
 }
+
+/* Mixed selection and the same directory structure for sender and recipient. */
+.file-tree { list-style: none; padding: 0; margin: 0; min-width: 0; text-align: left; }
+.file-tree > li { display: block; padding: 0; border: 0; min-width: 0; }
+.file-tree .file-tree { border-left: 1px solid #dce5d8; margin-left: 9px; padding-left: 16px; }
+.file-folder > summary, .selected-files summary { display: flex; align-items: center; gap: 9px; padding: 14px 0; cursor: pointer; overflow-wrap: anywhere; }
+.file-folder > summary::before, .selected-files summary::before { content: "›"; font-size: 18px; }
+.file-folder[open] > summary::before, .selected-files details[open] > summary::before { transform: rotate(90deg); }
+.file-folder > summary strong { flex: 1; min-width: 0; }
+.file-folder > summary small { color: var(--muted); font-size: 11px; }
+.file-tree .file-row { gap: 12px; }
+.file-tree .file-info strong { overflow-wrap: anywhere; }
+.selected-files { max-height: 340px; overflow: auto; margin: 16px 0; }
+.selected-files .selection-file { display: flex; gap: 10px; align-items: center; padding: 7px 0; }
+.selection-file > span { flex: 1; overflow-wrap: anywhere; min-width: 0; }
+.selection-file > small { flex-shrink: 0; }
+.upload-metrics { overflow-wrap: anywhere; font-size: 12px; color: var(--muted); line-height: 1.7; }
+.upload-actions .text-link { position: relative; overflow: hidden; cursor: pointer; }
+.gallery-details { margin-top: 18px; }
+.gallery-details > summary { cursor: pointer; padding: 12px 0; color: var(--accent); font-weight: 600; }
+.branded-surface { position: relative; isolation: isolate; background-color: var(--brand-background, #f6f8f1); }
+.brand-backdrop { position: absolute; z-index: -1; inset: 0; pointer-events: none; background-image: linear-gradient(#ffffffba, #ffffffed), var(--brand-image, none); background-position: center; background-size: cover; }
+.branded-surface .brand-logo { width: 44px; height: 44px; object-fit: contain; flex-shrink: 0; }
+.branded-surface .button:not(.secondary), .branded-surface .preview-monogram { background-color: var(--accent); border-color: var(--accent); color: var(--accent-contrast, #fff); }
+.branded-surface .preview-tagline, .public-tagline { color: #526451; }
+.branded-surface .preview-main > p { color: #526451; }
+.branded-surface .preview-footer { color: #43533b; }
+.branded-surface .preview-main { background: #ffffffed; margin: 20px 16px; border-radius: 12px; }
+.branding-editor .preview-wrap { position: sticky; top: 24px; align-self: start; }
+.branding-editor input[type="file"] { width: 100%; font-size: 12px; }
+@media (max-width: 600px) {
+  .file-folder > summary { flex-wrap: wrap; }
+  .file-folder > summary small { width: 100%; padding-left: 26px; }
+  .file-tree .file-tree { padding-left: 9px; margin-left: 4px; }
+  .file-tree .file-size { font-size: 10px; }
+  .branding-editor .preview-wrap { position: static; }
+}
+
+.color-controls { display: flex; align-items: center; gap: 10px; }
+.color-controls > input[type="text"] { min-width: 0; flex: 1; }
+.color-controls > input[type="color"] { width: 48px; height: 44px; padding: 4px; flex-shrink: 0; cursor: pointer; }
+.branded-surface.public-body .public-header { background: #fffffff2; border-radius: 0 0 18px 18px; }
+.branded-surface.public-body .share-intro { background: #fffffff2; border-radius: 18px; padding: 28px; }
+.brand-backdrop { background-image: var(--brand-image, none); opacity: .32; }
+.branded-surface.public-body .public-footer { background: #fffffff2; padding: 24px; }
+
+.selected-files .selection-file { font-size: 12px; }
+.upload-zone > button.text-link { border: 0; background: transparent; color: var(--green); padding: 8px; font: inherit; font-size: 12px; text-decoration: underline; cursor: pointer; }
+@media (max-width: 600px) {
+  .file-tree .file-tree .file-tree .file-tree { margin-left: 0; padding-left: 4px; }
+  .file-tree .file-row { flex-wrap: wrap; }
+}

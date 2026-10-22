@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LinkVault 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-22 16:18+0200\n"
+"POT-Creation-Date: 2026-10-22 17:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: LinkVault contributors\n"
 "Language-Team: English\n"
@@ -34,7 +34,7 @@ msgstr "Invitation for"
 msgid "Choisissez votre nom et votre mot de passe."
 msgstr "Choose your name and password."
 
-#: templates/account/invitation.html:15 templates/account/setup.html:31
+#: templates/account/invitation.html:15 templates/account/setup.html:38
 msgid "Créer mon compte"
 msgstr "Create my account"
 
@@ -373,7 +373,6 @@ msgid "Connexion"
 msgstr "Sign in"
 
 #: templates/account/setup.html:10
-#| msgid "Votre nom"
 msgid "Votre profil"
 msgstr "Your profile"
 
@@ -386,28 +385,32 @@ msgid "Créons votre espace."
 msgstr "Let’s create your workspace."
 
 #: templates/account/setup.html:17
-#| msgid "Choisissez votre nom et votre mot de passe."
 msgid "Commencez par votre e-mail et un mot de passe."
 msgstr "Start with your email and a password."
 
-#: templates/account/setup.html:21
+#: templates/account/setup.html:20
+msgid ""
+"Vérifiez les informations ci-dessous et ressaisissez votre mot de passe."
+msgstr "Check the details below and enter your password again."
+
+#: templates/account/setup.html:28
 msgid "Continuer"
 msgstr "Continue"
 
-#: templates/account/setup.html:24
+#: templates/account/setup.html:31
 msgid "PRESQUE TERMINÉ"
 msgstr "ALMOST THERE"
 
-#: templates/account/setup.html:25
+#: templates/account/setup.html:32
 msgid "Faisons connaissance."
 msgstr "Let’s get to know you."
 
-#: templates/account/setup.html:26
+#: templates/account/setup.html:33
 msgid ""
 "Ce premier compte administrateur vous permettra d’inviter votre équipe."
 msgstr "This first administrator account will let you invite your team."
 
-#: templates/account/setup.html:30
+#: templates/account/setup.html:37
 msgid "Retour"
 msgstr "Back"
 
@@ -442,15 +445,15 @@ msgid "← Afficher tous les liens"
 msgstr "← Show all links"
 
 #: templates/activity.html:24 templates/integrations/webhook.html:9
-#: vault/views.py:587
+#: vault/views.py:589
 msgid "Événement"
 msgstr "Event"
 
-#: templates/activity.html:25 templates/storage.html:89 vault/views.py:587
+#: templates/activity.html:25 templates/storage.html:90 vault/views.py:589
 msgid "Dossier"
 msgstr "Collection"
 
-#: templates/activity.html:26 vault/views.py:587
+#: templates/activity.html:26 vault/views.py:589
 msgid "Lien"
 msgstr "Link"
 
@@ -479,67 +482,75 @@ msgstr ""
 msgid "LinkVault · Votre espace de partage"
 msgstr "LinkVault · Your sharing workspace"
 
-#: templates/base.html:19
+#: templates/base.html:20
 msgid "Aller au contenu"
 msgstr "Skip to content"
 
-#: templates/branding.html:3 templates/layout.html:37
+#: templates/branding.html:4 templates/layout.html:37
 msgid "Page de partage"
 msgstr "Share page"
 
-#: templates/branding.html:7
+#: templates/branding.html:8
 msgid "VOTRE SIGNATURE"
 msgstr "YOUR SIGNATURE"
 
-#: templates/branding.html:9
+#: templates/branding.html:10
 msgid "Une page à votre image"
 msgstr "A page that feels like you"
 
-#: templates/branding.html:11
+#: templates/branding.html:12
 msgid "Le même soin dans vos fichiers et dans leur présentation."
 msgstr "Give your files and their presentation the same care."
 
-#: templates/branding.html:18
+#: templates/branding.html:19
+msgid ""
+"Sans JavaScript : PNG RVB uniquement. Logo : 512 × 512 pixels et 512 Kio "
+"maximum. Fond : 1 600 × 1 600 pixels et 2 Mio maximum."
+msgstr ""
+"Without JavaScript: RGB PNG only. Logo: up to 512 × 512 pixels and 512 KiB. "
+"Background: up to 1,600 × 1,600 pixels and 2 MiB."
+
+#: templates/branding.html:21
 msgid "Enregistrer les changements"
 msgstr "Save changes"
 
-#: templates/branding.html:22
+#: templates/branding.html:25
 msgid "APERÇU DE VOTRE PAGE"
 msgstr "YOUR PAGE PREVIEW"
 
-#: templates/branding.html:29
+#: templates/branding.html:34
 msgid "Un espace pensé pour vous."
 msgstr "A space made for you."
 
-#: templates/branding.html:31 templates/share/page.html:19
+#: templates/branding.html:36 templates/share/page.html:20
 msgid "DES FICHIERS POUR VOUS"
 msgstr "FILES FOR YOU"
 
-#: templates/branding.html:32
+#: templates/branding.html:37
 msgid "Dossier de présentation"
 msgstr "Presentation collection"
 
-#: templates/branding.html:33
+#: templates/branding.html:38
 msgid "Retrouvez ici les documents préparés à votre attention."
 msgstr "Find the documents prepared for you here."
 
-#: templates/branding.html:36
+#: templates/branding.html:41
 msgid "Présentation.pdf"
 msgstr "Presentation.pdf"
 
-#: templates/branding.html:36
+#: templates/branding.html:41
 msgid "2,4 Mo"
 msgstr "2.4 MB"
 
-#: templates/branding.html:41 templates/share/page.html:77
+#: templates/branding.html:46 templates/share/page.html:66
 msgid "Télécharger le dossier"
 msgstr "Download collection"
 
-#: templates/branding.html:43
+#: templates/branding.html:48
 msgid "Partagé avec LinkVault."
 msgstr "Shared with LinkVault."
 
-#: templates/branding.html:45
+#: templates/branding.html:50
 msgid ""
 "Contenu d’exemple. Le titre, la présentation et les fichiers proviennent de "
 "chaque dossier."
@@ -591,7 +602,7 @@ msgid "DOSSIER DE PARTAGE"
 msgstr "SHARED COLLECTION"
 
 #: templates/collections/detail.html:10
-#: templates/components/collection_card.html:10 templates/share/page.html:32
+#: templates/components/collection_card.html:10 templates/share/page.html:33
 #: templates/storage_delete.html:8
 msgid "fichier"
 msgstr "file"
@@ -604,7 +615,7 @@ msgstr "· Created on"
 msgid "Créer un lien"
 msgstr "Create a link"
 
-#: templates/collections/detail.html:19 vault/forms.py:85
+#: templates/collections/detail.html:19 vault/forms.py:86
 msgid "Présentation"
 msgstr "Introduction"
 
@@ -620,36 +631,24 @@ msgstr "Add an introduction to welcome your recipients."
 msgid "Fichiers"
 msgstr "Files"
 
-#: templates/collections/detail.html:41 templates/share/page.html:67
-msgid "Analysé par l’antivirus"
-msgstr "Scanned for malware"
-
-#: templates/collections/detail.html:41
-msgid "Non analysé · développement"
-msgstr "Not scanned · development"
-
-#: templates/collections/detail.html:46
-msgid "Aucun fichier pour le moment. Ajoutez les premiers ci-dessous."
-msgstr "No files yet. Add the first ones below."
-
-#: templates/collections/detail.html:54
+#: templates/collections/detail.html:43
 msgid "Liens du dossier"
 msgstr "Collection links"
 
-#: templates/collections/detail.html:64 templates/links/list.html:84
+#: templates/collections/detail.html:53 templates/links/list.html:84
 #, python-format
 msgid "Copier le lien %(name)s"
 msgstr "Copy link %(name)s"
 
-#: templates/collections/detail.html:70
+#: templates/collections/detail.html:59
 msgid "Créez votre premier lien quand les fichiers sont prêts."
 msgstr "Create your first link when the files are ready."
 
-#: templates/collections/detail.html:74
+#: templates/collections/detail.html:63
 msgid "Un dossier, plusieurs liens."
 msgstr "One collection, several links."
 
-#: templates/collections/detail.html:75
+#: templates/collections/detail.html:64
 msgid ""
 "Partagez les mêmes fichiers avec des conditions et un historique différents "
 "pour chaque destinataire."
@@ -657,7 +656,7 @@ msgstr ""
 "Share the same files with different conditions and a separate history for "
 "each recipient."
 
-#: templates/collections/detail.html:78
+#: templates/collections/detail.html:67
 msgid "Supprimer ce dossier"
 msgstr "Delete this collection"
 
@@ -780,6 +779,27 @@ msgstr "link"
 msgid "Modifié le"
 msgstr "Updated on"
 
+#: templates/components/file_tree.html:10
+msgid "Analysé par l’antivirus"
+msgstr "Scanned for malware"
+
+#: templates/components/file_tree.html:10
+msgid "Non analysé · développement"
+msgstr "Not scanned · development"
+
+#: templates/components/file_tree.html:16
+msgid "fichier(s)"
+msgstr "file(s)"
+
+#: templates/components/file_tree.html:22
+msgid "Aucun fichier pour le moment. Ajoutez les premiers ci-dessous."
+msgstr "No files yet. Add the first ones below."
+
+#: templates/components/form.html:15
+#, python-format
+msgid "Choisir %(name)s"
+msgstr "Choose %(name)s"
+
 #: templates/components/language.html:2
 msgid "Langue"
 msgstr "Language"
@@ -813,58 +833,64 @@ msgid "Faites de la place à vos fichiers."
 msgstr "Make room for your files."
 
 #: templates/components/upload_form.html:12
-msgid "Glissez vos fichiers ici, ou sélectionnez-les."
-msgstr "Drop your files here, or select them."
+msgid ""
+"Déposez ensemble vos fichiers et dossiers ici. Ajoutez-en autant de fois que"
+" nécessaire."
+msgstr "Drop files and folders together here. Add more whenever you need."
 
 #: templates/components/upload_form.html:15
-msgid "Choisir des fichiers"
-msgstr "Choose files"
+msgid "Ajouter des fichiers"
+msgstr "Add files"
 
 #: templates/components/upload_form.html:18
-msgid "Choisir un dossier"
-msgstr "Choose a folder"
+msgid "Ajouter un dossier"
+msgstr "Add a folder"
 
 #: templates/components/upload_form.html:23
 msgid "Fichiers sélectionnés"
 msgstr "Selected files"
 
-#: templates/components/upload_form.html:27
+#: templates/components/upload_form.html:25
+msgid "Vider la sélection"
+msgstr "Clear selection"
+
+#: templates/components/upload_form.html:28
 msgid "Envoi des fichiers"
 msgstr "Uploading files"
 
-#: templates/components/upload_form.html:33
+#: templates/components/upload_form.html:34
 msgid "Progression de l’envoi"
 msgstr "Upload progress"
 
-#: templates/components/upload_form.html:37
+#: templates/components/upload_form.html:39
 #: templates/integrations/webhook.html:8
 msgid "Mettre en pause"
 msgstr "Pause"
 
-#: templates/components/upload_form.html:39
+#: templates/components/upload_form.html:41
 msgid "Importer les fichiers"
 msgstr "Upload files"
 
-#: templates/components/upload_form.html:40
+#: templates/components/upload_form.html:42
 msgid "Mio par fichier ·"
 msgstr "MiB per file ·"
 
-#: templates/components/upload_form.html:40
+#: templates/components/upload_form.html:42
 msgid "Mio par dossier · 100 fichiers par dossier."
 msgstr "MiB per collection · 100 files per collection."
 
-#: templates/components/upload_form.html:42
+#: templates/components/upload_form.html:44
 msgid ""
 "Reprise disponible pendant 24 h : sélectionnez à nouveau les mêmes fichiers "
 "après une coupure."
 msgstr ""
 "Resume within 24 hours: select the same files again after an interruption."
 
-#: templates/components/upload_form.html:44
+#: templates/components/upload_form.html:46
 msgid "Révoquez les liens actifs avant de modifier les fichiers."
 msgstr "Revoke active links before changing the files."
 
-#: templates/components/upload_form.html:46
+#: templates/components/upload_form.html:48
 msgid ""
 "Sans JavaScript, la sélection de fichiers fonctionne ; la barre de "
 "progression et l’import de dossiers nécessitent JavaScript."
@@ -1135,7 +1161,7 @@ msgstr ""
 "until it starts."
 
 #: templates/integrations/index.html:17 templates/integrations/webhook.html:5
-#: vault/models.py:188
+#: vault/models.py:213
 msgid "Actif"
 msgstr "Active"
 
@@ -1283,7 +1309,7 @@ msgstr "LinkVault home"
 msgid "Mon espace"
 msgstr "My workspace"
 
-#: templates/layout.html:13 templates/share/page.html:15
+#: templates/layout.html:13 templates/share/page.html:16
 msgid "Partage privé"
 msgstr "Private sharing"
 
@@ -1470,7 +1496,7 @@ msgstr "Actions"
 msgid "Créé le"
 msgstr "Created on"
 
-#: templates/links/list.html:54 vault/forms.py:21 vault/forms.py:73
+#: templates/links/list.html:54 vault/forms.py:22 vault/forms.py:74
 msgid "Mot de passe"
 msgstr "Password"
 
@@ -1482,7 +1508,7 @@ msgstr "No password"
 msgid "Jusqu’au"
 msgstr "Until"
 
-#: templates/links/list.html:57
+#: templates/links/list.html:57 vault/forms.py:107
 msgid "Sans expiration"
 msgstr "No expiry"
 
@@ -1584,7 +1610,7 @@ msgstr "Your instance at a glance"
 msgid "Capacité, alertes et quotas, réunis au même endroit."
 msgstr "Capacity, alerts and quotas in one place."
 
-#: templates/operations.html:11 templates/storage.html:145
+#: templates/operations.html:11 templates/storage.html:146
 msgid "Administration"
 msgstr "Administration"
 
@@ -1717,55 +1743,59 @@ msgstr "Quota for %(name)s in GiB"
 msgid "Mettre à jour"
 msgstr "Update"
 
-#: templates/share/page.html:5 templates/share/page.html:12
+#: templates/share/page.html:5 templates/share/page.html:13
 msgid "LinkVault"
 msgstr "LinkVault"
 
-#: templates/share/page.html:11
+#: templates/share/page.html:12
 msgid "L"
 msgstr "L"
 
-#: templates/share/page.html:31
+#: templates/share/page.html:32
 msgid "Votre dossier"
 msgstr "Your collection"
 
-#: templates/share/page.html:35
+#: templates/share/page.html:37
+msgid "Voir les aperçus des fichiers"
+msgstr "View file previews"
+
+#: templates/share/page.html:38
 msgid ""
 "Un aperçu avant de télécharger. Ouvrez une image ou un PDF pour le regarder "
 "de plus près."
 msgstr ""
 "A preview before you download. Open an image or PDF for a closer look."
 
-#: templates/share/page.html:40
+#: templates/share/page.html:43
 msgid "Première page du PDF"
 msgstr "First page of the PDF"
 
-#: templates/share/page.html:40
+#: templates/share/page.html:43
 msgid "Image réduite"
 msgstr "Reduced image"
 
-#: templates/share/page.html:40
+#: templates/share/page.html:43
 #, python-format
 msgid "Aperçu de %(name)s"
 msgstr "Preview of %(name)s"
 
-#: templates/share/page.html:41
+#: templates/share/page.html:44
 msgid "Charger l’aperçu"
 msgstr "Load preview"
 
-#: templates/share/page.html:43
+#: templates/share/page.html:46
 msgid "Agrandir"
 msgstr "Enlarge"
 
-#: templates/share/page.html:47
+#: templates/share/page.html:50
 msgid "À découvrir après téléchargement"
 msgstr "Available after downloading"
 
-#: templates/share/page.html:52
+#: templates/share/page.html:55
 msgid "· PDF, page 1"
 msgstr "· PDF, page 1"
 
-#: templates/share/page.html:57
+#: templates/share/page.html:60
 msgid ""
 "Aperçus des images et PDF jusqu’à 20 Mio. Leur consultation ne consomme pas "
 "de téléchargement. Les fichiers originaux sont dans le dossier ZIP."
@@ -1773,23 +1803,23 @@ msgstr ""
 "Previews for images and PDFs up to 20 MiB. Viewing them does not consume a "
 "download. The original files are in the ZIP collection."
 
-#: templates/share/page.html:77
+#: templates/share/page.html:66
 msgid "ZIP ·"
 msgstr "ZIP ·"
 
-#: templates/share/page.html:83
+#: templates/share/page.html:72
 msgid "Disponible jusqu’au"
 msgstr "Available until"
 
-#: templates/share/page.html:87
+#: templates/share/page.html:76
 msgid "Un seul téléchargement autorisé, même en cas d’interruption."
 msgstr "One authorized download only, even if interrupted."
 
-#: templates/share/page.html:89
+#: templates/share/page.html:78
 msgid "téléchargements autorisés utilisés"
 msgstr "authorized downloads used"
 
-#: templates/share/page.html:93
+#: templates/share/page.html:82
 msgid ""
 "L’expéditeur peut consulter les dates d’ouverture de cette page et des "
 "téléchargements autorisés. Aucun outil publicitaire n’est utilisé."
@@ -1797,41 +1827,41 @@ msgstr ""
 "The sender can see when this page was opened and downloads were authorized. "
 "No advertising trackers are used."
 
-#: templates/share/page.html:99
+#: templates/share/page.html:88
 msgid "Fermer l’aperçu"
 msgstr "Close preview"
 
-#: templates/share/page.html:99
+#: templates/share/page.html:88
 msgid "×"
 msgstr "×"
 
-#: templates/share/page.html:102
+#: templates/share/page.html:91
 msgid "Chargement de l’aperçu…"
 msgstr "Loading preview…"
 
-#: templates/share/page.html:106
+#: templates/share/page.html:95
 msgid "Fichier précédent"
 msgstr "Previous file"
 
-#: templates/share/page.html:106 templates/trash.html:20
+#: templates/share/page.html:95 templates/trash.html:20
 #: templates/trash.html:23
 msgid "← Précédent"
 msgstr "← Previous"
 
-#: templates/share/page.html:108
+#: templates/share/page.html:97
 msgid "Fichier suivant"
 msgstr "Next file"
 
-#: templates/share/page.html:108 templates/trash.html:20
+#: templates/share/page.html:97 templates/trash.html:20
 #: templates/trash.html:23
 msgid "Suivant →"
 msgstr "Next →"
 
-#: templates/share/page.html:117
+#: templates/share/page.html:106
 msgid "Partagé avec"
 msgstr "Shared with"
 
-#: templates/share/page.html:117
+#: templates/share/page.html:106
 msgid "linkvault."
 msgstr "linkvault."
 
@@ -1920,88 +1950,101 @@ msgstr "Set by the administrator"
 msgid "Votre espace"
 msgstr "Your workspace"
 
-#: templates/storage.html:59
+#: templates/storage.html:57
+msgid "Images de personnalisation :"
+msgstr "Branding images:"
+
+#: templates/storage.html:57
+msgid ""
+"dans la base de données, avec une limite distincte de 2,5 Mio par compte."
+msgstr "in the database, with a separate limit of 2.5 MiB per account."
+
+#: templates/storage.html:57
+msgid "Gérer les images"
+msgstr "Manage images"
+
+#: templates/storage.html:60
 msgid "Tous vos fichiers"
 msgstr "All your files"
 
-#: templates/storage.html:63
+#: templates/storage.html:64
 msgid "Rechercher un fichier ou un dossier"
 msgstr "Search files or collections"
 
-#: templates/storage.html:67
+#: templates/storage.html:68
 msgid "Rechercher un fichier ou un dossier…"
 msgstr "Search files or collections…"
 
-#: templates/storage.html:68
+#: templates/storage.html:69
 msgid "Trier les fichiers"
 msgstr "Sort files"
 
-#: templates/storage.html:70
+#: templates/storage.html:71
 msgid "Plus volumineux d’abord"
 msgstr "Largest first"
 
-#: templates/storage.html:71
+#: templates/storage.html:72
 msgid "Plus petits d’abord"
 msgstr "Smallest first"
 
-#: templates/storage.html:72
+#: templates/storage.html:73
 msgid "Plus récents d’abord"
 msgstr "Newest first"
 
-#: templates/storage.html:73
+#: templates/storage.html:74
 msgid "Nom de fichier"
 msgstr "File name"
 
-#: templates/storage.html:75
+#: templates/storage.html:76
 msgid "Afficher"
 msgstr "Show"
 
-#: templates/storage.html:86
+#: templates/storage.html:87
 msgid "Sélectionner tous les fichiers de cette page"
 msgstr "Select all files on this page"
 
-#: templates/storage.html:88
+#: templates/storage.html:89
 msgid "Fichier"
 msgstr "File"
 
-#: templates/storage.html:90
+#: templates/storage.html:91
 msgid "Taille"
 msgstr "Size"
 
-#: templates/storage.html:91
+#: templates/storage.html:92
 msgid "Ajouté le"
 msgstr "Added on"
 
-#: templates/storage.html:101
+#: templates/storage.html:102
 #, python-format
 msgid "Sélectionner %(name)s"
 msgstr "Select %(name)s"
 
-#: templates/storage.html:115
+#: templates/storage.html:116
 msgid "octets"
 msgstr "bytes"
 
-#: templates/storage.html:123
+#: templates/storage.html:124
 msgid "Aucun fichier trouvé"
 msgstr "No files found"
 
-#: templates/storage.html:123
+#: templates/storage.html:124
 msgid "Tout l’espace est à vous."
 msgstr "All this space is yours."
 
-#: templates/storage.html:124
+#: templates/storage.html:125
 msgid "Les fichiers ajoutés à vos dossiers seront visibles ici."
 msgstr "Files added to your collections will appear here."
 
-#: templates/storage.html:134
+#: templates/storage.html:135
 msgid "Sélectionnez les fichiers à supprimer."
 msgstr "Select files to delete."
 
-#: templates/storage.html:135
+#: templates/storage.html:136
 msgid "Examiner la suppression →"
 msgstr "Review deletion →"
 
-#: templates/storage.html:140
+#: templates/storage.html:141
 msgid ""
 "La suppression demande une confirmation. Les liens des dossiers concernés "
 "seront révoqués. Le quota sera libéré après la suppression définitive."
@@ -2009,27 +2052,27 @@ msgstr ""
 "Deletion requires confirmation. Links for affected collections will be "
 "revoked. Quota is released after permanent deletion."
 
-#: templates/storage.html:144
+#: templates/storage.html:145
 msgid "Stockage du serveur"
 msgstr "Server storage"
 
-#: templates/storage.html:150
+#: templates/storage.html:151
 msgid "Fichiers dans LinkVault"
 msgstr "Files in LinkVault"
 
-#: templates/storage.html:154
+#: templates/storage.html:155
 msgid "Total des fichiers LinkVault"
 msgstr "Total LinkVault files"
 
-#: templates/storage.html:158
+#: templates/storage.html:159
 msgid "Disponible sur le volume"
 msgstr "Available on the volume"
 
-#: templates/storage.html:162
+#: templates/storage.html:163
 msgid "Capacité du volume"
 msgstr "Volume capacity"
 
-#: templates/storage.html:166
+#: templates/storage.html:167
 #, python-format
 msgid ""
 "%% du volume est occupé. Cette mesure inclut les autres données présentes "
@@ -2038,23 +2081,23 @@ msgstr ""
 "%% of the volume is used. This includes other data on the same disk; it may "
 "differ from LinkVault file usage."
 
-#: templates/storage.html:167
+#: templates/storage.html:168
 msgid "Utilisation par compte"
 msgstr "Usage by account"
 
-#: templates/storage.html:172 templates/team.html:93
+#: templates/storage.html:173 templates/team.html:93
 msgid "Compte"
 msgstr "Account"
 
-#: templates/storage.html:173
+#: templates/storage.html:174
 msgid "Utilisé"
 msgstr "Used"
 
-#: templates/storage.html:174
+#: templates/storage.html:175
 msgid "Quota"
 msgstr "Quota"
 
-#: templates/storage.html:175
+#: templates/storage.html:176
 msgid "Occupation"
 msgstr "Usage"
 
@@ -2378,23 +2421,31 @@ msgstr ""
 "In local development mode, the antivirus may be disabled. Unscanned files "
 "remain labeled as such."
 
-#: vault/api.py:133
+#: vault/api.py:136
+msgid "expires_in_days doit être un entier."
+msgstr "expires_in_days must be an integer."
+
+#: vault/api.py:138 vault/forms.py:186
+msgid "Choisissez une date ou une durée, pas les deux."
+msgstr "Choose a date or a duration, not both."
+
+#: vault/api.py:140
 msgid "allow_previews doit être un booléen."
 msgstr "allow_previews must be a boolean."
 
-#: vault/api.py:135
+#: vault/api.py:142
 msgid "max_downloads doit être un entier."
 msgstr "max_downloads must be an integer."
 
-#: vault/api.py:140
+#: vault/api.py:147
 msgid "expires_at doit inclure un fuseau horaire (ISO 8601)."
 msgstr "expires_at must include a timezone (ISO 8601)."
 
-#: vault/api.py:167 vault/views.py:490
+#: vault/api.py:174 vault/views.py:492
 msgid "Ajoutez au moins un fichier avant de créer un lien."
 msgstr "Add at least one file before creating a link."
 
-#: vault/api.py:171
+#: vault/api.py:178
 msgid "Des fichiers n’ont pas été analysés par l’antivirus."
 msgstr "Some files have not been scanned for malware."
 
@@ -2417,6 +2468,14 @@ msgstr ""
 msgid "Limite quotidienne de créations API atteinte (1 000)."
 msgstr "Daily API creation limit reached (1,000)."
 
+#: vault/brand_media.py:123
+msgid ""
+"Image invalide ou trop volumineuse. Utilisez un PNG RVB ou laissez le "
+"navigateur optimiser un JPEG/WebP."
+msgstr ""
+"Invalid or oversized image. Use an RGB PNG or let your browser optimize a "
+"JPEG/WebP."
+
 #: vault/capacity.py:74
 msgid ""
 "Espace temporaire insuffisant. Réessayez après les transferts en cours ou "
@@ -2429,43 +2488,63 @@ msgstr ""
 msgid "Deux envois classiques sont déjà en cours pour ce compte."
 msgstr "Two standard uploads are already in progress for this account."
 
-#: vault/forms.py:16
+#: vault/forms.py:17
 msgid "Votre nom"
 msgstr "Your name"
 
-#: vault/forms.py:24
+#: vault/forms.py:25
 msgid "Au moins 12 caractères. Préférez une longue phrase unique."
 msgstr "At least 12 characters. Prefer a long, unique passphrase."
 
-#: vault/forms.py:27
+#: vault/forms.py:28
 msgid "Confirmer le mot de passe"
 msgstr "Confirm password"
 
-#: vault/forms.py:40
+#: vault/forms.py:41
 msgid "Les mots de passe ne correspondent pas."
 msgstr "Passwords do not match."
 
-#: vault/forms.py:55 vault/forms.py:68
+#: vault/forms.py:56 vault/forms.py:69
 msgid "Adresse e-mail"
 msgstr "Email address"
 
-#: vault/forms.py:84
+#: vault/forms.py:85
 msgid "Titre du dossier"
 msgstr "Collection title"
 
-#: vault/forms.py:86
+#: vault/forms.py:87
 msgid "Message pour le destinataire"
 msgstr "Message for the recipient"
 
-#: vault/forms.py:93
+#: vault/forms.py:94
 msgid "Présentez ce que vous partagez, donnez du contexte…"
 msgstr "Introduce what you are sharing, add some context…"
 
-#: vault/forms.py:102
+#: vault/forms.py:103
+msgid "Expiration"
+msgstr "Expiry"
+
+#: vault/forms.py:108
+msgid "À une date précise"
+msgstr "On a specific date"
+
+#: vault/forms.py:109
+msgid "Dans un nombre de jours"
+msgstr "After a number of days"
+
+#: vault/forms.py:113
+msgid "Nombre de jours"
+msgstr "Number of days"
+
+#: vault/forms.py:118
+msgid "À compter de la création du lien, de 1 à 3 650 jours."
+msgstr "From link creation, between 1 and 3,650 days."
+
+#: vault/forms.py:130
 msgid "Afficher les aperçus des images et PDF"
 msgstr "Show image and PDF previews"
 
-#: vault/forms.py:106
+#: vault/forms.py:134
 msgid ""
 "Images réduites et première page des PDF jusqu’à 20 Mio, visibles avant "
 "téléchargement. Leur consultation ne consomme pas le lien et leur copie "
@@ -2475,75 +2554,135 @@ msgstr ""
 "downloading. Viewing them does not consume the link and they can still be "
 "copied."
 
-#: vault/forms.py:110
+#: vault/forms.py:138
 msgid "Mot de passe du lien"
 msgstr "Link password"
 
-#: vault/forms.py:116
-msgid "Facultatif · 12 caractères minimum. Communiquez-le par un autre canal."
+#: vault/forms.py:144
+msgid ""
+"Facultatif, sans longueur minimale. Un mot de passe long reste plus "
+"difficile à deviner. Communiquez-le par un autre canal."
 msgstr ""
-"Optional · at least 12 characters. Send it through a separate channel."
+"Optional, with no minimum length. Longer passwords are harder to guess. Send"
+" it through a separate channel."
 
-#: vault/forms.py:124
+#: vault/forms.py:152
 msgid "Nom du lien (visible par vous)"
 msgstr "Link name (visible to you)"
 
-#: vault/forms.py:125
+#: vault/forms.py:153
 msgid "Date d’expiration"
 msgstr "Expiry date"
 
-#: vault/forms.py:126
+#: vault/forms.py:154
 msgid "Nombre maximal de téléchargements"
 msgstr "Maximum downloads"
 
-#: vault/forms.py:130
+#: vault/forms.py:158
 msgid ""
 "Saisissez 1 pour un usage unique. Laissez vide pour un nombre illimité."
 msgstr "Enter 1 for single use. Leave empty for unlimited downloads."
 
-#: vault/forms.py:133
+#: vault/forms.py:161
 msgid ""
 "Facultatif · heure Europe/Berlin par défaut (configurable sur le serveur)."
 msgstr ""
 "Optional · Europe/Berlin time by default (configurable on the server)."
 
-#: vault/forms.py:140
+#: vault/forms.py:171
 msgid "Ex. : Envoi à Camille"
 msgstr "E.g. Delivery to Camille"
 
-#: vault/forms.py:146
+#: vault/forms.py:177
 msgid "Choisissez une date future."
 msgstr "Choose a future date."
 
-#: vault/forms.py:152
+#: vault/forms.py:198
+msgid "Indiquez le nombre de jours."
+msgstr "Enter the number of days."
+
+#: vault/forms.py:203
+msgid "Indiquez une date d’expiration."
+msgstr "Enter an expiry date."
+
+#: vault/forms.py:211
 msgid "Mot de passe du partage"
 msgstr "Share password"
 
-#: vault/forms.py:163
+#: vault/forms.py:220
+msgid "Logo"
+msgstr "Logo"
+
+#: vault/forms.py:229
+msgid ""
+"PNG, JPEG ou WebP · 10 Mio maximum. Le logo est optimisé automatiquement."
+msgstr ""
+"PNG, JPEG or WebP · up to 10 MiB. The logo is optimized automatically."
+
+#: vault/forms.py:232
+msgid "Supprimer le logo"
+msgstr "Remove logo"
+
+#: vault/forms.py:234
+msgid "Image de fond"
+msgstr "Background image"
+
+#: vault/forms.py:243
+msgid ""
+"PNG, JPEG ou WebP · 10 Mio maximum. Le fond est optimisé automatiquement."
+msgstr ""
+"PNG, JPEG or WebP · up to 10 MiB. The background is optimized automatically."
+
+#: vault/forms.py:247
+msgid "Supprimer l’image de fond"
+msgstr "Remove background image"
+
+#: vault/forms.py:269
+msgid "Choisissez une nouvelle image ou sa suppression."
+msgstr "Choose either a replacement image or removal."
+
+#: vault/forms.py:300
 msgid "Nom affiché"
 msgstr "Display name"
 
-#: vault/forms.py:164
+#: vault/forms.py:301
 msgid "Signature"
 msgstr "Tagline"
 
-#: vault/forms.py:165
+#: vault/forms.py:302
 msgid "Palette"
 msgstr "Palette"
 
-#: vault/forms.py:166
+#: vault/forms.py:303
 msgid "Texte en pied de page"
 msgstr "Footer text"
 
-#: vault/forms.py:172
+#: vault/forms.py:304
+msgid "Couleur principale"
+msgstr "Accent color"
+
+#: vault/forms.py:305
+msgid "Couleur de fond"
+msgstr "Background color"
+
+#: vault/forms.py:309
+msgid "Code hexadécimal, par exemple #245e48. Vide : couleur de la palette."
+msgstr "Hex color, for example #245e48. Leave blank to use the palette."
+
+#: vault/forms.py:312
+msgid "Code hexadécimal, par exemple #f6f8f1. Vide : fond par défaut."
+msgstr ""
+"Hex color, for example #f6f8f1. Leave blank for the default background."
+
+#: vault/forms.py:327
 msgid "Adresse e-mail du membre"
 msgstr "Member’s email address"
 
-#: vault/forms.py:177
+#: vault/forms.py:332
 msgid "Cette adresse possède déjà un compte."
 msgstr "This email address already has an account."
 
-#: vault/forms.py:198
+#: vault/forms.py:353
 msgid ""
 "Votre compte a changé pendant cette opération. Recommencez la connexion ou "
 "la récupération."
@@ -2692,7 +2831,7 @@ msgstr "Public HTTPS, port 443. Internal addresses and redirects are blocked."
 msgid "Événements"
 msgstr "Events"
 
-#: vault/integrations.py:77 vault/mfa.py:165 vault/views.py:907
+#: vault/integrations.py:77 vault/mfa.py:165 vault/views.py:932
 msgid "Mot de passe incorrect."
 msgstr "Incorrect password."
 
@@ -2746,31 +2885,31 @@ msgstr ""
 msgid "Action indisponible."
 msgstr "Action unavailable."
 
-#: vault/middleware.py:35
+#: vault/middleware.py:37
 msgid "Longueur invalide."
 msgstr "Invalid length."
 
-#: vault/middleware.py:37
+#: vault/middleware.py:39
 msgid "Envoi trop volumineux."
 msgstr "Upload too large."
 
-#: vault/middleware.py:43
+#: vault/middleware.py:45
 msgid "Content-Length requis."
 msgstr "Content-Length required."
 
-#: vault/middleware.py:69
+#: vault/middleware.py:69 vault/middleware.py:88
 msgid "Authentification requise."
 msgstr "Authentication required."
 
-#: vault/middleware.py:77
-msgid "Dossier introuvable."
-msgstr "Collection not found."
-
-#: vault/middleware.py:81 vault/resumable.py:99
+#: vault/middleware.py:75 vault/middleware.py:100 vault/resumable.py:99
 msgid "Trop d’envois. Réessayez plus tard."
 msgstr "Too many uploads. Try again later."
 
-#: vault/middleware.py:87
+#: vault/middleware.py:96
+msgid "Dossier introuvable."
+msgstr "Collection not found."
+
+#: vault/middleware.py:106
 msgid "Quota de stockage insuffisant."
 msgstr "Insufficient storage quota."
 
@@ -2790,31 +2929,35 @@ msgstr "Plum"
 msgid "Encre"
 msgstr "Ink"
 
-#: vault/models.py:185
+#: vault/models.py:89 vault/models.py:98
+msgid "Utilisez une couleur au format #123abc."
+msgstr "Use a color in #123abc format."
+
+#: vault/models.py:210
 msgid "Révoqué"
 msgstr "Revoked"
 
-#: vault/models.py:186
+#: vault/models.py:211
 msgid "Expiré"
 msgstr "Expired"
 
-#: vault/models.py:187
+#: vault/models.py:212
 msgid "Épuisé"
 msgstr "Exhausted"
 
-#: vault/models.py:227 vault/webhooks.py:43
+#: vault/models.py:252 vault/webhooks.py:43
 msgid "Page ouverte"
 msgstr "Page opened"
 
-#: vault/models.py:228 vault/webhooks.py:44
+#: vault/models.py:253 vault/webhooks.py:44
 msgid "Téléchargement autorisé"
 msgstr "Download authorized"
 
-#: vault/models.py:229 vault/webhooks.py:41
+#: vault/models.py:254 vault/webhooks.py:41
 msgid "Lien créé"
 msgstr "Link created"
 
-#: vault/models.py:230 vault/webhooks.py:42
+#: vault/models.py:255 vault/webhooks.py:42
 msgid "Lien révoqué"
 msgstr "Link revoked"
 
@@ -2874,7 +3017,7 @@ msgstr "Quota updated."
 msgid "Les aperçus de ce lien ont été mis à jour."
 msgstr "Previews for this link have been updated."
 
-#: vault/resumable.py:39 vault/resumable.py:103 vault/views.py:448
+#: vault/resumable.py:39 vault/resumable.py:103 vault/views.py:450
 msgid "Envoi invalide."
 msgstr "Invalid upload."
 
@@ -2886,7 +3029,7 @@ msgstr "Storage unavailable. Try again or contact the administrator."
 msgid "Cet envoi est terminé, annulé ou expiré."
 msgstr "This upload is complete, canceled or expired."
 
-#: vault/resumable.py:106 vault/storage.py:119 vault/views.py:700
+#: vault/resumable.py:106 vault/storage.py:119 vault/views.py:724
 msgid "Sélectionnez entre 1 et 100 fichiers."
 msgstr "Select between 1 and 100 files."
 
@@ -3064,19 +3207,19 @@ msgstr "Item restored. Create new links to share it."
 msgid "Élément supprimé définitivement. Le quota a été libéré."
 msgstr "Item permanently deleted. Quota has been released."
 
-#: vault/views.py:76
+#: vault/views.py:77
 msgid "Un instant…"
 msgstr "Just a moment…"
 
-#: vault/views.py:77
+#: vault/views.py:78
 msgid "Trop de tentatives. Réessayez dans quelques minutes."
 msgstr "Too many attempts. Try again in a few minutes."
 
-#: vault/views.py:90
+#: vault/views.py:91
 msgid "Ce lien n’est plus disponible"
 msgstr "This link is no longer available"
 
-#: vault/views.py:92
+#: vault/views.py:93
 msgid ""
 "Il a expiré, a été révoqué ou a atteint sa limite de téléchargements. "
 "Contactez la personne qui vous l’a envoyé."
@@ -3084,40 +3227,40 @@ msgstr ""
 "It has expired, was revoked or has reached its download limit. Contact the "
 "person who sent it."
 
-#: vault/views.py:170
+#: vault/views.py:171
 msgid "Adresse e-mail ou mot de passe incorrect."
 msgstr "Incorrect email address or password."
 
-#: vault/views.py:289
+#: vault/views.py:290
 msgid "Mot de passe modifié. Les autres sessions seront déconnectées."
 msgstr "Password updated. Other sessions will be signed out."
 
-#: vault/views.py:355
+#: vault/views.py:356
 msgid "Dossier créé. Ajoutez maintenant vos fichiers."
 msgstr "Collection created. Add your files now."
 
-#: vault/views.py:413
+#: vault/views.py:415
 msgid "Présentation mise à jour."
 msgstr "Introduction updated."
 
-#: vault/views.py:432
+#: vault/views.py:434
 msgid "Envoi trop volumineux. Aucun fichier n’a été conservé."
 msgstr "Upload too large. No files were retained."
 
-#: vault/views.py:437
+#: vault/views.py:439
 msgid "Liste des chemins invalide."
 msgstr "Invalid path list."
 
-#: vault/views.py:441
+#: vault/views.py:443
 #, python-format
 msgid "%(count)s fichier(s) ajouté(s) au dossier."
 msgstr "%(count)s file(s) added to the collection."
 
-#: vault/views.py:461
+#: vault/views.py:463
 msgid "Dossier placé dans la corbeille. Tous ses liens ont été révoqués."
 msgstr "Collection moved to the trash. All its links have been revoked."
 
-#: vault/views.py:499
+#: vault/views.py:501
 msgid ""
 "Des fichiers n’ont pas été analysés par l’antivirus. Importez-les à nouveau "
 "dans un dossier avec l’antivirus activé."
@@ -3125,23 +3268,27 @@ msgstr ""
 "Some files have not been scanned for malware. Upload them again into a "
 "collection with the antivirus enabled."
 
-#: vault/views.py:513
+#: vault/views.py:515
 msgid "Lien créé. Vous pouvez le copier et le partager."
 msgstr "Link created. You can copy and share it."
 
-#: vault/views.py:565
+#: vault/views.py:567
 msgid "Lien révoqué. Aucun nouveau téléchargement ne sera autorisé."
 msgstr "Link revoked. No new downloads will be authorized."
 
-#: vault/views.py:587
+#: vault/views.py:589
 msgid "Date (ISO 8601 UTC)"
 msgstr "Date (ISO 8601 UTC)"
 
-#: vault/views.py:637
+#: vault/views.py:642
+msgid "L’image dépasse la taille autorisée."
+msgstr "The image exceeds the size limit."
+
+#: vault/views.py:658
 msgid "Votre page de partage a été personnalisée."
 msgstr "Your share page has been customized."
 
-#: vault/views.py:718
+#: vault/views.py:742
 #, python-format
 msgid ""
 "%(count)s fichier(s) placé(s) dans la corbeille. Les liens des dossiers "
@@ -3150,54 +3297,54 @@ msgstr ""
 "%(count)s file(s) moved to the trash. Links for the affected collections "
 "have been revoked."
 
-#: vault/views.py:761
+#: vault/views.py:785
 msgid "Invitation créée pour 7 jours. Copiez le lien et envoyez-le au membre."
 msgstr ""
 "Invitation created for 7 days. Copy the link and send it to the member."
 
-#: vault/views.py:791
+#: vault/views.py:815
 msgid "Invitation révoquée."
 msgstr "Invitation revoked."
 
-#: vault/views.py:835
+#: vault/views.py:859
 msgid "Compte mis à jour. Une suspension révoque aussi les liens du membre."
 msgstr "Account updated. Suspending also revokes the member’s links."
 
-#: vault/views.py:934
+#: vault/views.py:959
 msgid "Transfert en attente"
 msgstr "Transfer pending"
 
-#: vault/views.py:936
+#: vault/views.py:961
 msgid ""
 "Le serveur manque d’espace temporaire. Réessayez plus tard ou contactez "
 "l’expéditeur."
 msgstr ""
 "The server lacks temporary space. Try again later or contact the sender."
 
-#: vault/views.py:948
+#: vault/views.py:973
 msgid "Transfert indisponible"
 msgstr "Transfer unavailable"
 
-#: vault/views.py:950
+#: vault/views.py:975
 msgid ""
 "Le fichier n’a pas pu être préparé. Réessayez plus tard ou contactez "
 "l’expéditeur."
 msgstr ""
 "The file could not be prepared. Try again later or contact the sender."
 
-#: vault/views.py:974
+#: vault/views.py:999
 msgid "Page introuvable"
 msgstr "Page not found"
 
-#: vault/views.py:975
+#: vault/views.py:1000
 msgid "Cette adresse ne correspond à aucune page disponible."
 msgstr "This address does not match an available page."
 
-#: vault/views.py:986
+#: vault/views.py:1011
 msgid "Une erreur est survenue"
 msgstr "An error occurred"
 
-#: vault/views.py:987
+#: vault/views.py:1012
 msgid "Réessayez dans quelques instants."
 msgstr "Try again in a few moments."
 
@@ -3216,8 +3363,3 @@ msgid ""
 msgstr ""
 "Use a public HTTPS URL on port 443, without credentials, query parameters or"
 " fragments."
-
-#: templates/account/setup.html:20
-msgid ""
-"Vérifiez les informations ci-dessous et ressaisissez votre mot de passe."
-msgstr "Check the details below and enter your password again."

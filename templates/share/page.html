@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load static %}
-{% block scripts %}<script src="{% static 'previews.js' %}" defer></script>{% endblock %}
+{% block scripts %}{% if branding %}<link rel="stylesheet" href="{% url 'share_brand_media' token 'style' %}">{% endif %}<script src="{% static 'previews.js' %}" defer></script>{% endblock %}
 {% block title %}{{ collection.title }} · {{ branding.name|default:_('LinkVault') }}{% endblock %}
-{% block body_class %}public-body {% if link.allow_previews %}has-previews{% endif %} theme-{{ branding.theme|default:'forest' }}{% endblock %}
+{% block body_class %}public-body branded-surface {% if link.allow_previews %}has-previews{% endif %} theme-{{ branding.theme|default:'forest' }}{% endblock %}
 {% block body %}
+<div class="brand-backdrop" aria-hidden="true"></div>
 <div class="public-language">{% include "components/language.html" %}</div>
   <header class="public-header">
     <a class="public-brand" href="{% url 'share' token %}">
-      <span class="preview-monogram">{{ branding.name|default:_('L')|slice:':1'|upper }}</span>
+      {% if branding.logo_data %}<img class="brand-logo" src="{% url 'share_brand_media' token 'logo' %}" alt="">{% else %}<span class="preview-monogram">{{ branding.name|default:_('L')|slice:':1'|upper }}</span>{% endif %}
       <span>{{ branding.name|default:_('LinkVault') }}</span>
     </a>
     <span class="public-tagline">{{ branding.tagline }}</span>
@@ -31,7 +32,9 @@
         <h2>{% translate "Votre dossier" %}</h2>
         <span>{{ collection.files.count }} {% translate "fichier" %}{{ collection.files.count|pluralize }} · {{ collection.total_bytes|filesizeformat }}</span>
       </div>
+      {% include "components/file_tree.html" with nodes=file_tree %}
       {% if link.allow_previews %}
+      <details class="gallery-details"><summary>{% translate "Voir les aperçus des fichiers" %}</summary>
       <p class="gallery-intro">{% translate "Un aperçu avant de télécharger. Ouvrez une image ou un PDF pour le regarder de plus près." %}</p>
       <div class="file-gallery" data-file-gallery>
         {% for file in collection.files.all %}
@@ -55,21 +58,7 @@
         {% endfor %}
       </div>
       <p class="preview-note">{% translate "Aperçus des images et PDF jusqu’à 20 Mio. Leur consultation ne consomme pas de téléchargement. Les fichiers originaux sont dans le dossier ZIP." %}</p>
-      {% else %}
-      {% for file in collection.files.all %}
-        <div class="file-row">
-          <span class="file-type">{{ file.extension }}</span>
-          <div class="file-info">
-            <strong>{{ file.path }}</strong>
-            <small>{{ file.size|filesizeformat }}</small>
-          </div>
-          {% if file.scanned %}
-            <span class="scanned-label" title="{% translate "Analysé par l’antivirus" %}">
-              {% include "components/icon.html" with name="shield" %}
-            </span>
-          {% endif %}
-        </div>
-      {% endfor %}
+      </details>
       {% endif %}
       <form method="post" action="{% url 'download' token %}">
         {% csrf_token %}

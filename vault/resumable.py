@@ -179,8 +179,8 @@ def start(request, pk):
         )
         UploadPart.objects.bulk_create(
             [
-                UploadPart(session=session, path=p, size=s, fingerprint=f)
-                for p, s, f in normalized
+                UploadPart(session=session, path=p, size=s, fingerprint=f, position=i)
+                for i, (p, s, f) in enumerate(normalized)
             ]
         )
         user.reserved_bytes += total

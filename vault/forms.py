@@ -7,6 +7,7 @@ from django.core.validators import MaxLengthValidator
 from django.db import transaction
 from django.utils import timezone
 from django.utils.crypto import constant_time_compare
+from datetime import timedelta
 
 from .models import Branding, Collection, ShareLink, User
 
@@ -98,6 +99,33 @@ class CollectionForm(forms.ModelForm):
 
 
 class LinkForm(forms.ModelForm):
+    expiry_mode = forms.ChoiceField(
+        label=_("Expiration"),
+        required=False,
+        initial="none",
+        choices=[
+            ("none", _("Sans expiration")),
+            ("date", _("À une date précise")),
+            ("days", _("Dans un nombre de jours")),
+        ],
+    )
+    expires_in_days = forms.IntegerField(
+        label=_("Nombre de jours"),
+        required=False,
+        min_value=1,
+        max_value=3650,
+        widget=forms.TextInput(attrs={"inputmode": "numeric", "pattern": "[0-9]*"}),
+        help_text=_("À compter de la création du lien, de 1 à 3 650 jours."),
+    )
+    field_order = [
+        "label",
+        "expiry_mode",
+        "expires_at",
+        "expires_in_days",
+        "max_downloads",
+        "password",
+        "allow_previews",
+    ]
     allow_previews = forms.BooleanField(
         label=_("Afficher les aperçus des images et PDF"),
         required=False,
@@ -110,10 +138,10 @@ class LinkForm(forms.ModelForm):
         label=_("Mot de passe du lien"),
         required=False,
         max_length=128,
-        min_length=12,
+        strip=False,
         widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
         help_text=_(
-            "Facultatif · 12 caractères minimum. Communiquez-le par un autre canal."
+            "Facultatif, sans longueur minimale. Un mot de passe long reste plus difficile à deviner. Communiquez-le par un autre canal."
         ),
     )
 
@@ -134,6 +162,9 @@ class LinkForm(forms.ModelForm):
             ),
         }
         widgets = {
+            "max_downloads": forms.TextInput(
+                attrs={"inputmode": "numeric", "pattern": "[0-9]*"}
+            ),
             "expires_at": forms.DateTimeInput(
                 attrs={"type": "datetime-local"}, format="%Y-%m-%dT%H:%M"
             ),
@@ -146,26 +177,150 @@ class LinkForm(forms.ModelForm):
             raise ValidationError(_("Choisissez une date future."))
         return value
 
+    def clean(self):
+        data = super().clean()
+        mode = data.get("expiry_mode")
+        if not mode:  # Existing API clients supply only expires_at.
+            if data.get("expires_at") and data.get("expires_in_days"):
+                raise ValidationError(
+                    _("Choisissez une date ou une durée, pas les deux.")
+                )
+            mode = (
+                "days"
+                if data.get("expires_in_days") is not None
+                else "date"
+                if data.get("expires_at")
+                else "none"
+            )
+        if mode == "days":
+            days = data.get("expires_in_days")
+            if days is None:
+                self.add_error("expires_in_days", _("Indiquez le nombre de jours."))
+            else:
+                data["expires_at"] = timezone.now() + timedelta(days=days)
+        elif mode == "date":
+            if not data.get("expires_at"):
+                self.add_error("expires_at", _("Indiquez une date d’expiration."))
+        else:
+            data["expires_at"] = None
+        return data
+
 
 class UnlockForm(forms.Form):
     password = forms.CharField(
         label=_("Mot de passe du partage"),
         max_length=128,
+        strip=False,
         widget=forms.PasswordInput(attrs={"autocomplete": "off", "autofocus": True}),
     )
 
 
 class BrandingForm(forms.ModelForm):
+    logo = forms.FileField(
+        label=_("Logo"),
+        required=False,
+        widget=forms.FileInput(
+            attrs={
+                "accept": "image/png,image/jpeg,image/webp",
+                "data-brand-image": "logo",
+            }
+        ),
+        help_text=_(
+            "PNG, JPEG ou WebP · 10 Mio maximum. Le logo est optimisé automatiquement."
+        ),
+    )
+    remove_logo = forms.BooleanField(label=_("Supprimer le logo"), required=False)
+    background = forms.FileField(
+        label=_("Image de fond"),
+        required=False,
+        widget=forms.FileInput(
+            attrs={
+                "accept": "image/png,image/jpeg,image/webp",
+                "data-brand-image": "background",
+            }
+        ),
+        help_text=_(
+            "PNG, JPEG ou WebP · 10 Mio maximum. Le fond est optimisé automatiquement."
+        ),
+    )
+    remove_background = forms.BooleanField(
+        label=_("Supprimer l’image de fond"), required=False
+    )
+    field_order = [
+        "name",
+        "tagline",
+        "logo",
+        "remove_logo",
+        "background",
+        "remove_background",
+        "theme",
+        "accent_color",
+        "background_color",
+        "footer",
+    ]
+
+    def clean(self):
+        from .brand_media import clean_image
+
+        data = super().clean()
+        for kind in ("logo", "background"):
+            if data.get(kind) and data.get(f"remove_{kind}"):
+                self.add_error(
+                    kind, _("Choisissez une nouvelle image ou sa suppression.")
+                )
+            elif data.get(kind):
+                try:
+                    data[kind] = clean_image(data[kind], kind)
+                except ValidationError as exc:
+                    self.add_error(kind, exc)
+        return data
+
+    def save(self, commit=True):
+        item = super().save(commit=False)
+        for kind in ("logo", "background"):
+            if self.cleaned_data.get(f"remove_{kind}"):
+                setattr(item, f"{kind}_data", b"")
+            elif self.cleaned_data.get(kind):
+                setattr(item, f"{kind}_data", self.cleaned_data[kind])
+        if commit:
+            item.save()
+        return item
+
     class Meta:
         model = Branding
-        fields = ["name", "tagline", "theme", "footer"]
+        fields = [
+            "name",
+            "tagline",
+            "theme",
+            "accent_color",
+            "background_color",
+            "footer",
+        ]
         labels = {
             "name": _("Nom affiché"),
             "tagline": _("Signature"),
             "theme": _("Palette"),
             "footer": _("Texte en pied de page"),
+            "accent_color": _("Couleur principale"),
+            "background_color": _("Couleur de fond"),
         }
-        widgets = {"footer": forms.Textarea(attrs={"rows": 3})}
+        help_texts = {
+            "accent_color": _(
+                "Code hexadécimal, par exemple #245e48. Vide : couleur de la palette."
+            ),
+            "background_color": _(
+                "Code hexadécimal, par exemple #f6f8f1. Vide : fond par défaut."
+            ),
+        }
+        widgets = {
+            "footer": forms.Textarea(attrs={"rows": 3}),
+            "accent_color": forms.TextInput(
+                attrs={"placeholder": "#245e48", "pattern": "#[0-9a-fA-F]{6}"}
+            ),
+            "background_color": forms.TextInput(
+                attrs={"placeholder": "#f6f8f1", "pattern": "#[0-9a-fA-F]{6}"}
+            ),
+        }
 
 
 class InvitationForm(forms.Form):

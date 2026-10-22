@@ -1,0 +1,24 @@
+{% load i18n %}
+<ul class="file-tree">
+  {% for node in nodes %}
+    <li>
+      {% if node.file %}
+        <div class="file-row">
+          <span class="file-type">{{ node.file.extension }}</span>
+          <div class="file-info">
+            <strong title="{{ node.file.path }}">{{ node.name }}</strong>
+            <small>{% if node.file.scanned %}{% translate "Analysé par l’antivirus" %}{% else %}{% translate "Non analysé · développement" %}{% endif %}</small>
+          </div>
+          <span class="file-size">{{ node.file.size|filesizeformat }}</span>
+        </div>
+      {% else %}
+        <details class="file-folder" open>
+          <summary>{% include "components/icon.html" with name="folder" %}<strong>{{ node.name }}</strong><small>{{ node.count }} {% translate "fichier(s)" %} · {{ node.size|filesizeformat }}</small></summary>
+          {% include "components/file_tree.html" with nodes=node.children %}
+        </details>
+      {% endif %}
+    </li>
+  {% empty %}
+    <li class="quiet-empty">{% translate "Aucun fichier pour le moment. Ajoutez les premiers ci-dessous." %}</li>
+  {% endfor %}
+</ul>

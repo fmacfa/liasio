@@ -12,10 +12,10 @@
     <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %}
       <span class="required">*</span>
 {% endif %}
-</label>{{ field }}
+</label>{% if field.name == 'accent_color' or field.name == 'background_color' %}<div class="color-controls">{{ field }}<input type="color" data-color-picker="{{ field.name }}" value="{% if field.value %}{{ field.value }}{% elif field.name == 'accent_color' %}#245e48{% else %}#f6f8f1{% endif %}" aria-label="{% blocktranslate with name=field.label %}Choisir {{ name }}{% endblocktranslate %}"></div>{% else %}{{ field }}{% endif %}
     {% endif %}
 {% if field.help_text %}
-<div class="help">{{ field.help_text }}</div>
+<div class="help" id="{{ field.auto_id }}_helptext">{{ field.help_text }}</div>
 {% endif %}
 {% if field.errors %}
   <div class="field-error" role="alert">{{ field.errors }}</div>
