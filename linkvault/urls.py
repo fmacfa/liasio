@@ -12,6 +12,7 @@ from vault import (
     help,
     brand_media,
     batches,
+    api_batches,
 )
 
 urlpatterns = [
@@ -36,6 +37,18 @@ urlpatterns = [
     ),
     path("api/v1/collections/<uuid:pk>/", api.collection),
     path("api/v1/collections/<uuid:pk>/links/", api.create_link),
+    path(
+        "api/v1/collections/<uuid:pk>/link-batches/",
+        api_batches.create,
+        name="api_link_batch_create",
+    ),
+    path("api/v1/link-batches/", api_batches.index, name="api_link_batches"),
+    path("api/v1/link-batches/<uuid:pk>/", api_batches.detail, name="api_link_batch"),
+    path(
+        "api/v1/link-batches/<uuid:pk>/export/<str:format>/",
+        api_batches.export,
+        name="api_link_batch_export",
+    ),
     path("api/v1/collections/<uuid:pk>/uploads/start/", api.upload_start),
     path("api/v1/collections/<uuid:pk>/uploads/pending/", api.uploads_pending),
     path("api/v1/uploads/<uuid:pk>/status/", api.upload_status),

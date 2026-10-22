@@ -123,10 +123,9 @@ def create_collection(request):
         return remember(request, JsonResponse(collection_data(item), status=201))
 
 
-@api("links:write", ("POST",))
-def create_link(request, pk):
-    data = json_body(request)
-    prepare_receipt(request)
+def link_form_values(data):
+    """Strict JSON types and timezone parsing shared by single and bulk creation."""
+    data = dict(data)
     text_fields(data, ["label", "password", "expires_at", "expiry_mode"])
     if (
         data.get("expires_in_days") is not None
@@ -146,7 +145,14 @@ def create_link(request, pk):
                 _("expires_at doit inclure un fuseau horaire (ISO 8601).")
             )
         data["expires_at"] = value
-    form = LinkForm(data)
+    return data
+
+
+@api("links:write", ("POST",))
+def create_link(request, pk):
+    data = json_body(request)
+    prepare_receipt(request)
+    form = LinkForm(link_form_values(data))
     with transaction.atomic():
         owner = User.objects.select_for_update().get(pk=request.user.pk)
         authorize_current(request, owner)

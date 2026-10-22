@@ -52,4 +52,9 @@ Les listes sont privées au compte qui possède le dossier, ne sont jamais affic
 - Dix préparations de lot par heure et par compte ; les limites de requêtes s’appliquent aussi par adresse IP. Si une limite est atteinte, réessayez plus tard.
 - L’antivirus doit accepter la liste et les fichiers du dossier quand il est requis sur l’instance. Les données de liste utilisent la base avec leurs propres limites ; elles ne sont pas décomptées du quota de fichiers.
 
+
+## Automatiser ce parcours
+
+La [création de lots par API](bulk-links-api.md) permet d’envoyer des noms ou une quantité depuis Codex, un terminal ou le serveur d’un site, puis de récupérer les liens et les exports Excel/CSV. Ces lots apparaissent dans **Mes lots** et restent accessibles dans l’interface.
+
 [Conditions des liens](sharing.md) · [Automatisations API et webhooks](automation.md) · [Retour au guide](README.md)

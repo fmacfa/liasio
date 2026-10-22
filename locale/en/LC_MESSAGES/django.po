@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Liasio 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-22 20:23+0200\n"
+"POT-Creation-Date: 2026-10-22 21:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Liasio contributors\n"
 "Language-Team: English\n"
@@ -482,7 +482,7 @@ msgstr ""
 msgid "Liasio · Votre espace de partage"
 msgstr "Liasio · Your sharing workspace"
 
-#: templates/base.html:20
+#: templates/base.html:21
 msgid "Aller au contenu"
 msgstr "Skip to content"
 
@@ -522,7 +522,7 @@ msgstr "YOUR PAGE PREVIEW"
 msgid "Un espace pensé pour vous."
 msgstr "A space made for you."
 
-#: templates/branding.html:36 templates/share/page.html:20
+#: templates/branding.html:36 templates/share/page.html:27
 msgid "DES FICHIERS POUR VOUS"
 msgstr "FILES FOR YOU"
 
@@ -542,15 +542,15 @@ msgstr "Presentation.pdf"
 msgid "2,4 Mo"
 msgstr "2.4 MB"
 
-#: templates/branding.html:46 templates/share/page.html:66
+#: templates/branding.html:46 templates/share/page.html:73
 msgid "Télécharger le dossier"
 msgstr "Download collection"
 
-#: templates/branding.html:48
-msgid "Partagé avec Liasio."
-msgstr "Shared with Liasio."
+#: templates/branding.html:50 templates/share/page.html:113
+msgid "Partagé avec"
+msgstr "Shared with"
 
-#: templates/branding.html:50
+#: templates/branding.html:53
 msgid ""
 "Contenu d’exemple. Le titre, la présentation et les fichiers proviennent de "
 "chaque dossier."
@@ -602,7 +602,7 @@ msgid "DOSSIER DE PARTAGE"
 msgstr "SHARED COLLECTION"
 
 #: templates/collections/detail.html:10
-#: templates/components/collection_card.html:10 templates/share/page.html:33
+#: templates/components/collection_card.html:10 templates/share/page.html:40
 #: templates/storage_delete.html:8
 msgid "fichier"
 msgstr "file"
@@ -1315,7 +1315,7 @@ msgstr "Liasio home"
 msgid "Mon espace"
 msgstr "My workspace"
 
-#: templates/layout.html:13 templates/share/page.html:16
+#: templates/layout.html:13 templates/share/page.html:23
 msgid "Partage privé"
 msgstr "Private sharing"
 
@@ -1428,7 +1428,7 @@ msgstr "Download Excel"
 msgid "Télécharger CSV"
 msgstr "Download CSV"
 
-#: templates/links/batch_detail.html:20 vault/batches.py:267
+#: templates/links/batch_detail.html:20 vault/batches.py:285
 msgid "Ce brouillon a expiré. Préparez un nouveau lot."
 msgstr "This draft has expired. Prepare a new batch."
 
@@ -2021,59 +2021,55 @@ msgstr "Quota for %(name)s in GiB"
 msgid "Mettre à jour"
 msgstr "Update"
 
-#: templates/share/page.html:5 templates/share/page.html:13
+#: templates/share/page.html:5 templates/share/page.html:14
 msgid "Liasio"
 msgstr "Liasio"
 
-#: templates/share/page.html:12
-msgid "L"
-msgstr "L"
-
-#: templates/share/page.html:32
+#: templates/share/page.html:39
 msgid "Votre dossier"
 msgstr "Your collection"
 
-#: templates/share/page.html:37
+#: templates/share/page.html:44
 msgid "Voir les aperçus des fichiers"
 msgstr "View file previews"
 
-#: templates/share/page.html:38
+#: templates/share/page.html:45
 msgid ""
 "Un aperçu avant de télécharger. Ouvrez une image ou un PDF pour le regarder "
 "de plus près."
 msgstr ""
 "A preview before you download. Open an image or PDF for a closer look."
 
-#: templates/share/page.html:43
+#: templates/share/page.html:50
 msgid "Première page du PDF"
 msgstr "First page of the PDF"
 
-#: templates/share/page.html:43
+#: templates/share/page.html:50
 msgid "Image réduite"
 msgstr "Reduced image"
 
-#: templates/share/page.html:43
+#: templates/share/page.html:50
 #, python-format
 msgid "Aperçu de %(name)s"
 msgstr "Preview of %(name)s"
 
-#: templates/share/page.html:44
+#: templates/share/page.html:51
 msgid "Charger l’aperçu"
 msgstr "Load preview"
 
-#: templates/share/page.html:46
+#: templates/share/page.html:53
 msgid "Agrandir"
 msgstr "Enlarge"
 
-#: templates/share/page.html:50
+#: templates/share/page.html:57
 msgid "À découvrir après téléchargement"
 msgstr "Available after downloading"
 
-#: templates/share/page.html:55
+#: templates/share/page.html:62
 msgid "· PDF, page 1"
 msgstr "· PDF, page 1"
 
-#: templates/share/page.html:60
+#: templates/share/page.html:67
 msgid ""
 "Aperçus des images et PDF jusqu’à 20 Mio. Leur consultation ne consomme pas "
 "de téléchargement. Les fichiers originaux sont dans le dossier ZIP."
@@ -2081,23 +2077,23 @@ msgstr ""
 "Previews for images and PDFs up to 20 MiB. Viewing them does not consume a "
 "download. The original files are in the ZIP collection."
 
-#: templates/share/page.html:66
+#: templates/share/page.html:73
 msgid "ZIP ·"
 msgstr "ZIP ·"
 
-#: templates/share/page.html:72
+#: templates/share/page.html:79
 msgid "Disponible jusqu’au"
 msgstr "Available until"
 
-#: templates/share/page.html:76
+#: templates/share/page.html:83
 msgid "Un seul téléchargement autorisé, même en cas d’interruption."
 msgstr "One authorized download only, even if interrupted."
 
-#: templates/share/page.html:78
+#: templates/share/page.html:85
 msgid "téléchargements autorisés utilisés"
 msgstr "authorized downloads used"
 
-#: templates/share/page.html:82
+#: templates/share/page.html:89
 msgid ""
 "L’expéditeur peut consulter les dates d’ouverture de cette page et des "
 "téléchargements autorisés. Aucun outil publicitaire n’est utilisé."
@@ -2105,39 +2101,35 @@ msgstr ""
 "The sender can see when this page was opened and downloads were authorized. "
 "No advertising trackers are used."
 
-#: templates/share/page.html:88
+#: templates/share/page.html:95
 msgid "Fermer l’aperçu"
 msgstr "Close preview"
 
-#: templates/share/page.html:88
+#: templates/share/page.html:95
 msgid "×"
 msgstr "×"
 
-#: templates/share/page.html:91
+#: templates/share/page.html:98
 msgid "Chargement de l’aperçu…"
 msgstr "Loading preview…"
 
-#: templates/share/page.html:95
+#: templates/share/page.html:102
 msgid "Fichier précédent"
 msgstr "Previous file"
 
-#: templates/share/page.html:95 templates/trash.html:20
+#: templates/share/page.html:102 templates/trash.html:20
 #: templates/trash.html:23
 msgid "← Précédent"
 msgstr "← Previous"
 
-#: templates/share/page.html:97
+#: templates/share/page.html:104
 msgid "Fichier suivant"
 msgstr "Next file"
 
-#: templates/share/page.html:97 templates/trash.html:20
+#: templates/share/page.html:104 templates/trash.html:20
 #: templates/trash.html:23
 msgid "Suivant →"
 msgstr "Next →"
-
-#: templates/share/page.html:106
-msgid "Partagé avec"
-msgstr "Shared with"
 
 #: templates/share/unlock.html:3
 msgid "Partage protégé · Liasio"
@@ -2695,32 +2687,32 @@ msgstr ""
 "In local development mode, the antivirus may be disabled. Unscanned files "
 "remain labeled as such."
 
-#: vault/api.py:135
+#: vault/api.py:134
 msgid "expires_in_days doit être un entier."
 msgstr "expires_in_days must be an integer."
 
-#: vault/api.py:137 vault/forms.py:186
+#: vault/api.py:136 vault/forms.py:186
 msgid "Choisissez une date ou une durée, pas les deux."
 msgstr "Choose a date or a duration, not both."
 
-#: vault/api.py:139
+#: vault/api.py:138
 msgid "allow_previews doit être un booléen."
 msgstr "allow_previews must be a boolean."
 
-#: vault/api.py:141
+#: vault/api.py:140
 msgid "max_downloads doit être un entier."
 msgstr "max_downloads must be an integer."
 
-#: vault/api.py:146
+#: vault/api.py:145
 msgid "expires_at doit inclure un fuseau horaire (ISO 8601)."
 msgstr "expires_at must include a timezone (ISO 8601)."
 
-#: vault/api.py:173 vault/batches.py:205 vault/batches.py:270
+#: vault/api.py:179 vault/batches.py:117 vault/batches.py:288
 #: vault/views.py:496
 msgid "Ajoutez au moins un fichier avant de créer un lien."
 msgstr "Add at least one file before creating a link."
 
-#: vault/api.py:177
+#: vault/api.py:183
 msgid "Des fichiers n’ont pas été analysés par l’antivirus."
 msgstr "Some files have not been scanned for malware."
 
@@ -2742,6 +2734,40 @@ msgstr ""
 #: vault/api_auth.py:188
 msgid "Limite quotidienne de créations API atteinte (1 000)."
 msgstr "Daily API creation limit reached (1,000)."
+
+#: vault/api_batches.py:82
+msgid "Champs de lot inconnus."
+msgstr "Unknown batch fields."
+
+#: vault/api_batches.py:84
+#| msgid "Indiquez le nombre de liens."
+msgid "Indiquez un nom de lot."
+msgstr "Enter a batch name."
+
+#: vault/api_batches.py:89
+#| msgid "Choisissez une date ou une durée, pas les deux."
+msgid "Fournissez names ou count, mais pas les deux."
+msgstr "Supply names or count, but not both."
+
+#: vault/api_batches.py:97
+msgid "names doit contenir de 1 à 200 noms de liens."
+msgstr "names must contain between 1 and 200 link names."
+
+#: vault/api_batches.py:101
+#| msgid "max_downloads doit être un entier."
+msgid "count doit être un entier de 1 à 200."
+msgstr "count must be an integer between 1 and 200."
+
+#: vault/api_batches.py:108
+#| msgid ""
+#| "Chaque cellule doit contenir au plus 1 000 caractères, sans caractères de "
+#| "contrôle."
+msgid "Chaque nom doit contenir de 1 à 80 caractères sur une seule ligne."
+msgstr "Each name must contain 1 to 80 characters on a single line."
+
+#: vault/api_batches.py:113
+msgid "Conditions de lot invalides ou champs inconnus."
+msgstr "Invalid batch conditions or unknown fields."
 
 #: vault/batches.py:29
 msgid "Utilisez un nom sur une seule ligne, sans caractères de contrôle."
@@ -2799,15 +2825,7 @@ msgstr "Choose your list."
 msgid "Nom du lien %(number)s"
 msgstr "Name for link %(number)s"
 
-#: vault/batches.py:111 vault/middleware.py:86
-msgid "Trop de demandes. Réessayez plus tard."
-msgstr "Too many requests. Try again later."
-
-#: vault/batches.py:175 vault/link_lists.py:163
-msgid "La liste ne doit pas dépasser 1 Mio."
-msgstr "The list must not exceed 1 MiB."
-
-#: vault/batches.py:200
+#: vault/batches.py:108
 msgid ""
 "Vous avez atteint 100 lots. Supprimez une ancienne liste pour en préparer "
 "une autre ; ses liens seront conservés."
@@ -2815,12 +2833,20 @@ msgstr ""
 "You have reached 100 batches. Delete an older list to prepare another; its "
 "links will be kept."
 
-#: vault/batches.py:244
+#: vault/batches.py:130 vault/middleware.py:90
+msgid "Trop de demandes. Réessayez plus tard."
+msgstr "Too many requests. Try again later."
+
+#: vault/batches.py:194 vault/link_lists.py:163
+msgid "La liste ne doit pas dépasser 1 Mio."
+msgstr "The list must not exceed 1 MiB."
+
+#: vault/batches.py:247
 #, python-format
 msgid "Lien %(number)s"
 msgstr "Link %(number)s"
 
-#: vault/batches.py:278 vault/views.py:505
+#: vault/batches.py:292 vault/views.py:505
 msgid ""
 "Des fichiers n’ont pas été analysés par l’antivirus. Importez-les à nouveau "
 "dans un dossier avec l’antivirus activé."
@@ -2828,27 +2854,27 @@ msgstr ""
 "Some files have not been scanned for malware. Upload them again into a "
 "collection with the antivirus enabled."
 
-#: vault/batches.py:338 vault/batches.py:343
+#: vault/batches.py:350 vault/batches.py:355
 msgid "Action invalide."
 msgstr "Invalid action."
 
-#: vault/batches.py:356
+#: vault/batches.py:368
 msgid "Les liens sont créés. Copiez-les ou téléchargez la liste complétée."
 msgstr "Links created. Copy them or download the completed list."
 
-#: vault/batches.py:386 vault/batches.py:535
+#: vault/batches.py:398 vault/batches.py:552
 msgid "Noms enregistrés. Les URL restent identiques."
 msgstr "Names saved. URLs stay unchanged."
 
-#: vault/batches.py:474
+#: vault/batches.py:491
 msgid "Nom"
 msgstr "Name"
 
-#: vault/batches.py:474
+#: vault/batches.py:491
 msgid "Référence"
 msgstr "Reference"
 
-#: vault/batches.py:502
+#: vault/batches.py:519
 msgid ""
 "Liste supprimée. Les liens déjà créés restent disponibles dans Mes liens."
 msgstr "List deleted. Existing links remain available in My links."
@@ -3123,50 +3149,59 @@ msgid "Quantité, import Excel ou CSV, noms et export des URL."
 msgstr "Quantity, Excel or CSV imports, names and URL exports."
 
 #: vault/help.py:48
+#| msgid "Automatiser avec l’API et les webhooks"
+msgid "Automatiser les lots de liens"
+msgstr "Automate link batches"
+
+#: vault/help.py:49
+msgid "Envoyer des noms, recevoir les liens et exporter par API."
+msgstr "Send names, receive links and export through the API."
+
+#: vault/help.py:53
 msgid "Gérer le stockage"
 msgstr "Manage storage"
 
-#: vault/help.py:49
+#: vault/help.py:54
 msgid "Tailles, quotas, suppression et restauration."
 msgstr "Sizes, quotas, deletion and recovery."
 
-#: vault/help.py:53
+#: vault/help.py:58
 msgid "Inviter son équipe"
 msgstr "Invite your team"
 
-#: vault/help.py:54
+#: vault/help.py:59
 msgid "Invitations, comptes et suspension des accès."
 msgstr "Invitations, accounts and access suspension."
 
-#: vault/help.py:58
+#: vault/help.py:63
 msgid "Protéger son compte"
 msgstr "Protect your account"
 
-#: vault/help.py:59
+#: vault/help.py:64
 msgid "Mot de passe, double authentification et récupération."
 msgstr "Password, two-factor authentication and recovery."
 
-#: vault/help.py:63
+#: vault/help.py:68
 msgid "Suivre les accès"
 msgstr "Track activity"
 
-#: vault/help.py:64
+#: vault/help.py:69
 msgid "Ouvertures, téléchargements et export CSV."
 msgstr "Page opens, downloads and CSV export."
 
-#: vault/help.py:68
+#: vault/help.py:73
 msgid "Administrer l’instance"
 msgstr "Administer your instance"
 
-#: vault/help.py:69
+#: vault/help.py:74
 msgid "Capacité, antivirus, sauvegardes et maintenance."
 msgstr "Capacity, antivirus, backups and maintenance."
 
-#: vault/help.py:73
+#: vault/help.py:78
 msgid "Automatiser avec l’API et les webhooks"
 msgstr "Automate with API and webhooks"
 
-#: vault/help.py:74
+#: vault/help.py:79
 msgid "Clés, import automatique, événements signés et n8n."
 msgstr "Keys, automated uploads, signed events and n8n."
 
@@ -3326,31 +3361,31 @@ msgstr ""
 msgid "Action indisponible."
 msgstr "Action unavailable."
 
-#: vault/middleware.py:39
+#: vault/middleware.py:43
 msgid "Longueur invalide."
 msgstr "Invalid length."
 
-#: vault/middleware.py:41
+#: vault/middleware.py:45
 msgid "Envoi trop volumineux."
 msgstr "Upload too large."
 
-#: vault/middleware.py:47 vault/middleware.py:81
+#: vault/middleware.py:51 vault/middleware.py:85
 msgid "Content-Length requis."
 msgstr "Content-Length required."
 
-#: vault/middleware.py:71 vault/middleware.py:97 vault/middleware.py:116
+#: vault/middleware.py:75 vault/middleware.py:101 vault/middleware.py:120
 msgid "Authentification requise."
 msgstr "Authentication required."
 
-#: vault/middleware.py:79 vault/middleware.py:124
+#: vault/middleware.py:83 vault/middleware.py:128
 msgid "Dossier introuvable."
 msgstr "Collection not found."
 
-#: vault/middleware.py:103 vault/middleware.py:128 vault/resumable.py:99
+#: vault/middleware.py:107 vault/middleware.py:132 vault/resumable.py:99
 msgid "Trop d’envois. Réessayez plus tard."
 msgstr "Too many uploads. Try again later."
 
-#: vault/middleware.py:134
+#: vault/middleware.py:138
 msgid "Quota de stockage insuffisant."
 msgstr "Insufficient storage quota."
 
@@ -3796,3 +3831,9 @@ msgid ""
 msgstr ""
 "Use a public HTTPS URL on port 443, without credentials, query parameters or"
 " fragments."
+
+#~ msgid "Partagé avec Liasio."
+#~ msgstr "Shared with Liasio."
+
+#~ msgid "L"
+#~ msgstr "L"

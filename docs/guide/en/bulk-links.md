@@ -52,4 +52,9 @@ Lists are private to the folder's owner, never shown to recipients, and included
 - Ten batch preparations per hour per account; request limits also apply per IP address. Try again later if a limit is reached.
 - When antivirus is required, it must accept both the imported list and the folder's files. List data has separate database limits and does not count towards file-storage quota.
 
+
+## Automate this workflow
+
+[Batch creation through the API](bulk-links-api.md) accepts names or a quantity from Codex, a terminal or your website server, then returns links and Excel/CSV exports. These batches appear in **My batches** and remain accessible in the interface.
+
 [Link conditions](sharing.md) · [API and webhook automation](automation.md) · [Back to the guide](README.md)

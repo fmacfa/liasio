@@ -21,6 +21,10 @@ Send JSON with `Content-Type: application/json`, except binary chunks. Use `Acce
 | POST | `uploads/{id}/cancel/` | files:write | 200, canceled state |
 | GET | `links/` | read | 200, paginated link objects |
 | POST | `collections/{id}/links/` | links:write | 201, link; idempotency key required |
+| POST | `collections/{id}/link-batches/` | links:write | 201, completed batch with ordered links; idempotency key required |
+| GET | `link-batches/` | read | 200, paginated batch summaries; optional `collection_id` filter |
+| GET | `link-batches/{id}/` | read | 200, batch, original rows and current links |
+| GET | `link-batches/{id}/export/{format}/` | read | 200, private `xlsx` or `csv` attachment |
 | GET | `links/{id}/` | read | 200, link object |
 | POST | `links/{id}/revoke/` | links:write | 200, link object |
 
@@ -55,6 +59,35 @@ After finalizing files, create a link:
 
 A link response contains `id`, `collection_id`, `label`, **`url`**, `status` (`active`, `expired`, `revoked`, `exhausted`), `password_protected`, `allow_previews`, `max_downloads`, `downloads` and `expires_at`. Treat the URL as a secret. Revoke is idempotent. Existing link conditions cannot be edited via this API: issue a replacement.
 
+## Saved link batches
+
+The [English walkthrough](guide/en/bulk-links-api.md), [French walkthrough](guide/fr/bulk-links-api.md) and [Python command-line client](../examples/batches.py) cover Codex/terminal commands, server-side website integration, reads and downloads. API batches immediately appear in **My links → My batches**. API and browser creation use the same records, atomic completion, ownership checks, file/antivirus rules and value-only export code.
+
+POST `collections/{id}/link-batches/` with a required `Idempotency-Key` and:
+
+```json
+{
+  "name": "October clients",
+  "names": ["A", "B"],
+  "conditions": {"expires_in_days": 7, "max_downloads": 1}
+}
+```
+
+- `name`: required batch name, 1–80 characters on a single line.
+- Supply exactly one of `names` (1–200 strings, each 1–80 characters on a single line) or `count` (integer 1–200, generating stable English labels `Link 001`, etc.). Names are trimmed; duplicate names remain separate links in their original order. Control characters, invalid Unicode and unknown request fields are rejected.
+- Optional `conditions` accepts only `expires_at`, `expires_in_days`, `max_downloads`, `password`, `allow_previews`, with the same strict types and bounds as single-link creation. Without conditions: no expiry/password, unlimited downloads, previews false. Conditions apply independently to each link. Date and duration are mutually exclusive. The password is hashed once outside owner locks and is never returned/exported.
+- JSON only, at most 256 KiB per request. The API does not accept workbook or CSV uploads on this endpoint. The original names become a `Name` source column, included in exports.
+
+Both creation and detail responses contain `id` (batch UUID), `collection_id`, `name`, `state` (`complete`, `draft`, `expired`), `count` (source row count), ISO 8601 `created_at`/nullable `completed_at`, `view_url`, `api_url`, `exports`, `headers`, `source_rows` and `items`. Each item is a link object as described above, plus its **1-based `position`**, ordered like `names`. Its `id` is a link UUID, and its `label` is the current name. URLs in `exports.xlsx` / `exports.csv` require Bearer authentication; `view_url` requires a browser login. None of these management URLs grants anonymous access.
+
+List responses omit `headers`, `source_rows` and `items`, use the usual 50-entry pagination, and include both API and browser batches. Optional `?collection_id=UUID` must refer to an owned, non-trashed collection. Drafts and expired drafts have an empty `items` list and `exports: null`; trying to export either returns 404. New API batches are completed directly, without a draft confirmation step. Trashed or deleted collections make their batches unavailable.
+
+Exports contain original source columns, current link labels, URLs and UTC dates/status/counters. They use the same formula-neutralization rules as browser exports. Renaming a link in the interface is reflected by subsequent reads/exports without changing its URL. Reads and exports do not count as recipient opens/downloads. A saved export is a snapshot and never updates itself. No password is included. List deletion, renaming and link revocation remain available in the interface; the existing API also supports individual link revocation.
+
+The shared limits are 10 preparations/hour/account (20/IP), 100 saved batches/account including trashed collections, and 60 exports/hour/account (120/IP). Browser imports have an additional preparse guard. Creating a batch uses one encrypted API receipt, in addition to general API limits. An idempotent replay precedes batch quota, preparation budget and date validation, so it still succeeds after the original link expiry; it does not create more links or events. Concurrent retries are serialized by the owner lock and recheck current token validity. A failure rolls back batch, links, associations, events, webhook deliveries and receipt together. Each created link emits its usual `link.created`, without private list data; no additional batch event or email is sent.
+
+For a website, call from its authenticated backend with a server-side API key, authorize that site's user and collection, limit requests and do not expose credentials or unrestricted share URLs to browsers. Cross-origin browser calls are not enabled. Webhook-triggered workflows call this same API; outgoing webhooks are notifications, not incoming commands.
+
 ## Resumable file protocol
 
 1. Create a collection.
@@ -76,7 +109,7 @@ Do not add files to a collection with active links. API and browser imports shar
 
 ## Idempotency and retries
 
-Three creation routes require `Idempotency-Key`: collections, upload sessions and links. Use 8–128 letters, digits, `_` or `-`. Within one API key, an identical **path and raw request body** returns the original successful response for 24 hours, with `Idempotency-Replayed: true`. Reusing the key for different bytes/path returns 409 `idempotency_conflict`. Keep JSON serialization stable. Receipts are encrypted because responses may contain share URLs. A replay is a historical creation result: read the resource again for its current status.
+Four creation routes require `Idempotency-Key`: collections, upload sessions, individual links and link batches. Use 8–128 letters, digits, `_` or `-`. Within one API key, an identical **path and raw request body** returns the original successful response for 24 hours, with `Idempotency-Replayed: true`. Reusing the key for different bytes/path returns 409 `idempotency_conflict`. Keep JSON serialization stable. Receipts are encrypted because responses may contain share URLs. A replay is a historical creation result: read the resource again for its current status, including after deleting a list.
 
 Receipts are not permanent deduplication. Persist resource IDs and use status/read routes after 24 hours; do not blindly resubmit old creates. Per owner: 600 API requests/minute and 1,000 retained creation receipts/day. An additional IP ceiling is 1,200 requests/minute; upload starts/finalizations also have a 30/hour/IP guard. HTTP 429 includes `Retry-After`. Retry transient 429/502/503/504 with bounded backoff and the same idempotency key; never automatically repeat a new creation with a new key.
 

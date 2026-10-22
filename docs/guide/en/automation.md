@@ -40,6 +40,10 @@ Choose a title of up to 120 characters; its first 80 characters become the link 
 
 The client uses all three permissions, checksums every chunk and reuses durable offsets. Pending uploads expire after 24 hours. Completed collection/link IDs are saved locally; creation receipts last 24 hours, so resume promptly if the connection was lost before an ID was saved. See the [API reference](../../API.md) for all endpoints, fields, limits and error responses.
 
+## Create multiple links and export their list
+
+Send `names: ["A", "B"]` to the API to receive links A and B in order, saved in **My batches**. Reads and Excel/CSV exports use the same key with the `read` permission. The [batch API guide](bulk-links-api.md) includes Python commands for Codex/terminals and a server-side website example.
+
 ## 3. Add an outgoing webhook
 
 Choose **Add a webhook**, enter a name and the receiver’s **public HTTPS URL**, select events, then confirm your password/MFA. Only port 443 is allowed. Internal/private IPs, credentials in URLs, query parameters, fragments and redirects are rejected. For n8n on the same VPS, use its public HTTPS domain, not a Docker service name or `localhost`.

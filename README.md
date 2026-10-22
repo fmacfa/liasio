@@ -53,6 +53,8 @@ For n8n, scripts and other tools, see the [API reference](docs/API.md), the [aut
 
 For a workflow entirely in the interface, use **Create multiple links**: enter a quantity or upload an Excel/CSV list, check the names and conditions, then download the completed list. Original columns and row order are kept as values. See the [bulk-link guide](docs/guide/en/bulk-links.md), including the downloadable template, limits and illustrated steps.
 
+The [batch API](docs/guide/en/bulk-links-api.md) accepts names or a quantity and returns the corresponding links in order. Batches appear in **My batches**, can be read and exported as Excel/CSV, and support safe retries. Use the included [Python client](examples/batches.py) from a terminal or Codex, or call the API from your website's backend with a private key.
+
 ## Install on your domain
 
 Use a Linux server with **Docker Engine and Docker Compose v2**, Git, and Python 3 for configuration. For the complete stack, start with **8 GB of RAM** (including up to 4 GB for ClamAV), 2 vCPUs, and enough disk space for your files. These are starting recommendations, not load-test results.

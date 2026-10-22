@@ -40,6 +40,10 @@ Choisissez un titre de 120 caractères maximum ; ses 80 premiers caractères dev
 
 Le client utilise les trois permissions, vérifie chaque bloc et reprend aux positions enregistrées. Les imports en attente expirent après 24 heures. Les identifiants de dossier/lien sont sauvegardés localement ; les reçus de création durent 24 heures : reprenez rapidement si la connexion s’est coupée avant l’enregistrement d’un identifiant. La [référence API](../../API.md) détaille routes, champs, limites et erreurs.
 
+## Créer plusieurs liens et exporter leur liste
+
+Envoyez `names: ["A", "B"]` à l’API pour recevoir les liens A et B dans l’ordre, enregistrés dans **Mes lots**. La consultation et les exports Excel/CSV utilisent la même clé, avec la permission `read`. Le [guide des lots par API](bulk-links-api.md) fournit les commandes Python pour Codex/terminal et un exemple de site web côté serveur.
+
 ## 3. Ajouter un webhook sortant
 
 Cliquez sur **Ajouter un webhook**, indiquez un nom et l’**URL HTTPS publique** du destinataire, choisissez les événements puis confirmez le mot de passe/MFA. Seul le port 443 est autorisé. Les IP privées/internes, identifiants dans l’URL, paramètres de requête, fragments et redirections sont refusés. Pour n8n sur le même VPS, utilisez son domaine HTTPS public, pas un nom Docker ni `localhost`.
