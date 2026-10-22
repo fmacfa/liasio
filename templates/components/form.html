@@ -1,9 +1,12 @@
+{% load i18n %}
 {% if form.non_field_errors %}
   <div class="form-error" role="alert">{{ form.non_field_errors }}</div>
 {% endif %}
 {% for field in form %}
   <div class="field">
-    {% if field.field.widget.input_type == 'checkbox' %}
+    {% if field.field.widget.allow_multiple_selected %}
+    <fieldset class="checkbox-group"><legend>{{ field.label }}</legend>{{ field }}</fieldset>
+    {% elif field.field.widget.input_type == 'checkbox' %}
     <label class="checkbox-field" for="{{ field.id_for_label }}">{{ field }}<span>{{ field.label }}</span></label>
     {% else %}
     <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %}

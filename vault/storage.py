@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _
 import hashlib
 import re
 import socket
@@ -23,7 +24,7 @@ def safe_path(value):
     value = unicodedata.normalize("NFC", value)
     parts = value.split("/")
     if not value or len(value) > 500 or len(parts) > 20 or "\\" in value:
-        raise ValidationError("Chemin de fichier invalide.")
+        raise ValidationError(_("Chemin de fichier invalide."))
     for part in parts:
         if (
             not part
@@ -33,13 +34,13 @@ def safe_path(value):
             or len(part) > 180
         ):
             raise ValidationError(
-                "Les chemins cachés, vides ou relatifs ne sont pas autorisés."
+                _("Les chemins cachés, vides ou relatifs ne sont pas autorisés.")
             )
         if any(unicodedata.category(c).startswith("C") for c in part) or re.search(
             r'[<>:"|?*]', part
         ):
             raise ValidationError(
-                "Un nom de fichier contient des caractères non autorisés."
+                _("Un nom de fichier contient des caractères non autorisés.")
             )
         if part.split(".")[0].upper() in {
             "CON",
@@ -49,11 +50,12 @@ def safe_path(value):
             *(f"COM{i}" for i in range(10)),
             *(f"LPT{i}" for i in range(10)),
         }:
-            raise ValidationError("Nom de fichier réservé.")
+            raise ValidationError(_("Nom de fichier réservé."))
     extension = PurePosixPath(value).suffix.lower().lstrip(".")
     if extension not in settings.ALLOWED_EXTENSIONS:
         raise ValidationError(
-            f"Type de fichier non autorisé : {extension or 'sans extension'}."
+            _("Type de fichier non autorisé : %(extension)s.")
+            % {"extension": extension or _("sans extension")}
         )
     return value
 
@@ -62,7 +64,7 @@ def scan(upload):
     if not settings.CLAMAV_HOST:
         if settings.ANTIVIRUS_REQUIRED:
             raise ValidationError(
-                "L’antivirus est indisponible. Aucun fichier n’a été enregistré."
+                _("L’antivirus est indisponible. Aucun fichier n’a été enregistré.")
             )
         return False
     try:
@@ -85,12 +87,12 @@ def scan(upload):
         # truncated, unexpected or error responses.
         if result != b"stream: OK\x00":
             raise ValidationError(
-                "Fichier refusé par l’antivirus ou analyse incomplète."
+                _("Fichier refusé par l’antivirus ou analyse incomplète.")
             )
         return True
     except OSError:
         raise ValidationError(
-            "L’antivirus ne répond pas. Réessayez plus tard."
+            _("L’antivirus ne répond pas. Réessayez plus tard.")
         ) from None
     finally:
         upload.seek(0)
@@ -114,15 +116,15 @@ def add_files(
     capacity_reserved=False,
 ):
     if not uploads or len(uploads) > 100 or len(paths) != len(uploads):
-        raise ValidationError("Sélectionnez entre 1 et 100 fichiers.")
+        raise ValidationError(_("Sélectionnez entre 1 et 100 fichiers."))
     normalized = [safe_path(p) for p in paths]
     if len({p.casefold() for p in normalized}) != len(normalized):
-        raise ValidationError("Deux fichiers portent le même chemin.")
+        raise ValidationError(_("Deux fichiers portent le même chemin."))
     size = sum(f.size for f in uploads)
     if size > settings.MAX_UPLOAD_BYTES or any(
         f.size > settings.MAX_FILE_BYTES for f in uploads
     ):
-        raise ValidationError("La taille maximale de l’envoi est dépassée.")
+        raise ValidationError(_("La taille maximale de l’envoi est dépassée."))
     if not upload_session and not capacity_reserved:
         with reserve_temporary(2 * size, owner_id=owner.pk, kind="import"):
             return add_files(
@@ -144,10 +146,12 @@ def add_files(
                 pk=collection_id, owner=user
             )
             if not user.is_active:
-                raise ValidationError("Compte désactivé.")
+                raise ValidationError(_("Compte désactivé."))
             if available_links(collection.links.all()).exists():
                 raise ValidationError(
-                    "Révoquez les liens actifs avant de modifier les fichiers du dossier."
+                    _(
+                        "Révoquez les liens actifs avant de modifier les fichiers du dossier."
+                    )
                 )
             reservation = 0
             if upload_session:
@@ -161,13 +165,13 @@ def add_files(
                     or session.collection_id != collection.pk
                     or session.size != size
                 ):
-                    raise ValidationError("Session expirée ou invalide.")
+                    raise ValidationError(_("Session expirée ou invalide."))
                 reservation = session.size
             if (
                 user.used_bytes + user.reserved_bytes - reservation + size
                 > user.quota_bytes
             ):
-                raise ValidationError("Votre quota de stockage est atteint.")
+                raise ValidationError(_("Votre quota de stockage est atteint."))
             existing = {
                 p.casefold()
                 for p in Asset.all_objects.filter(collection=collection).values_list(
@@ -183,13 +187,15 @@ def add_files(
                 + size
                 > settings.MAX_UPLOAD_BYTES
             ):
-                raise ValidationError("La taille maximale du dossier est atteinte.")
+                raise ValidationError(_("La taille maximale du dossier est atteinte."))
             if (
                 existing.intersection(p.casefold() for p in normalized)
                 or len(existing) + len(uploads) > 100
             ):
                 raise ValidationError(
-                    "Chemin déjà présent ou limite de 100 fichiers par dossier atteinte."
+                    _(
+                        "Chemin déjà présent ou limite de 100 fichiers par dossier atteinte."
+                    )
                 )
             if (
                 not upload_session
@@ -198,7 +204,9 @@ def add_files(
                 ).exists()
             ):
                 raise ValidationError(
-                    "Terminez ou annulez les envois reprenables avant un import classique."
+                    _(
+                        "Terminez ou annulez les envois reprenables avant un import classique."
+                    )
                 )
             all_paths = existing | {p.casefold() for p in normalized}
             if any(
@@ -207,7 +215,7 @@ def add_files(
                 for i in range(1, len(path.split("/")))
             ):
                 raise ValidationError(
-                    "Un chemin ne peut pas être à la fois un fichier et un dossier."
+                    _("Un chemin ne peut pas être à la fois un fichier et un dossier.")
                 )
             for upload, path, scanned, digest in checked:
                 name = default_storage.save(f"{user.pk}/{uuid.uuid4().hex}", upload)
@@ -253,9 +261,9 @@ def download_bundle(link):
     """Build before claiming: a missing file must not consume a one-use link."""
     files = list(link.collection.files.all())
     if not files:
-        raise ValidationError("Ce dossier est vide.")
+        raise ValidationError(_("Ce dossier est vide."))
     if settings.ANTIVIRUS_REQUIRED and any(not f.scanned for f in files):
-        raise ValidationError("Ce dossier contient des fichiers non analysés.")
+        raise ValidationError(_("Ce dossier contient des fichiers non analysés."))
     # Always a disk temporary file: memory usage is independent of bundle size.
     # ZIP_STORED requires payload bytes plus two UTF-8 names and headers per
     # entry. The extra 1 MiB safely covers ZIP64 and all bounded metadata.
@@ -283,12 +291,12 @@ def download_bundle(link):
             # expiration, owner state and count immediately before authorization.
             owner = User.objects.select_for_update().get(pk=link.collection.owner_id)
             if not owner.is_active:
-                raise ValidationError("Ce lien n’est plus disponible.")
+                raise ValidationError(_("Ce lien n’est plus disponible."))
             changed = available_links(ShareLink.objects.filter(pk=link.pk)).update(
                 downloads=F("downloads") + 1
             )
             if not changed:
-                raise ValidationError("Ce lien n’est plus disponible.")
+                raise ValidationError(_("Ce lien n’est plus disponible."))
             Event.objects.create(link=link, kind="download_started")
         return bundle
     except Exception:

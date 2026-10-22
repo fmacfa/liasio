@@ -1,1 +1,1 @@
-Réinitialiser votre mot de passe LinkVault
+{% load i18n %}{% translate "Réinitialiser votre mot de passe LinkVault" %}

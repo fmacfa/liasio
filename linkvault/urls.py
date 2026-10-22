@@ -1,7 +1,48 @@
+from django.views.i18n import set_language, JavaScriptCatalog
 from django.urls import path
-from vault import views, mfa, trash, resumable, operations, previews
+from vault import (
+    views,
+    mfa,
+    trash,
+    resumable,
+    operations,
+    previews,
+    api,
+    integrations,
+    help,
+)
 
 urlpatterns = [
+    path("help/", help.index, name="help"),
+    path("help/<slug:slug>/", help.guide, name="guide"),
+    path("language/", set_language, name="set_language"),
+    path("jsi18n/", JavaScriptCatalog.as_view(), name="javascript-catalog"),
+    path("automations/", integrations.index, name="integrations"),
+    path(
+        "automations/keys/<uuid:pk>/revoke/",
+        integrations.revoke_token,
+        name="api_key_revoke",
+    ),
+    path(
+        "automations/webhooks/<uuid:pk>/", integrations.webhook_detail, name="webhook"
+    ),
+    path("api/v1/collections/", api.collections, name="api_collections"),
+    path(
+        "api/v1/collections/create/",
+        api.create_collection,
+        name="api_collection_create",
+    ),
+    path("api/v1/collections/<uuid:pk>/", api.collection),
+    path("api/v1/collections/<uuid:pk>/links/", api.create_link),
+    path("api/v1/collections/<uuid:pk>/uploads/start/", api.upload_start),
+    path("api/v1/collections/<uuid:pk>/uploads/pending/", api.uploads_pending),
+    path("api/v1/uploads/<uuid:pk>/status/", api.upload_status),
+    path("api/v1/uploads/<uuid:pk>/parts/<uuid:part_id>/chunk/", api.upload_chunk),
+    path("api/v1/uploads/<uuid:pk>/finish/", api.upload_finish),
+    path("api/v1/uploads/<uuid:pk>/cancel/", api.upload_cancel),
+    path("api/v1/links/", api.links),
+    path("api/v1/links/<uuid:pk>/", api.link),
+    path("api/v1/links/<uuid:pk>/revoke/", api.revoke_link),
     path("", views.dashboard, name="dashboard"),
     path("setup/", views.setup, name="setup"),
     path("login/", views.sign_in, name="login"),

@@ -2762,3 +2762,45 @@ a.preview-tile:focus-visible { outline: 3px solid var(--accent); outline-offset:
 .quota-field { display: grid; gap: 6px; font-size: 10px; color: var(--muted); }
 .quota-field input { width: 120px; min-height: 42px; border: 1px solid var(--line); border-radius: 7px; padding: 8px 10px; background: var(--paper); color: var(--ink); }
 @media (max-width: 650px) { .sidebar { overflow-y: visible; } }
+
+/* Automation and documentation surfaces. */
+.integration-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; align-items: start; }
+.integration-grid .panel, .guide-content, .secret-panel { padding: 28px; }
+.integration-row { display: flex; justify-content: space-between; gap: 18px; padding: 18px 0; border-bottom: 1px solid var(--line, #e4e6e2); color: inherit; text-decoration: none; }
+.integration-row small, .delivery-id { display: block; font-size: 12px; color: var(--muted, #6a716c); margin-top: 5px; overflow-wrap: anywhere; }
+.integration-create { margin-top: 22px; }
+summary { cursor: pointer; font-weight: 600; padding: 12px 0; }
+.integration-create form { margin-top: 20px; }
+.secret-panel { border: 2px solid #2c6552; margin-bottom: 24px; }
+.secret-value { display: block; padding: 18px; background: #edf3ef; overflow-wrap: anywhere; user-select: all; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 16px 0; }
+.language-picker { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; }
+.language-picker button { background: transparent; border: 1px solid transparent; border-radius: 6px; cursor: pointer; padding: 5px 8px; color: inherit; }
+.language-picker button[aria-pressed=true] { border-color: #9dad9f; background: #eef2ec; color: #1e4b39; }
+.auth-main > .language-picker { align-self: flex-end; margin: 20px; }
+.public-language { display: flex; justify-content: flex-end; padding: 12px 24px 0; }
+.guide-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.guide-card { display: block; padding: 24px; color: inherit; text-decoration: none; border: 1px solid #dce2da; background: #fff; border-radius: 14px; }
+.guide-card:hover { border-color: #477a5a; }
+.guide-card .eyebrow { color: #477a5a; }
+.guide-content { max-width: 960px; margin: 0 auto; background: white; border: 1px solid #e1e5de; border-radius: 16px; line-height: 1.8; }
+.guide-content h2 { margin-top: 36px; font-size: 23px; }
+.guide-content h3 { margin-top: 24px; }
+.guide-content img { width: 100%; height: auto; border-radius: 10px; border: 1px solid #e1e5de; margin: 16px 0; }
+.guide-content code { font-size: .85em; overflow-wrap: anywhere; background: #f2f4ef; padding: 2px 5px; border-radius: 4px; }
+.guide-content pre { overflow-x: auto; padding: 20px; background: #f2f4ef; border-radius: 10px; line-height: 1.6; }
+.guide-content pre code { padding: 0; }
+.guide-content table { display: block; overflow-x: auto; }
+.guide-content th, .guide-content td { min-width: 120px; }
+.guide-content ul, .guide-content ol { padding-left: 24px; }
+.guide-content li { margin: 8px 0; }
+.guide-content a { color: #276647; text-decoration: underline; }
+@media (max-width: 1050px) { .guide-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .integration-grid, .guide-grid { grid-template-columns: 1fr; } .guide-content { padding: 20px; } }
+.checkbox-group { border: 0; padding: 0; margin: 0; }
+.checkbox-group legend { font-weight: 600; margin-bottom: 10px; }
+.checkbox-group label { display: flex; gap: 10px; align-items: center; padding: 6px 0; }
+.checkbox-group input { width: auto; }
+.sidebar { overflow-y: auto; }
+
+.integration-panel { padding: 28px; margin-bottom: 24px; }

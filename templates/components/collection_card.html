@@ -1,13 +1,14 @@
+{% load i18n %}
 <a class="collection-card" href="{% url 'collection' item.pk %}">
   <div class="spread">
     <span class="folder-icon">{% include "components/icon.html" with name="folder" %}</span>
     <span class="card-arrow">↗</span>
   </div>
   <h3>{{ item.title }}</h3>
-  <p>{{ item.description|default:'Votre prochain partage commence ici.'|truncatechars:86 }}</p>
+  <p>{{ item.description|default:_('Votre prochain partage commence ici.')|truncatechars:86 }}</p>
   <div class="card-meta">
-    <span>{{ item.files.count }} fichier{{ item.files.count|pluralize }} · {{ item.total_bytes|filesizeformat }}</span>
-    <span>{{ item.link_count }} lien{{ item.link_count|pluralize }}</span>
+    <span>{{ item.files.count }} {% translate "fichier" %}{{ item.files.count|pluralize }} · {{ item.total_bytes|filesizeformat }}</span>
+    <span>{{ item.link_count }} {% translate "lien" %}{{ item.link_count|pluralize }}</span>
   </div>
-  <div class="card-bottom">Modifié le {{ item.updated_at|date:'d M Y' }}</div>
+  <div class="card-bottom">{% translate "Modifié le" %} {{ item.updated_at|date:"DATE_FORMAT" }}</div>
 </a>

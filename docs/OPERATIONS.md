@@ -102,16 +102,24 @@ Ne changez pas `SECRET_KEY` à chaque déploiement : sa rotation invalide sessio
 
 Si vous remplacez Caddy, maintenez HTTPS et HSTS, la limite de corps, les délais de réception, le remplacement des en-têtes proxy et l’isolation réseau de Gunicorn. N’activez pas de journalisation des URL de capacités. Ne placez pas un cache public devant les pages privées ou les téléchargements. N’ajoutez pas `null` ou des origines génériques à `CSRF_TRUSTED_ORIGINS`.
 
-## Limites de la version 0.3
+## Limites de la version 0.4
 
-- Déploiement sur un seul hôte, stockage local ; pas de haute disponibilité ou d’API publique.
+- Déploiement sur un seul hôte, stockage local ; pas de haute disponibilité. API privée à clés et permissions ; aucun import anonyme.
 - 1 Gio par fichier / 5 Gio par dossier par défaut ; reprise pendant 24 h en resélectionnant les mêmes fichiers.
 - ZIP global uniquement ; galerie d’images réduites et première page des PDF, sans prévisualisation active des originaux. Voir [les aperçus](PREVIEWS.md).
 - Pas de chiffrement de bout en bout, SSO ou vérification de boîte e-mail indépendante de l’invitation.
-- Pas de notification d’ouverture ni de mesure de réception complète.
+- Notifications d’ouverture par webhooks signés ; aucune mesure de réception complète.
 - La corbeille est conservée 30 jours ; après purge définitive, seule une sauvegarde permet la restauration.
 
 
 ## Guide de fiabilité 0.2
 
 [RELIABILITY.md](RELIABILITY.md) décrit en anglais les nouvelles options, la MFA, les alertes, le contrôle de restauration isolé et les tests de charge. `MFA_ENCRYPTION_KEY` doit rester stable ; en son absence, la clé MFA dépend de `SECRET_KEY`. Sauvegardez cette configuration avant toute rotation. La commande de récupération du mot de passe ne désactive pas la MFA.
+
+## Automatisations et traductions (0.4)
+
+La pile complète comprend le service `webhooks`, avec accès à PostgreSQL et au réseau HTTPS public, sans volume d’originaux. Vérifiez `docker compose logs --tail=50 webhooks` et la page Automatisations. Pour une installation manuelle, superviser `python manage.py deliver_webhooks --loop`. Une file d’événements ne livre rien sans ce processus.
+
+Le chiffrement des destinations, secrets de signature et reçus d’idempotence utilise la même clé stable que la MFA. Préservez `MFA_ENCRYPTION_KEY` (ou `SECRET_KEY` si la clé MFA est absente) lors d’une restauration. Les clés API deviennent invalides après changement de mot de passe/MFA. Les reçus API expirent après 24 h, les livraisons après 30 jours via `housekeeping`.
+
+Les catalogues `.mo` sont inclus. Exécutez `collectstatic` après chaque mise à jour, y compris pour les captures des guides. Les utilisateurs choisissent FR/EN par cookie ; les titres, noms de fichiers et présentations restent inchangés. [Guide français](guide/fr/README.md) · [API et webhooks](API.md).

@@ -1,0 +1,144 @@
+# English translations for LinkVault. MIT license.
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: LinkVault 0.4.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-22 09:51+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: LinkVault contributors\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: static/app.js:15
+msgid "Lien copié. Prêt à être partagé."
+msgstr "Link copied. Ready to share."
+
+#: static/app.js:24
+msgid "Lien à copier"
+msgstr "Link to copy"
+
+#: static/app.js:27
+msgid "Copiez le lien sélectionné avec votre clavier."
+msgstr "Copy the selected link with your keyboard."
+
+#: static/app.js:42
+msgid "Mon espace"
+msgstr "My workspace"
+
+#: static/app.js:63
+msgid ""
+"%(value1)s fichier(s) sélectionné(s) · %(value2)s octets vers la corbeille"
+msgstr "%(value1)s file(s) selected · %(value2)s bytes to move to the trash"
+
+#: static/app.js:63
+msgid "Sélectionnez les fichiers à supprimer."
+msgstr "Select files to delete."
+
+#: static/previews.js:47
+msgid "Préparation de l’aperçu…"
+msgstr "Preparing preview…"
+
+#: static/previews.js:51
+msgid "Aperçu indisponible"
+msgstr "Preview unavailable"
+
+#: static/previews.js:78
+msgid "Chargement de l’aperçu…"
+msgstr "Loading preview…"
+
+#: static/previews.js:87
+msgid "Aperçu de %(value1)s"
+msgstr "Preview of %(value1)s"
+
+#: static/previews.js:90
+msgid ""
+"Cet aperçu n’est pas disponible. Fermez cette fenêtre pour retrouver le "
+"téléchargement du dossier."
+msgstr ""
+"This preview is unavailable. Close this window to find the collection "
+"download."
+
+#: static/upload.js:27
+msgid "Envoi refusé (%(value1)s). Reconnectez-vous si votre session a expiré."
+msgstr "Upload rejected (%(value1)s). Sign in again if your session expired."
+
+#: static/upload.js:28
+msgid "Envoi refusé."
+msgstr "Upload rejected."
+
+#: static/upload.js:33
+msgid "Impossible de retrouver les envois. Reconnectez-vous."
+msgstr "Could not retrieve uploads. Sign in again."
+
+#: static/upload.js:39
+msgid ""
+"%(value1)s fichier(s) en attente · %(value2)s % reçus. Resélectionnez les "
+"mêmes fichiers puis cliquez sur Importer pour reprendre."
+msgstr ""
+"%(value1)s pending file(s) · %(value2)s % received. Select the same files "
+"and click Upload to resume."
+
+#: static/upload.js:40
+msgid "Annuler cet envoi"
+msgstr "Cancel this upload"
+
+#: static/upload.js:49
+msgid "%(count)s fichier(s) · %(size)s Mio"
+msgstr "%(count)s file(s) · %(size)s MiB"
+
+#: static/upload.js:52
+msgid "%(size)s octets"
+msgstr "%(size)s bytes"
+
+#: static/upload.js:55
+msgid "Sélectionnez au maximum 100 fichiers."
+msgstr "Select at most 100 files."
+
+#: static/upload.js:60
+msgid "Pause après le bloc en cours…"
+msgstr "Pausing after the current chunk…"
+
+#: static/upload.js:65
+msgid "Utilisez « Choisir un dossier » pour conserver l’arborescence."
+msgstr "Use “Choose a folder” to preserve the directory structure."
+
+#: static/upload.js:71
+msgid "Préparation de l’envoi…"
+msgstr "Preparing upload…"
+
+#: static/upload.js:91
+#| msgid ""
+#| "Envoi en pause avant vérification. Cliquez sur Importer pour terminer."
+msgid ""
+"Envoi en pause. Cliquez sur Importer pour reprendre pendant les prochaines "
+"24 h."
+msgstr "Upload paused. Click Upload to resume within the next 24 hours."
+
+#: static/upload.js:92
+msgid "Envoi de %(value1)s"
+msgstr "Uploading %(value1)s"
+
+#: static/upload.js:100
+msgid "Envoi en pause avant vérification. Cliquez sur Importer pour terminer."
+msgstr "Upload paused before verification. Click Upload to finish."
+
+#: static/upload.js:101
+msgid "Analyse antivirus et enregistrement…"
+msgstr "Scanning for malware and saving…"
+
+#: static/upload.js:106
+msgid ""
+"Connexion interrompue. Vos blocs reçus sont conservés : cliquez sur Importer"
+" pour reprendre."
+msgstr ""
+"Connection interrupted. Received chunks are retained: click Upload to "
+"resume."
+
+#: static/upload.js:107
+msgid "En attente"
+msgstr "Pending"

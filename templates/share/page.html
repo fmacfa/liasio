@@ -1,20 +1,22 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% load static %}
 {% block scripts %}<script src="{% static 'previews.js' %}" defer></script>{% endblock %}
-{% block title %}{{ collection.title }} · {{ branding.name|default:'LinkVault' }}{% endblock %}
+{% block title %}{{ collection.title }} · {{ branding.name|default:_('LinkVault') }}{% endblock %}
 {% block body_class %}public-body {% if link.allow_previews %}has-previews{% endif %} theme-{{ branding.theme|default:'forest' }}{% endblock %}
 {% block body %}
+<div class="public-language">{% include "components/language.html" %}</div>
   <header class="public-header">
     <a class="public-brand" href="{% url 'share' token %}">
-      <span class="preview-monogram">{{ branding.name|default:'L'|slice:':1'|upper }}</span>
-      <span>{{ branding.name|default:'LinkVault' }}</span>
+      <span class="preview-monogram">{{ branding.name|default:_('L')|slice:':1'|upper }}</span>
+      <span>{{ branding.name|default:_('LinkVault') }}</span>
     </a>
     <span class="public-tagline">{{ branding.tagline }}</span>
-    <span class="badge">{% include "components/icon.html" with name="lock" %}Partage privé</span>
+    <span class="badge">{% include "components/icon.html" with name="lock" %}{% translate "Partage privé" %}</span>
   </header>
   <main id="main" class="public-main">
     <div class="share-intro">
-      <span class="eyebrow">DES FICHIERS POUR VOUS</span>
+      <span class="eyebrow">{% translate "DES FICHIERS POUR VOUS" %}</span>
       <h1>{{ collection.title }}</h1>
       <p class="pre-line">{{ collection.description }}</p>
     </div>
@@ -26,33 +28,33 @@
     {% endif %}
     <section class="share-files">
       <div class="section-heading">
-        <h2>Votre dossier</h2>
-        <span>{{ collection.files.count }} fichier{{ collection.files.count|pluralize }} · {{ collection.total_bytes|filesizeformat }}</span>
+        <h2>{% translate "Votre dossier" %}</h2>
+        <span>{{ collection.files.count }} {% translate "fichier" %}{{ collection.files.count|pluralize }} · {{ collection.total_bytes|filesizeformat }}</span>
       </div>
       {% if link.allow_previews %}
-      <p class="gallery-intro">Un aperçu avant de télécharger. Ouvrez une image ou un PDF pour le regarder de plus près.</p>
+      <p class="gallery-intro">{% translate "Un aperçu avant de télécharger. Ouvrez une image ou un PDF pour le regarder de plus près." %}</p>
       <div class="file-gallery" data-file-gallery>
         {% for file in collection.files.all %}
         <article class="file-card">
           {% if file.preview_kind %}
-          <a class="preview-tile" href="{% url 'file_preview' token file.pk %}" data-preview data-name="{{ file.path }}" data-detail="{{ file.size|filesizeformat }} · {% if file.preview_kind == 'pdf' %}Première page du PDF{% else %}Image réduite{% endif %}" aria-label="Aperçu de {{ file.path }}">
-            <span class="preview-fallback"><span class="file-type">{{ file.extension }}</span><span data-preview-state>Charger l’aperçu</span></span>
+          <a class="preview-tile" href="{% url 'file_preview' token file.pk %}" data-preview data-name="{{ file.path }}" data-detail="{{ file.size|filesizeformat }} · {% if file.preview_kind == 'pdf' %}{% translate "Première page du PDF" %}{% else %}{% translate "Image réduite" %}{% endif %}" aria-label="{% blocktranslate with name=file.path %}Aperçu de {{ name }}{% endblocktranslate %}">
+            <span class="preview-fallback"><span class="file-type">{{ file.extension }}</span><span data-preview-state>{% translate "Charger l’aperçu" %}</span></span>
             <img data-preview-src="{% url 'file_preview' token file.pk %}" alt="" decoding="async" hidden>
-            <span class="preview-zoom">{% include "components/icon.html" with name="eye" %}Agrandir</span>
+            <span class="preview-zoom">{% include "components/icon.html" with name="eye" %}{% translate "Agrandir" %}</span>
           </a>
           {% else %}
           <div class="preview-tile preview-unavailable">
-            <span class="preview-fallback"><span class="file-type">{{ file.extension }}</span><span>À découvrir après téléchargement</span></span>
+            <span class="preview-fallback"><span class="file-type">{{ file.extension }}</span><span>{% translate "À découvrir après téléchargement" %}</span></span>
           </div>
           {% endif %}
           <div class="file-card-info">
             <strong title="{{ file.path }}">{{ file.path }}</strong>
-            <span>{{ file.size|filesizeformat }}{% if file.preview_kind == 'pdf' %} · PDF, page 1{% endif %}</span>
+            <span>{{ file.size|filesizeformat }}{% if file.preview_kind == 'pdf' %} {% translate "· PDF, page 1" %}{% endif %}</span>
           </div>
         </article>
         {% endfor %}
       </div>
-      <p class="preview-note">Aperçus des images et PDF jusqu’à 20 Mio. Leur consultation ne consomme pas de téléchargement. Les fichiers originaux sont dans le dossier ZIP.</p>
+      <p class="preview-note">{% translate "Aperçus des images et PDF jusqu’à 20 Mio. Leur consultation ne consomme pas de téléchargement. Les fichiers originaux sont dans le dossier ZIP." %}</p>
       {% else %}
       {% for file in collection.files.all %}
         <div class="file-row">
@@ -62,7 +64,7 @@
             <small>{{ file.size|filesizeformat }}</small>
           </div>
           {% if file.scanned %}
-            <span class="scanned-label" title="Analysé par l’antivirus">
+            <span class="scanned-label" title="{% translate "Analysé par l’antivirus" %}">
               {% include "components/icon.html" with name="shield" %}
             </span>
           {% endif %}
@@ -72,38 +74,38 @@
       <form method="post" action="{% url 'download' token %}">
         {% csrf_token %}
         <button class="button full download-button">
-          {% include "components/icon.html" with name="download" %}Télécharger le dossier <span>ZIP · {{ collection.total_bytes|filesizeformat }}</span>
+          {% include "components/icon.html" with name="download" %}{% translate "Télécharger le dossier" %} <span>{% translate "ZIP ·" %} {{ collection.total_bytes|filesizeformat }}</span>
         </button>
       </form>
       <div class="download-conditions">
         {% if link.expires_at %}
           <span>
-          {% include "components/icon.html" with name="clock" %}Disponible jusqu’au {{ link.expires_at|date:'d F Y à H:i T' }}</span>
+          {% include "components/icon.html" with name="clock" %}{% translate "Disponible jusqu’au" %} {{ link.expires_at|date:"DATETIME_FORMAT" }}</span>
         {% endif %}
         {% if link.max_downloads == 1 %}
           <span>
-          {% include "components/icon.html" with name="lock" %}Un seul téléchargement autorisé, même en cas d’interruption.</span>
+          {% include "components/icon.html" with name="lock" %}{% translate "Un seul téléchargement autorisé, même en cas d’interruption." %}</span>
         {% elif link.max_downloads %}
-          <span>{{ link.downloads }} / {{ link.max_downloads }} téléchargements autorisés utilisés</span>
+          <span>{{ link.downloads }} / {{ link.max_downloads }} {% translate "téléchargements autorisés utilisés" %}</span>
         {% endif %}
       </div>
     </section>
-    <p class="privacy-note">L’expéditeur peut consulter les dates d’ouverture de cette page et des téléchargements autorisés. Aucun outil publicitaire n’est utilisé.</p>
+    <p class="privacy-note">{% translate "L’expéditeur peut consulter les dates d’ouverture de cette page et des téléchargements autorisés. Aucun outil publicitaire n’est utilisé." %}</p>
   </main>
   {% if link.allow_previews %}
   <dialog class="preview-dialog" data-preview-dialog aria-labelledby="preview-title" aria-describedby="preview-detail">
     <div class="preview-dialog-bar">
       <div><h2 id="preview-title"></h2><p id="preview-detail"></p></div>
-      <button type="button" class="preview-close" data-preview-close aria-label="Fermer l’aperçu">×</button>
+      <button type="button" class="preview-close" data-preview-close aria-label="{% translate "Fermer l’aperçu" %}">{% translate "×" %}</button>
     </div>
     <div class="preview-stage">
-      <p data-preview-message role="status">Chargement de l’aperçu…</p>
+      <p data-preview-message role="status">{% translate "Chargement de l’aperçu…" %}</p>
       <img data-preview-image alt="" hidden>
     </div>
     <div class="preview-dialog-footer">
-      <button class="button secondary" data-preview-prev aria-label="Fichier précédent">← Précédent</button>
+      <button class="button secondary" data-preview-prev aria-label="{% translate "Fichier précédent" %}">{% translate "← Précédent" %}</button>
       <span data-preview-position></span>
-      <button class="button secondary" data-preview-next aria-label="Fichier suivant">Suivant →</button>
+      <button class="button secondary" data-preview-next aria-label="{% translate "Fichier suivant" %}">{% translate "Suivant →" %}</button>
     </div>
   </dialog>
   {% endif %}
@@ -112,7 +114,7 @@
     <a class="powered-by"
        href="https://github.com/fmacfa/linkvault"
        target="_blank"
-       rel="noreferrer">Partagé avec <strong>linkvault.</strong>
+       rel="noreferrer">{% translate "Partagé avec" %} <strong>{% translate "linkvault." %}</strong>
     </a>
   </footer>
 {% endblock %}

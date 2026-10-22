@@ -1,6 +1,7 @@
-Vous avez demandé la réinitialisation de votre mot de passe LinkVault.
+{% load i18n %}
+{% translate "Vous avez demandé la réinitialisation de votre mot de passe LinkVault." %}
 
-Ouvrez ce lien personnel, valable une heure :
+{% translate "Ouvrez ce lien personnel, valable une heure :" %}
 {{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token %}
 
-Si vous n’êtes pas à l’origine de cette demande, ignorez cet e-mail.
+{% translate "Si vous n’êtes pas à l’origine de cette demande, ignorez cet e-mail." %}

@@ -27,12 +27,12 @@ Pour modifier le modèle, générez une migration et incluez-la dans la PR. Les 
 | `vault/tests/` | Tests fonctionnels et de concurrence |
 | `templates/`, `static/` | HTML échappé, CSS, JavaScript progressif |
 | `docker/`, `compose.yaml` | Déploiement autonome |
-| `docs/` | Exploitation, sécurité, comparatif, captures fictives |
+| `docs/` | Exploitation, sécurité, comparatif, captures réelles avec données de démonstration |
 
 ## Principes
 
 - Contrôler les droits côté serveur à chaque accès ; tester les accès entre comptes.
-- Ne jamais introduire de `csrf_exempt`, d’HTML utilisateur non échappé ou de URL publique de blob.
+- Garder CSRF sur tous les parcours à session. Seules les routes API v1, authentifiées exclusivement par `Authorization: Bearer` et sans autorité des cookies, utilisent `csrf_exempt`. Ne jamais exposer de HTML utilisateur non échappé ou de URL publique de blob.
 - Garder les règles de quota et de consommation transactionnelles, avec l’ordre de verrouillage utilisateur → dossier → lien/fichier. Une admission reprenable prend d’abord le verrou global de capacité, puis Instance, puis utilisateur ; ne jamais prendre ce verrou global en tenant un verrou utilisateur. Les imports classiques et ZIP prennent leur réservation avant leur transaction métier.
 - Préférer une amélioration ciblée à l’ajout d’un service obligatoire.
 - Décrire les limites observables sans promesse de sécurité absolue.
@@ -40,3 +40,16 @@ Pour modifier le modèle, générez une migration et incluez-la dans la PR. Les 
 - Ne jamais committer secrets, bases, uploads ou données réelles. Les captures utilisent des données fictives.
 
 Les contributions sont proposées sous MIT. Aucun CLA n’est demandé par ce dépôt.
+
+## Traductions et guides
+
+Les messages source sont en français, les catalogues anglais dans `locale/en/LC_MESSAGES/`. Utilisez `gettext_lazy` pour les champs et `translate` / `blocktranslate` dans les templates ; gardez les états métier et identifiants API indépendants des traductions. Les textes JavaScript passent par `gettext` et `interpolate`, servis par `/jsi18n/`. Installez GNU gettext pour extraire et compiler :
+
+```sh
+uv run --env-file .env python manage.py makemessages -l en --ignore=.venv --ignore=.local --ignore=staticfiles --ignore=vault/migrations --ignore=vault/tests
+uv run --env-file .env python manage.py makemessages -l en -d djangojs --ignore=.venv --ignore=.local --ignore=staticfiles
+uv run --env-file .env python manage.py compilemessages -l en --ignore=.venv --ignore=.local
+uv run python scripts/check_documentation.py
+```
+
+Incluez `.po` et `.mo`, sans entrée vide ou fuzzy. Les guides de `docs/guide/{fr,en}/` sont lus directement par l’application et par GitHub. Mettez à jour les deux langues et les captures locales réelles dans `docs/screenshots/user-guide/`. Utilisez exclusivement des données de démonstration, aucun secret visible. Le vérificateur CI contrôle les liens, images, catalogues compilés et paramètres de traduction.

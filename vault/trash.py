@@ -1,5 +1,6 @@
 """Recoverable deletion; quota is released only after permanent purge."""
 
+from django.utils.translation import gettext_lazy as _
 from datetime import timedelta
 
 from django.conf import settings
@@ -27,7 +28,8 @@ def revoke(collection_ids):
     ShareLink.objects.filter(pk__in=[link.pk for link in links]).update(
         revoked_at=timezone.now()
     )
-    Event.objects.bulk_create([Event(link=link, kind="revoked") for link in links])
+    for link in links:
+        Event.objects.create(link=link, kind="revoked")
 
 
 def trash_collection(owner, collection_id):
@@ -60,7 +62,7 @@ def trash_assets(owner, identifiers):
         )
         if len(assets) != len(set(identifiers)):
             raise ValidationError(
-                "Un fichier n’est plus disponible ou ne vous appartient pas."
+                _("Un fichier n’est plus disponible ou ne vous appartient pas.")
             )
         collection_ids = {a.collection_id for a in assets}
         revoke(collection_ids)
@@ -207,7 +209,7 @@ def action(request, kind, pk):
     if request.POST.get("action") == "restore":
         restore(request.user, kind, pk)
         messages.success(
-            request, "Élément restauré. Créez de nouveaux liens pour le partager."
+            request, _("Élément restauré. Créez de nouveaux liens pour le partager.")
         )
     elif request.POST.get("action") == "purge":
         if request.POST.get("confirm") != "purge":
@@ -233,7 +235,7 @@ def action(request, kind, pk):
             )
         purge(request.user, kind, pk)
         messages.success(
-            request, "Élément supprimé définitivement. Le quota a été libéré."
+            request, _("Élément supprimé définitivement. Le quota a été libéré.")
         )
     else:
         raise Http404

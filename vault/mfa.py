@@ -1,5 +1,6 @@
 """TOTP with encrypted secrets, replay protection and one-use recovery codes."""
 
+from django.utils.translation import gettext_lazy as _
 import base64
 import hashlib
 import hmac
@@ -29,7 +30,7 @@ from .security import limited, rate_allowed
 
 class CodeForm(forms.Form):
     code = forms.CharField(
-        label="Code de votre application ou code de récupération",
+        label=_("Code de votre application ou code de récupération"),
         max_length=32,
         widget=forms.TextInput(
             attrs={"autocomplete": "one-time-code", "autofocus": True}
@@ -39,7 +40,7 @@ class CodeForm(forms.Form):
 
 class PasswordForm(forms.Form):
     password = forms.CharField(
-        label="Mot de passe actuel", max_length=128, widget=forms.PasswordInput
+        label=_("Mot de passe actuel"), max_length=128, widget=forms.PasswordInput
     )
 
 
@@ -140,7 +141,7 @@ def challenge(request):
                 ):
                     complete_login(request, user)
                     return redirect("dashboard")
-            form.add_error("code", "Code incorrect, expiré ou déjà utilisé.")
+            form.add_error("code", _("Code incorrect, expiré ou déjà utilisé."))
     return render(request, "account/mfa_challenge.html", {"form": form})
 
 
@@ -161,7 +162,7 @@ def settings_view(request):
         with transaction.atomic():
             user = User.objects.select_for_update().get(pk=request.user.pk)
             if len(password) > 128 or not user.check_password(password):
-                error = "Mot de passe incorrect."
+                error = _("Mot de passe incorrect.")
             elif action == "begin" and not user.mfa_secret:
                 request.session["mfa_setup"] = {
                     "secret": cipher().encrypt(pyotp.random_base32().encode()).decode(),
@@ -174,7 +175,7 @@ def settings_view(request):
                     timezone.now().timestamp() - setup.get("at", 0) > 600
                     or setup.get("hash") != user.get_session_auth_hash()
                 ):
-                    error = "Configuration expirée. Recommencez."
+                    error = _("Configuration expirée. Recommencez.")
                 else:
                     user.mfa_secret = setup["secret"]
                     if consume_code(user, code):
@@ -191,7 +192,7 @@ def settings_view(request):
                         request.session["mfa_version"] = str(user.mfa_version)
                         Audit.objects.create(actor=user, action="mfa_enabled")
                     else:
-                        error = "Code incorrect ou expiré."
+                        error = _("Code incorrect ou expiré.")
             elif action in {"disable", "regenerate"} and user.mfa_secret:
                 if consume_code(user, code):
                     user.mfa_version = uuid.uuid4()
@@ -207,12 +208,14 @@ def settings_view(request):
                     Audit.objects.create(actor=user, action="mfa_" + action)
                     messages.success(
                         request,
-                        "Double authentification mise à jour. Les autres sessions sont déconnectées.",
+                        _(
+                            "Double authentification mise à jour. Les autres sessions sont déconnectées."
+                        ),
                     )
                 else:
-                    error = "Code incorrect, expiré ou déjà utilisé."
+                    error = _("Code incorrect, expiré ou déjà utilisé.")
             else:
-                error = "Action indisponible."
+                error = _("Action indisponible.")
         if codes or (action == "disable" and not error):
             from django.contrib.sessions.models import Session
 

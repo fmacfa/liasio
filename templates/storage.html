@@ -1,77 +1,78 @@
 {% extends "layout.html" %}
-{% block breadcrumb %}Stockage{% endblock %}
+{% load i18n %}
+{% block breadcrumb %}{% translate "Stockage" %}{% endblock %}
 {% block content %}
   <div class="page-heading">
     <div>
-      <div class="eyebrow">DE LA PLACE POUR L’ESSENTIEL</div>
+      <div class="eyebrow">{% translate "DE LA PLACE POUR L’ESSENTIEL" %}</div>
       <h1>
-        Votre stockage, en clair<span class="green">.</span>
+        {% translate "Votre stockage, en clair" %}<span class="green">.</span>
       </h1>
-      <p>Identifiez les fichiers volumineux et libérez de l’espace quand vous en avez besoin.</p>
+      <p>{% translate "Identifiez les fichiers volumineux et libérez de l’espace quand vous en avez besoin." %}</p>
     </div>
     <a class="button secondary" href="{% url 'collections' %}">
-    {% include "components/icon.html" with name="folder" %}Mes dossiers</a>
+    {% include "components/icon.html" with name="folder" %}{% translate "Mes dossiers" %}</a>
   </div>
-  <section class="stats-grid" aria-label="Utilisation de mon stockage">
+  <section class="stats-grid" aria-label="{% translate "Utilisation de mon stockage" %}">
     <article class="stat">
       <div class="spread">
-        <span>Fichiers</span>
+        <span>{% translate "Fichiers" %}</span>
         {% include "components/icon.html" with name="file" %}
       </div>
       <strong>{{ file_count }}</strong>
-      <small>Dans {{ collection_count }} dossier{{ collection_count|pluralize }}</small>
+      <small>{% translate "Dans" %} {{ collection_count }} {% translate "dossier" %}{{ collection_count|pluralize }}</small>
     </article>
     <article class="stat">
       <div class="spread">
-        <span>Espace utilisé</span>
+        <span>{% translate "Espace utilisé" %}</span>
         {% include "components/icon.html" with name="storage" %}
       </div>
       <strong class="storage-number">{{ user.used_bytes|filesizeformat }}</strong>
-      <small>{{ user.storage_percent }} % de votre quota</small>
+      <small>{{ user.storage_percent }} {% translate "% de votre quota" %}</small>
     </article>
     <article class="stat">
       <div class="spread">
-        <span>Espace restant</span>
+        <span>{% translate "Espace restant" %}</span>
         {% include "components/icon.html" with name="folder" %}
       </div>
       <strong class="storage-number">{{ remaining|filesizeformat }}</strong>
-      <small>Dans votre quota personnel</small>
+      <small>{% translate "Dans votre quota personnel" %}</small>
     </article>
     <article class="stat">
       <div class="spread">
-        <span>Quota personnel</span>
+        <span>{% translate "Quota personnel" %}</span>
         {% include "components/icon.html" with name="shield" %}
       </div>
       <strong class="storage-number">{{ user.quota_bytes|filesizeformat }}</strong>
-      <small>Défini par l’administrateur</small>
+      <small>{% translate "Défini par l’administrateur" %}</small>
     </article>
   </section>
   <div class="storage-meter panel">
     <div class="spread">
-      <strong>Votre espace</strong>
+      <strong>{% translate "Votre espace" %}</strong>
       <span>{{ user.used_bytes|filesizeformat }} / {{ user.quota_bytes|filesizeformat }}</span>
     </div>
     <progress max="{{ user.quota_bytes }}" value="{{ user.used_bytes }}">{{ user.storage_percent }} %</progress>
   </div>
   <div class="section-heading spaced">
     <h2>
-      Tous vos fichiers <span class="count">{{ page.paginator.count }}</span>
+      {% translate "Tous vos fichiers" %} <span class="count">{{ page.paginator.count }}</span>
     </h2>
   </div>
   <form class="storage-filter" method="get">
-    <label class="sr-only" for="storage-q">Rechercher un fichier ou un dossier</label>
+    <label class="sr-only" for="storage-q">{% translate "Rechercher un fichier ou un dossier" %}</label>
     <input id="storage-q"
            name="q"
            value="{{ query }}"
-           placeholder="Rechercher un fichier ou un dossier…">
-    <label class="sr-only" for="sort">Trier les fichiers</label>
+           placeholder="{% translate "Rechercher un fichier ou un dossier…" %}">
+    <label class="sr-only" for="sort">{% translate "Trier les fichiers" %}</label>
     <select name="sort" id="sort">
-      <option value="largest" {% if sort == 'largest' %}selected{% endif %}>Plus volumineux d’abord</option>
-      <option value="smallest" {% if sort == 'smallest' %}selected{% endif %}>Plus petits d’abord</option>
-      <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Plus récents d’abord</option>
-      <option value="name" {% if sort == 'name' %}selected{% endif %}>Nom de fichier</option>
+      <option value="largest" {% if sort == 'largest' %}selected{% endif %}>{% translate "Plus volumineux d’abord" %}</option>
+      <option value="smallest" {% if sort == 'smallest' %}selected{% endif %}>{% translate "Plus petits d’abord" %}</option>
+      <option value="newest" {% if sort == 'newest' %}selected{% endif %}>{% translate "Plus récents d’abord" %}</option>
+      <option value="name" {% if sort == 'name' %}selected{% endif %}>{% translate "Nom de fichier" %}</option>
     </select>
-    <button class="button secondary">Afficher</button>
+    <button class="button secondary">{% translate "Afficher" %}</button>
   </form>
   <form method="post" action="{% url 'storage_delete' %}" data-storage-form>
     {% csrf_token %}
@@ -82,12 +83,12 @@
             <th>
               <input type="checkbox"
                      data-select-all
-                     aria-label="Sélectionner tous les fichiers de cette page">
+                     aria-label="{% translate "Sélectionner tous les fichiers de cette page" %}">
             </th>
-            <th>Fichier</th>
-            <th>Dossier</th>
-            <th>Taille</th>
-            <th>Ajouté le</th>
+            <th>{% translate "Fichier" %}</th>
+            <th>{% translate "Dossier" %}</th>
+            <th>{% translate "Taille" %}</th>
+            <th>{% translate "Ajouté le" %}</th>
           </tr>
         </thead>
         <tbody>
@@ -97,7 +98,7 @@
                 <input type="checkbox"
                        name="selected"
                        value="{{ file.pk }}"
-                       aria-label="Sélectionner {{ file.path }}"
+                       aria-label="{% blocktranslate with name=file.path %}Sélectionner {{ name }}{% endblocktranslate %}"
                        data-size="{{ file.size }}">
               </td>
               <td>
@@ -111,16 +112,16 @@
               </td>
               <td>
                 <strong>{{ file.size|filesizeformat }}</strong>
-                <small>{{ file.size }} octets</small>
+                <small>{{ file.size }} {% translate "octets" %}</small>
               </td>
-              <td>{{ file.created_at|date:'d/m/Y H:i' }}</td>
+              <td>{{ file.created_at|date:"SHORT_DATETIME_FORMAT" }}</td>
             </tr>
           {% empty %}
             <tr>
               <td colspan="5">
                 <div class="empty-panel">
-                  <h3>{% if query %}Aucun fichier trouvé{% else %}Tout l’espace est à vous.{% endif %}</h3>
-                  <p>Les fichiers ajoutés à vos dossiers seront visibles ici.</p>
+                  <h3>{% if query %}{% translate "Aucun fichier trouvé" %}{% else %}{% translate "Tout l’espace est à vous." %}{% endif %}</h3>
+                  <p>{% translate "Les fichiers ajoutés à vos dossiers seront visibles ici." %}</p>
                 </div>
               </td>
             </tr>
@@ -130,48 +131,48 @@
     </div>
     {% if files %}
       <div class="selection-bar">
-        <span data-selection-summary aria-live="polite">Sélectionnez les fichiers à supprimer.</span>
-        <button class="button secondary danger-text" data-delete-selection>Examiner la suppression →</button>
+        <span data-selection-summary aria-live="polite">{% translate "Sélectionnez les fichiers à supprimer." %}</span>
+        <button class="button secondary danger-text" data-delete-selection>{% translate "Examiner la suppression →" %}</button>
       </div>
     {% endif %}
   </form>
   {% include "components/pagination.html" %}
-  <p class="footnote">La suppression demande une confirmation. Les liens des dossiers concernés seront révoqués, et l’espace libéré de votre quota.</p>
+  <p class="footnote">{% translate "La suppression demande une confirmation. Les liens des dossiers concernés seront révoqués. Le quota sera libéré après la suppression définitive." %}</p>
   {% if user.is_staff %}
     <section class="server-storage panel spaced">
       <div class="section-heading">
-        <h2>{% include "components/icon.html" with name="storage" %} Stockage du serveur</h2>
-        <span class="badge">Administration</span>
+        <h2>{% include "components/icon.html" with name="storage" %} {% translate "Stockage du serveur" %}</h2>
+        <span class="badge">{% translate "Administration" %}</span>
       </div>
       <div class="server-stats">
         <div>
           <strong>{{ server_file_count }}</strong>
-          <small>Fichiers dans LinkVault</small>
+          <small>{% translate "Fichiers dans LinkVault" %}</small>
         </div>
         <div>
           <strong>{{ server_bytes|filesizeformat }}</strong>
-          <small>Total des fichiers LinkVault</small>
+          <small>{% translate "Total des fichiers LinkVault" %}</small>
         </div>
         <div>
           <strong>{{ disk.free|filesizeformat }}</strong>
-          <small>Disponible sur le volume</small>
+          <small>{% translate "Disponible sur le volume" %}</small>
         </div>
         <div>
           <strong>{{ disk.total|filesizeformat }}</strong>
-          <small>Capacité du volume</small>
+          <small>{% translate "Capacité du volume" %}</small>
         </div>
       </div>
       <progress value="{{ disk.used }}" max="{{ disk.total }}">{{ disk_percent }} %</progress>
-      <p class="footnote">{{ disk_percent }} % du volume est occupé. Cette mesure inclut les autres données présentes sur le même disque ; elle peut différer des fichiers LinkVault.</p>
-      <h3>Utilisation par compte</h3>
+      <p class="footnote">{{ disk_percent }} {% translate "% du volume est occupé. Cette mesure inclut les autres données présentes sur le même disque ; elle peut différer des fichiers LinkVault." %}</p>
+      <h3>{% translate "Utilisation par compte" %}</h3>
       <div class="table-scroll">
         <table>
           <thead>
             <tr>
-              <th>Compte</th>
-              <th>Utilisé</th>
-              <th>Quota</th>
-              <th>Occupation</th>
+              <th>{% translate "Compte" %}</th>
+              <th>{% translate "Utilisé" %}</th>
+              <th>{% translate "Quota" %}</th>
+              <th>{% translate "Occupation" %}</th>
             </tr>
           </thead>
           <tbody>

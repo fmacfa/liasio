@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block body_class %}public-body{% endblock %}
 {% block body %}
   <header class="public-header">
@@ -8,6 +9,6 @@
     <span class="empty-icon">{% include "components/icon.html" with name="info" %}</span>
     <h1>{{ title }}</h1>
     <p class="muted">{{ detail }}</p>
-    <a class="button secondary" href="{% url 'login' %}">Mon espace LinkVault</a>
+    <a class="button secondary" href="{% url 'login' %}">{% translate "Mon espace LinkVault" %}</a>
   </main>
 {% endblock %}

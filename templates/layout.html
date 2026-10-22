@@ -1,71 +1,74 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block body %}
     <div class="app-layout">
         <aside class="sidebar">
             <a class="brand"
                href="{% url 'dashboard' %}"
-               aria-label="LinkVault, accueil">{% include "components/logo.html" %}</a>
+               aria-label="{% translate "LinkVault, accueil" %}">{% include "components/logo.html" %}</a>
             <div class="workspace-label">
                 <span class="workspace-avatar">{{ user.display_name|slice:':1'|upper }}</span>
                 <div>
-                    <strong>Mon espace</strong>
-                    <small>Partage privé</small>
+                    <strong>{% translate "Mon espace" %}</strong>
+                    <small>{% translate "Partage privé" %}</small>
                 </div>
                 <span class="workspace-chevron">⌄</span>
             </div>
-            <span class="nav-caption">ESPACE DE TRAVAIL</span>
-            <nav aria-label="Navigation principale">
+            <span class="nav-caption">{% translate "ESPACE DE TRAVAIL" %}</span>
+            <nav aria-label="{% translate "Navigation principale" %}">
                 <a class="nav-item {% if nav == 'dashboard' %}active{% endif %}"
-                   href="{% url 'dashboard' %}">{% include "components/icon.html" with name="grid" %}Vue d’ensemble</a>
+                   href="{% url 'dashboard' %}">{% include "components/icon.html" with name="grid" %}{% translate "Vue d’ensemble" %}</a>
                 <a class="nav-item {% if nav == 'upload' %}active{% endif %}"
-                   href="{% url 'upload' %}">{% include "components/icon.html" with name="upload" %}Importer</a>
+                   href="{% url 'upload' %}">{% include "components/icon.html" with name="upload" %}{% translate "Importer" %}</a>
                 <a class="nav-item {% if nav == 'collections' %}active{% endif %}"
-                   href="{% url 'collections' %}">{% include "components/icon.html" with name="folder" %}Mes dossiers</a>
+                   href="{% url 'collections' %}">{% include "components/icon.html" with name="folder" %}{% translate "Mes dossiers" %}</a>
                 <a class="nav-item {% if nav == 'links' %}active{% endif %}"
-                   href="{% url 'links' %}">{% include "components/icon.html" with name="link" %}Mes liens</a>
+                   href="{% url 'links' %}">{% include "components/icon.html" with name="link" %}{% translate "Mes liens" %}</a>
                 <a class="nav-item {% if nav == 'activity' %}active{% endif %}"
-                   href="{% url 'activity' %}">{% include "components/icon.html" with name="activity" %}Activité</a>
+                   href="{% url 'activity' %}">{% include "components/icon.html" with name="activity" %}{% translate "Activité" %}</a>
                 <a class="nav-item {% if nav == 'storage' %}active{% endif %}"
-                   href="{% url 'storage' %}">{% include "components/icon.html" with name="storage" %}Stockage</a>
+                   href="{% url 'storage' %}">{% include "components/icon.html" with name="storage" %}{% translate "Stockage" %}</a>
                 <a class="nav-item {% if nav == 'trash' %}active{% endif %}"
-                   href="{% url 'trash' %}">{% include "components/icon.html" with name="trash" %}Corbeille</a>
-                <span class="nav-caption second-caption">PERSONNALISATION</span>
+                   href="{% url 'trash' %}">{% include "components/icon.html" with name="trash" %}{% translate "Corbeille" %}</a>
+                <a class="nav-item {% if nav == 'integrations' %}active{% endif %}" href="{% url 'integrations' %}">{% include "components/icon.html" with name="link" %}{% translate "Automatisations" %}</a>
+                <a class="nav-item {% if nav == 'help' %}active{% endif %}" href="{% url 'help' %}">{% include "components/icon.html" with name="folder" %}{% translate "Guide d’utilisation" %}</a>
+                <span class="nav-caption second-caption">{% translate "PERSONNALISATION" %}</span>
                 <a class="nav-item {% if nav == 'branding' %}active{% endif %}"
-                   href="{% url 'branding' %}">{% include "components/icon.html" with name="palette" %}Page de partage</a>
+                   href="{% url 'branding' %}">{% include "components/icon.html" with name="palette" %}{% translate "Page de partage" %}</a>
                 {% if user.is_staff %}
                     <a class="nav-item {% if nav == 'operations' %}active{% endif %}"
-                       href="{% url 'operations' %}">{% include "components/icon.html" with name="activity" %}Exploitation</a>
+                       href="{% url 'operations' %}">{% include "components/icon.html" with name="activity" %}{% translate "Exploitation" %}</a>
                     <a class="nav-item {% if nav == 'team' %}active{% endif %}"
-                       href="{% url 'team' %}">{% include "components/icon.html" with name="users" %}Membres</a>
+                       href="{% url 'team' %}">{% include "components/icon.html" with name="users" %}{% translate "Membres" %}</a>
                 {% endif %}
                 <a class="nav-item {% if nav == 'account' %}active{% endif %}"
-                   href="{% url 'account' %}">{% include "components/icon.html" with name="settings" %}Mon compte</a>
+                   href="{% url 'account' %}">{% include "components/icon.html" with name="settings" %}{% translate "Mon compte" %}</a>
             </nav>
             <div class="sidebar-bottom">
                 <a href="{% url 'storage' %}" class="storage-box">
                     <div class="spread">
-                        <span>Stockage utilisé</span>
+                        <span>{% translate "Stockage utilisé" %}</span>
                         <span>{{ user.storage_percent }} %</span>
                     </div>
                     <progress value="{{ user.used_bytes }}"
                               max="{{ user.quota_bytes }}">{{ user.storage_percent }} %</progress>
-                    <small>{{ user.used_bytes|filesizeformat }} sur {{ user.quota_bytes|filesizeformat }}</small>
+                    <small>{{ user.used_bytes|filesizeformat }} {% translate "sur" %} {{ user.quota_bytes|filesizeformat }}</small>
                 </a>
                 <div class="self-hosted">
                     {% include "components/icon.html" with name="shield" %}
-                    <span>Vos fichiers, votre serveur.</span>
+                    <span>{% translate "Vos fichiers, votre serveur." %}</span>
                 </div>
                 <div class="profile">
                     <span class="profile-avatar">{{ user.display_name|slice:':1'|upper }}</span>
                     <div>
                         <strong>{{ user.display_name }}</strong>
-                        <small>{% if user.is_staff %}Administrateur{% else %}Membre{% endif %}</small>
+                        <small>{% if user.is_staff %}{% translate "Administrateur" %}{% else %}{% translate "Membre" %}{% endif %}</small>
                     </div>
                     <form method="post" action="{% url 'logout' %}">
                         {% csrf_token %}
                         <button class="icon-button"
-                                aria-label="Se déconnecter"
-                                title="Se déconnecter">{% include "components/icon.html" with name="logout" %}</button>
+                                aria-label="{% translate "Se déconnecter" %}"
+                                title="{% translate "Se déconnecter" %}">{% include "components/icon.html" with name="logout" %}</button>
                     </form>
                 </div>
             </div>
@@ -73,19 +76,20 @@
         <div class="main-shell">
             <header class="topbar">
                 <div class="breadcrumb">
-                    Espace de travail<span>/</span>
-                    <strong>{% block breadcrumb %}Vue d’ensemble{% endblock %}</strong>
+                    {% translate "Espace de travail" %}<span>/</span>
+                    <strong>{% block breadcrumb %}{% translate "Vue d’ensemble" %}{% endblock %}</strong>
                 </div>
                 <div class="topbar-end">
-                    <span class="live-dot"></span>Auto-hébergé<span class="version">v{{ app_version }}</span>
+                    {% include "components/language.html" %}
+                    <span class="live-dot"></span>{% translate "Auto-hébergé" %}<span class="version">{% translate "v" %}{{ app_version }}</span>
                 </div>
             </header>
             <main id="main" class="main-content">
                 {% include "components/messages.html" %}
                 {% block content %}{% endblock %}
                 <footer class="app-footer">
-                    <span>LinkVault · Open source, sous licence MIT.</span>
-                    <span>Le partage, en toute simplicité.</span>
+                    <span>{% translate "LinkVault · Open source, sous licence MIT." %}</span>
+                    <span>{% translate "Le partage, en toute simplicité." %}</span>
                 </footer>
             </main>
         </div>

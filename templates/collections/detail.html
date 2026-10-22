@@ -1,24 +1,25 @@
 {% extends "layout.html" %}
-{% block breadcrumb %}Mes dossiers / {{ collection.title }}{% endblock %}
+{% load i18n %}
+{% block breadcrumb %}{% translate "Mes dossiers /" %} {{ collection.title }}{% endblock %}
 {% block content %}
-  <a class="back-link" href="{% url 'collections' %}">← Mes dossiers</a>
+  <a class="back-link" href="{% url 'collections' %}">{% translate "← Mes dossiers" %}</a>
   <div class="page-heading">
     <div>
-      <div class="eyebrow">DOSSIER DE PARTAGE</div>
+      <div class="eyebrow">{% translate "DOSSIER DE PARTAGE" %}</div>
       <h1>{{ collection.title }}</h1>
-      <p>{{ collection.files.count }} fichier{{ collection.files.count|pluralize }} · {{ collection.total_bytes|filesizeformat }} · Créé le {{ collection.created_at|date:'d F Y' }}</p>
+      <p>{{ collection.files.count }} {% translate "fichier" %}{{ collection.files.count|pluralize }} · {{ collection.total_bytes|filesizeformat }} {% translate "· Créé le" %} {{ collection.created_at|date:"DATE_FORMAT" }}</p>
     </div>
     <a class="button" href="{% url 'link_create' collection.pk %}">
-    {% include "components/icon.html" with name="link" %}Créer un lien</a>
+    {% include "components/icon.html" with name="link" %}{% translate "Créer un lien" %}</a>
   </div>
   <div class="detail-grid">
     <section>
       <div class="panel description-panel">
         <div class="section-heading">
-          <h2>Présentation</h2>
-          <a class="text-link" href="{% url 'collection_edit' collection.pk %}">Modifier ↗</a>
+          <h2>{% translate "Présentation" %}</h2>
+          <a class="text-link" href="{% url 'collection_edit' collection.pk %}">{% translate "Modifier ↗" %}</a>
         </div>
-        <p class="pre-line">{{ collection.description|default:'Ajoutez une présentation pour accueillir vos destinataires.' }}</p>
+        <p class="pre-line">{{ collection.description|default:_('Ajoutez une présentation pour accueillir vos destinataires.') }}</p>
         {% if collection.recipient_note %}
           <blockquote>
             {{ collection.recipient_note }}
@@ -28,7 +29,7 @@
       <div class="panel file-panel">
         <div class="section-heading">
           <h2>
-            Fichiers <span class="count">{{ collection.files.count }}</span>
+            {% translate "Fichiers" %} <span class="count">{{ collection.files.count }}</span>
           </h2>
           <span>{{ collection.total_bytes|filesizeformat }}</span>
         </div>
@@ -37,12 +38,12 @@
             <span class="file-type">{{ file.extension }}</span>
             <div class="file-info">
               <strong>{{ file.path }}</strong>
-              <small>{% if file.scanned %}Analysé par l’antivirus{% else %}Non analysé · développement{% endif %}</small>
+              <small>{% if file.scanned %}{% translate "Analysé par l’antivirus" %}{% else %}{% translate "Non analysé · développement" %}{% endif %}</small>
             </div>
             <span class="file-size">{{ file.size|filesizeformat }}</span>
           </div>
         {% empty %}
-          <div class="quiet-empty">Aucun fichier pour le moment. Ajoutez les premiers ci-dessous.</div>
+          <div class="quiet-empty">{% translate "Aucun fichier pour le moment. Ajoutez les premiers ci-dessous." %}</div>
         {% endfor %}
       </div>
       {% include "components/upload_form.html" %}
@@ -50,31 +51,31 @@
     <aside>
       <div class="panel">
         <div class="section-heading">
-          <h2>Liens du dossier</h2>
+          <h2>{% translate "Liens du dossier" %}</h2>
           <span class="count">{{ collection.links.count }}</span>
         </div>
         {% for link in collection.links.all %}
           <div class="mini-link">
             <strong>{{ link.label }}</strong>
             <div class="spread">
-              <span class="badge {% if link.status == 'Actif' %}success{% endif %}">{{ link.status }}</span>
+              <span class="badge {% if link.status_code == 'active' %}success{% endif %}">{{ link.status }}</span>
               <button class="icon-button"
                       data-copy="{{ link.public_url }}"
-                      aria-label="Copier le lien {{ link.label }}">
+                      aria-label="{% blocktranslate with name=link.label %}Copier le lien {{ name }}{% endblocktranslate %}">
                 {% include "components/icon.html" with name="copy" %}
               </button>
             </div>
           </div>
         {% empty %}
-          <p class="muted">Créez votre premier lien quand les fichiers sont prêts.</p>
+          <p class="muted">{% translate "Créez votre premier lien quand les fichiers sont prêts." %}</p>
         {% endfor %}
       </div>
       <div class="tip-card compact">
-        <h3>Un dossier, plusieurs liens.</h3>
-        <p>Partagez les mêmes fichiers avec des conditions et un historique différents pour chaque destinataire.</p>
+        <h3>{% translate "Un dossier, plusieurs liens." %}</h3>
+        <p>{% translate "Partagez les mêmes fichiers avec des conditions et un historique différents pour chaque destinataire." %}</p>
       </div>
       <a class="danger-link"
-         href="{% url 'collection_delete' collection.pk %}">Supprimer ce dossier</a>
+         href="{% url 'collection_delete' collection.pk %}">{% translate "Supprimer ce dossier" %}</a>
     </aside>
   </div>
 {% endblock %}

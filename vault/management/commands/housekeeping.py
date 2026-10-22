@@ -27,6 +27,13 @@ class Command(BaseCommand):
             ServiceState.objects.update_or_create(
                 key="maintenance", defaults={"data": {"version": settings.APP_VERSION}}
             )
+            from vault.models import APIReceipt, APIToken, WebhookDelivery
+
+            APIReceipt.objects.filter(created_at__lt=now - timedelta(hours=24)).delete()
+            APIToken.objects.filter(expires_at__lt=now - timedelta(days=30)).delete()
+            WebhookDelivery.objects.filter(
+                created_at__lt=now - timedelta(days=30)
+            ).delete()
             cutoff = now - timedelta(days=settings.EVENT_RETENTION_DAYS)
             Event.objects.filter(created_at__lt=cutoff).delete()
             Audit.objects.filter(created_at__lt=cutoff).delete()

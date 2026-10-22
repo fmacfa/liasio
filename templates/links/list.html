@@ -1,40 +1,41 @@
 {% extends "layout.html" %}
-{% block breadcrumb %}Mes liens{% endblock %}
+{% load i18n %}
+{% block breadcrumb %}{% translate "Mes liens" %}{% endblock %}
 {% block content %}
   <div class="page-heading">
     <div>
-      <div class="eyebrow">PARTAGER, AVEC PRÉCISION</div>
+      <div class="eyebrow">{% translate "PARTAGER, AVEC PRÉCISION" %}</div>
       <h1>
-        Mes liens<span class="green">.</span>
+        {% translate "Mes liens" %}<span class="green">.</span>
       </h1>
-      <p>Chaque destinataire, chaque condition, chaque accès : tout est ici.</p>
+      <p>{% translate "Chaque destinataire, chaque condition, chaque accès : tout est ici." %}</p>
     </div>
-    <a class="button" href="{% url 'collections' %}">{% include "components/icon.html" with name="plus" %}Créer un lien</a>
+    <a class="button" href="{% url 'collections' %}">{% include "components/icon.html" with name="plus" %}{% translate "Créer un lien" %}</a>
   </div>
   <div class="toolbar">
     <div class="tabs">
       <a href="{% url 'links' %}"
-         class="{% if not status %}selected{% endif %}">Tous les liens</a>
+         class="{% if not status %}selected{% endif %}">{% translate "Tous les liens" %}</a>
       <a href="?status=active"
-         class="{% if status == 'active' %}selected{% endif %}">Actifs</a>
+         class="{% if status == 'active' %}selected{% endif %}">{% translate "Actifs" %}</a>
     </div>
     <form class="search-form small" method="get">
-      <label class="sr-only" for="q">Rechercher un lien</label>
+      <label class="sr-only" for="q">{% translate "Rechercher un lien" %}</label>
       {% include "components/icon.html" with name="search" %}
-      <input id="q" name="q" value="{{ query }}" placeholder="Rechercher un lien…">
+      <input id="q" name="q" value="{{ query }}" placeholder="{% translate "Rechercher un lien…" %}">
       <input type="hidden" name="status" value="{{ status }}">
-      <button class="button secondary">Rechercher</button>
+      <button class="button secondary">{% translate "Rechercher" %}</button>
     </form>
   </div>
   <div class="table-panel">
     <table>
       <thead>
         <tr>
-          <th>Lien et dossier</th>
-          <th>Conditions</th>
-          <th>Activité</th>
-          <th>Statut</th>
-          <th>Actions</th>
+          <th>{% translate "Lien et dossier" %}</th>
+          <th>{% translate "Conditions" %}</th>
+          <th>{% translate "Activité" %}</th>
+          <th>{% translate "Statut" %}</th>
+          <th>{% translate "Actions" %}</th>
         </tr>
       </thead>
       <tbody>
@@ -45,25 +46,25 @@
               <small>
                 <a href="{% url 'collection' link.collection_id %}">{{ link.collection.title }}</a>
               </small>
-              <small>Créé le {{ link.created_at|date:'d/m/Y à H:i' }}</small>
+              <small>{% translate "Créé le" %} {{ link.created_at|date:"SHORT_DATETIME_FORMAT" }}</small>
             </td>
             <td>
               <span class="condition">
                 {% include "components/icon.html" with name="lock" %}
-                {% if link.password_hash %}Mot de passe{% else %}Sans mot de passe{% endif %}
+                {% if link.password_hash %}{% translate "Mot de passe" %}{% else %}{% translate "Sans mot de passe" %}{% endif %}
               </span>
               <small>
-                {% if link.expires_at %}Jusqu’au {{ link.expires_at|date:'d/m/Y H:i' }}{% else %}Sans expiration{% endif %}
+                {% if link.expires_at %}{% translate "Jusqu’au" %} {{ link.expires_at|date:"SHORT_DATETIME_FORMAT" }}{% else %}{% translate "Sans expiration" %}{% endif %}
               </small>
               <small>
-                {% if link.max_downloads == 1 %}Usage unique{% elif link.max_downloads %}{{ link.max_downloads }} téléchargements max.{% else %}Téléchargements illimités{% endif %}
+                {% if link.max_downloads == 1 %}{% translate "Usage unique" %}{% elif link.max_downloads %}{{ link.max_downloads }} {% translate "téléchargements max." %}{% else %}{% translate "Téléchargements illimités" %}{% endif %}
               </small>
-              <small>Aperçus {% if link.allow_previews %}activés{% else %}désactivés{% endif %}</small>
-              {% if link.status == "Actif" %}
+              <small>{% translate "Aperçus" %} {% if link.allow_previews %}{% translate "activés" %}{% else %}{% translate "désactivés" %}{% endif %}</small>
+              {% if link.status_code == "active" %}
                 <form method="post" action="{% url 'link_previews' link.pk %}">
                   {% csrf_token %}
                   <input type="hidden" name="enabled" value="{% if link.allow_previews %}0{% else %}1{% endif %}">
-                  <button class="text-button" title="Les aperçus sont visibles avant téléchargement et peuvent être copiés.">{% if link.allow_previews %}Masquer les aperçus{% else %}Activer les aperçus{% endif %}</button>
+                  <button class="text-button" title="{% translate "Les aperçus sont visibles avant téléchargement et peuvent être copiés." %}">{% if link.allow_previews %}{% translate "Masquer les aperçus" %}{% else %}{% translate "Activer les aperçus" %}{% endif %}</button>
                 </form>
               {% endif %}
             </td>
@@ -73,28 +74,28 @@
               {% include "components/icon.html" with name="eye" %} {{ link.open_count }} <span>·</span> {% include "components/icon.html" with name="download" %} {{ link.downloads }}</a>
             </td>
             <td>
-              <span class="badge {% if link.status == 'Actif' %}success{% endif %}">{{ link.status }}</span>
+              <span class="badge {% if link.status_code == 'active' %}success{% endif %}">{{ link.status }}</span>
             </td>
             <td>
               <div class="row-actions">
                 <button class="icon-button"
                         data-copy="{{ link.public_url }}"
-                        title="Copier le lien"
-                        aria-label="Copier le lien {{ link.label }}">
+                        title="{% translate "Copier le lien" %}"
+                        aria-label="{% blocktranslate with name=link.label %}Copier le lien {{ name }}{% endblocktranslate %}">
                   {% include "components/icon.html" with name="copy" %}
                 </button>
                 <a class="icon-button"
                    href="{{ link.public_url }}"
                    target="_blank"
                    rel="noreferrer"
-                   title="Ouvrir la page (comptabilisé)"
-                   aria-label="Ouvrir {{ link.label }}">{% include "components/icon.html" with name="arrow" %}</a>
-                {% if link.status == "Actif" %}
+                   title="{% translate "Ouvrir la page (comptabilisé)" %}"
+                   aria-label="{% blocktranslate with name=link.label %}Ouvrir {{ name }}{% endblocktranslate %}">{% include "components/icon.html" with name="arrow" %}</a>
+                {% if link.status_code == "active" %}
                   <form method="post"
                         action="{% url 'link_revoke' link.pk %}"
-                        data-confirm="Révoquer ce lien ? Les prochains téléchargements seront bloqués.">
+                        data-confirm="{% translate "Révoquer ce lien ? Les prochains téléchargements seront bloqués." %}">
                     {% csrf_token %}
-                    <button class="text-button danger-text">Révoquer</button>
+                    <button class="text-button danger-text">{% translate "Révoquer" %}</button>
                   </form>
                 {% endif %}
               </div>
@@ -104,9 +105,9 @@
           <tr>
             <td colspan="5">
               <div class="empty-panel">
-                <h3>Aucun lien à afficher</h3>
-                <p>Ouvrez un dossier pour créer un lien de partage.</p>
-                <a class="button secondary" href="{% url 'collections' %}">Mes dossiers →</a>
+                <h3>{% translate "Aucun lien à afficher" %}</h3>
+                <p>{% translate "Ouvrez un dossier pour créer un lien de partage." %}</p>
+                <a class="button secondary" href="{% url 'collections' %}">{% translate "Mes dossiers →" %}</a>
               </div>
             </td>
           </tr>
@@ -115,6 +116,6 @@
     </table>
   </div>
   {% include "components/pagination.html" %}
-  <p class="footnote">Une ouverture est une page servie au navigateur, dédupliquée pendant 30 minutes par session. Le compteur de téléchargements indique les transferts autorisés.</p>
-  <p class="footnote">Les aperçus montrent une image réduite ou la première page d’un PDF, avant téléchargement. Ils ne consomment pas le lien et peuvent être copiés.</p>
+  <p class="footnote">{% translate "Une ouverture est une page servie au navigateur, dédupliquée pendant 30 minutes par session. Le compteur de téléchargements indique les transferts autorisés." %}</p>
+  <p class="footnote">{% translate "Les aperçus montrent une image réduite ou la première page d’un PDF, avant téléchargement. Ils ne consomment pas le lien et peuvent être copiés." %}</p>
 {% endblock %}

@@ -1,6 +1,6 @@
 # Évolutions proposées
 
-La [version 0.3](CHANGELOG.md) ajoute une galerie d’images et des aperçus de la première page des PDF, avec un moteur isolé. Elle complète TOTP, les codes de récupération, la corbeille, les transferts reprenables, les quotas administrables, la surveillance, la restauration testée et la publication des images Docker de la version 0.2.
+La version 0.4 ajoute l’API à permissions limitées, les webhooks signés, les guides illustrés et l’interface français/anglais. La [version 0.3](CHANGELOG.md) ajoute une galerie d’images et des aperçus de la première page des PDF, avec un moteur isolé. Elle complète TOTP, les codes de récupération, la corbeille, les transferts reprenables, les quotas administrables, la surveillance, la restauration testée et la publication des images Docker de la version 0.2.
 
 ## Prochaines priorités
 
@@ -21,8 +21,8 @@ La [version 0.3](CHANGELOG.md) ajoute une galerie d’images et des aperçus de 
 ## Organisations et intégrations
 
 - Espaces d’équipe, SSO OIDC et rôles plus fins.
-- API à jetons de portée limitée et webhooks signés.
-- Interface disponible en français et en anglais.
+- Davantage d’événements et connecteurs natifs, politique d’archivage des automatisations.
+- Nouvelles langues après stabilisation des catalogues français/anglais.
 - Étendre les formats de prévisualisation en conservant l’isolation du moteur et l’absence de contenu actif.
 - Chiffrement de bout en bout conçu séparément, avec gestion de clés et récupération explicites. Il change les possibilités d’analyse antivirus côté serveur.
 

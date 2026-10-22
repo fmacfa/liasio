@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.4.0 — 2026-10-22
+
+### Added
+
+- Scoped, expiring and revocable API keys for collection creation, resumable file/folder imports, metadata reads and share-link creation/revocation. Browser and API uploads share antivirus, path, quota and disk-admission checks.
+- Encrypted 24-hour idempotency receipts for creation requests, owner isolation, rate limits and credential invalidation after password/MFA changes.
+- Transactional outgoing webhooks for collection/file/link/open/download events, HMAC signatures, pinned public HTTPS destinations, a dedicated worker, bounded retries, pause/rotation and delivery history. No share capabilities or file contents in webhook payloads.
+- Eleven illustrated user guides in both French and English, served from the same Markdown on GitHub and inside the application.
+- Full French/English interface selection, including recipient pages, validation, email recovery templates, progress and previews. Business status codes are independent of translated labels.
+- Dependency-free Python upload/resume client and receiver signature-verification example.
+
+### Upgrade
+
+- Back up `.env`, database and files; preserve encryption keys. The new migration only adds integration tables. Existing accounts and links keep their settings.
+- Start the complete Compose stack, including the new `webhooks` worker. Prebuilt users should pull `app maintenance preview webhooks` with the same version.
+- Manual deployments must run `deliver_webhooks --loop` and collect static assets, including documentation screenshots. Compiled translation catalogs are included.
+- Webhooks accept public HTTPS port 443 only. Delivery is at least once, not exactly once; receivers must verify signatures and deduplicate event IDs.
+
 ## 0.3.0 — 2026-10-21
 
 ### Added

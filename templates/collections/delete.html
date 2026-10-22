@@ -1,16 +1,17 @@
 {% extends "layout.html" %}
-{% block breadcrumb %}Supprimer un dossier{% endblock %}
+{% load i18n %}
+{% block breadcrumb %}{% translate "Supprimer un dossier" %}{% endblock %}
 {% block content %}
     <div class="panel narrow form-panel">
-        <h1>Placer ce dossier dans la corbeille ?</h1>
+        <h1>{% translate "Placer ce dossier dans la corbeille ?" %}</h1>
         <p>
-            <strong>{{ collection.title }}</strong>, ses {{ collection.files.count }} fichier(s), seront conservés pendant {{ trash_retention }} jours. Ses liens seront révoqués. Le quota sera libéré après la suppression définitive.
+            <strong>{{ collection.title }}</strong>{% translate ", ses" %} {{ collection.files.count }} {% translate "fichier(s), seront conservés pendant" %} {{ trash_retention }} {% translate "jours. Ses liens seront révoqués. Le quota sera libéré après la suppression définitive." %}
         </p>
         <form method="post">
             {% csrf_token %}
             <div class="button-row">
-                <a class="button secondary" href="{% url 'collection' collection.pk %}">Conserver le dossier</a>
-                <button class="button danger">Placer dans la corbeille</button>
+                <a class="button secondary" href="{% url 'collection' collection.pk %}">{% translate "Conserver le dossier" %}</a>
+                <button class="button danger">{% translate "Placer dans la corbeille" %}</button>
             </div>
         </form>
     </div>

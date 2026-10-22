@@ -12,7 +12,7 @@ document.querySelectorAll("[data-copy]").forEach((button) => {
   button.addEventListener("click", async () => {
     try {
       await navigator.clipboard.writeText(button.dataset.copy);
-      toast("Lien copié. Prêt à être partagé.");
+      toast(gettext("Lien copié. Prêt à être partagé."));
     } catch {
       // A selectable value remains available without Clipboard API permission.
       const existing = button.parentElement.querySelector(".copy-fallback");
@@ -21,10 +21,10 @@ document.querySelectorAll("[data-copy]").forEach((button) => {
       field.className = "copy-fallback";
       field.value = button.dataset.copy;
       field.readOnly = true;
-      field.setAttribute("aria-label", "Lien à copier");
+      field.setAttribute("aria-label", gettext("Lien à copier"));
       button.after(field);
       field.focus(); field.select();
-      toast("Copiez le lien sélectionné avec votre clavier.");
+      toast(gettext("Copiez le lien sélectionné avec votre clavier."));
     }
   });
 });
@@ -39,7 +39,7 @@ const brandForm = document.querySelector("[data-branding-form]");
 if (brandForm) {
   const preview = document.querySelector("[data-brand-preview]");
   const update = () => {
-    const name = brandForm.elements.name.value || "Mon espace";
+    const name = brandForm.elements.name.value || gettext("Mon espace");
     preview.querySelector("[data-preview-name]").textContent = name;
     preview.querySelector("[data-preview-monogram]").textContent = name.slice(0, 1).toUpperCase();
     preview.querySelector("[data-preview-tagline]").textContent = brandForm.elements.tagline.value;
@@ -60,7 +60,7 @@ if (storageForm) {
   const update = () => {
     const chosen = boxes.filter((box) => box.checked);
     const total = chosen.reduce((value, box) => value + Number(box.dataset.size), 0);
-    if (summary) summary.textContent = chosen.length ? `${chosen.length} fichier(s) sélectionné(s) · ${total.toLocaleString("fr-FR")} octets vers la corbeille` : "Sélectionnez les fichiers à supprimer.";
+    if (summary) summary.textContent = chosen.length ? interpolate(gettext("%(value1)s fichier(s) sélectionné(s) · %(value2)s octets vers la corbeille"), {value1: chosen.length, value2: total.toLocaleString(document.documentElement.lang)}, true) : gettext("Sélectionnez les fichiers à supprimer.");
     if (button) button.disabled = !chosen.length;
     all.checked = boxes.length > 0 && chosen.length === boxes.length;
     all.indeterminate = chosen.length > 0 && chosen.length < boxes.length;

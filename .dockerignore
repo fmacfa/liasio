@@ -7,4 +7,3 @@ backups
 **/__pycache__
 *.sqlite3*
 staticfiles
-docs/screenshots

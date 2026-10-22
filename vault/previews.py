@@ -1,5 +1,6 @@
 """Authorized JPEG derivatives. Originals never leave through this endpoint."""
 
+from django.utils.translation import gettext_lazy as _
 import fcntl
 import json
 import os
@@ -206,7 +207,7 @@ def authorized_asset(request, token, asset_id):
     )
     if (
         not link.allow_previews
-        or link.status != "Actif"
+        or link.status_code != "active"
         or not link.collection.owner.is_active
     ):
         raise Http404
@@ -257,5 +258,5 @@ def toggle(request, pk):
         Audit.objects.create(
             actor=owner, action="link_previews_changed", target=str(pk)
         )
-    messages.success(request, "Les aperçus de ce lien ont été mis à jour.")
+    messages.success(request, _("Les aperçus de ce lien ont été mis à jour."))
     return redirect("links")

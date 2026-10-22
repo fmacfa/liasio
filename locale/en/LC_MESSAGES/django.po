@@ -1,0 +1,3195 @@
+# English translations for LinkVault. MIT license.
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: LinkVault 0.4.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-22 10:05+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: LinkVault contributors\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: templates/account/invitation.html:3
+msgid "Votre invitation · LinkVault"
+msgstr "Your invitation · LinkVault"
+
+#: templates/account/invitation.html:5
+msgid "UNE PLACE VOUS ATTEND"
+msgstr "THERE’S A PLACE FOR YOU"
+
+#: templates/account/invitation.html:6
+msgid "Rejoignez LinkVault."
+msgstr "Join LinkVault."
+
+#: templates/account/invitation.html:8
+msgid "Invitation pour"
+msgstr "Invitation for"
+
+#: templates/account/invitation.html:10
+msgid "Choisissez votre nom et votre mot de passe."
+msgstr "Choose your name and password."
+
+#: templates/account/invitation.html:15 templates/account/setup.html:11
+msgid "Créer mon compte"
+msgstr "Create my account"
+
+#: templates/account/invitation.html:17
+msgid "Ce lien est personnel et ne peut être utilisé qu’une fois."
+msgstr "This link is personal and can only be used once."
+
+#: templates/account/layout.html:9
+msgid "LE PARTAGE VOUS APPARTIENT"
+msgstr "SHARING ON YOUR TERMS"
+
+#: templates/account/layout.html:11
+msgid "Le bon fichier."
+msgstr "The right file."
+
+#: templates/account/layout.html:13
+msgid "La bonne personne."
+msgstr "The right person."
+
+#: templates/account/layout.html:15
+msgid "Vos conditions."
+msgstr "Your rules."
+
+#: templates/account/layout.html:18
+msgid "Un espace indépendant pour vos fichiers,"
+msgstr "An independent home for your files,"
+
+#: templates/account/layout.html:20
+msgid "des liens que vous maîtrisez de bout en bout."
+msgstr "with links you control from start to finish."
+
+#: templates/account/layout.html:23
+msgid "Vos fichiers sur votre serveur"
+msgstr "Your files on your server"
+
+#: templates/account/layout.html:24
+msgid "Des liens adaptés à chaque envoi"
+msgstr "Links tailored to every delivery"
+
+#: templates/account/layout.html:25
+msgid "Un accès sur invitation"
+msgstr "Access by invitation"
+
+#: templates/account/layout.html:28
+msgid "Open source · Licence MIT · Auto-hébergé"
+msgstr "Open source · MIT license · Self-hosted"
+
+#: templates/account/layout.html:36 templates/help/guide.html:1
+#: templates/help/index.html:1 templates/layout.html:34
+msgid "Guide d’utilisation"
+msgstr "User guide"
+
+#: templates/account/layout.html:37
+msgid "LinkVault — Vos fichiers ont trouvé leur place."
+msgstr "LinkVault — A place for your files."
+
+#: templates/account/login.html:3
+msgid "Connexion · LinkVault"
+msgstr "Sign in · LinkVault"
+
+#: templates/account/login.html:5
+msgid "HEUREUX DE VOUS RETROUVER"
+msgstr "WELCOME BACK"
+
+#: templates/account/login.html:6
+msgid "Votre espace vous attend."
+msgstr "Your workspace awaits."
+
+#: templates/account/login.html:7
+msgid "Connectez-vous pour retrouver vos dossiers et vos liens."
+msgstr "Sign in to find your collections and links."
+
+#: templates/account/login.html:11 templates/help/public.html:1
+msgid "Se connecter"
+msgstr "Sign in"
+
+#: templates/account/login.html:13
+msgid "Mot de passe oublié ?"
+msgstr "Forgot your password?"
+
+#: templates/account/login.html:16
+msgid ""
+"Vous rejoignez une équipe ? Utilisez le lien d’invitation envoyé par votre "
+"administrateur."
+msgstr "Joining a team? Use the invitation link sent by your administrator."
+
+#: templates/account/mfa_challenge.html:3
+msgid "Vérification · LinkVault"
+msgstr "Verification · LinkVault"
+
+#: templates/account/mfa_challenge.html:5
+msgid "UNE SECONDE VÉRIFICATION"
+msgstr "ONE MORE CHECK"
+
+#: templates/account/mfa_challenge.html:6
+msgid "Confirmez que c’est vous."
+msgstr "Confirm it’s you."
+
+#: templates/account/mfa_challenge.html:7
+msgid ""
+"Saisissez le code de votre application d’authentification. Vous pouvez aussi"
+" utiliser un code de récupération, une seule fois."
+msgstr ""
+"Enter the code from your authenticator app. You can also use a recovery code"
+" once."
+
+#: templates/account/mfa_challenge.html:8
+msgid "Vérifier et se connecter"
+msgstr "Verify and sign in"
+
+#: templates/account/mfa_challenge.html:9
+msgid "Recommencer la connexion"
+msgstr "Start sign-in again"
+
+#: templates/account/mfa_settings.html:3
+msgid "Mon compte / Double authentification"
+msgstr "My account / Two-factor authentication"
+
+#: templates/account/mfa_settings.html:7
+msgid "PROTÉGER VOTRE COMPTE"
+msgstr "PROTECT YOUR ACCOUNT"
+
+#: templates/account/mfa_settings.html:9
+msgid "Un accès mieux protégé"
+msgstr "An extra layer of protection"
+
+#: templates/account/mfa_settings.html:11
+msgid ""
+"Une application d’authentification ajoute une seconde vérification à votre "
+"mot de passe."
+msgstr "An authenticator app adds a second check to your password."
+
+#: templates/account/mfa_settings.html:16
+msgid "Conservez ces codes de récupération"
+msgstr "Keep these recovery codes"
+
+#: templates/account/mfa_settings.html:16
+msgid ""
+"Ils ne seront affichés qu’une fois. Enregistrez-les dans votre gestionnaire "
+"de mots de passe. Chaque code remplace un code d’application une seule fois."
+msgstr ""
+"They will only be shown once. Save them in your password manager. Each code "
+"replaces an app code once."
+
+#: templates/account/mfa_settings.html:16
+msgid ""
+"Les anciens codes sont désormais invalides. Ne partagez jamais ces codes."
+msgstr "Your previous codes are now invalid. Never share these codes."
+
+#: templates/account/mfa_settings.html:20
+msgid "Double authentification activée"
+msgstr "Two-factor authentication enabled"
+
+#: templates/account/mfa_settings.html:21
+msgid ""
+"code(s) de récupération disponible(s). Attendez un nouveau code de "
+"l’application si le précédent vient d’être utilisé."
+msgstr ""
+"recovery code(s) available. Wait for a new app code if you have just used "
+"the previous one."
+
+#: templates/account/mfa_settings.html:22
+msgid "Renouveler les codes"
+msgstr "Replace recovery codes"
+
+#: templates/account/mfa_settings.html:22
+msgid "Désactiver"
+msgstr "Disable"
+
+#: templates/account/mfa_settings.html:24
+msgid "Associez votre application"
+msgstr "Connect your app"
+
+#: templates/account/mfa_settings.html:24
+msgid ""
+"Scannez ce QR code avec votre application TOTP, puis confirmez avec le code "
+"à six chiffres. La configuration expire après dix minutes."
+msgstr ""
+"Scan this QR code with your TOTP app, then confirm with the six-digit code. "
+"Setup expires after ten minutes."
+
+#: templates/account/mfa_settings.html:26
+msgid "Saisir une clé manuellement"
+msgstr "Enter a key manually"
+
+#: templates/account/mfa_settings.html:26
+msgid "Activer et obtenir mes codes"
+msgstr "Enable and get my codes"
+
+#: templates/account/mfa_settings.html:28
+msgid "Activez la double authentification"
+msgstr "Enable two-factor authentication"
+
+#: templates/account/mfa_settings.html:28
+msgid ""
+"Préparez votre application (par exemple Aegis, 2FAS ou votre gestionnaire de"
+" mots de passe). La clé reste chiffrée sur le serveur."
+msgstr ""
+"Prepare your app (for example Aegis, 2FAS or your password manager). The key"
+" stays encrypted on the server."
+
+#: templates/account/mfa_settings.html:28
+msgid "Configurer mon application"
+msgstr "Set up my app"
+
+#: templates/account/reset.html:4
+msgid "RETROUVER VOTRE ACCÈS"
+msgstr "RESTORE YOUR ACCESS"
+
+#: templates/account/reset.html:5
+msgid "Un nouveau départ."
+msgstr "A fresh start."
+
+#: templates/account/reset.html:6
+msgid ""
+"Saisissez l’adresse de votre compte pour recevoir un lien de "
+"réinitialisation."
+msgstr "Enter your account’s email address to receive a password reset link."
+
+#: templates/account/reset.html:11
+msgid "Demander un lien"
+msgstr "Request a link"
+
+#: templates/account/reset.html:15
+msgid ""
+"L’envoi d’e-mails n’est pas configuré sur ce serveur. Contactez votre "
+"administrateur pour récupérer votre accès."
+msgstr ""
+"Email delivery is not configured on this server. Contact your administrator "
+"to recover access."
+
+#: templates/account/reset.html:18
+msgid "← Retour à la connexion"
+msgstr "← Back to sign-in"
+
+#: templates/account/reset_confirm.html:4
+msgid "Votre nouveau mot de passe."
+msgstr "Your new password."
+
+#: templates/account/reset_confirm.html:9
+msgid "Enregistrer le mot de passe"
+msgstr "Save password"
+
+#: templates/account/reset_confirm.html:12
+msgid "Ce lien est invalide ou a expiré."
+msgstr "This link is invalid or has expired."
+
+#: templates/account/reset_confirm.html:13
+msgid "Demander un nouveau lien"
+msgstr "Request a new link"
+
+#: templates/account/reset_email.txt:2
+msgid "Vous avez demandé la réinitialisation de votre mot de passe LinkVault."
+msgstr "You requested a password reset for your LinkVault account."
+
+#: templates/account/reset_email.txt:4
+msgid "Ouvrez ce lien personnel, valable une heure :"
+msgstr "Open this personal link, valid for one hour:"
+
+#: templates/account/reset_email.txt:7
+msgid "Si vous n’êtes pas à l’origine de cette demande, ignorez cet e-mail."
+msgstr "If you did not request this, ignore this email."
+
+#: templates/account/reset_sent.html:4
+msgid "DEMANDE ENREGISTRÉE"
+msgstr "REQUEST RECEIVED"
+
+#: templates/account/reset_sent.html:5
+msgid "Consultez votre messagerie."
+msgstr "Check your inbox."
+
+#: templates/account/reset_sent.html:6
+msgid ""
+"Si un compte actif correspond à cette adresse et si l’envoi est disponible, "
+"un lien de réinitialisation vous sera envoyé. Il sera valable une heure."
+msgstr ""
+"If an active account matches this address and email delivery is available, "
+"you will receive a reset link. It will be valid for one hour."
+
+#: templates/account/reset_sent.html:7
+msgid "Retour à la connexion"
+msgstr "Back to sign-in"
+
+#: templates/account/reset_subject.txt:1
+msgid "Réinitialiser votre mot de passe LinkVault"
+msgstr "Reset your LinkVault password"
+
+#: templates/account/settings.html:3 templates/account/settings.html:9
+#: templates/layout.html:45
+msgid "Mon compte"
+msgstr "My account"
+
+#: templates/account/settings.html:7
+msgid "VOTRE ACCÈS PERSONNEL"
+msgstr "YOUR PERSONAL ACCESS"
+
+#: templates/account/settings.html:14
+msgid "Double authentification"
+msgstr "Two-factor authentication"
+
+#: templates/account/settings.html:14
+msgid "Activée · votre application protège les nouvelles connexions."
+msgstr "Enabled · your app protects new sign-ins."
+
+#: templates/account/settings.html:14
+msgid ""
+"Ajoutez un code temporaire et des codes de récupération à votre compte."
+msgstr "Add a temporary code and recovery codes to your account."
+
+#: templates/account/settings.html:14
+msgid "Gérer la double authentification"
+msgstr "Manage two-factor authentication"
+
+#: templates/account/settings.html:17
+msgid "Changer le mot de passe"
+msgstr "Change password"
+
+#: templates/account/settings.html:18
+msgid "Les autres sessions seront déconnectées après ce changement."
+msgstr "Other sessions will be signed out after this change."
+
+#: templates/account/settings.html:20
+msgid "Mettre à jour le mot de passe"
+msgstr "Update password"
+
+#: templates/account/setup.html:3
+msgid "Première installation · LinkVault"
+msgstr "First-time setup · LinkVault"
+
+#: templates/account/setup.html:5
+msgid "BIENVENUE CHEZ VOUS"
+msgstr "WELCOME HOME"
+
+#: templates/account/setup.html:6
+msgid "Créons votre espace."
+msgstr "Let’s create your workspace."
+
+#: templates/account/setup.html:7
+msgid ""
+"Ce premier compte administrateur vous permettra d’inviter votre équipe."
+msgstr "This first administrator account will let you invite your team."
+
+#: templates/activity.html:3 templates/layout.html:28
+#: templates/links/list.html:36
+msgid "Activité"
+msgstr "Activity"
+
+#: templates/activity.html:7
+msgid "L’HISTORIQUE DE VOS PARTAGES"
+msgstr "YOUR SHARING HISTORY"
+
+#: templates/activity.html:9
+msgid "Chaque accès, sa date"
+msgstr "Every visit, with a date"
+
+#: templates/activity.html:11
+msgid "Les événements sont conservés"
+msgstr "Events are kept for"
+
+#: templates/activity.html:11
+msgid ""
+"jours. Aucun suivi publicitaire, aucune adresse IP dans cet historique."
+msgstr "days. No advertising trackers or IP addresses in this history."
+
+#: templates/activity.html:15
+msgid "Exporter en CSV"
+msgstr "Export CSV"
+
+#: templates/activity.html:18
+msgid "← Afficher tous les liens"
+msgstr "← Show all links"
+
+#: templates/activity.html:24 templates/integrations/webhook.html:9
+#: vault/views.py:589
+msgid "Événement"
+msgstr "Event"
+
+#: templates/activity.html:25 templates/storage.html:89 vault/views.py:589
+msgid "Dossier"
+msgstr "Collection"
+
+#: templates/activity.html:26 vault/views.py:589
+msgid "Lien"
+msgstr "Link"
+
+#: templates/activity.html:27
+msgid "Date et heure"
+msgstr "Date and time"
+
+#: templates/activity.html:55
+msgid "Le début de l’histoire."
+msgstr "The beginning of the story."
+
+#: templates/activity.html:56
+msgid "L’activité de vos liens apparaîtra ici."
+msgstr "Activity on your links will appear here."
+
+#: templates/activity.html:67
+msgid ""
+"« Téléchargement autorisé » signifie que le serveur a autorisé le transfert,"
+" pas que le fichier a été intégralement reçu. Les aperçus automatiques de "
+"messageries peuvent créer une ouverture."
+msgstr ""
+"“Download authorized” means the server authorized the transfer, not that the"
+" entire file was received. Email previews may generate a page-open event."
+
+#: templates/base.html:10
+msgid "LinkVault · Votre espace de partage"
+msgstr "LinkVault · Your sharing workspace"
+
+#: templates/base.html:19
+msgid "Aller au contenu"
+msgstr "Skip to content"
+
+#: templates/branding.html:3 templates/layout.html:37
+msgid "Page de partage"
+msgstr "Share page"
+
+#: templates/branding.html:7
+msgid "VOTRE SIGNATURE"
+msgstr "YOUR SIGNATURE"
+
+#: templates/branding.html:9
+msgid "Une page à votre image"
+msgstr "A page that feels like you"
+
+#: templates/branding.html:11
+msgid "Le même soin dans vos fichiers et dans leur présentation."
+msgstr "Give your files and their presentation the same care."
+
+#: templates/branding.html:18
+msgid "Enregistrer les changements"
+msgstr "Save changes"
+
+#: templates/branding.html:22
+msgid "APERÇU DE VOTRE PAGE"
+msgstr "YOUR PAGE PREVIEW"
+
+#: templates/branding.html:29
+msgid "Un espace pensé pour vous."
+msgstr "A space made for you."
+
+#: templates/branding.html:31 templates/share/page.html:19
+msgid "DES FICHIERS POUR VOUS"
+msgstr "FILES FOR YOU"
+
+#: templates/branding.html:32
+msgid "Dossier de présentation"
+msgstr "Presentation collection"
+
+#: templates/branding.html:33
+msgid "Retrouvez ici les documents préparés à votre attention."
+msgstr "Find the documents prepared for you here."
+
+#: templates/branding.html:36
+msgid "Présentation.pdf"
+msgstr "Presentation.pdf"
+
+#: templates/branding.html:36
+msgid "2,4 Mo"
+msgstr "2.4 MB"
+
+#: templates/branding.html:41 templates/share/page.html:77
+msgid "Télécharger le dossier"
+msgstr "Download collection"
+
+#: templates/branding.html:43
+msgid "Partagé avec LinkVault."
+msgstr "Shared with LinkVault."
+
+#: templates/branding.html:45
+msgid ""
+"Contenu d’exemple. Le titre, la présentation et les fichiers proviennent de "
+"chaque dossier."
+msgstr ""
+"Example content. The title, introduction and files come from each "
+"collection."
+
+#: templates/collections/delete.html:3
+msgid "Supprimer un dossier"
+msgstr "Delete a collection"
+
+#: templates/collections/delete.html:6
+msgid "Placer ce dossier dans la corbeille ?"
+msgstr "Move this collection to the trash?"
+
+#: templates/collections/delete.html:8
+msgid ", ses"
+msgstr "and its"
+
+#: templates/collections/delete.html:8
+msgid "fichier(s), seront conservés pendant"
+msgstr "file(s) will be kept for"
+
+#: templates/collections/delete.html:8
+msgid ""
+"jours. Ses liens seront révoqués. Le quota sera libéré après la suppression "
+"définitive."
+msgstr ""
+"days. Its links will be revoked. Quota is released after permanent deletion."
+
+#: templates/collections/delete.html:13
+msgid "Conserver le dossier"
+msgstr "Keep collection"
+
+#: templates/collections/delete.html:14 templates/storage_delete.html:33
+msgid "Placer dans la corbeille"
+msgstr "Move to trash"
+
+#: templates/collections/detail.html:3
+msgid "Mes dossiers /"
+msgstr "My collections /"
+
+#: templates/collections/detail.html:5 templates/collections/form.html:5
+msgid "← Mes dossiers"
+msgstr "← My collections"
+
+#: templates/collections/detail.html:8
+msgid "DOSSIER DE PARTAGE"
+msgstr "SHARED COLLECTION"
+
+#: templates/collections/detail.html:10
+#: templates/components/collection_card.html:10 templates/share/page.html:32
+#: templates/storage_delete.html:8
+msgid "fichier"
+msgstr "file"
+
+#: templates/collections/detail.html:10
+msgid "· Créé le"
+msgstr "· Created on"
+
+#: templates/collections/detail.html:13 templates/links/list.html:13
+msgid "Créer un lien"
+msgstr "Create a link"
+
+#: templates/collections/detail.html:19 vault/forms.py:93
+msgid "Présentation"
+msgstr "Introduction"
+
+#: templates/collections/detail.html:20
+msgid "Modifier ↗"
+msgstr "Edit ↗"
+
+#: templates/collections/detail.html:22
+msgid "Ajoutez une présentation pour accueillir vos destinataires."
+msgstr "Add an introduction to welcome your recipients."
+
+#: templates/collections/detail.html:32 templates/storage.html:19
+msgid "Fichiers"
+msgstr "Files"
+
+#: templates/collections/detail.html:41 templates/share/page.html:67
+msgid "Analysé par l’antivirus"
+msgstr "Scanned for malware"
+
+#: templates/collections/detail.html:41
+msgid "Non analysé · développement"
+msgstr "Not scanned · development"
+
+#: templates/collections/detail.html:46
+msgid "Aucun fichier pour le moment. Ajoutez les premiers ci-dessous."
+msgstr "No files yet. Add the first ones below."
+
+#: templates/collections/detail.html:54
+msgid "Liens du dossier"
+msgstr "Collection links"
+
+#: templates/collections/detail.html:64 templates/links/list.html:84
+#, python-format
+msgid "Copier le lien %(name)s"
+msgstr "Copy link %(name)s"
+
+#: templates/collections/detail.html:70
+msgid "Créez votre premier lien quand les fichiers sont prêts."
+msgstr "Create your first link when the files are ready."
+
+#: templates/collections/detail.html:74
+msgid "Un dossier, plusieurs liens."
+msgstr "One collection, several links."
+
+#: templates/collections/detail.html:75
+msgid ""
+"Partagez les mêmes fichiers avec des conditions et un historique différents "
+"pour chaque destinataire."
+msgstr ""
+"Share the same files with different conditions and a separate history for "
+"each recipient."
+
+#: templates/collections/detail.html:78
+msgid "Supprimer ce dossier"
+msgstr "Delete this collection"
+
+#: templates/collections/form.html:3
+msgid "Mes dossiers / Présentation"
+msgstr "My collections / Introduction"
+
+#: templates/collections/form.html:9
+msgid "Un nouveau dossier"
+msgstr "A new collection"
+
+#: templates/collections/form.html:9
+msgid "La bonne présentation"
+msgstr "The right introduction"
+
+#: templates/collections/form.html:12
+msgid "Ces informations seront affichées sur la page de partage."
+msgstr "This information will appear on the share page."
+
+#: templates/collections/form.html:20
+msgid "Créer le dossier"
+msgstr "Create collection"
+
+#: templates/collections/form.html:20
+msgid "Enregistrer la présentation"
+msgstr "Save introduction"
+
+#: templates/collections/form.html:25
+msgid "01 / PRÉSENTER"
+msgstr "01 / INTRODUCE"
+
+#: templates/collections/form.html:27
+msgid "Un peu de contexte"
+msgstr "A little context"
+
+#: templates/collections/form.html:29
+msgid "fait la différence."
+msgstr "makes a difference."
+
+#: templates/collections/form.html:31
+msgid ""
+"Donnez un titre clair à votre dossier et expliquez ce que le destinataire y "
+"trouvera."
+msgstr ""
+"Give your collection a clear title and explain what recipients will find."
+
+#: templates/collections/form.html:35 templates/upload.html:44
+msgid "Ajoutez vos fichiers"
+msgstr "Add your files"
+
+#: templates/collections/form.html:36
+msgid "Fichiers ou dossier entier, avec son arborescence."
+msgstr "Files or an entire folder, with its directory structure."
+
+#: templates/collections/form.html:42
+msgid "Choisissez vos conditions"
+msgstr "Choose your conditions"
+
+#: templates/collections/form.html:43
+msgid "Un lien par destinataire, avec ses propres règles."
+msgstr "One link per recipient, each with its own rules."
+
+#: templates/collections/list.html:3 templates/collections/list.html:9
+#: templates/layout.html:24 templates/storage.html:14
+msgid "Mes dossiers"
+msgstr "My collections"
+
+#: templates/collections/list.html:7
+msgid "VOTRE BIBLIOTHÈQUE"
+msgstr "YOUR LIBRARY"
+
+#: templates/collections/list.html:11
+msgid ""
+"Des fichiers regroupés, une présentation et autant de liens que nécessaire."
+msgstr ""
+"Files grouped together, an introduction and as many links as you need."
+
+#: templates/collections/list.html:14 templates/dashboard.html:13
+#: templates/upload.html:14
+msgid "Nouveau dossier"
+msgstr "New collection"
+
+#: templates/collections/list.html:17
+msgid "Rechercher un dossier"
+msgstr "Search collections"
+
+#: templates/collections/list.html:22
+msgid "Rechercher un dossier…"
+msgstr "Search collections…"
+
+#: templates/collections/list.html:23 templates/links/list.html:27
+msgid "Rechercher"
+msgstr "Search"
+
+#: templates/collections/list.html:30
+msgid "Aucun résultat"
+msgstr "No results"
+
+#: templates/collections/list.html:30
+msgid "Votre bibliothèque vous attend"
+msgstr "Your library awaits"
+
+#: templates/collections/list.html:32
+msgid "Essayez un autre mot-clé."
+msgstr "Try another keyword."
+
+#: templates/collections/list.html:32
+msgid "Créez un dossier pour y déposer vos premiers fichiers."
+msgstr "Create a collection to upload your first files."
+
+#: templates/components/collection_card.html:8
+msgid "Votre prochain partage commence ici."
+msgstr "Your next share starts here."
+
+#: templates/components/collection_card.html:11
+msgid "lien"
+msgstr "link"
+
+#: templates/components/collection_card.html:13
+msgid "Modifié le"
+msgstr "Updated on"
+
+#: templates/components/language.html:2
+msgid "Langue"
+msgstr "Language"
+
+#: templates/components/logo.html:14
+msgid "linkvault"
+msgstr "linkvault"
+
+#: templates/components/pagination.html:3
+msgid "Pagination"
+msgstr "Pagination"
+
+#: templates/components/pagination.html:6
+msgid "Précédent"
+msgstr "Previous"
+
+#: templates/components/pagination.html:8
+msgid "Page"
+msgstr "Page"
+
+#: templates/components/pagination.html:8 templates/layout.html:55
+msgid "sur"
+msgstr "of"
+
+#: templates/components/pagination.html:11
+msgid "Suivant"
+msgstr "Next"
+
+#: templates/components/upload_form.html:11
+msgid "Faites de la place à vos fichiers."
+msgstr "Make room for your files."
+
+#: templates/components/upload_form.html:12
+msgid "Glissez vos fichiers ici, ou sélectionnez-les."
+msgstr "Drop your files here, or select them."
+
+#: templates/components/upload_form.html:15
+msgid "Choisir des fichiers"
+msgstr "Choose files"
+
+#: templates/components/upload_form.html:18
+msgid "Choisir un dossier"
+msgstr "Choose a folder"
+
+#: templates/components/upload_form.html:23
+msgid "Fichiers sélectionnés"
+msgstr "Selected files"
+
+#: templates/components/upload_form.html:27
+msgid "Envoi des fichiers"
+msgstr "Uploading files"
+
+#: templates/components/upload_form.html:33
+msgid "Progression de l’envoi"
+msgstr "Upload progress"
+
+#: templates/components/upload_form.html:37
+#: templates/integrations/webhook.html:8
+msgid "Mettre en pause"
+msgstr "Pause"
+
+#: templates/components/upload_form.html:39
+msgid "Importer les fichiers"
+msgstr "Upload files"
+
+#: templates/components/upload_form.html:40
+msgid "Mio par fichier ·"
+msgstr "MiB per file ·"
+
+#: templates/components/upload_form.html:40
+msgid "Mio par dossier · 100 fichiers par dossier."
+msgstr "MiB per collection · 100 files per collection."
+
+#: templates/components/upload_form.html:42
+msgid ""
+"Reprise disponible pendant 24 h : sélectionnez à nouveau les mêmes fichiers "
+"après une coupure."
+msgstr ""
+"Resume within 24 hours: select the same files again after an interruption."
+
+#: templates/components/upload_form.html:44
+msgid "Révoquez les liens actifs avant de modifier les fichiers."
+msgstr "Revoke active links before changing the files."
+
+#: templates/components/upload_form.html:46
+msgid ""
+"Sans JavaScript, la sélection de fichiers fonctionne ; la barre de "
+"progression et l’import de dossiers nécessitent JavaScript."
+msgstr ""
+"Without JavaScript, file selection works; the progress bar and folder "
+"uploads require JavaScript."
+
+#: templates/dashboard.html:6
+msgid "VOTRE ESPACE, SOUS CONTRÔLE"
+msgstr "YOUR WORKSPACE, UNDER CONTROL"
+
+#: templates/dashboard.html:8
+msgid "Le partage commence ici"
+msgstr "Sharing starts here"
+
+#: templates/dashboard.html:10
+msgid "Rassemblez vos fichiers. Créez un lien. Gardez la main."
+msgstr "Gather your files. Create a link. Stay in control."
+
+#: templates/dashboard.html:17
+msgid "SIMPLE À PARTAGER. FACILE À MAÎTRISER."
+msgstr "EASY TO SHARE. EASY TO MANAGE."
+
+#: templates/dashboard.html:19
+msgid "Vos fichiers ont"
+msgstr "A place"
+
+#: templates/dashboard.html:21
+msgid "trouvé leur place."
+msgstr "for your files."
+
+#: templates/dashboard.html:24
+msgid "Un espace à vous, des liens sur mesure."
+msgstr "Your own space, with links that fit."
+
+#: templates/dashboard.html:26
+msgid "La bonne présentation, pour chaque destinataire."
+msgstr "The right introduction for every recipient."
+
+#: templates/dashboard.html:29
+msgid "Personnaliser ma page"
+msgstr "Customize my page"
+
+#: templates/dashboard.html:34
+msgid "Un accès maîtrisé"
+msgstr "Controlled access"
+
+#: templates/dashboard.html:41
+msgid "Prêt à partager"
+msgstr "Ready to share"
+
+#: templates/dashboard.html:45
+msgid "Le bon lien, à la bonne personne"
+msgstr "The right link for the right person"
+
+#: templates/dashboard.html:48
+msgid "Statistiques"
+msgstr "Statistics"
+
+#: templates/dashboard.html:51
+msgid "Dossiers"
+msgstr "Collections"
+
+#: templates/dashboard.html:55
+msgid "Dans votre bibliothèque"
+msgstr "In your library"
+
+#: templates/dashboard.html:59
+msgid "Liens actifs"
+msgstr "Active links"
+
+#: templates/dashboard.html:63
+msgid "Prêts à être partagés"
+msgstr "Ready to share"
+
+#: templates/dashboard.html:67
+msgid "Pages ouvertes"
+msgstr "Pages opened"
+
+#: templates/dashboard.html:71
+msgid "Dans l’historique conservé"
+msgstr "In the retained history"
+
+#: templates/dashboard.html:75
+msgid "Téléchargements"
+msgstr "Downloads"
+
+#: templates/dashboard.html:79
+msgid "Transferts autorisés"
+msgstr "Authorized transfers"
+
+#: templates/dashboard.html:84
+msgid "Dossiers récents"
+msgstr "Recent collections"
+
+#: templates/dashboard.html:87
+msgid "Voir tous les dossiers"
+msgstr "View all collections"
+
+#: templates/dashboard.html:98
+msgid "Un premier dossier, mille possibilités."
+msgstr "One first collection, many possibilities."
+
+#: templates/dashboard.html:99
+msgid ""
+"Une présentation, des photos ou un dossier complet : donnez un bel espace à "
+"vos fichiers."
+msgstr ""
+"A presentation, photos or an entire folder: give your files a beautiful "
+"home."
+
+#: templates/dashboard.html:101
+msgid "Créer mon premier dossier"
+msgstr "Create my first collection"
+
+#: templates/dashboard.html:108
+msgid "Dernière activité"
+msgstr "Recent activity"
+
+#: templates/dashboard.html:109
+msgid "Tout voir ↗"
+msgstr "View all ↗"
+
+#: templates/dashboard.html:128
+msgid "Vos ouvertures et téléchargements apparaîtront ici."
+msgstr "Page opens and downloads will appear here."
+
+#: templates/dashboard.html:130
+msgid "Chaque lien garde son propre historique."
+msgstr "Every link has its own history."
+
+#: templates/dashboard.html:136
+msgid "Un lien, vos règles."
+msgstr "One link, your rules."
+
+#: templates/dashboard.html:137
+msgid ""
+"Mot de passe, date d’expiration ou téléchargement unique : choisissez les "
+"conditions de chaque partage."
+msgstr ""
+"Password, expiry date or a single download: choose the conditions for every "
+"share."
+
+#: templates/dashboard.html:138
+msgid "Vous gardez le contrôle"
+msgstr "You stay in control"
+
+#: templates/error.html:12
+msgid "Mon espace LinkVault"
+msgstr "My LinkVault workspace"
+
+#: templates/help/guide.html:1
+msgid "Tous les guides"
+msgstr "All guides"
+
+#: templates/help/guide.html:1
+msgid "Voir sur GitHub"
+msgstr "View on GitHub"
+
+#: templates/help/index.html:2
+msgid "À CHAQUE ÉTAPE"
+msgstr "EVERY STEP OF THE WAY"
+
+#: templates/help/index.html:2
+msgid "Prenez vos repères."
+msgstr "Find your way around."
+
+#: templates/help/index.html:2
+msgid "Des guides illustrés, du premier fichier à vos automatisations."
+msgstr "Illustrated guides, from your first file to your automations."
+
+#: templates/integrations/index.html:3 templates/integrations/index.html:4
+#: templates/integrations/webhook.html:3 templates/layout.html:33
+msgid "Automatisations"
+msgstr "Automations"
+
+#: templates/integrations/index.html:3
+msgid "· LinkVault"
+msgstr "· LinkVault"
+
+#: templates/integrations/index.html:6
+msgid "API & WEBHOOKS"
+msgstr "API & WEBHOOKS"
+
+#: templates/integrations/index.html:6
+msgid "Vos outils, connectés."
+msgstr "Your tools, connected."
+
+#: templates/integrations/index.html:6
+msgid ""
+"Importez des fichiers, créez des liens et recevez les événements dans vos "
+"workflows."
+msgstr "Upload files, create links and receive events in your workflows."
+
+#: templates/integrations/index.html:6
+msgid "Guide des automatisations"
+msgstr "Automation guide"
+
+#: templates/integrations/index.html:7
+msgid ""
+"Copiez ce secret maintenant. Il ne sera plus affiché. Conservez-le dans le "
+"coffre de votre outil d’automatisation."
+msgstr ""
+"Copy this secret now. It will not be shown again. Keep it in your automation"
+" tool’s credential store."
+
+#: templates/integrations/index.html:8
+msgid ""
+"Les clés accèdent uniquement à votre espace. Un changement de mot de passe "
+"ou de double authentification les invalide. Aucun accès à la gestion des "
+"membres ou à la suppression définitive."
+msgstr ""
+"Keys can only access your workspace. Changing your password or two-factor "
+"authentication invalidates them. They cannot manage members or permanently "
+"delete data."
+
+#: templates/integrations/index.html:10
+msgid "Clés API"
+msgstr "API keys"
+
+#: templates/integrations/index.html:10
+msgid "REST · v1"
+msgstr "REST · v1"
+
+#: templates/integrations/index.html:11
+msgid "Active"
+msgstr "Active"
+
+#: templates/integrations/index.html:11
+msgid "Inactive"
+msgstr "Inactive"
+
+#: templates/integrations/index.html:11
+msgid "Dernière utilisation"
+msgstr "Last used"
+
+#: templates/integrations/index.html:11 templates/links/list.html:98
+#: templates/team.html:63
+msgid "Révoquer"
+msgstr "Revoke"
+
+#: templates/integrations/index.html:11
+msgid "Aucune clé API pour le moment."
+msgstr "No API keys yet."
+
+#: templates/integrations/index.html:12
+msgid "Créer une clé API"
+msgstr "Create an API key"
+
+#: templates/integrations/index.html:12
+msgid "Créer la clé"
+msgstr "Create key"
+
+#: templates/integrations/index.html:15
+msgid "Webhooks"
+msgstr "Webhooks"
+
+#: templates/integrations/index.html:15
+msgid "HMAC · SHA-256"
+msgstr "HMAC · SHA-256"
+
+#: templates/integrations/index.html:16
+msgid ""
+"Le service de livraison n’a pas envoyé de signal récent. Les événements "
+"resteront en attente jusqu’à son démarrage."
+msgstr ""
+"The delivery service has not reported recently. Events will remain queued "
+"until it starts."
+
+#: templates/integrations/index.html:17 templates/integrations/webhook.html:5
+#: vault/models.py:185
+msgid "Actif"
+msgstr "Active"
+
+#: templates/integrations/index.html:17 templates/integrations/webhook.html:5
+msgid "En pause"
+msgstr "Paused"
+
+#: templates/integrations/index.html:17
+msgid "Aucun webhook pour le moment."
+msgstr "No webhooks yet."
+
+#: templates/integrations/index.html:18
+msgid "Ajouter un webhook"
+msgstr "Add a webhook"
+
+#: templates/integrations/index.html:18
+msgid "Créer le webhook"
+msgstr "Create webhook"
+
+#: templates/integrations/webhook.html:2
+msgid "· Webhook"
+msgstr "· Webhook"
+
+#: templates/integrations/webhook.html:3
+msgid "/ Webhook"
+msgstr "/ Webhook"
+
+#: templates/integrations/webhook.html:5
+msgid "WEBHOOK"
+msgstr "WEBHOOK"
+
+#: templates/integrations/webhook.html:5
+msgid "Lire le guide"
+msgstr "Read the guide"
+
+#: templates/integrations/webhook.html:6
+msgid ""
+"File d’attente pleine : ce webhook a été mis en pause. Vérifiez le "
+"destinataire avant de le réactiver. Les événements produits pendant la pause"
+" ne sont pas conservés."
+msgstr ""
+"Queue full: this webhook was paused. Check the receiver before reactivating "
+"it. Events produced while paused are not retained."
+
+#: templates/integrations/webhook.html:7
+msgid "Nouveau secret de signature"
+msgstr "New signing secret"
+
+#: templates/integrations/webhook.html:7
+msgid ""
+"Copiez-le maintenant et mettez à jour le destinataire. Les prochaines "
+"tentatives utilisent ce secret."
+msgstr "Copy it now and update the receiver. Future attempts use this secret."
+
+#: templates/integrations/webhook.html:8
+msgid "Événements suivis"
+msgstr "Subscribed events"
+
+#: templates/integrations/webhook.html:8
+msgid "Envoyer un test"
+msgstr "Send a test"
+
+#: templates/integrations/webhook.html:8
+msgid ""
+"Un test est un événement réel envoyé à votre URL. Une requête déjà en cours "
+"peut se terminer après une mise en pause."
+msgstr ""
+"A test is a real event sent to your URL. A request already in progress may "
+"finish after pausing."
+
+#: templates/integrations/webhook.html:9
+msgid "Livraisons"
+msgstr "Deliveries"
+
+#: templates/integrations/webhook.html:9
+msgid "Historique : 30 jours"
+msgstr "History: 30 days"
+
+#: templates/integrations/webhook.html:9 templates/team.html:94
+msgid "Date"
+msgstr "Date"
+
+#: templates/integrations/webhook.html:9
+msgid "État"
+msgstr "State"
+
+#: templates/integrations/webhook.html:9
+msgid "Tentatives"
+msgstr "Attempts"
+
+#: templates/integrations/webhook.html:9
+msgid "HTTP"
+msgstr "HTTP"
+
+#: templates/integrations/webhook.html:9
+msgid "Livré"
+msgstr "Delivered"
+
+#: templates/integrations/webhook.html:9
+msgid "En attente"
+msgstr "Pending"
+
+#: templates/integrations/webhook.html:9
+msgid "Annulé"
+msgstr "Canceled"
+
+#: templates/integrations/webhook.html:9
+msgid "Échec"
+msgstr "Failed"
+
+#: templates/integrations/webhook.html:9
+msgid ""
+"Aucune livraison. Envoyez un événement de test pour vérifier la connexion."
+msgstr "No deliveries. Send a test event to check the connection."
+
+#: templates/integrations/webhook.html:10
+msgid "Sécurité et configuration"
+msgstr "Security and configuration"
+
+#: templates/integrations/webhook.html:10
+msgid ""
+"Pour changer l’URL ou les événements, créez un nouveau webhook puis "
+"supprimez celui-ci. Une reprise concerne uniquement les futurs événements."
+msgstr ""
+"To change the URL or events, create a new webhook and delete this one. "
+"Resuming only affects future events."
+
+#: templates/integrations/webhook.html:10 templates/team.html:38
+msgid "Réactiver"
+msgstr "Reactivate"
+
+#: templates/integrations/webhook.html:10
+msgid "Renouveler le secret"
+msgstr "Rotate secret"
+
+#: templates/integrations/webhook.html:10
+msgid "Supprimer le webhook et son historique"
+msgstr "Delete webhook and its history"
+
+#: templates/layout.html:8
+msgid "LinkVault, accueil"
+msgstr "LinkVault home"
+
+#: templates/layout.html:12 vault/models.py:77
+msgid "Mon espace"
+msgstr "My workspace"
+
+#: templates/layout.html:13 templates/share/page.html:15
+msgid "Partage privé"
+msgstr "Private sharing"
+
+#: templates/layout.html:17
+msgid "ESPACE DE TRAVAIL"
+msgstr "WORKSPACE"
+
+#: templates/layout.html:18
+msgid "Navigation principale"
+msgstr "Main navigation"
+
+#: templates/layout.html:20 templates/layout.html:80
+msgid "Vue d’ensemble"
+msgstr "Overview"
+
+#: templates/layout.html:22 templates/upload.html:3
+msgid "Importer"
+msgstr "Upload"
+
+#: templates/layout.html:26 templates/links/list.html:3
+#: templates/links/list.html:9
+msgid "Mes liens"
+msgstr "My links"
+
+#: templates/layout.html:30 templates/storage.html:3
+msgid "Stockage"
+msgstr "Storage"
+
+#: templates/layout.html:32 templates/trash.html:3
+msgid "Corbeille"
+msgstr "Trash"
+
+#: templates/layout.html:35
+msgid "PERSONNALISATION"
+msgstr "CUSTOMIZATION"
+
+#: templates/layout.html:40
+msgid "Exploitation"
+msgstr "Operations"
+
+#: templates/layout.html:42 templates/team.html:3 templates/team.html:19
+msgid "Membres"
+msgstr "Members"
+
+#: templates/layout.html:50
+msgid "Stockage utilisé"
+msgstr "Storage used"
+
+#: templates/layout.html:59
+msgid "Vos fichiers, votre serveur."
+msgstr "Your files, your server."
+
+#: templates/layout.html:65
+msgid "Administrateur"
+msgstr "Administrator"
+
+#: templates/layout.html:65 templates/team.html:31
+msgid "Membre"
+msgstr "Member"
+
+#: templates/layout.html:70 templates/layout.html:71
+msgid "Se déconnecter"
+msgstr "Sign out"
+
+#: templates/layout.html:79
+msgid "Espace de travail"
+msgstr "Workspace"
+
+#: templates/layout.html:84
+msgid "Auto-hébergé"
+msgstr "Self-hosted"
+
+#: templates/layout.html:84
+msgid "v"
+msgstr "v"
+
+#: templates/layout.html:91
+msgid "LinkVault · Open source, sous licence MIT."
+msgstr "LinkVault · Open source, MIT licensed."
+
+#: templates/layout.html:92
+msgid "Le partage, en toute simplicité."
+msgstr "Sharing made simple."
+
+#: templates/links/form.html:3
+msgid "Mes liens / Nouveau lien"
+msgstr "My links / New link"
+
+#: templates/links/form.html:8
+msgid "LES BONNES CONDITIONS"
+msgstr "THE RIGHT CONDITIONS"
+
+#: templates/links/form.html:10
+msgid "Un lien sur mesure"
+msgstr "A link on your terms"
+
+#: templates/links/form.html:12
+#, python-format
+msgid "Pour le dossier « %(title)s »."
+msgstr "For collection “%(title)s”."
+
+#: templates/links/form.html:19
+msgid "Créer le lien"
+msgstr "Create link"
+
+#: templates/links/form.html:24
+msgid "Vous choisissez"
+msgstr "You choose"
+
+#: templates/links/form.html:26
+msgid "qui, quand, combien."
+msgstr "who, when, how many."
+
+#: templates/links/form.html:28
+msgid ""
+"Un mot de passe protège aussi la présentation et la liste des fichiers."
+msgstr "A password also protects the introduction and file list."
+
+#: templates/links/form.html:30
+msgid "1×"
+msgstr "1×"
+
+#: templates/links/form.html:32
+msgid "Un usage vraiment unique"
+msgstr "A truly single-use link"
+
+#: templates/links/form.html:33
+msgid ""
+"L’ouverture de la page ne consomme pas le lien. Un téléchargement autorisé "
+"le consomme, même si le transfert est interrompu."
+msgstr ""
+"Opening the page does not consume the link. An authorized download does, "
+"even if the transfer is interrupted."
+
+#: templates/links/form.html:39
+msgid "Toujours révocable"
+msgstr "Always revocable"
+
+#: templates/links/form.html:40
+msgid "Vous pouvez couper les prochains accès à tout moment."
+msgstr "You can stop future access at any time."
+
+#: templates/links/list.html:7
+msgid "PARTAGER, AVEC PRÉCISION"
+msgstr "SHARE WITH PRECISION"
+
+#: templates/links/list.html:11
+msgid "Chaque destinataire, chaque condition, chaque accès : tout est ici."
+msgstr "Every recipient, every condition, every visit: it’s all here."
+
+#: templates/links/list.html:18
+msgid "Tous les liens"
+msgstr "All links"
+
+#: templates/links/list.html:20
+msgid "Actifs"
+msgstr "Active"
+
+#: templates/links/list.html:23
+msgid "Rechercher un lien"
+msgstr "Search links"
+
+#: templates/links/list.html:25
+msgid "Rechercher un lien…"
+msgstr "Search links…"
+
+#: templates/links/list.html:34
+msgid "Lien et dossier"
+msgstr "Link and collection"
+
+#: templates/links/list.html:35
+msgid "Conditions"
+msgstr "Conditions"
+
+#: templates/links/list.html:37
+msgid "Statut"
+msgstr "Status"
+
+#: templates/links/list.html:38
+msgid "Actions"
+msgstr "Actions"
+
+#: templates/links/list.html:49
+msgid "Créé le"
+msgstr "Created on"
+
+#: templates/links/list.html:54 vault/forms.py:21 vault/forms.py:81
+msgid "Mot de passe"
+msgstr "Password"
+
+#: templates/links/list.html:54
+msgid "Sans mot de passe"
+msgstr "No password"
+
+#: templates/links/list.html:57
+msgid "Jusqu’au"
+msgstr "Until"
+
+#: templates/links/list.html:57
+msgid "Sans expiration"
+msgstr "No expiry"
+
+#: templates/links/list.html:60
+msgid "Usage unique"
+msgstr "Single use"
+
+#: templates/links/list.html:60
+msgid "téléchargements max."
+msgstr "downloads maximum"
+
+#: templates/links/list.html:60
+msgid "Téléchargements illimités"
+msgstr "Unlimited downloads"
+
+#: templates/links/list.html:62
+msgid "Aperçus"
+msgstr "Previews"
+
+#: templates/links/list.html:62
+msgid "activés"
+msgstr "enabled"
+
+#: templates/links/list.html:62
+msgid "désactivés"
+msgstr "disabled"
+
+#: templates/links/list.html:67
+msgid "Les aperçus sont visibles avant téléchargement et peuvent être copiés."
+msgstr "Previews are visible before downloading and can be copied."
+
+#: templates/links/list.html:67
+msgid "Masquer les aperçus"
+msgstr "Hide previews"
+
+#: templates/links/list.html:67
+msgid "Activer les aperçus"
+msgstr "Enable previews"
+
+#: templates/links/list.html:83
+msgid "Copier le lien"
+msgstr "Copy link"
+
+#: templates/links/list.html:91
+msgid "Ouvrir la page (comptabilisé)"
+msgstr "Open page (counted)"
+
+#: templates/links/list.html:92
+#, python-format
+msgid "Ouvrir %(name)s"
+msgstr "Open %(name)s"
+
+#: templates/links/list.html:96
+msgid "Révoquer ce lien ? Les prochains téléchargements seront bloqués."
+msgstr "Revoke this link? Future downloads will be blocked."
+
+#: templates/links/list.html:108
+msgid "Aucun lien à afficher"
+msgstr "No links to display"
+
+#: templates/links/list.html:109
+msgid "Ouvrez un dossier pour créer un lien de partage."
+msgstr "Open a collection to create a share link."
+
+#: templates/links/list.html:110
+msgid "Mes dossiers →"
+msgstr "My collections →"
+
+#: templates/links/list.html:119
+msgid ""
+"Une ouverture est une page servie au navigateur, dédupliquée pendant 30 "
+"minutes par session. Le compteur de téléchargements indique les transferts "
+"autorisés."
+msgstr ""
+"An open is a page served to a browser, deduplicated for 30 minutes per "
+"session. The download counter shows authorized transfers."
+
+#: templates/links/list.html:120
+msgid ""
+"Les aperçus montrent une image réduite ou la première page d’un PDF, avant "
+"téléchargement. Ils ne consomment pas le lien et peuvent être copiés."
+msgstr ""
+"Previews show a smaller image or the first page of a PDF before downloading."
+" They do not consume the link and can be copied."
+
+#: templates/operations.html:2
+msgid "Administration / Exploitation"
+msgstr "Administration / Operations"
+
+#: templates/operations.html:5
+msgid "GARDER UNE LONGUEUR D’AVANCE"
+msgstr "STAY ONE STEP AHEAD"
+
+#: templates/operations.html:7
+msgid "L’état de votre instance"
+msgstr "Your instance at a glance"
+
+#: templates/operations.html:9
+msgid "Capacité, alertes et quotas, réunis au même endroit."
+msgstr "Capacity, alerts and quotas in one place."
+
+#: templates/operations.html:11 templates/storage.html:145
+msgid "Administration"
+msgstr "Administration"
+
+#: templates/operations.html:13
+msgid "Fichiers conservés"
+msgstr "Stored files"
+
+#: templates/operations.html:13
+msgid "Corbeille comprise"
+msgstr "Including trash"
+
+#: templates/operations.html:13
+msgid "Disque disponible"
+msgstr "Available disk space"
+
+#: templates/operations.html:13
+msgid "Sur"
+msgstr "Of"
+
+#: templates/operations.html:13
+msgid "du volume"
+msgstr "on the volume"
+
+#: templates/operations.html:13
+msgid "Dans la corbeille"
+msgstr "In the trash"
+
+#: templates/operations.html:13
+msgid "Purge après"
+msgstr "Purged after"
+
+#: templates/operations.html:13
+msgid "jours"
+msgstr "days"
+
+#: templates/operations.html:13
+msgid "Restauration vérifiée"
+msgstr "Verified restore"
+
+#: templates/operations.html:13
+msgid "À configurer"
+msgstr "Needs setup"
+
+#: templates/operations.html:13
+msgid "Voir le guide d’exploitation"
+msgstr "See the operations guide"
+
+#: templates/operations.html:14
+msgid "Surveillance"
+msgstr "Monitoring"
+
+#: templates/operations.html:14
+msgid "Dernier contrôle :"
+msgstr "Last check:"
+
+#: templates/operations.html:14
+msgid "· Base :"
+msgstr "· Database:"
+
+#: templates/operations.html:14
+msgid "disponible,indisponible"
+msgstr "available,unavailable"
+
+#: templates/operations.html:14
+msgid "· Antivirus :"
+msgstr "· Antivirus:"
+
+#: templates/operations.html:14
+msgid "En attente du premier passage du service de maintenance."
+msgstr "Waiting for the maintenance service’s first run."
+
+#: templates/operations.html:14
+msgid "Alertes e-mail :"
+msgstr "Email alerts:"
+
+#: templates/operations.html:14
+msgid "activées,désactivées"
+msgstr "enabled,disabled"
+
+#: templates/operations.html:14
+msgid ". Les alertes restent consultables ici."
+msgstr ". Alerts are always available here."
+
+#: templates/operations.html:14
+msgid "Depuis"
+msgstr "Since"
+
+#: templates/operations.html:14
+msgid "Aucune alerte enregistrée."
+msgstr "No alerts recorded."
+
+#: templates/operations.html:15
+msgid "Quotas des membres"
+msgstr "Member quotas"
+
+#: templates/operations.html:15
+msgid ""
+"Le quota inclut la corbeille et les envois réservés. Il ne peut pas "
+"descendre sous cette utilisation."
+msgstr ""
+"Quota includes trash and reserved uploads. It cannot be reduced below "
+"current usage."
+
+#: templates/operations.html:15
+msgid "conservés +"
+msgstr "stored +"
+
+#: templates/operations.html:15
+msgid "réservés /"
+msgstr "reserved /"
+
+#: templates/operations.html:15
+msgid "MFA :"
+msgstr "MFA:"
+
+#: templates/operations.html:15
+msgid "activée,désactivée"
+msgstr "enabled,disabled"
+
+#: templates/operations.html:17
+msgid "Quota (Gio)"
+msgstr "Quota (GiB)"
+
+#: templates/operations.html:23
+#, python-format
+msgid "Quota de %(name)s en Gio"
+msgstr "Quota for %(name)s in GiB"
+
+#: templates/operations.html:23
+msgid "Mettre à jour"
+msgstr "Update"
+
+#: templates/share/page.html:5 templates/share/page.html:12
+msgid "LinkVault"
+msgstr "LinkVault"
+
+#: templates/share/page.html:11
+msgid "L"
+msgstr "L"
+
+#: templates/share/page.html:31
+msgid "Votre dossier"
+msgstr "Your collection"
+
+#: templates/share/page.html:35
+msgid ""
+"Un aperçu avant de télécharger. Ouvrez une image ou un PDF pour le regarder "
+"de plus près."
+msgstr ""
+"A preview before you download. Open an image or PDF for a closer look."
+
+#: templates/share/page.html:40
+msgid "Première page du PDF"
+msgstr "First page of the PDF"
+
+#: templates/share/page.html:40
+msgid "Image réduite"
+msgstr "Reduced image"
+
+#: templates/share/page.html:40
+#, python-format
+msgid "Aperçu de %(name)s"
+msgstr "Preview of %(name)s"
+
+#: templates/share/page.html:41
+msgid "Charger l’aperçu"
+msgstr "Load preview"
+
+#: templates/share/page.html:43
+msgid "Agrandir"
+msgstr "Enlarge"
+
+#: templates/share/page.html:47
+msgid "À découvrir après téléchargement"
+msgstr "Available after downloading"
+
+#: templates/share/page.html:52
+msgid "· PDF, page 1"
+msgstr "· PDF, page 1"
+
+#: templates/share/page.html:57
+msgid ""
+"Aperçus des images et PDF jusqu’à 20 Mio. Leur consultation ne consomme pas "
+"de téléchargement. Les fichiers originaux sont dans le dossier ZIP."
+msgstr ""
+"Previews for images and PDFs up to 20 MiB. Viewing them does not consume a "
+"download. The original files are in the ZIP collection."
+
+#: templates/share/page.html:77
+msgid "ZIP ·"
+msgstr "ZIP ·"
+
+#: templates/share/page.html:83
+msgid "Disponible jusqu’au"
+msgstr "Available until"
+
+#: templates/share/page.html:87
+msgid "Un seul téléchargement autorisé, même en cas d’interruption."
+msgstr "One authorized download only, even if interrupted."
+
+#: templates/share/page.html:89
+msgid "téléchargements autorisés utilisés"
+msgstr "authorized downloads used"
+
+#: templates/share/page.html:93
+msgid ""
+"L’expéditeur peut consulter les dates d’ouverture de cette page et des "
+"téléchargements autorisés. Aucun outil publicitaire n’est utilisé."
+msgstr ""
+"The sender can see when this page was opened and downloads were authorized. "
+"No advertising trackers are used."
+
+#: templates/share/page.html:99
+msgid "Fermer l’aperçu"
+msgstr "Close preview"
+
+#: templates/share/page.html:99
+msgid "×"
+msgstr "×"
+
+#: templates/share/page.html:102
+msgid "Chargement de l’aperçu…"
+msgstr "Loading preview…"
+
+#: templates/share/page.html:106
+msgid "Fichier précédent"
+msgstr "Previous file"
+
+#: templates/share/page.html:106 templates/trash.html:20
+#: templates/trash.html:23
+msgid "← Précédent"
+msgstr "← Previous"
+
+#: templates/share/page.html:108
+msgid "Fichier suivant"
+msgstr "Next file"
+
+#: templates/share/page.html:108 templates/trash.html:20
+#: templates/trash.html:23
+msgid "Suivant →"
+msgstr "Next →"
+
+#: templates/share/page.html:117
+msgid "Partagé avec"
+msgstr "Shared with"
+
+#: templates/share/page.html:117
+msgid "linkvault."
+msgstr "linkvault."
+
+#: templates/share/unlock.html:3
+msgid "Partage protégé · LinkVault"
+msgstr "Protected share · LinkVault"
+
+#: templates/share/unlock.html:9
+msgid "Partage protégé"
+msgstr "Protected share"
+
+#: templates/share/unlock.html:13
+msgid "CE PARTAGE VOUS EST RÉSERVÉ"
+msgstr "THIS SHARE IS FOR YOU"
+
+#: templates/share/unlock.html:14
+msgid "Une clé pour entrer."
+msgstr "A key to get in."
+
+#: templates/share/unlock.html:15
+msgid ""
+"Saisissez le mot de passe communiqué par l’expéditeur pour découvrir les "
+"fichiers."
+msgstr "Enter the password provided by the sender to discover the files."
+
+#: templates/share/unlock.html:19
+msgid "Ouvrir le partage"
+msgstr "Open share"
+
+#: templates/share/unlock.html:21
+msgid "L’ouverture de la page ne consomme aucun téléchargement."
+msgstr "Opening the page does not consume a download."
+
+#: templates/storage.html:7
+msgid "DE LA PLACE POUR L’ESSENTIEL"
+msgstr "ROOM FOR WHAT MATTERS"
+
+#: templates/storage.html:9
+msgid "Votre stockage, en clair"
+msgstr "Your storage, clearly"
+
+#: templates/storage.html:11
+msgid ""
+"Identifiez les fichiers volumineux et libérez de l’espace quand vous en avez"
+" besoin."
+msgstr "Find large files and free up space when you need it."
+
+#: templates/storage.html:16
+msgid "Utilisation de mon stockage"
+msgstr "My storage usage"
+
+#: templates/storage.html:23
+msgid "Dans"
+msgstr "Across"
+
+#: templates/storage.html:23
+msgid "dossier"
+msgstr "collection"
+
+#: templates/storage.html:27
+msgid "Espace utilisé"
+msgstr "Used space"
+
+#: templates/storage.html:31
+#, python-format
+msgid "%% de votre quota"
+msgstr "%% of your quota"
+
+#: templates/storage.html:35
+msgid "Espace restant"
+msgstr "Remaining space"
+
+#: templates/storage.html:39
+msgid "Dans votre quota personnel"
+msgstr "Within your personal quota"
+
+#: templates/storage.html:43
+msgid "Quota personnel"
+msgstr "Personal quota"
+
+#: templates/storage.html:47
+msgid "Défini par l’administrateur"
+msgstr "Set by the administrator"
+
+#: templates/storage.html:52
+msgid "Votre espace"
+msgstr "Your workspace"
+
+#: templates/storage.html:59
+msgid "Tous vos fichiers"
+msgstr "All your files"
+
+#: templates/storage.html:63
+msgid "Rechercher un fichier ou un dossier"
+msgstr "Search files or collections"
+
+#: templates/storage.html:67
+msgid "Rechercher un fichier ou un dossier…"
+msgstr "Search files or collections…"
+
+#: templates/storage.html:68
+msgid "Trier les fichiers"
+msgstr "Sort files"
+
+#: templates/storage.html:70
+msgid "Plus volumineux d’abord"
+msgstr "Largest first"
+
+#: templates/storage.html:71
+msgid "Plus petits d’abord"
+msgstr "Smallest first"
+
+#: templates/storage.html:72
+msgid "Plus récents d’abord"
+msgstr "Newest first"
+
+#: templates/storage.html:73
+msgid "Nom de fichier"
+msgstr "File name"
+
+#: templates/storage.html:75
+msgid "Afficher"
+msgstr "Show"
+
+#: templates/storage.html:86
+msgid "Sélectionner tous les fichiers de cette page"
+msgstr "Select all files on this page"
+
+#: templates/storage.html:88
+msgid "Fichier"
+msgstr "File"
+
+#: templates/storage.html:90
+msgid "Taille"
+msgstr "Size"
+
+#: templates/storage.html:91
+msgid "Ajouté le"
+msgstr "Added on"
+
+#: templates/storage.html:101
+#, python-format
+msgid "Sélectionner %(name)s"
+msgstr "Select %(name)s"
+
+#: templates/storage.html:115
+msgid "octets"
+msgstr "bytes"
+
+#: templates/storage.html:123
+msgid "Aucun fichier trouvé"
+msgstr "No files found"
+
+#: templates/storage.html:123
+msgid "Tout l’espace est à vous."
+msgstr "All this space is yours."
+
+#: templates/storage.html:124
+msgid "Les fichiers ajoutés à vos dossiers seront visibles ici."
+msgstr "Files added to your collections will appear here."
+
+#: templates/storage.html:134
+msgid "Sélectionnez les fichiers à supprimer."
+msgstr "Select files to delete."
+
+#: templates/storage.html:135
+msgid "Examiner la suppression →"
+msgstr "Review deletion →"
+
+#: templates/storage.html:140
+msgid ""
+"La suppression demande une confirmation. Les liens des dossiers concernés "
+"seront révoqués. Le quota sera libéré après la suppression définitive."
+msgstr ""
+"Deletion requires confirmation. Links for affected collections will be "
+"revoked. Quota is released after permanent deletion."
+
+#: templates/storage.html:144
+msgid "Stockage du serveur"
+msgstr "Server storage"
+
+#: templates/storage.html:150
+msgid "Fichiers dans LinkVault"
+msgstr "Files in LinkVault"
+
+#: templates/storage.html:154
+msgid "Total des fichiers LinkVault"
+msgstr "Total LinkVault files"
+
+#: templates/storage.html:158
+msgid "Disponible sur le volume"
+msgstr "Available on the volume"
+
+#: templates/storage.html:162
+msgid "Capacité du volume"
+msgstr "Volume capacity"
+
+#: templates/storage.html:166
+#, python-format
+msgid ""
+"%% du volume est occupé. Cette mesure inclut les autres données présentes "
+"sur le même disque ; elle peut différer des fichiers LinkVault."
+msgstr ""
+"%% of the volume is used. This includes other data on the same disk; it may "
+"differ from LinkVault file usage."
+
+#: templates/storage.html:167
+msgid "Utilisation par compte"
+msgstr "Usage by account"
+
+#: templates/storage.html:172 templates/team.html:93
+msgid "Compte"
+msgstr "Account"
+
+#: templates/storage.html:173
+msgid "Utilisé"
+msgstr "Used"
+
+#: templates/storage.html:174
+msgid "Quota"
+msgstr "Quota"
+
+#: templates/storage.html:175
+msgid "Occupation"
+msgstr "Usage"
+
+#: templates/storage_delete.html:3
+msgid "Stockage / Confirmer la suppression"
+msgstr "Storage / Confirm deletion"
+
+#: templates/storage_delete.html:5
+msgid "← Retour au stockage"
+msgstr "← Back to storage"
+
+#: templates/storage_delete.html:7
+msgid "SUPPRESSION RÉCUPÉRABLE"
+msgstr "RECOVERABLE DELETION"
+
+#: templates/storage_delete.html:8 templates/trash.html:20
+#: templates/trash.html:23
+msgid "Supprimer"
+msgstr "Delete"
+
+#: templates/storage_delete.html:9
+msgid "seront conservés dans la corbeille pendant"
+msgstr "will be kept in the trash for"
+
+#: templates/storage_delete.html:9
+msgid "jours et continueront à compter dans votre quota."
+msgstr "days and will continue to count toward your quota."
+
+#: templates/storage_delete.html:12
+msgid "%(count)s lien actif sera révoqué."
+msgid_plural "%(count)s liens actifs seront révoqués."
+msgstr[0] "%(count)s active link will be revoked."
+msgstr[1] "%(count)s active links will be revoked."
+
+#: templates/storage_delete.html:12
+msgid ""
+"Créez de nouveaux liens pour partager les fichiers restants. Les dossiers et"
+" l’historique des anciens liens seront conservés."
+msgstr ""
+"Create new links to share the remaining files. Collections and the history "
+"of old links are retained."
+
+#: templates/storage_delete.html:32
+msgid "Conserver les fichiers"
+msgstr "Keep files"
+
+#: templates/team.html:7
+msgid "VOTRE ÉQUIPE"
+msgstr "YOUR TEAM"
+
+#: templates/team.html:9
+msgid "Mieux partager, ensemble"
+msgstr "Share better, together"
+
+#: templates/team.html:11
+msgid "Chaque membre dispose de ses propres dossiers, liens et paramètres."
+msgstr "Each member has their own collections, links and settings."
+
+#: templates/team.html:13
+msgid "Sur invitation uniquement"
+msgstr "By invitation only"
+
+#: templates/team.html:31
+msgid "Suspendu"
+msgstr "Suspended"
+
+#: templates/team.html:31
+msgid "Admin"
+msgstr "Admin"
+
+#: templates/team.html:36
+msgid ""
+"Modifier l’accès de ce membre ? La suspension révoque ses liens et ses "
+"sessions."
+msgstr ""
+"Change this member’s access? Suspending revokes their links and sessions."
+
+#: templates/team.html:38
+msgid "Suspendre"
+msgstr "Suspend"
+
+#: templates/team.html:46
+msgid "Invitations en attente"
+msgstr "Pending invitations"
+
+#: templates/team.html:52
+msgid "Expire le"
+msgstr "Expires on"
+
+#: templates/team.html:57
+msgid "Copier l’invitation"
+msgstr "Copy invitation"
+
+#: templates/team.html:58
+#, python-format
+msgid "Copier l’invitation pour %(name)s"
+msgstr "Copy invitation for %(name)s"
+
+#: templates/team.html:68
+msgid "Aucune invitation en attente."
+msgstr "No pending invitations."
+
+#: templates/team.html:76
+msgid "Inviter un membre"
+msgstr "Invite a member"
+
+#: templates/team.html:77
+msgid ""
+"Une invitation personnelle, valable 7 jours et utilisable une seule fois."
+msgstr "A personal invitation, valid for 7 days and usable only once."
+
+#: templates/team.html:79
+msgid "Créer l’invitation"
+msgstr "Create invitation"
+
+#: templates/team.html:82
+msgid ""
+"Le lien doit être transmis à la personne invitée. Son adresse est fixée par "
+"l’invitation ; elle choisit son mot de passe. Les comptes invités n’ont pas "
+"de droits administrateur."
+msgstr ""
+"Send the link to the invited person. Their email address is fixed by the "
+"invitation; they choose their password. Invited accounts do not have "
+"administrator privileges."
+
+#: templates/team.html:87
+msgid "Journal d’administration · 10 derniers événements"
+msgstr "Administration log · 10 latest events"
+
+#: templates/team.html:92
+msgid "Action"
+msgstr "Action"
+
+#: templates/team.html:101
+msgid "Compte supprimé"
+msgstr "Deleted account"
+
+#: templates/trash.html:7
+msgid "UNE SECONDE CHANCE POUR VOS FICHIERS"
+msgstr "A SECOND CHANCE FOR YOUR FILES"
+
+#: templates/trash.html:9
+msgid "La corbeille"
+msgstr "The trash"
+
+#: templates/trash.html:11
+msgid "Restaurez vos éléments pendant"
+msgstr "Restore your items for"
+
+#: templates/trash.html:11
+msgid "jours. Leurs anciens liens restent révoqués."
+msgstr "days. Their old links stay revoked."
+
+#: templates/trash.html:13
+msgid "conservés"
+msgstr "retained"
+
+#: templates/trash.html:16
+msgid ""
+"La corbeille compte dans votre quota. La suppression définitive, manuelle ou"
+" automatique après"
+msgstr ""
+"Trash counts toward your quota. Permanent deletion, manually or "
+"automatically after"
+
+#: templates/trash.html:16
+msgid "jours, libère l’espace."
+msgstr "days, frees up space."
+
+#: templates/trash.html:18
+msgid "Dossiers supprimés"
+msgstr "Deleted collections"
+
+#: templates/trash.html:18
+msgid "Supprimé le"
+msgstr "Deleted on"
+
+#: templates/trash.html:20 templates/trash.html:23
+msgid "Restaurer"
+msgstr "Restore"
+
+#: templates/trash.html:20
+msgid "Aucun dossier dans la corbeille."
+msgstr "No collections in the trash."
+
+#: templates/trash.html:21
+msgid "Fichiers supprimés individuellement"
+msgstr "Individually deleted files"
+
+#: templates/trash.html:23
+msgid "Aucun fichier dans la corbeille."
+msgstr "No files in the trash."
+
+#: templates/trash_confirm.html:2
+msgid "Corbeille / Suppression définitive"
+msgstr "Trash / Permanent deletion"
+
+#: templates/trash_confirm.html:2
+msgid "Supprimer définitivement ?"
+msgstr "Delete permanently?"
+
+#: templates/trash_confirm.html:2
+msgid "et tous ses fichiers"
+msgstr "and all its files"
+
+#: templates/trash_confirm.html:2
+msgid ""
+"ne pourront plus être restaurés depuis LinkVault. Cette action libérera le "
+"quota correspondant."
+msgstr ""
+"cannot be restored from LinkVault afterwards. This action releases the "
+"corresponding quota."
+
+#: templates/trash_confirm.html:2
+msgid "Conserver"
+msgstr "Keep"
+
+#: templates/trash_confirm.html:2
+msgid "Supprimer définitivement"
+msgstr "Delete permanently"
+
+#: templates/upload.html:7
+msgid "UNE PLACE POUR VOS FICHIERS"
+msgstr "A PLACE FOR YOUR FILES"
+
+#: templates/upload.html:9
+msgid "Déposez. Vérifiez. Partagez"
+msgstr "Upload. Check. Share"
+
+#: templates/upload.html:11
+msgid ""
+"Ajoutez vos fichiers ou un dossier complet et suivez l’envoi en temps réel."
+msgstr "Add files or an entire folder and follow the upload in real time."
+
+#: templates/upload.html:21
+msgid "Choisissez la destination"
+msgstr "Choose a destination"
+
+#: templates/upload.html:26
+msgid "Dossier de destination"
+msgstr "Destination collection"
+
+#: templates/upload.html:28
+msgid "Choisir un dossier…"
+msgstr "Choose a collection…"
+
+#: templates/upload.html:35
+msgid "Utiliser ce dossier"
+msgstr "Use this collection"
+
+#: templates/upload.html:38
+msgid "Créez votre premier dossier pour commencer à importer."
+msgstr "Create your first collection to start uploading."
+
+#: templates/upload.html:52
+msgid "Prêt pour le prochain envoi."
+msgstr "Ready for the next upload."
+
+#: templates/upload.html:53
+msgid "Choisissez un dossier ci-dessus pour sélectionner vos fichiers."
+msgstr "Choose a collection above to select your files."
+
+#: templates/upload.html:60
+msgid "Un envoi suivi,"
+msgstr "An upload you can follow,"
+
+#: templates/upload.html:62
+msgid "du début à la fin."
+msgstr "from start to finish."
+
+#: templates/upload.html:67
+msgid "Sélection"
+msgstr "Selection"
+
+#: templates/upload.html:68
+msgid "Vérifiez les noms, les chemins et les tailles avant d’envoyer."
+msgstr "Check names, paths and sizes before uploading."
+
+#: templates/upload.html:74
+msgid "Transfert"
+msgstr "Transfer"
+
+#: templates/upload.html:75
+msgid ""
+"La barre indique le pourcentage transmis au serveur. Vous pouvez mettre en "
+"pause et reprendre pendant 24 h, en sélectionnant les mêmes fichiers."
+msgstr ""
+"The bar shows the percentage sent to the server. You can pause and resume "
+"within 24 hours by selecting the same files."
+
+#: templates/upload.html:81
+msgid "Vérification"
+msgstr "Verification"
+
+#: templates/upload.html:82
+#, python-format
+msgid ""
+"Après 100 %%, l’antivirus et le quota sont vérifiés avant confirmation de "
+"l’enregistrement."
+msgstr ""
+"After 100 %%, the antivirus and quota are checked before storage is "
+"confirmed."
+
+#: templates/upload.html:88
+msgid "Partage"
+msgstr "Sharing"
+
+#: templates/upload.html:89
+msgid ""
+"Les fichiers sont dans votre dossier. Créez alors un lien à vos conditions."
+msgstr ""
+"The files are in your collection. Create a link with your preferred "
+"conditions."
+
+#: templates/upload.html:94
+msgid ""
+"En mode local de développement, l’antivirus peut être désactivé. Les "
+"fichiers non analysés restent identifiés comme tels."
+msgstr ""
+"In local development mode, the antivirus may be disabled. Unscanned files "
+"remain labeled as such."
+
+#: vault/api.py:130
+msgid "allow_previews doit être un booléen."
+msgstr "allow_previews must be a boolean."
+
+#: vault/api.py:132
+msgid "max_downloads doit être un entier."
+msgstr "max_downloads must be an integer."
+
+#: vault/api.py:137
+msgid "expires_at doit inclure un fuseau horaire (ISO 8601)."
+msgstr "expires_at must include a timezone (ISO 8601)."
+
+#: vault/api.py:157 vault/views.py:492
+msgid "Ajoutez au moins un fichier avant de créer un lien."
+msgstr "Add at least one file before creating a link."
+
+#: vault/api.py:161
+msgid "Des fichiers n’ont pas été analysés par l’antivirus."
+msgstr "Some files have not been scanned for malware."
+
+#: vault/api_auth.py:126
+msgid "Utilisez le type application/json."
+msgstr "Use the application/json content type."
+
+#: vault/api_auth.py:129
+msgid "Un objet JSON est requis."
+msgstr "A JSON object is required."
+
+#: vault/api_auth.py:138
+msgid ""
+"Idempotency-Key est requis (8 à 128 lettres, chiffres, tirets ou "
+"soulignements)."
+msgstr ""
+"Idempotency-Key is required (8–128 letters, digits, hyphens or underscores)."
+
+#: vault/api_auth.py:176
+msgid "Limite quotidienne de créations API atteinte (1 000)."
+msgstr "Daily API creation limit reached (1,000)."
+
+#: vault/capacity.py:74
+msgid ""
+"Espace temporaire insuffisant. Réessayez après les transferts en cours ou "
+"contactez l’administrateur."
+msgstr ""
+"Insufficient temporary space. Try again after current transfers finish or "
+"contact the administrator."
+
+#: vault/capacity.py:109
+msgid "Deux envois classiques sont déjà en cours pour ce compte."
+msgstr "Two standard uploads are already in progress for this account."
+
+#: vault/forms.py:16
+msgid "Votre nom"
+msgstr "Your name"
+
+#: vault/forms.py:24
+msgid "Au moins 12 caractères. Préférez une longue phrase unique."
+msgstr "At least 12 characters. Prefer a long, unique passphrase."
+
+#: vault/forms.py:27
+msgid "Confirmer le mot de passe"
+msgstr "Confirm password"
+
+#: vault/forms.py:40
+msgid "Les mots de passe ne correspondent pas."
+msgstr "Passwords do not match."
+
+#: vault/forms.py:55 vault/forms.py:76
+msgid "Adresse e-mail"
+msgstr "Email address"
+
+#: vault/forms.py:60
+msgid "Clé d’installation"
+msgstr "Setup key"
+
+#: vault/forms.py:63
+msgid "La valeur SETUP_TOKEN du fichier .env de votre serveur."
+msgstr "The SETUP_TOKEN value in your server’s .env file."
+
+#: vault/forms.py:92
+msgid "Titre du dossier"
+msgstr "Collection title"
+
+#: vault/forms.py:94
+msgid "Message pour le destinataire"
+msgstr "Message for the recipient"
+
+#: vault/forms.py:101
+msgid "Présentez ce que vous partagez, donnez du contexte…"
+msgstr "Introduce what you are sharing, add some context…"
+
+#: vault/forms.py:110
+msgid "Afficher les aperçus des images et PDF"
+msgstr "Show image and PDF previews"
+
+#: vault/forms.py:114
+msgid ""
+"Images réduites et première page des PDF jusqu’à 20 Mio, visibles avant "
+"téléchargement. Leur consultation ne consomme pas le lien et leur copie "
+"reste possible."
+msgstr ""
+"Reduced images and the first page of PDFs up to 20 MiB, visible before "
+"downloading. Viewing them does not consume the link and they can still be "
+"copied."
+
+#: vault/forms.py:118
+msgid "Mot de passe du lien"
+msgstr "Link password"
+
+#: vault/forms.py:124
+msgid "Facultatif · 12 caractères minimum. Communiquez-le par un autre canal."
+msgstr ""
+"Optional · at least 12 characters. Send it through a separate channel."
+
+#: vault/forms.py:132
+msgid "Nom du lien (visible par vous)"
+msgstr "Link name (visible to you)"
+
+#: vault/forms.py:133
+msgid "Date d’expiration"
+msgstr "Expiry date"
+
+#: vault/forms.py:134
+msgid "Nombre maximal de téléchargements"
+msgstr "Maximum downloads"
+
+#: vault/forms.py:138
+msgid ""
+"Saisissez 1 pour un usage unique. Laissez vide pour un nombre illimité."
+msgstr "Enter 1 for single use. Leave empty for unlimited downloads."
+
+#: vault/forms.py:141
+msgid ""
+"Facultatif · heure Europe/Berlin par défaut (configurable sur le serveur)."
+msgstr ""
+"Optional · Europe/Berlin time by default (configurable on the server)."
+
+#: vault/forms.py:148
+msgid "Ex. : Envoi à Camille"
+msgstr "E.g. Delivery to Camille"
+
+#: vault/forms.py:154
+msgid "Choisissez une date future."
+msgstr "Choose a future date."
+
+#: vault/forms.py:160
+msgid "Mot de passe du partage"
+msgstr "Share password"
+
+#: vault/forms.py:171
+msgid "Nom affiché"
+msgstr "Display name"
+
+#: vault/forms.py:172
+msgid "Signature"
+msgstr "Tagline"
+
+#: vault/forms.py:173
+msgid "Palette"
+msgstr "Palette"
+
+#: vault/forms.py:174
+msgid "Texte en pied de page"
+msgstr "Footer text"
+
+#: vault/forms.py:180
+msgid "Adresse e-mail du membre"
+msgstr "Member’s email address"
+
+#: vault/forms.py:185
+msgid "Cette adresse possède déjà un compte."
+msgstr "This email address already has an account."
+
+#: vault/forms.py:206
+msgid ""
+"Votre compte a changé pendant cette opération. Recommencez la connexion ou "
+"la récupération."
+msgstr ""
+"Your account changed during this operation. Restart sign-in or recovery."
+
+#: vault/help.py:18
+msgid "Premiers pas"
+msgstr "Getting started"
+
+#: vault/help.py:19
+msgid "Installation, connexion et langue de l’interface."
+msgstr "Setup, sign-in and interface language."
+
+#: vault/help.py:23
+msgid "Organiser ses dossiers"
+msgstr "Organize collections"
+
+#: vault/help.py:24
+msgid "Créer un dossier et préparer sa présentation."
+msgstr "Create a collection and prepare its introduction."
+
+#: vault/help.py:28
+msgid "Importer des fichiers"
+msgstr "Upload files"
+
+#: vault/help.py:29
+msgid "Fichiers, dossiers, progression et reprise des envois."
+msgstr "Files, folders, progress and resumable uploads."
+
+#: vault/help.py:33
+msgid "Partager et prévisualiser"
+msgstr "Share and preview"
+
+#: vault/help.py:34
+msgid "Conditions, mots de passe, aperçus et révocation."
+msgstr "Conditions, passwords, previews and revocation."
+
+#: vault/help.py:38
+msgid "Personnaliser sa page"
+msgstr "Customize your page"
+
+#: vault/help.py:39
+msgid "Nom, signature, couleurs et pied de page."
+msgstr "Name, tagline, colors and footer."
+
+#: vault/help.py:43
+msgid "Gérer le stockage"
+msgstr "Manage storage"
+
+#: vault/help.py:44
+msgid "Tailles, quotas, suppression et restauration."
+msgstr "Sizes, quotas, deletion and recovery."
+
+#: vault/help.py:48
+msgid "Inviter son équipe"
+msgstr "Invite your team"
+
+#: vault/help.py:49
+msgid "Invitations, comptes et suspension des accès."
+msgstr "Invitations, accounts and access suspension."
+
+#: vault/help.py:53
+msgid "Protéger son compte"
+msgstr "Protect your account"
+
+#: vault/help.py:54
+msgid "Mot de passe, double authentification et récupération."
+msgstr "Password, two-factor authentication and recovery."
+
+#: vault/help.py:58
+msgid "Suivre les accès"
+msgstr "Track activity"
+
+#: vault/help.py:59
+msgid "Ouvertures, téléchargements et export CSV."
+msgstr "Page opens, downloads and CSV export."
+
+#: vault/help.py:63
+msgid "Administrer l’instance"
+msgstr "Administer your instance"
+
+#: vault/help.py:64
+msgid "Capacité, antivirus, sauvegardes et maintenance."
+msgstr "Capacity, antivirus, backups and maintenance."
+
+#: vault/help.py:68
+msgid "Automatiser avec l’API et les webhooks"
+msgstr "Automate with API and webhooks"
+
+#: vault/help.py:69
+msgid "Clés, import automatique, événements signés et n8n."
+msgstr "Keys, automated uploads, signed events and n8n."
+
+#: vault/integrations.py:23
+msgid "Lire mes dossiers, fichiers et liens"
+msgstr "Read my collections, files and links"
+
+#: vault/integrations.py:24
+msgid "Créer des dossiers et importer des fichiers"
+msgstr "Create collections and upload files"
+
+#: vault/integrations.py:25
+msgid "Créer et révoquer des liens"
+msgstr "Create and revoke links"
+
+#: vault/integrations.py:31 vault/mfa.py:43
+msgid "Mot de passe actuel"
+msgstr "Current password"
+
+#: vault/integrations.py:36
+msgid "Code de double authentification"
+msgstr "Two-factor authentication code"
+
+#: vault/integrations.py:39
+msgid "Requis si la double authentification est activée."
+msgstr "Required if two-factor authentication is enabled."
+
+#: vault/integrations.py:44
+msgid "Nom de la clé"
+msgstr "Key name"
+
+#: vault/integrations.py:46
+msgid "Permissions"
+msgstr "Permissions"
+
+#: vault/integrations.py:49
+msgid "Validité en jours"
+msgstr "Validity in days"
+
+#: vault/integrations.py:55
+msgid "Nom du webhook"
+msgstr "Webhook name"
+
+#: vault/integrations.py:57
+msgid "URL de réception"
+msgstr "Receiver URL"
+
+#: vault/integrations.py:61
+msgid ""
+"HTTPS public, port 443. Les adresses internes et les redirections sont "
+"refusées."
+msgstr "Public HTTPS, port 443. Internal addresses and redirects are blocked."
+
+#: vault/integrations.py:65
+msgid "Événements"
+msgstr "Events"
+
+#: vault/integrations.py:77 vault/mfa.py:165 vault/views.py:902
+msgid "Mot de passe incorrect."
+msgstr "Incorrect password."
+
+#: vault/integrations.py:80 vault/mfa.py:144 vault/mfa.py:216
+msgid "Code incorrect, expiré ou déjà utilisé."
+msgstr "Incorrect, expired or already used code."
+
+#: vault/integrations.py:123
+msgid "Révoquez une clé avant d’en créer une autre (10 maximum)."
+msgstr "Revoke a key before creating another (maximum 10)."
+
+#: vault/integrations.py:138
+msgid "Clé API"
+msgstr "API key"
+
+#: vault/integrations.py:149
+msgid "Supprimez un webhook avant d’en créer un autre (10 maximum)."
+msgstr "Delete a webhook before creating another (maximum 10)."
+
+#: vault/integrations.py:164
+msgid "Secret de signature"
+msgstr "Signing secret"
+
+#: vault/integrations.py:204
+msgid "Clé API révoquée."
+msgstr "API key revoked."
+
+#: vault/integrations.py:228
+msgid "Événement de test ajouté à la file d’attente."
+msgstr "Test event added to the delivery queue."
+
+#: vault/mfa.py:33
+msgid "Code de votre application ou code de récupération"
+msgstr "Code from your app or a recovery code"
+
+#: vault/mfa.py:178
+msgid "Configuration expirée. Recommencez."
+msgstr "Setup expired. Start again."
+
+#: vault/mfa.py:195
+msgid "Code incorrect ou expiré."
+msgstr "Incorrect or expired code."
+
+#: vault/mfa.py:212
+msgid ""
+"Double authentification mise à jour. Les autres sessions sont déconnectées."
+msgstr ""
+"Two-factor authentication updated. Other sessions have been signed out."
+
+#: vault/mfa.py:218
+msgid "Action indisponible."
+msgstr "Action unavailable."
+
+#: vault/middleware.py:35
+msgid "Longueur invalide."
+msgstr "Invalid length."
+
+#: vault/middleware.py:37
+msgid "Envoi trop volumineux."
+msgstr "Upload too large."
+
+#: vault/middleware.py:43
+msgid "Content-Length requis."
+msgstr "Content-Length required."
+
+#: vault/middleware.py:69
+msgid "Authentification requise."
+msgstr "Authentication required."
+
+#: vault/middleware.py:77
+msgid "Dossier introuvable."
+msgstr "Collection not found."
+
+#: vault/middleware.py:81 vault/resumable.py:99
+msgid "Trop d’envois. Réessayez plus tard."
+msgstr "Too many uploads. Try again later."
+
+#: vault/middleware.py:87
+msgid "Quota de stockage insuffisant."
+msgstr "Insufficient storage quota."
+
+#: vault/models.py:69
+msgid "Forêt"
+msgstr "Forest"
+
+#: vault/models.py:70
+msgid "Océan"
+msgstr "Ocean"
+
+#: vault/models.py:71
+msgid "Prune"
+msgstr "Plum"
+
+#: vault/models.py:72
+msgid "Encre"
+msgstr "Ink"
+
+#: vault/models.py:182
+msgid "Révoqué"
+msgstr "Revoked"
+
+#: vault/models.py:183
+msgid "Expiré"
+msgstr "Expired"
+
+#: vault/models.py:184
+msgid "Épuisé"
+msgstr "Exhausted"
+
+#: vault/models.py:224 vault/webhooks.py:34
+msgid "Page ouverte"
+msgstr "Page opened"
+
+#: vault/models.py:225 vault/webhooks.py:35
+msgid "Téléchargement autorisé"
+msgstr "Download authorized"
+
+#: vault/models.py:226 vault/webhooks.py:32
+msgid "Lien créé"
+msgstr "Link created"
+
+#: vault/models.py:227 vault/webhooks.py:33
+msgid "Lien révoqué"
+msgstr "Link revoked"
+
+#: vault/operations.py:91
+msgid ""
+"Le disque dépasse 85 % d’utilisation ou sa réserve minimale. Libérez de "
+"l’espace."
+msgstr "Disk usage exceeds 85% or its minimum reserve. Free up space."
+
+#: vault/operations.py:95
+msgid ""
+"L’antivirus ne répond plus. Les nouveaux fichiers ne peuvent pas être "
+"validés."
+msgstr "The antivirus is not responding. New files cannot be validated."
+
+#: vault/operations.py:99
+msgid ""
+"La maintenance ne signale plus son activité depuis plus de quinze minutes."
+msgstr ""
+"The maintenance service has not reported activity for more than fifteen "
+"minutes."
+
+#: vault/operations.py:103
+msgid ""
+"Aucune restauration de sauvegarde vérifiée récemment. Consultez le guide "
+"d’exploitation."
+msgstr ""
+"No backup restore has been verified recently. See the operations guide."
+
+#: vault/operations.py:108
+#, python-format
+msgid ""
+"Le compte n° %(id)s atteint au moins 90 %% de son quota (envois réservés "
+"compris)."
+msgstr ""
+"Account #%(id)s has reached at least 90%% of its quota (including reserved "
+"uploads)."
+
+#: vault/operations.py:121
+msgid "[LinkVault] Intervention nécessaire"
+msgstr "[LinkVault] Action required"
+
+#: vault/operations.py:172
+msgid "Indiquez un quota valide, entre 0 et 1 048 576 Gio."
+msgstr "Enter a valid quota between 0 and 1,048,576 GiB."
+
+#: vault/operations.py:181
+msgid ""
+"Le quota doit couvrir les fichiers, la corbeille et les envois en attente."
+msgstr "Quota must cover files, trash and pending uploads."
+
+#: vault/operations.py:190
+msgid "Quota mis à jour."
+msgstr "Quota updated."
+
+#: vault/previews.py:261
+msgid "Les aperçus de ce lien ont été mis à jour."
+msgstr "Previews for this link have been updated."
+
+#: vault/resumable.py:39 vault/views.py:450
+msgid "Envoi invalide."
+msgstr "Invalid upload."
+
+#: vault/resumable.py:47
+msgid "Stockage indisponible. Réessayez ou contactez l’administrateur."
+msgstr "Storage unavailable. Try again or contact the administrator."
+
+#: vault/resumable.py:86
+msgid "Cet envoi est terminé, annulé ou expiré."
+msgstr "This upload is complete, canceled or expired."
+
+#: vault/resumable.py:104 vault/storage.py:119 vault/views.py:702
+msgid "Sélectionnez entre 1 et 100 fichiers."
+msgstr "Select between 1 and 100 files."
+
+#: vault/resumable.py:108
+msgid "Liste des fichiers invalide."
+msgstr "Invalid file list."
+
+#: vault/resumable.py:112
+msgid "Taille de fichier invalide ou trop élevée."
+msgstr "Invalid file size or file too large."
+
+#: vault/resumable.py:116
+msgid "Empreinte invalide."
+msgstr "Invalid fingerprint."
+
+#: vault/resumable.py:120
+msgid "La taille maximale du dossier est dépassée."
+msgstr "The maximum collection size has been exceeded."
+
+#: vault/resumable.py:134
+msgid "Révoquez les liens actifs avant d’importer des fichiers."
+msgstr "Revoke active links before uploading files."
+
+#: vault/resumable.py:139
+msgid ""
+"Terminez ou annulez un envoi avant d’en commencer un autre (5 maximum)."
+msgstr "Complete or cancel an upload before starting another (maximum 5)."
+
+#: vault/resumable.py:144
+msgid "Quota insuffisant, y compris la corbeille et les envois en attente."
+msgstr "Insufficient quota, including trash and pending uploads."
+
+#: vault/resumable.py:160
+msgid ""
+"Chemin déjà présent (corbeille comprise) ou limite de 100 fichiers atteinte."
+msgstr ""
+"Path already exists (including trash), or the 100-file limit has been "
+"reached."
+
+#: vault/resumable.py:164 vault/storage.py:190
+msgid "La taille maximale du dossier est atteinte."
+msgstr "The maximum collection size has been reached."
+
+#: vault/resumable.py:172 vault/storage.py:218
+msgid "Un chemin ne peut pas être à la fois un fichier et un dossier."
+msgstr "A path cannot be both a file and a folder."
+
+#: vault/resumable.py:237
+msgid "Bloc invalide."
+msgstr "Invalid chunk."
+
+#: vault/resumable.py:243
+msgid "L’intégrité du bloc n’a pas pu être vérifiée. Réessayez."
+msgstr "Chunk integrity could not be verified. Try again."
+
+#: vault/resumable.py:258
+msgid "Position modifiée. Reprenez à la position indiquée."
+msgstr "Offset changed. Resume at the indicated offset."
+
+#: vault/resumable.py:264
+msgid "Le bloc dépasse la taille déclarée."
+msgstr "The chunk exceeds the declared size."
+
+#: vault/resumable.py:269
+msgid "Le serveur manque d’espace disque."
+msgstr "The server is running out of disk space."
+
+#: vault/resumable.py:279
+msgid "Bloc manquant sur le serveur."
+msgstr "Chunk missing on the server."
+
+#: vault/resumable.py:323
+msgid "Trop de vérifications. Réessayez plus tard."
+msgstr "Too many verifications. Try again later."
+
+#: vault/resumable.py:346
+msgid "L’envoi n’est pas encore complet."
+msgstr "The upload is not complete yet."
+
+#: vault/resumable.py:354
+msgid "Fichier temporaire incomplet. Annulez puis recommencez l’envoi."
+msgstr "Incomplete temporary file. Cancel the upload and start again."
+
+#: vault/storage.py:27
+msgid "Chemin de fichier invalide."
+msgstr "Invalid file path."
+
+#: vault/storage.py:37
+msgid "Les chemins cachés, vides ou relatifs ne sont pas autorisés."
+msgstr "Hidden, empty or relative paths are not allowed."
+
+#: vault/storage.py:43
+msgid "Un nom de fichier contient des caractères non autorisés."
+msgstr "A file name contains prohibited characters."
+
+#: vault/storage.py:53
+msgid "Nom de fichier réservé."
+msgstr "Reserved file name."
+
+#: vault/storage.py:57
+#, python-format
+msgid "Type de fichier non autorisé : %(extension)s."
+msgstr "File type not allowed: %(extension)s."
+
+#: vault/storage.py:58
+msgid "sans extension"
+msgstr "no extension"
+
+#: vault/storage.py:67
+msgid "L’antivirus est indisponible. Aucun fichier n’a été enregistré."
+msgstr "The antivirus is unavailable. No files were stored."
+
+#: vault/storage.py:90
+msgid "Fichier refusé par l’antivirus ou analyse incomplète."
+msgstr "File rejected by the antivirus or scan incomplete."
+
+#: vault/storage.py:95
+msgid "L’antivirus ne répond pas. Réessayez plus tard."
+msgstr "The antivirus is not responding. Try again later."
+
+#: vault/storage.py:122
+msgid "Deux fichiers portent le même chemin."
+msgstr "Two files have the same path."
+
+#: vault/storage.py:127
+msgid "La taille maximale de l’envoi est dépassée."
+msgstr "The maximum upload size has been exceeded."
+
+#: vault/storage.py:149
+msgid "Compte désactivé."
+msgstr "Account disabled."
+
+#: vault/storage.py:153
+msgid "Révoquez les liens actifs avant de modifier les fichiers du dossier."
+msgstr "Revoke active links before changing the collection’s files."
+
+#: vault/storage.py:168
+msgid "Session expirée ou invalide."
+msgstr "Expired or invalid session."
+
+#: vault/storage.py:174
+msgid "Votre quota de stockage est atteint."
+msgstr "Your storage quota has been reached."
+
+#: vault/storage.py:197
+msgid "Chemin déjà présent ou limite de 100 fichiers par dossier atteinte."
+msgstr ""
+"Path already exists or the 100-file limit per collection has been reached."
+
+#: vault/storage.py:208
+msgid "Terminez ou annulez les envois reprenables avant un import classique."
+msgstr "Finish or cancel resumable uploads before a standard upload."
+
+#: vault/storage.py:264
+msgid "Ce dossier est vide."
+msgstr "This collection is empty."
+
+#: vault/storage.py:266
+msgid "Ce dossier contient des fichiers non analysés."
+msgstr "This collection contains unscanned files."
+
+#: vault/storage.py:294 vault/storage.py:299
+msgid "Ce lien n’est plus disponible."
+msgstr "This link is no longer available."
+
+#: vault/trash.py:65
+msgid "Un fichier n’est plus disponible ou ne vous appartient pas."
+msgstr "A file is no longer available or does not belong to you."
+
+#: vault/trash.py:212
+msgid "Élément restauré. Créez de nouveaux liens pour le partager."
+msgstr "Item restored. Create new links to share it."
+
+#: vault/trash.py:238
+msgid "Élément supprimé définitivement. Le quota a été libéré."
+msgstr "Item permanently deleted. Quota has been released."
+
+#: vault/views.py:77
+msgid "Un instant…"
+msgstr "Just a moment…"
+
+#: vault/views.py:78
+msgid "Trop de tentatives. Réessayez dans quelques minutes."
+msgstr "Too many attempts. Try again in a few minutes."
+
+#: vault/views.py:91
+msgid "Ce lien n’est plus disponible"
+msgstr "This link is no longer available"
+
+#: vault/views.py:93
+msgid ""
+"Il a expiré, a été révoqué ou a atteint sa limite de téléchargements. "
+"Contactez la personne qui vous l’a envoyé."
+msgstr ""
+"It has expired, was revoked or has reached its download limit. Contact the "
+"person who sent it."
+
+#: vault/views.py:127
+msgid "Clé d’installation incorrecte."
+msgstr "Incorrect setup key."
+
+#: vault/views.py:176
+msgid "Adresse e-mail ou mot de passe incorrect."
+msgstr "Incorrect email address or password."
+
+#: vault/views.py:295
+msgid "Mot de passe modifié. Les autres sessions seront déconnectées."
+msgstr "Password updated. Other sessions will be signed out."
+
+#: vault/views.py:357
+msgid "Dossier créé. Ajoutez maintenant vos fichiers."
+msgstr "Collection created. Add your files now."
+
+#: vault/views.py:415
+msgid "Présentation mise à jour."
+msgstr "Introduction updated."
+
+#: vault/views.py:434
+msgid "Envoi trop volumineux. Aucun fichier n’a été conservé."
+msgstr "Upload too large. No files were retained."
+
+#: vault/views.py:439
+msgid "Liste des chemins invalide."
+msgstr "Invalid path list."
+
+#: vault/views.py:443
+#, python-format
+msgid "%(count)s fichier(s) ajouté(s) au dossier."
+msgstr "%(count)s file(s) added to the collection."
+
+#: vault/views.py:463
+msgid "Dossier placé dans la corbeille. Tous ses liens ont été révoqués."
+msgstr "Collection moved to the trash. All its links have been revoked."
+
+#: vault/views.py:501
+msgid ""
+"Des fichiers n’ont pas été analysés par l’antivirus. Importez-les à nouveau "
+"dans un dossier avec l’antivirus activé."
+msgstr ""
+"Some files have not been scanned for malware. Upload them again into a "
+"collection with the antivirus enabled."
+
+#: vault/views.py:515
+msgid "Lien créé. Vous pouvez le copier et le partager."
+msgstr "Link created. You can copy and share it."
+
+#: vault/views.py:567
+msgid "Lien révoqué. Aucun nouveau téléchargement ne sera autorisé."
+msgstr "Link revoked. No new downloads will be authorized."
+
+#: vault/views.py:589
+msgid "Date (ISO 8601 UTC)"
+msgstr "Date (ISO 8601 UTC)"
+
+#: vault/views.py:639
+msgid "Votre page de partage a été personnalisée."
+msgstr "Your share page has been customized."
+
+#: vault/views.py:720
+#, python-format
+msgid ""
+"%(count)s fichier(s) placé(s) dans la corbeille. Les liens des dossiers "
+"concernés ont été révoqués."
+msgstr ""
+"%(count)s file(s) moved to the trash. Links for the affected collections "
+"have been revoked."
+
+#: vault/views.py:763
+msgid "Invitation créée pour 7 jours. Copiez le lien et envoyez-le au membre."
+msgstr ""
+"Invitation created for 7 days. Copy the link and send it to the member."
+
+#: vault/views.py:793
+msgid "Invitation révoquée."
+msgstr "Invitation revoked."
+
+#: vault/views.py:831
+msgid "Compte mis à jour. Une suspension révoque aussi les liens du membre."
+msgstr "Account updated. Suspending also revokes the member’s links."
+
+#: vault/views.py:929
+msgid "Transfert en attente"
+msgstr "Transfer pending"
+
+#: vault/views.py:931
+msgid ""
+"Le serveur manque d’espace temporaire. Réessayez plus tard ou contactez "
+"l’expéditeur."
+msgstr ""
+"The server lacks temporary space. Try again later or contact the sender."
+
+#: vault/views.py:943
+msgid "Transfert indisponible"
+msgstr "Transfer unavailable"
+
+#: vault/views.py:945
+msgid ""
+"Le fichier n’a pas pu être préparé. Réessayez plus tard ou contactez "
+"l’expéditeur."
+msgstr ""
+"The file could not be prepared. Try again later or contact the sender."
+
+#: vault/views.py:969
+msgid "Page introuvable"
+msgstr "Page not found"
+
+#: vault/views.py:970
+msgid "Cette adresse ne correspond à aucune page disponible."
+msgstr "This address does not match an available page."
+
+#: vault/views.py:981
+msgid "Une erreur est survenue"
+msgstr "An error occurred"
+
+#: vault/views.py:982
+msgid "Réessayez dans quelques instants."
+msgstr "Try again in a few moments."
+
+#: vault/webhooks.py:30
+msgid "Dossier créé"
+msgstr "Collection created"
+
+#: vault/webhooks.py:31
+msgid "Fichiers enregistrés"
+msgstr "Files stored"
+
+#: vault/webhooks.py:66
+msgid ""
+"Utilisez une URL HTTPS publique sur le port 443, sans identifiants, "
+"paramètres ni fragment."
+msgstr ""
+"Use a public HTTPS URL on port 443, without credentials, query parameters or"
+" fragments."

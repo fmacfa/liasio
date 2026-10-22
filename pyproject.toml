@@ -1,6 +1,6 @@
 [project]
 name = "linkvault"
-version = "0.3.0"
+version = "0.4.0"
 description = "Self-hosted file collections, beautiful share pages, and controlled download links."
 requires-python = ">=3.12,<3.15"
 license = "MIT"
@@ -15,12 +15,14 @@ dependencies = [
   "segno>=1.6,<2",
   "pillow>=13,<14",
   "pypdfium2>=5.14,<6",
+  "markdown-it-py>=4,<5",
 ]
 
 [dependency-groups]
 dev = [
     "bandit>=1.8,<2",
     "pip-audit>=2.9.0,<3",
+    "polib>=1.2,<2",
 ]
 
 [tool.uv]
