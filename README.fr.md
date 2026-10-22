@@ -25,6 +25,7 @@ Interface français / anglais · Licence **MIT** · Python / Django · Docker Co
 | Page de partage | Logo, image de fond, couleurs libres, nom, signature et pied de page propres à chaque compte ; aperçu en direct |
 | Aperçus des fichiers | Galerie d’images et première page des PDF, visionneuse et navigation au clavier ; option par lien |
 | Plusieurs liens par dossier | Nom interne, mot de passe facultatif sans minimum, expiration par date ou durée, nombre maximal de téléchargements |
+| Liens en lot sans code | De 1 à 200 liens par quantité ou liste Excel/CSV, vérification des noms et conditions, export de la liste avec les URL, renommage sans changer les liens |
 | Usage unique | Un seul téléchargement autorisé, y compris en cas de requêtes simultanées |
 | Suivi | Ouvertures et téléchargements autorisés datés, filtre par lien, export CSV |
 | Stockage | Nombre de fichiers, tailles, quotas, recherche, tri par taille/nom/date, suppression individuelle ou multiple vers une corbeille récupérable de 30 jours |
@@ -46,6 +47,8 @@ Interface français / anglais · Licence **MIT** · Python / Django · Docker Co
 Le **[guide français illustré](docs/guide/fr/README.md)** et sa **[version anglaise](docs/guide/en/README.md)** sont aussi intégrés à l’application, menu **Guide d’utilisation** (`/help/`). Le sélecteur **FR / EN** traduit les formulaires, les messages, la progression et les pages destinataires.
 
 Pour n8n et vos scripts : [référence API](docs/API.md), [guide des automatisations](docs/guide/fr/automation.md), [client Python d’import](examples/upload.py) et [vérificateur de signature](examples/verify_webhook.py). Les clés sont limitées, expirables et révocables ; les webhooks disposent d’un historique et de nouvelles tentatives bornées.
+
+Pour tout faire depuis l’interface, choisissez **Créer plusieurs liens** : indiquez une quantité ou importez une liste Excel/CSV, vérifiez les noms et conditions, puis téléchargez la liste complétée. Les colonnes et l’ordre d’origine sont conservés en valeurs. Le [guide des liens en lot](docs/guide/fr/bulk-links.md) détaille les étapes, le modèle à télécharger et les limites.
 
 ## Installer sur votre domaine
 

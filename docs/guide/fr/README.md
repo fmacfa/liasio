@@ -15,5 +15,6 @@ Version 0.4 · Ces mêmes guides sont accessibles dans votre instance via **Guid
 9. [Activité et CSV](activity.md)
 10. [Exploitation et quotas](operations.md)
 11. [API, webhooks et n8n](automation.md)
+12. [Liens en lot, Excel et CSV](bulk-links.md)
 
 [English](../en/README.md) · [Français](../fr/README.md) · [API reference](../../API.md)

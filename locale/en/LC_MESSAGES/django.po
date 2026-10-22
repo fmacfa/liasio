@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Liasio 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-22 17:36+0200\n"
+"POT-Creation-Date: 2026-10-22 20:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Liasio contributors\n"
 "Language-Team: English\n"
@@ -415,7 +415,7 @@ msgid "Retour"
 msgstr "Back"
 
 #: templates/activity.html:3 templates/layout.html:28
-#: templates/links/list.html:36
+#: templates/links/batch_detail.html:44 templates/links/list.html:40
 msgid "Activité"
 msgstr "Activity"
 
@@ -445,15 +445,15 @@ msgid "← Afficher tous les liens"
 msgstr "← Show all links"
 
 #: templates/activity.html:24 templates/integrations/webhook.html:9
-#: vault/views.py:589
+#: vault/views.py:593
 msgid "Événement"
 msgstr "Event"
 
-#: templates/activity.html:25 templates/storage.html:90 vault/views.py:589
+#: templates/activity.html:25 templates/storage.html:90 vault/views.py:593
 msgid "Dossier"
 msgstr "Collection"
 
-#: templates/activity.html:26 vault/views.py:589
+#: templates/activity.html:26 vault/views.py:593
 msgid "Lien"
 msgstr "Link"
 
@@ -611,44 +611,54 @@ msgstr "file"
 msgid "· Créé le"
 msgstr "· Created on"
 
-#: templates/collections/detail.html:13 templates/links/list.html:13
+#: templates/collections/detail.html:13 templates/links/form.html:14
+#: templates/links/list.html:14
+msgid "Créer plusieurs liens"
+msgstr "Create multiple links"
+
+#: templates/collections/detail.html:15 templates/links/list.html:15
 msgid "Créer un lien"
 msgstr "Create a link"
 
-#: templates/collections/detail.html:19 vault/forms.py:86
+#: templates/collections/detail.html:22 vault/forms.py:86
 msgid "Présentation"
 msgstr "Introduction"
 
-#: templates/collections/detail.html:20
+#: templates/collections/detail.html:23
 msgid "Modifier ↗"
 msgstr "Edit ↗"
 
-#: templates/collections/detail.html:22
+#: templates/collections/detail.html:25
 msgid "Ajoutez une présentation pour accueillir vos destinataires."
 msgstr "Add an introduction to welcome your recipients."
 
-#: templates/collections/detail.html:32 templates/storage.html:19
+#: templates/collections/detail.html:35 templates/storage.html:19
 msgid "Fichiers"
 msgstr "Files"
 
-#: templates/collections/detail.html:43
+#: templates/collections/detail.html:46
 msgid "Liens du dossier"
 msgstr "Collection links"
 
-#: templates/collections/detail.html:53 templates/links/list.html:84
+#: templates/collections/detail.html:56 templates/links/batch_detail.html:43
+#: templates/links/list.html:89
 #, python-format
 msgid "Copier le lien %(name)s"
 msgstr "Copy link %(name)s"
 
-#: templates/collections/detail.html:59
+#: templates/collections/detail.html:62
 msgid "Créez votre premier lien quand les fichiers sont prêts."
 msgstr "Create your first link when the files are ready."
 
-#: templates/collections/detail.html:63
+#: templates/collections/detail.html:64
+msgid "Voir tous les liens →"
+msgstr "View all links →"
+
+#: templates/collections/detail.html:67
 msgid "Un dossier, plusieurs liens."
 msgstr "One collection, several links."
 
-#: templates/collections/detail.html:64
+#: templates/collections/detail.html:68
 msgid ""
 "Partagez les mêmes fichiers avec des conditions et un historique différents "
 "pour chaque destinataire."
@@ -656,7 +666,7 @@ msgstr ""
 "Share the same files with different conditions and a separate history for "
 "each recipient."
 
-#: templates/collections/detail.html:67
+#: templates/collections/detail.html:71
 msgid "Supprimer ce dossier"
 msgstr "Delete this collection"
 
@@ -747,7 +757,7 @@ msgstr "Search collections"
 msgid "Rechercher un dossier…"
 msgstr "Search collections…"
 
-#: templates/collections/list.html:23 templates/links/list.html:27
+#: templates/collections/list.html:23 templates/links/list.html:31
 msgid "Rechercher"
 msgstr "Search"
 
@@ -1123,7 +1133,7 @@ msgstr "Inactive"
 msgid "Dernière utilisation"
 msgstr "Last used"
 
-#: templates/integrations/index.html:11 templates/links/list.html:98
+#: templates/integrations/index.html:11 templates/links/list.html:103
 #: templates/team.html:63
 msgid "Révoquer"
 msgstr "Revoke"
@@ -1157,7 +1167,7 @@ msgstr ""
 "until it starts."
 
 #: templates/integrations/index.html:17 templates/integrations/webhook.html:5
-#: vault/models.py:213
+#: vault/models.py:217
 msgid "Actif"
 msgstr "Active"
 
@@ -1390,6 +1400,269 @@ msgstr "Liasio · Open source, MIT licensed."
 msgid "Le partage, en toute simplicité."
 msgstr "Sharing made simple."
 
+#: templates/links/batch_detail.html:7 templates/links/batches.html:4
+msgid "Mes liens / Mes lots"
+msgstr "My links / My batches"
+
+#: templates/links/batch_detail.html:10
+msgid "← Mes lots"
+msgstr "← My batches"
+
+#: templates/links/batch_detail.html:11
+msgid "VOS LIENS SONT PRÊTS"
+msgstr "YOUR LINKS ARE READY"
+
+#: templates/links/batch_detail.html:11
+msgid "ÉTAPE 2 SUR 2"
+msgstr "STEP 2 OF 2"
+
+#: templates/links/batch_detail.html:11
+msgid "liens pour"
+msgstr "links for"
+
+#: templates/links/batch_detail.html:15
+msgid "Télécharger Excel"
+msgstr "Download Excel"
+
+#: templates/links/batch_detail.html:16
+msgid "Télécharger CSV"
+msgstr "Download CSV"
+
+#: templates/links/batch_detail.html:20 vault/batches.py:267
+msgid "Ce brouillon a expiré. Préparez un nouveau lot."
+msgstr "This draft has expired. Prepare a new batch."
+
+#: templates/links/batch_detail.html:22 templates/links/batches.html:11
+msgid "Préparer un lot"
+msgstr "Prepare a batch"
+
+#: templates/links/batch_detail.html:28
+msgid "Colonne pour nommer les liens"
+msgstr "Column for link names"
+
+#: templates/links/batch_detail.html:33
+msgid "Appliquer aux noms"
+msgstr "Apply to names"
+
+#: templates/links/batch_detail.html:33
+msgid ""
+"Vous pouvez ensuite corriger chaque nom. Les autres colonnes restent "
+"inchangées."
+msgstr "You can then edit each name. Other columns stay unchanged."
+
+#: templates/links/batch_detail.html:35
+msgid "Un nom pour chaque lien"
+msgstr "A name for every link"
+
+#: templates/links/batch_detail.html:40
+#, python-format
+msgid "URL du lien %(number)s"
+msgstr "URL for link %(number)s"
+
+#: templates/links/batch_detail.html:45
+msgid "Données d’origine"
+msgstr "Original data"
+
+#: templates/links/batch_detail.html:49
+msgid "Conditions de chaque lien"
+msgstr "Conditions for each link"
+
+#: templates/links/batch_detail.html:50
+msgid ""
+"Les mêmes conditions s’appliquent séparément à chacun des liens. Un usage "
+"unique autorise un téléchargement par lien."
+msgstr ""
+"The same conditions apply independently to every link. Single use allows one"
+" download per link."
+
+#: templates/links/batch_detail.html:52
+msgid ""
+"La durée commence à la création. Le mot de passe commun n’est jamais ajouté "
+"au fichier exporté."
+msgstr ""
+"Duration starts at creation. The shared password is never added to the "
+"exported file."
+
+#: templates/links/batch_detail.html:58
+msgid "Enregistrer les noms"
+msgstr "Save names"
+
+#: templates/links/batch_detail.html:58
+#, python-format
+msgid "Créer les %(count)s liens"
+msgstr "Create the %(count)s links"
+
+#: templates/links/batch_detail.html:58
+msgid ""
+"Renommer un lien ne change pas son URL. Enregistrez avant de télécharger la "
+"liste."
+msgstr ""
+"Renaming a link does not change its URL. Save before downloading the list."
+
+#: templates/links/batch_detail.html:58
+msgid ""
+"Tous les liens sont créés ensemble, après vérification. Aucun e-mail n’est "
+"envoyé."
+msgstr "All links are created together after review. No email is sent."
+
+#: templates/links/batch_detail.html:62
+msgid ""
+"La liste est privée et reste disponible dans Mes lots. Supprimer la liste "
+"conserve les liens ; révoquez-les dans Mes liens pour bloquer leurs accès."
+msgstr ""
+"Your private list stays available in My batches. Deleting it keeps the "
+"links; revoke them in My links to block access."
+
+#: templates/links/batch_detail.html:65
+msgid "Supprimer cette liste ? Les liens déjà créés seront conservés."
+msgstr "Delete this list? Links already created will be kept."
+
+#: templates/links/batch_detail.html:67
+msgid "Supprimer la liste"
+msgstr "Delete list"
+
+#: templates/links/batch_prepare.html:7
+msgid "Mes liens / Nouveau lot"
+msgstr "My links / New batch"
+
+#: templates/links/batch_prepare.html:11
+msgid "ÉTAPE 1 SUR 2"
+msgstr "STEP 1 OF 2"
+
+#: templates/links/batch_prepare.html:11
+msgid "Plusieurs liens, en une fois"
+msgstr "Multiple links, all at once"
+
+#: templates/links/batch_prepare.html:11 templates/links/form.html:12
+#, python-format
+msgid "Pour le dossier « %(title)s »."
+msgstr "For collection “%(title)s”."
+
+#: templates/links/batch_prepare.html:11 templates/links/batches.html:8
+#: templates/links/list.html:24
+msgid "Mes lots"
+msgstr "My batches"
+
+#: templates/links/batch_prepare.html:19
+msgid "Vérifier les noms et les conditions"
+msgstr "Review names and conditions"
+
+#: templates/links/batch_prepare.html:25
+msgid "Une ligne, un lien."
+msgstr "One row, one link."
+
+#: templates/links/batch_prepare.html:26
+msgid ""
+"Chaque lien possède son URL et ses compteurs. Vous pourrez modifier les noms"
+" et copier les liens individuellement."
+msgstr ""
+"Each link has its own URL and counters. You can edit names and copy links "
+"individually."
+
+#: templates/links/batch_prepare.html:27
+msgid "Avec une quantité"
+msgstr "By quantity"
+
+#: templates/links/batch_prepare.html:27
+msgid ""
+"Des noms numérotés sont proposés. Renommez-les avant ou après la création."
+msgstr "Numbered names are suggested. Rename them before or after creation."
+
+#: templates/links/batch_prepare.html:28
+msgid "Avec votre liste"
+msgstr "From your list"
+
+#: templates/links/batch_prepare.html:28
+msgid ""
+"Choisissez la colonne des noms. Les colonnes d’origine seront conservées "
+"dans la liste exportée, avec les URL ajoutées."
+msgstr ""
+"Choose the name column. Original columns are kept in the exported list, with"
+" URLs added."
+
+#: templates/links/batch_prepare.html:30
+msgid "Modèle Excel"
+msgstr "Excel template"
+
+#: templates/links/batch_prepare.html:30
+msgid "Modèle CSV"
+msgstr "CSV template"
+
+#: templates/links/batch_prepare.html:31
+msgid ""
+"Valeurs uniquement : ni formules, ni macros. Les mises en forme et les "
+"autres feuilles ne sont pas reprises. Aucun e-mail n’est envoyé."
+msgstr ""
+"Values only: no formulas or macros. Original formatting and other sheets are"
+" not retained. No email is sent."
+
+#: templates/links/batches.html:7 templates/links/rename.html:6
+msgid "← Mes liens"
+msgstr "← My links"
+
+#: templates/links/batches.html:8
+msgid "PARTAGER EN SÉRIE"
+msgstr "SHARE IN BATCHES"
+
+#: templates/links/batches.html:8
+msgid "Préparez plusieurs liens, retrouvez vos listes et exportez leurs URL."
+msgstr "Prepare multiple links, find your lists and export their URLs."
+
+#: templates/links/batches.html:10
+msgid "Dossier à partager"
+msgstr "Folder to share"
+
+#: templates/links/batches.html:10
+msgid "Choisir un dossier"
+msgstr "Choose a folder"
+
+#: templates/links/batches.html:19
+msgid "Lot et dossier"
+msgstr "Batch and folder"
+
+#: templates/links/batches.html:20
+msgid "Liens"
+msgstr "Links"
+
+#: templates/links/batches.html:21 templates/links/list.html:41
+msgid "Statut"
+msgstr "Status"
+
+#: templates/links/batches.html:22 templates/links/list.html:42
+msgid "Actions"
+msgstr "Actions"
+
+#: templates/links/batches.html:26
+msgid "Créé"
+msgstr "Created"
+
+#: templates/links/batches.html:26
+msgid "Brouillon"
+msgstr "Draft"
+
+#: templates/links/batches.html:26
+msgid "Ouvrir et exporter"
+msgstr "Open and export"
+
+#: templates/links/batches.html:26
+msgid "Vérifier et créer"
+msgstr "Review and create"
+
+#: templates/links/batches.html:31
+msgid "Votre premier lot"
+msgstr "Your first batch"
+
+#: templates/links/batches.html:32
+msgid "Choisissez un dossier, puis une quantité ou une liste Excel / CSV."
+msgstr "Choose a folder, then a quantity or an Excel / CSV list."
+
+#: templates/links/batches.html:41
+msgid ""
+"Les brouillons expirent après 24 heures. Jusqu’à 100 lots conservés par "
+"compte."
+msgstr ""
+"Drafts expire after 24 hours. Up to 100 batches can be kept per account."
+
 #: templates/links/form.html:3
 msgid "Mes liens / Nouveau lien"
 msgstr "My links / New link"
@@ -1402,37 +1675,32 @@ msgstr "THE RIGHT CONDITIONS"
 msgid "Un lien sur mesure"
 msgstr "A link on your terms"
 
-#: templates/links/form.html:12
-#, python-format
-msgid "Pour le dossier « %(title)s »."
-msgstr "For collection “%(title)s”."
-
-#: templates/links/form.html:19
+#: templates/links/form.html:20
 msgid "Créer le lien"
 msgstr "Create link"
 
-#: templates/links/form.html:24
+#: templates/links/form.html:25
 msgid "Vous choisissez"
 msgstr "You choose"
 
-#: templates/links/form.html:26
+#: templates/links/form.html:27
 msgid "qui, quand, combien."
 msgstr "who, when, how many."
 
-#: templates/links/form.html:28
+#: templates/links/form.html:29
 msgid ""
 "Un mot de passe protège aussi la présentation et la liste des fichiers."
 msgstr "A password also protects the introduction and file list."
 
-#: templates/links/form.html:30
+#: templates/links/form.html:31
 msgid "1×"
 msgstr "1×"
 
-#: templates/links/form.html:32
+#: templates/links/form.html:33
 msgid "Un usage vraiment unique"
 msgstr "A truly single-use link"
 
-#: templates/links/form.html:33
+#: templates/links/form.html:34
 msgid ""
 "L’ouverture de la page ne consomme pas le lien. Un téléchargement autorisé "
 "le consomme, même si le transfert est interrompu."
@@ -1440,11 +1708,11 @@ msgstr ""
 "Opening the page does not consume the link. An authorized download does, "
 "even if the transfer is interrupted."
 
-#: templates/links/form.html:39
+#: templates/links/form.html:40
 msgid "Toujours révocable"
 msgstr "Always revocable"
 
-#: templates/links/form.html:40
+#: templates/links/form.html:41
 msgid "Vous pouvez couper les prochains accès à tout moment."
 msgstr "You can stop future access at any time."
 
@@ -1456,124 +1724,120 @@ msgstr "SHARE WITH PRECISION"
 msgid "Chaque destinataire, chaque condition, chaque accès : tout est ici."
 msgstr "Every recipient, every condition, every visit: it’s all here."
 
-#: templates/links/list.html:18
+#: templates/links/list.html:21
 msgid "Tous les liens"
 msgstr "All links"
 
-#: templates/links/list.html:20
+#: templates/links/list.html:23
 msgid "Actifs"
 msgstr "Active"
 
-#: templates/links/list.html:23
+#: templates/links/list.html:27
 msgid "Rechercher un lien"
 msgstr "Search links"
 
-#: templates/links/list.html:25
+#: templates/links/list.html:29
 msgid "Rechercher un lien…"
 msgstr "Search links…"
 
-#: templates/links/list.html:34
+#: templates/links/list.html:38
 msgid "Lien et dossier"
 msgstr "Link and collection"
 
-#: templates/links/list.html:35
+#: templates/links/list.html:39
 msgid "Conditions"
 msgstr "Conditions"
 
-#: templates/links/list.html:37
-msgid "Statut"
-msgstr "Status"
-
-#: templates/links/list.html:38
-msgid "Actions"
-msgstr "Actions"
-
-#: templates/links/list.html:49
+#: templates/links/list.html:53
 msgid "Créé le"
 msgstr "Created on"
 
-#: templates/links/list.html:54 vault/forms.py:22 vault/forms.py:74
+#: templates/links/list.html:58 vault/forms.py:22 vault/forms.py:74
 msgid "Mot de passe"
 msgstr "Password"
 
-#: templates/links/list.html:54
+#: templates/links/list.html:58
 msgid "Sans mot de passe"
 msgstr "No password"
 
-#: templates/links/list.html:57
+#: templates/links/list.html:61
 msgid "Jusqu’au"
 msgstr "Until"
 
-#: templates/links/list.html:57 vault/forms.py:107
+#: templates/links/list.html:61 vault/forms.py:107
 msgid "Sans expiration"
 msgstr "No expiry"
 
-#: templates/links/list.html:60
+#: templates/links/list.html:64
 msgid "Usage unique"
 msgstr "Single use"
 
-#: templates/links/list.html:60
+#: templates/links/list.html:64
 msgid "téléchargements max."
 msgstr "downloads maximum"
 
-#: templates/links/list.html:60
+#: templates/links/list.html:64
 msgid "Téléchargements illimités"
 msgstr "Unlimited downloads"
 
-#: templates/links/list.html:62
+#: templates/links/list.html:66
 msgid "Aperçus"
 msgstr "Previews"
 
-#: templates/links/list.html:62
+#: templates/links/list.html:66
 msgid "activés"
 msgstr "enabled"
 
-#: templates/links/list.html:62
+#: templates/links/list.html:66
 msgid "désactivés"
 msgstr "disabled"
 
-#: templates/links/list.html:67
+#: templates/links/list.html:71
 msgid "Les aperçus sont visibles avant téléchargement et peuvent être copiés."
 msgstr "Previews are visible before downloading and can be copied."
 
-#: templates/links/list.html:67
+#: templates/links/list.html:71
 msgid "Masquer les aperçus"
 msgstr "Hide previews"
 
-#: templates/links/list.html:67
+#: templates/links/list.html:71
 msgid "Activer les aperçus"
 msgstr "Enable previews"
 
-#: templates/links/list.html:83
+#: templates/links/list.html:85
+msgid "Renommer"
+msgstr "Rename"
+
+#: templates/links/list.html:88
 msgid "Copier le lien"
 msgstr "Copy link"
 
-#: templates/links/list.html:91
+#: templates/links/list.html:96
 msgid "Ouvrir la page (comptabilisé)"
 msgstr "Open page (counted)"
 
-#: templates/links/list.html:92
+#: templates/links/list.html:97
 #, python-format
 msgid "Ouvrir %(name)s"
 msgstr "Open %(name)s"
 
-#: templates/links/list.html:96
+#: templates/links/list.html:101
 msgid "Révoquer ce lien ? Les prochains téléchargements seront bloqués."
 msgstr "Revoke this link? Future downloads will be blocked."
 
-#: templates/links/list.html:108
+#: templates/links/list.html:113
 msgid "Aucun lien à afficher"
 msgstr "No links to display"
 
-#: templates/links/list.html:109
+#: templates/links/list.html:114
 msgid "Ouvrez un dossier pour créer un lien de partage."
 msgstr "Open a collection to create a share link."
 
-#: templates/links/list.html:110
+#: templates/links/list.html:115
 msgid "Mes dossiers →"
 msgstr "My collections →"
 
-#: templates/links/list.html:119
+#: templates/links/list.html:124
 msgid ""
 "Une ouverture est une page servie au navigateur, dédupliquée pendant 30 "
 "minutes par session. Le compteur de téléchargements indique les transferts "
@@ -1582,13 +1846,31 @@ msgstr ""
 "An open is a page served to a browser, deduplicated for 30 minutes per "
 "session. The download counter shows authorized transfers."
 
-#: templates/links/list.html:120
+#: templates/links/list.html:125
 msgid ""
 "Les aperçus montrent une image réduite ou la première page d’un PDF, avant "
 "téléchargement. Ils ne consomment pas le lien et peuvent être copiés."
 msgstr ""
 "Previews show a smaller image or the first page of a PDF before downloading."
 " They do not consume the link and can be copied."
+
+#: templates/links/rename.html:4
+msgid "Mes liens / Renommer"
+msgstr "My links / Rename"
+
+#: templates/links/rename.html:6
+msgid "Renommer le lien"
+msgstr "Rename link"
+
+#: templates/links/rename.html:6
+msgid ""
+"Le nom est visible uniquement par vous. L’URL et les conditions restent "
+"identiques."
+msgstr "Only you can see this name. The URL and conditions stay unchanged."
+
+#: templates/links/rename.html:6
+msgid "Enregistrer"
+msgstr "Save"
 
 #: templates/operations.html:2
 msgid "Administration / Exploitation"
@@ -2413,31 +2695,32 @@ msgstr ""
 "In local development mode, the antivirus may be disabled. Unscanned files "
 "remain labeled as such."
 
-#: vault/api.py:136
+#: vault/api.py:135
 msgid "expires_in_days doit être un entier."
 msgstr "expires_in_days must be an integer."
 
-#: vault/api.py:138 vault/forms.py:186
+#: vault/api.py:137 vault/forms.py:186
 msgid "Choisissez une date ou une durée, pas les deux."
 msgstr "Choose a date or a duration, not both."
 
-#: vault/api.py:140
+#: vault/api.py:139
 msgid "allow_previews doit être un booléen."
 msgstr "allow_previews must be a boolean."
 
-#: vault/api.py:142
+#: vault/api.py:141
 msgid "max_downloads doit être un entier."
 msgstr "max_downloads must be an integer."
 
-#: vault/api.py:147
+#: vault/api.py:146
 msgid "expires_at doit inclure un fuseau horaire (ISO 8601)."
 msgstr "expires_at must include a timezone (ISO 8601)."
 
-#: vault/api.py:174 vault/views.py:492
+#: vault/api.py:173 vault/batches.py:205 vault/batches.py:270
+#: vault/views.py:496
 msgid "Ajoutez au moins un fichier avant de créer un lien."
 msgstr "Add at least one file before creating a link."
 
-#: vault/api.py:178
+#: vault/api.py:177
 msgid "Des fichiers n’ont pas été analysés par l’antivirus."
 msgstr "Some files have not been scanned for malware."
 
@@ -2459,6 +2742,116 @@ msgstr ""
 #: vault/api_auth.py:188
 msgid "Limite quotidienne de créations API atteinte (1 000)."
 msgstr "Daily API creation limit reached (1,000)."
+
+#: vault/batches.py:29
+msgid "Utilisez un nom sur une seule ligne, sans caractères de contrôle."
+msgstr "Use a single-line name without control characters."
+
+#: vault/batches.py:36
+msgid "Nom du lot"
+msgstr "Batch name"
+
+#: vault/batches.py:39
+msgid "Comment préparer les liens ?"
+msgstr "How would you like to prepare the links?"
+
+#: vault/batches.py:41
+msgid "Indiquer un nombre"
+msgstr "Enter a quantity"
+
+#: vault/batches.py:42
+msgid "Importer une liste Excel ou CSV"
+msgstr "Import an Excel or CSV list"
+
+#: vault/batches.py:46
+msgid "Nombre de liens"
+msgstr "Number of links"
+
+#: vault/batches.py:52
+msgid ""
+"De 1 à 200 liens par lot. Vous pourrez nommer chaque lien à l’étape "
+"suivante."
+msgstr ""
+"Between 1 and 200 links per batch. You can name each link in the next step."
+
+#: vault/batches.py:56
+msgid "Votre liste"
+msgstr "Your list"
+
+#: vault/batches.py:60
+msgid ""
+"Excel .xlsx ou CSV UTF-8 · 1 Mio · 200 lignes · 20 colonnes. Première "
+"feuille, avec une ligne d’en-tête."
+msgstr ""
+"Excel .xlsx or UTF-8 CSV · 1 MiB · 200 rows · 20 columns. First sheet, with "
+"a header row."
+
+#: vault/batches.py:67
+msgid "Indiquez le nombre de liens."
+msgstr "Enter the number of links."
+
+#: vault/batches.py:69
+msgid "Choisissez votre liste."
+msgstr "Choose your list."
+
+#: vault/batches.py:84
+#, python-format
+msgid "Nom du lien %(number)s"
+msgstr "Name for link %(number)s"
+
+#: vault/batches.py:111 vault/middleware.py:86
+msgid "Trop de demandes. Réessayez plus tard."
+msgstr "Too many requests. Try again later."
+
+#: vault/batches.py:175 vault/link_lists.py:163
+msgid "La liste ne doit pas dépasser 1 Mio."
+msgstr "The list must not exceed 1 MiB."
+
+#: vault/batches.py:200
+msgid ""
+"Vous avez atteint 100 lots. Supprimez une ancienne liste pour en préparer "
+"une autre ; ses liens seront conservés."
+msgstr ""
+"You have reached 100 batches. Delete an older list to prepare another; its "
+"links will be kept."
+
+#: vault/batches.py:244
+#, python-format
+msgid "Lien %(number)s"
+msgstr "Link %(number)s"
+
+#: vault/batches.py:278 vault/views.py:505
+msgid ""
+"Des fichiers n’ont pas été analysés par l’antivirus. Importez-les à nouveau "
+"dans un dossier avec l’antivirus activé."
+msgstr ""
+"Some files have not been scanned for malware. Upload them again into a "
+"collection with the antivirus enabled."
+
+#: vault/batches.py:338 vault/batches.py:343
+msgid "Action invalide."
+msgstr "Invalid action."
+
+#: vault/batches.py:356
+msgid "Les liens sont créés. Copiez-les ou téléchargez la liste complétée."
+msgstr "Links created. Copy them or download the completed list."
+
+#: vault/batches.py:386 vault/batches.py:535
+msgid "Noms enregistrés. Les URL restent identiques."
+msgstr "Names saved. URLs stay unchanged."
+
+#: vault/batches.py:474
+msgid "Nom"
+msgstr "Name"
+
+#: vault/batches.py:474
+msgid "Référence"
+msgstr "Reference"
+
+#: vault/batches.py:502
+msgid ""
+"Liste supprimée. Les liens déjà créés restent disponibles dans Mes liens."
+msgstr "List deleted. Existing links remain available in My links."
 
 #: vault/brand_media.py:123
 msgid ""
@@ -2722,50 +3115,58 @@ msgid "Nom, signature, couleurs et pied de page."
 msgstr "Name, tagline, colors and footer."
 
 #: vault/help.py:43
+msgid "Créer des liens en lot"
+msgstr "Create links in batches"
+
+#: vault/help.py:44
+msgid "Quantité, import Excel ou CSV, noms et export des URL."
+msgstr "Quantity, Excel or CSV imports, names and URL exports."
+
+#: vault/help.py:48
 msgid "Gérer le stockage"
 msgstr "Manage storage"
 
-#: vault/help.py:44
+#: vault/help.py:49
 msgid "Tailles, quotas, suppression et restauration."
 msgstr "Sizes, quotas, deletion and recovery."
 
-#: vault/help.py:48
+#: vault/help.py:53
 msgid "Inviter son équipe"
 msgstr "Invite your team"
 
-#: vault/help.py:49
+#: vault/help.py:54
 msgid "Invitations, comptes et suspension des accès."
 msgstr "Invitations, accounts and access suspension."
 
-#: vault/help.py:53
+#: vault/help.py:58
 msgid "Protéger son compte"
 msgstr "Protect your account"
 
-#: vault/help.py:54
+#: vault/help.py:59
 msgid "Mot de passe, double authentification et récupération."
 msgstr "Password, two-factor authentication and recovery."
 
-#: vault/help.py:58
+#: vault/help.py:63
 msgid "Suivre les accès"
 msgstr "Track activity"
 
-#: vault/help.py:59
+#: vault/help.py:64
 msgid "Ouvertures, téléchargements et export CSV."
 msgstr "Page opens, downloads and CSV export."
 
-#: vault/help.py:63
+#: vault/help.py:68
 msgid "Administrer l’instance"
 msgstr "Administer your instance"
 
-#: vault/help.py:64
+#: vault/help.py:69
 msgid "Capacité, antivirus, sauvegardes et maintenance."
 msgstr "Capacity, antivirus, backups and maintenance."
 
-#: vault/help.py:68
+#: vault/help.py:73
 msgid "Automatiser avec l’API et les webhooks"
 msgstr "Automate with API and webhooks"
 
-#: vault/help.py:69
+#: vault/help.py:74
 msgid "Clés, import automatique, événements signés et n8n."
 msgstr "Keys, automated uploads, signed events and n8n."
 
@@ -2823,7 +3224,7 @@ msgstr "Public HTTPS, port 443. Internal addresses and redirects are blocked."
 msgid "Événements"
 msgstr "Events"
 
-#: vault/integrations.py:77 vault/mfa.py:165 vault/views.py:932
+#: vault/integrations.py:77 vault/mfa.py:165 vault/views.py:936
 msgid "Mot de passe incorrect."
 msgstr "Incorrect password."
 
@@ -2855,6 +3256,54 @@ msgstr "API key revoked."
 msgid "Événement de test ajouté à la file d’attente."
 msgstr "Test event added to the delivery queue."
 
+#: vault/link_lists.py:81 vault/link_lists.py:127 vault/link_lists.py:134
+#: vault/link_lists.py:197 vault/link_lists.py:205
+msgid ""
+"La liste est limitée à 200 lignes et 20 colonnes, en plus de l’en-tête."
+msgstr "The list is limited to 200 rows and 20 columns, plus the header row."
+
+#: vault/link_lists.py:87
+msgid ""
+"Le classeur contient des formules. Collez leurs résultats en valeurs avant "
+"l’import."
+msgstr ""
+"The workbook contains formulas. Paste their results as values before "
+"importing."
+
+#: vault/link_lists.py:112
+msgid ""
+"Chaque cellule doit contenir au plus 1 000 caractères, sans caractères de "
+"contrôle."
+msgstr ""
+"Each cell must contain at most 1,000 characters, with no control characters."
+
+#: vault/link_lists.py:123
+msgid "Ajoutez une ligne d’en-tête et au moins une ligne de données."
+msgstr "Add a header row and at least one data row."
+
+#: vault/link_lists.py:143
+msgid ""
+"Les en-têtes doivent être uniques, non vides et limités à 80 caractères."
+msgstr "Headers must be unique, non-empty and no longer than 80 characters."
+
+#: vault/link_lists.py:149
+msgid ""
+"Le contenu de la liste dépasse 256 Kio. Réduisez les colonnes ou le nombre "
+"de lignes."
+msgstr "List content exceeds 256 KiB. Reduce the number of columns or rows."
+
+#: vault/link_lists.py:160
+msgid "Choisissez un fichier Excel .xlsx ou CSV UTF-8."
+msgstr "Choose an Excel .xlsx or UTF-8 CSV file."
+
+#: vault/link_lists.py:215
+msgid ""
+"Liste illisible ou format non pris en charge. Utilisez le modèle Excel ou un"
+" CSV UTF-8 avec uniquement des valeurs."
+msgstr ""
+"Unreadable list or unsupported format. Use the Excel template or a UTF-8 CSV"
+" containing values only."
+
 #: vault/mfa.py:33
 msgid "Code de votre application ou code de récupération"
 msgstr "Code from your app or a recovery code"
@@ -2877,31 +3326,31 @@ msgstr ""
 msgid "Action indisponible."
 msgstr "Action unavailable."
 
-#: vault/middleware.py:37
+#: vault/middleware.py:39
 msgid "Longueur invalide."
 msgstr "Invalid length."
 
-#: vault/middleware.py:39
+#: vault/middleware.py:41
 msgid "Envoi trop volumineux."
 msgstr "Upload too large."
 
-#: vault/middleware.py:45
+#: vault/middleware.py:47 vault/middleware.py:81
 msgid "Content-Length requis."
 msgstr "Content-Length required."
 
-#: vault/middleware.py:69 vault/middleware.py:88
+#: vault/middleware.py:71 vault/middleware.py:97 vault/middleware.py:116
 msgid "Authentification requise."
 msgstr "Authentication required."
 
-#: vault/middleware.py:75 vault/middleware.py:100 vault/resumable.py:99
-msgid "Trop d’envois. Réessayez plus tard."
-msgstr "Too many uploads. Try again later."
-
-#: vault/middleware.py:96
+#: vault/middleware.py:79 vault/middleware.py:124
 msgid "Dossier introuvable."
 msgstr "Collection not found."
 
-#: vault/middleware.py:106
+#: vault/middleware.py:103 vault/middleware.py:128 vault/resumable.py:99
+msgid "Trop d’envois. Réessayez plus tard."
+msgstr "Too many uploads. Try again later."
+
+#: vault/middleware.py:134
 msgid "Quota de stockage insuffisant."
 msgstr "Insufficient storage quota."
 
@@ -2921,35 +3370,35 @@ msgstr "Plum"
 msgid "Encre"
 msgstr "Ink"
 
-#: vault/models.py:89 vault/models.py:98
+#: vault/models.py:91 vault/models.py:102
 msgid "Utilisez une couleur au format #123abc."
 msgstr "Use a color in #123abc format."
 
-#: vault/models.py:210
+#: vault/models.py:214
 msgid "Révoqué"
 msgstr "Revoked"
 
-#: vault/models.py:211
+#: vault/models.py:215
 msgid "Expiré"
 msgstr "Expired"
 
-#: vault/models.py:212
+#: vault/models.py:216
 msgid "Épuisé"
 msgstr "Exhausted"
 
-#: vault/models.py:252 vault/webhooks.py:43
+#: vault/models.py:289 vault/webhooks.py:43
 msgid "Page ouverte"
 msgstr "Page opened"
 
-#: vault/models.py:253 vault/webhooks.py:44
+#: vault/models.py:290 vault/webhooks.py:44
 msgid "Téléchargement autorisé"
 msgstr "Download authorized"
 
-#: vault/models.py:254 vault/webhooks.py:41
+#: vault/models.py:291 vault/webhooks.py:41
 msgid "Lien créé"
 msgstr "Link created"
 
-#: vault/models.py:255 vault/webhooks.py:42
+#: vault/models.py:292 vault/webhooks.py:42
 msgid "Lien révoqué"
 msgstr "Link revoked"
 
@@ -3021,7 +3470,7 @@ msgstr "Storage unavailable. Try again or contact the administrator."
 msgid "Cet envoi est terminé, annulé ou expiré."
 msgstr "This upload is complete, canceled or expired."
 
-#: vault/resumable.py:106 vault/storage.py:119 vault/views.py:724
+#: vault/resumable.py:106 vault/storage.py:119 vault/views.py:728
 msgid "Sélectionnez entre 1 et 100 fichiers."
 msgstr "Select between 1 and 100 files."
 
@@ -3252,35 +3701,27 @@ msgstr "%(count)s file(s) added to the collection."
 msgid "Dossier placé dans la corbeille. Tous ses liens ont été révoqués."
 msgstr "Collection moved to the trash. All its links have been revoked."
 
-#: vault/views.py:501
-msgid ""
-"Des fichiers n’ont pas été analysés par l’antivirus. Importez-les à nouveau "
-"dans un dossier avec l’antivirus activé."
-msgstr ""
-"Some files have not been scanned for malware. Upload them again into a "
-"collection with the antivirus enabled."
-
-#: vault/views.py:515
+#: vault/views.py:519
 msgid "Lien créé. Vous pouvez le copier et le partager."
 msgstr "Link created. You can copy and share it."
 
-#: vault/views.py:567
+#: vault/views.py:571
 msgid "Lien révoqué. Aucun nouveau téléchargement ne sera autorisé."
 msgstr "Link revoked. No new downloads will be authorized."
 
-#: vault/views.py:589
+#: vault/views.py:593
 msgid "Date (ISO 8601 UTC)"
 msgstr "Date (ISO 8601 UTC)"
 
-#: vault/views.py:642
+#: vault/views.py:646
 msgid "L’image dépasse la taille autorisée."
 msgstr "The image exceeds the size limit."
 
-#: vault/views.py:658
+#: vault/views.py:662
 msgid "Votre page de partage a été personnalisée."
 msgstr "Your share page has been customized."
 
-#: vault/views.py:742
+#: vault/views.py:746
 #, python-format
 msgid ""
 "%(count)s fichier(s) placé(s) dans la corbeille. Les liens des dossiers "
@@ -3289,54 +3730,54 @@ msgstr ""
 "%(count)s file(s) moved to the trash. Links for the affected collections "
 "have been revoked."
 
-#: vault/views.py:785
+#: vault/views.py:789
 msgid "Invitation créée pour 7 jours. Copiez le lien et envoyez-le au membre."
 msgstr ""
 "Invitation created for 7 days. Copy the link and send it to the member."
 
-#: vault/views.py:815
+#: vault/views.py:819
 msgid "Invitation révoquée."
 msgstr "Invitation revoked."
 
-#: vault/views.py:859
+#: vault/views.py:863
 msgid "Compte mis à jour. Une suspension révoque aussi les liens du membre."
 msgstr "Account updated. Suspending also revokes the member’s links."
 
-#: vault/views.py:959
+#: vault/views.py:963
 msgid "Transfert en attente"
 msgstr "Transfer pending"
 
-#: vault/views.py:961
+#: vault/views.py:965
 msgid ""
 "Le serveur manque d’espace temporaire. Réessayez plus tard ou contactez "
 "l’expéditeur."
 msgstr ""
 "The server lacks temporary space. Try again later or contact the sender."
 
-#: vault/views.py:973
+#: vault/views.py:977
 msgid "Transfert indisponible"
 msgstr "Transfer unavailable"
 
-#: vault/views.py:975
+#: vault/views.py:979
 msgid ""
 "Le fichier n’a pas pu être préparé. Réessayez plus tard ou contactez "
 "l’expéditeur."
 msgstr ""
 "The file could not be prepared. Try again later or contact the sender."
 
-#: vault/views.py:999
+#: vault/views.py:1003
 msgid "Page introuvable"
 msgstr "Page not found"
 
-#: vault/views.py:1000
+#: vault/views.py:1004
 msgid "Cette adresse ne correspond à aucune page disponible."
 msgstr "This address does not match an available page."
 
-#: vault/views.py:1011
+#: vault/views.py:1015
 msgid "Une erreur est survenue"
 msgstr "An error occurred"
 
-#: vault/views.py:1012
+#: vault/views.py:1016
 msgid "Réessayez dans quelques instants."
 msgstr "Try again in a few moments."
 

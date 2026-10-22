@@ -12,6 +12,7 @@
 
 ### Changed
 
+- Interactive link batches offer quantity-based creation or XLSX/CSV list import, reviewable names and common conditions, stable-URL renaming, and private Excel/CSV exports with original columns and generated URLs. Each batch contains up to 200 links. Atomic completion makes duplicate submissions harmless; creation events retain webhook behavior. Illustrated French/English guides cover both workflows.
 - Share links can expire on a specific date or after 1–3,650 days. Download limits use a wheel-safe text field; optional link passwords have no minimum length (account requirements are unchanged). The API accepts `expires_in_days` and preserves the original deadline on an idempotent replay.
 - Mixed file/folder drops and successive selections accumulate in one queue. New resumable manifests preserve selection order, and sender/recipient pages show expandable directories. Upload progress now includes real in-flight bytes, server-confirmed bytes, speed and estimated remaining time; scanning is a separate phase. Empty folders and hidden files are explicitly excluded.
 - Branding supports an uploaded logo, background image and custom colors with a live preview and contrast-aware button text. Images are browser-optimized, strictly bounded/canonicalized PNGs, scanned and stored in the backed-up database (a separate 2.5 MiB/account ceiling). Brand media requires the same active, unlocked share link as the page. No native image decoder is added to the web process.
@@ -28,6 +29,7 @@
 
 ### Upgrade notes
 
+- Migration `0008` adds private batch/list tables. Back up before upgrading and restart application and maintenance workers. Drafts expire after 24 hours; completed lists are retained until removed, up to 100 per account, and included in database backups. Deleting a list keeps its share links. New list imports require openpyxl and defusedxml from the updated lockfile.
 - Migration `0007` adds branding fields and upload-part ordering only; back up first and restart all writers with the updated code. Existing files, passwords and expiry dates stay unchanged. Existing pending uploads retain their prior path ordering. Branding images are included in database backups.
 
 - Back up the database, files and original keys. Stop webhook workers before migration `0006`, then restart the complete updated stack; do not run old and new dispatchers together. Use `deliver_webhooks --loop --workers 2` for a manual deployment. A single worker remains supported but waits for its current attempt.

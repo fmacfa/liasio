@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+{% load i18n static %}
+{% block scripts %}
+  <script src="{% static 'batches.js' %}" defer></script>
+{% endblock %}
+{% block breadcrumb %}
+  {% translate "Mes liens / Mes lots" %}
+{% endblock %}
+{% block content %}
+  <a class="back-link" href="{% url 'link_batches' %}">{% translate "← Mes lots" %}</a>
+  <div class="page-heading"><div><div class="eyebrow">{% if batch.completed_at %}{% translate "VOS LIENS SONT PRÊTS" %}{% else %}{% translate "ÉTAPE 2 SUR 2" %}{% endif %}</div><h1>{{ batch.name }}</h1><p>{{ batch.source_rows|length }} {% translate "liens pour" %} <a href="{% url 'collection' batch.collection_id %}">{{ batch.collection.title }}</a></p></div>
+    {% if batch.completed_at %}
+      <div class="actions"><a class="button" href="{% url 'link_batch_export' batch.pk 'xlsx' %}">
+        {% include "components/icon.html" with name="download" %}
+      {% translate "Télécharger Excel" %}</a><a class="button secondary"
+   href="{% url 'link_batch_export' batch.pk 'csv' %}">{% translate "Télécharger CSV" %}</a></div>
+    {% endif %}
+  </div>
+  {% if expired %}
+    <div class="alert error">{% translate "Ce brouillon a expiré. Préparez un nouveau lot." %}</div>
+    <a class="button"
+       href="{% url 'link_batch_prepare' batch.collection_id %}">{% translate "Préparer un lot" %}</a>
+  {% else %}
+    <form method="post"
+          {% if not batch.completed_at %}data-link-form{% endif %}
+          data-batch-review>
+      {% csrf_token %}
+      {% if not batch.completed_at and batch.headers %}<div class="panel batch-mapping"><div class="field"><label for="label-column">{% translate "Colonne pour nommer les liens" %}</label><select id="label-column" name="label_column">{% for index, header in columns %}<option value="{{ index }}" {% if index == column %}selected{% endif %}>{{ header }}</option>{% endfor %}</select></div><button class="button secondary"
+        type="submit"
+        name="action"
+        value="map"
+        formnovalidate
+        data-map-column>{% translate "Appliquer aux noms" %}</button><p class="muted">{% translate "Vous pouvez ensuite corriger chaque nom. Les autres colonnes restent inchangées." %}</p></div>{{ batch.source_rows|json_script:"batch-source-rows" }}{% endif %}
+      <div class="{% if not batch.completed_at %}batch-review-grid{% endif %}">
+        <section class="panel batch-rows"><div class="section-heading"><h2>{% translate "Un nom pour chaque lien" %}</h2><span class="count">{{ rows|length }}</span></div>
+          {% for row in rows %}<div class="batch-row"><span class="batch-number">{{ row.position|stringformat:"02d" }}</span><div class="batch-row-content"><label class="sr-only" for="{{ row.field.id_for_label }}">{{ row.field.label }}</label>{{ row.field }}{{ row.field.errors }}
+            {% if row.item %}<div class="batch-link-actions"><input class="batch-url"
+       readonly
+       value="{{ row.item.link.public_url }}"
+       aria-label="{% blocktranslate with number=row.position %}URL du lien {{ number }}{% endblocktranslate %}"><button type="button"
+        class="icon-button"
+        data-copy="{{ row.item.link.public_url }}"
+        aria-label="{% blocktranslate with name=row.item.link.label %}Copier le lien {{ name }}{% endblocktranslate %}">{% include "components/icon.html" with name="copy" %}</button><span class="badge {% if row.item.link.status_code == 'active' %}success{% endif %}">{{ row.item.link.status }}</span><a class="text-link"
+   href="{% url 'activity' %}?link={{ row.item.link_id }}">{% translate "Activité" %}</a></div>{% endif %}
+            {% if row.values %}<details class="batch-source-detail"><summary>{% translate "Données d’origine" %}</summary><div class="batch-source-values">{% for header, value in row.cells %}<div><strong>{{ header }} :</strong> {{ value|default:"—" }}</div>{% endfor %}</div></details>{% endif %}</div></div>{% endfor %}
+      </section>
+      {% if not batch.completed_at %}
+        <aside class="panel form-panel batch-conditions">
+          <h2>{% translate "Conditions de chaque lien" %}</h2>
+          <p class="muted">{% translate "Les mêmes conditions s’appliquent séparément à chacun des liens. Un usage unique autorise un téléchargement par lien." %}</p>
+          {% include "components/form.html" %}
+          <p class="footnote">{% translate "La durée commence à la création. Le mot de passe commun n’est jamais ajouté au fichier exporté." %}</p>
+        </aside>
+      {% endif %}
+    </div>
+    <div class="batch-submit"><button class="button"
+        name="action"
+        value="{% if batch.completed_at %}rename{% else %}create{% endif %}">{% if batch.completed_at %}{% translate "Enregistrer les noms" %}{% else %}{% blocktranslate with count=batch.source_rows|length %}Créer les {{ count }} liens{% endblocktranslate %}{% endif %}</button><p class="muted">{% if batch.completed_at %}{% translate "Renommer un lien ne change pas son URL. Enregistrez avant de télécharger la liste." %}{% else %}{% translate "Tous les liens sont créés ensemble, après vérification. Aucun e-mail n’est envoyé." %}{% endif %}</p></div>
+    </form>
+  {% endif %}
+  <div class="batch-footer">
+    <p class="footnote">{% translate "La liste est privée et reste disponible dans Mes lots. Supprimer la liste conserve les liens ; révoquez-les dans Mes liens pour bloquer leurs accès." %}</p>
+    <form method="post"
+          action="{% url 'link_batch_delete' batch.pk %}"
+          data-confirm="{% translate 'Supprimer cette liste ? Les liens déjà créés seront conservés.' %}">
+      {% csrf_token %}
+      <button class="text-button danger-text">{% translate "Supprimer la liste" %}</button>
+    </form>
+  </div>
+{% endblock %}

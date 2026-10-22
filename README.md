@@ -25,6 +25,7 @@ French / English interface · **MIT** license · Python / Django · Docker Compo
 | Sharing page | Per-account logo, background image, custom colors, name, tagline and footer, with a live preview |
 | File previews | Image gallery and first-page PDF previews, lightbox and keyboard navigation; optional per link |
 | Multiple links per folder | Internal label, optional password without a minimum length, expiry date or duration, and maximum download count |
+| Bulk links without code | Create 1–200 links by quantity or import XLSX/CSV, review names and shared rules, then download your list with URLs; rename without changing URLs |
 | Single-use links | One authorized download, including when requests arrive simultaneously |
 | Activity tracking | Dated page opens and authorized downloads, filtering by link, and CSV export |
 | Storage management | File counts, sizes, quotas, search, sorting by size/name/date, and individual/bulk deletion to a recoverable 30-day trash |
@@ -49,6 +50,8 @@ French / English interface · **MIT** license · Python / Django · Docker Compo
 Start with the **[illustrated English guide](docs/guide/en/README.md)** or **[guide français](docs/guide/fr/README.md)**. The same pages and screenshots are built into `/help/`.
 
 For n8n, scripts and other tools, see the [API reference](docs/API.md), the [automation walkthrough](docs/guide/en/automation.md), the [Python upload client](examples/upload.py) and the [webhook signature verifier](examples/verify_webhook.py). No public registration or anonymous upload is added.
+
+For a workflow entirely in the interface, use **Create multiple links**: enter a quantity or upload an Excel/CSV list, check the names and conditions, then download the completed list. Original columns and row order are kept as values. See the [bulk-link guide](docs/guide/en/bulk-links.md), including the downloadable template, limits and illustrated steps.
 
 ## Install on your domain
 

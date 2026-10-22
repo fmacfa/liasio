@@ -224,6 +224,39 @@ class ShareLink(models.Model):
         return f"{settings.APP_URL}/s/{capability('share', self.id)}/"
 
 
+class LinkBatch(models.Model):
+    """A private, reviewable list. Completing the same UUID twice is harmless."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    collection = models.ForeignKey(
+        Collection, on_delete=models.CASCADE, related_name="link_batches"
+    )
+    name = models.CharField(max_length=80)
+    headers = models.JSONField(default=list)
+    source_rows = models.JSONField(default=list)
+    created_at = models.DateTimeField(auto_now_add=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-created_at", "-pk"]
+
+
+class LinkBatchItem(models.Model):
+    batch = models.ForeignKey(LinkBatch, on_delete=models.CASCADE, related_name="items")
+    link = models.OneToOneField(
+        ShareLink, on_delete=models.CASCADE, related_name="batch_item"
+    )
+    position = models.PositiveSmallIntegerField()
+
+    class Meta:
+        ordering = ["position"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["batch", "position"], name="unique_batch_position"
+            )
+        ]
+
+
 class Invitation(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField()

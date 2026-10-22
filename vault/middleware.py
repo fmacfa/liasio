@@ -31,6 +31,8 @@ class RequestBoundaryMiddleware:
         )
         if request.path == "/branding/":
             ceiling = 3 * 1024 * 1024
+        if request.path.endswith("/links/batch/"):
+            ceiling = 1152 * 1024
         if request.path.endswith("/chunk/"):
             ceiling = settings.UPLOAD_CHUNK_BYTES
         if length < 0:
@@ -64,6 +66,32 @@ class RequestBoundaryMiddleware:
         return response
 
     def process_view(self, request, view_func, view_args, view_kwargs):
+        if request.path.endswith("/links/batch/") and request.method == "POST":
+            if not request.user.is_authenticated:
+                return HttpResponse(_("Authentification requise."), status=403)
+            from .models import Collection
+            from .capacity import CapacityUnavailable, reserve_temporary
+            from .security import limited, rate_allowed
+
+            if not Collection.objects.filter(
+                pk=view_kwargs.get("pk"), owner=request.user
+            ).exists():
+                return HttpResponse(_("Dossier introuvable."), status=404)
+            if not request.META.get("CONTENT_LENGTH"):
+                return HttpResponse(_("Content-Length requis."), status=411)
+            if limited(request, "batch-upload", 40, 3600) or not rate_allowed(
+                "batch-upload-owner", str(request.user.pk), 20, 3600
+            ):
+                return HttpResponse(
+                    _("Trop de demandes. Réessayez plus tard."), status=429
+                )
+            request.upload_byte_budget = 1024 * 1024
+            try:
+                request.upload_capacity_lease = reserve_temporary(
+                    3 * 1024 * 1024, owner_id=request.user.pk, kind="link-list"
+                )
+            except CapacityUnavailable as exc:
+                return HttpResponse(" ".join(exc.messages), status=503)
         if request.path == "/branding/" and request.method == "POST":
             if not request.user.is_authenticated:
                 return HttpResponse(_("Authentification requise."), status=403)

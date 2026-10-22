@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Liasio 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-22 17:32+0200\n"
+"POT-Creation-Date: 2026-10-22 20:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Liasio contributors\n"
 "Language-Team: English\n"
@@ -34,6 +34,15 @@ msgstr "%(value1)s file(s) selected · %(value2)s bytes to move to the trash"
 #: static/app.js:60
 msgid "Sélectionnez les fichiers à supprimer."
 msgstr "Select files to delete."
+
+#: static/batches.js:30
+msgid "Noms mis à jour. Vérifiez les lignes avant de continuer."
+msgstr "Names updated. Review the rows before continuing."
+
+#: static/batches.js:39
+#| msgid "Préparation de l’envoi…"
+msgid "Création des liens…"
+msgstr "Creating links…"
 
 #: static/branding.js:14
 msgid "Mon espace"
@@ -82,7 +91,6 @@ msgid "octets"
 msgstr "bytes"
 
 #: static/upload.js:20
-#| msgid "Mio"
 msgid "Kio"
 msgstr "KiB"
 
@@ -91,7 +99,6 @@ msgid "Mio"
 msgstr "MiB"
 
 #: static/upload.js:20
-#| msgid "Mio"
 msgid "Gio"
 msgstr "GiB"
 
@@ -126,7 +133,6 @@ msgid "Annuler cet envoi"
 msgstr "Cancel this upload"
 
 #: static/upload.js:70
-#| msgid "%(count)s fichier(s) · %(size)s Mio"
 msgid "%(count)s fichier(s) · %(size)s"
 msgstr "%(count)s file(s) · %(size)s"
 

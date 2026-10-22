@@ -9,8 +9,11 @@
       <h1>{{ collection.title }}</h1>
       <p>{{ collection.files.count }} {% translate "fichier" %}{{ collection.files.count|pluralize }} · {{ collection.total_bytes|filesizeformat }} {% translate "· Créé le" %} {{ collection.created_at|date:"DATE_FORMAT" }}</p>
     </div>
+    <div class="actions">
+    <a class="button secondary" href="{% url 'link_batch_prepare' collection.pk %}">{% translate "Créer plusieurs liens" %}</a>
     <a class="button" href="{% url 'link_create' collection.pk %}">
     {% include "components/icon.html" with name="link" %}{% translate "Créer un lien" %}</a>
+    </div>
   </div>
   <div class="detail-grid">
     <section>
@@ -43,7 +46,7 @@
           <h2>{% translate "Liens du dossier" %}</h2>
           <span class="count">{{ collection.links.count }}</span>
         </div>
-        {% for link in collection.links.all %}
+        {% for link in collection.links.all|slice:":10" %}
           <div class="mini-link">
             <strong>{{ link.label }}</strong>
             <div class="spread">
@@ -58,6 +61,7 @@
         {% empty %}
           <p class="muted">{% translate "Créez votre premier lien quand les fichiers sont prêts." %}</p>
         {% endfor %}
+        {% if collection.links.count > 10 %}<a class="text-link" href="{% url 'links' %}?q={{ collection.title|urlencode }}">{% translate "Voir tous les liens →" %}</a>{% endif %}
       </div>
       <div class="tip-card compact">
         <h3>{% translate "Un dossier, plusieurs liens." %}</h3>

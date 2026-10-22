@@ -1,5 +1,7 @@
 # Liens de partage et aperçus
 
+Pour créer plusieurs liens à la fois, par quantité ou depuis Excel/CSV, consultez le [guide des liens en lot](bulk-links.md). Le bouton **Renommer** permet aussi de changer le nom d’un lien existant sans modifier son URL ni ses conditions.
+
 ![Création d’un lien protégé](../../screenshots/user-guide/fr/link-create.jpg)
 
 ## Créer un lien avec vos conditions

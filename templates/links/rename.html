@@ -1,0 +1,6 @@
+{% extends "layout.html" %}
+{% load i18n %}
+{% block breadcrumb %}
+  {% translate "Mes liens / Renommer" %}
+{% endblock %}
+{% block content %}<a class="back-link" href="{% url 'links' %}">{% translate "← Mes liens" %}</a><div class="page-heading"><div><h1>{% translate "Renommer le lien" %}<span class="green">.</span></h1><p>{{ link.collection.title }}</p></div></div><form class="panel form-panel" method="post">{% csrf_token %}{% include "components/form.html" %}<p class="muted">{% translate "Le nom est visible uniquement par vous. L’URL et les conditions restent identiques." %}</p><button class="button">{% translate "Enregistrer" %}</button></form>{% endblock %}
