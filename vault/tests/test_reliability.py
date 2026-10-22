@@ -81,6 +81,22 @@ class MFATests(IsolatedFiles, TestCase):
             self.client.post("/login/mfa/", {"code": self.codes[0]}), "/login/"
         )
 
+    def test_suspension_invalidates_pending_mfa_after_reactivation(self):
+        self.enable()
+        self.password_login()
+        admin = Client()
+        admin.force_login(self.account("admin@example.com", admin=True))
+        admin.post(f"/team/members/{self.user.pk}/toggle/")
+        admin.post(f"/team/members/{self.user.pk}/toggle/")
+        self.assertRedirects(
+            self.client.post("/login/mfa/", {"code": self.codes[0]}), "/login/"
+        )
+        self.assertNotIn("_auth_user_id", self.client.session)
+        self.password_login()
+        self.assertRedirects(
+            self.client.post("/login/mfa/", {"code": self.codes[0]}), "/"
+        )
+
     def test_setup_requires_password_and_valid_code_and_invalidates_old_sessions(self):
         other = Client()
         other.force_login(self.user)
@@ -230,6 +246,17 @@ class ResumableTests(IsolatedFiles, TestCase):
             {"files": [{"path": path, "size": size, "fingerprint": "a" * 64}]},
             content_type="application/json",
         )
+
+    def test_start_rejects_non_object_json(self):
+        for data in ([], None, True, "files", 12):
+            with self.subTest(data=data):
+                response = self.client.post(
+                    f"/collections/{self.item.pk}/uploads/start/",
+                    json.dumps(data),
+                    content_type="application/json",
+                )
+                self.assertEqual(response.status_code, 400)
+        self.assertEqual(self.start().status_code, 201)
 
     def block(self, session, data, offset=0, client=None, checksum=None):
         return (client or self.client).post(

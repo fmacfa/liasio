@@ -80,6 +80,8 @@ Set `LINKVAULT_IMAGE=ghcr.io/fmacfa/linkvault:0.4.0` in `.env` to use the regist
 
 Before upgrading from 0.1, preserve your original keys and take a complete backup. Read the [upgrade and reliability guide](docs/RELIABILITY.md), including MFA key handling, trash quotas, monitoring and restore verification.
 
+Source builds after 0.4.0 include the [unreleased hardening changes](CHANGELOG.md#unreleased): fair webhook dispatch, stronger file/state handling and preview isolation. Stop webhook workers before migration `0006` and restart the updated stack together. Production previews require Linux Landlock ABI 3+; see the [updated operations guide](docs/guide/en/operations.md). The existing 0.4.0 image does not contain these changes. Vendor images are pinned by digest and require reviewed updates; future release notes provide workflow/tag/commit-bound attestation verification and an immutable image reference.
+
 ## Try it locally
 
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/), then run:

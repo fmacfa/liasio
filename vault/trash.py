@@ -113,15 +113,18 @@ def restore(owner, kind, identifier):
         )
 
 
-def purge(owner, kind, identifier):
+def purge(owner, kind, identifier, *, expired_before=None):
     with transaction.atomic():
         user = User.objects.select_for_update().get(pk=owner.pk)
+        # Recheck retention after taking the same lock as restore/re-trash.
+        expiry = {"deleted_at__lte": expired_before} if expired_before else {}
         if kind == "collection":
             item = get_object_or_404(
                 Collection.all_objects,
                 owner=user,
                 pk=identifier,
                 deleted_at__isnull=False,
+                **expiry,
             )
             assets = list(Asset.all_objects.filter(collection=item))
             preview_ids = [asset.pk for asset in assets]
@@ -132,6 +135,7 @@ def purge(owner, kind, identifier):
                 pk=identifier,
                 collection__owner=user,
                 deleted_at__isnull=False,
+                **expiry,
             )
             assets = [item]
             preview_ids = [item.pk]
@@ -155,7 +159,7 @@ def purge_expired():
     cutoff = timezone.now() - timedelta(days=settings.TRASH_RETENTION_DAYS)
     for collection in Collection.all_objects.filter(deleted_at__lte=cutoff).iterator():
         try:
-            purge(collection.owner, "collection", collection.pk)
+            purge(collection.owner, "collection", collection.pk, expired_before=cutoff)
         except Http404:
             pass  # A concurrent restore or manual purge wins.
     for asset in (
@@ -164,7 +168,7 @@ def purge_expired():
         .iterator()
     ):
         try:
-            purge(asset.collection.owner, "asset", asset.pk)
+            purge(asset.collection.owner, "asset", asset.pk, expired_before=cutoff)
         except Http404:
             pass
 

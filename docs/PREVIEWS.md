@@ -23,6 +23,8 @@ Use the 0.3 Compose file. The `preview` service uses the same application image,
 
 Each render starts a disposable decoder process with an eight-second wall timeout, five CPU seconds, a 384 MiB Linux address-space limit and a 2 MiB output limit. The application serializes generation across its workers and applies request/account rate limits and temporary disk admission. A missing or busy renderer produces an unavailable preview; the upload and ZIP download paths continue working.
 
+The hardening update adds a per-request **Landlock** filesystem policy before importing the native decoders. The child may read its Python/native runtime and read/write its own temporary request directory. It cannot create, replace, truncate or remove entries in the broker's socket directory, even though the two processes use the same UID. On ABI 6+ it also cannot signal processes outside its sandbox. The container network and resource limits remain necessary. Production requires **Landlock ABI 3+**, normally Linux 6.2+ with Landlock enabled; unsupported kernels or denied sandbox syscalls fail closed for previews, with no unsandboxed production fallback. Verify real image and PDF rendering after upgrading. See the [kernel Landlock documentation](https://docs.kernel.org/userspace-api/landlock.html).
+
 For a prebuilt upgrade, set `LINKVAULT_IMAGE=ghcr.io/fmacfa/linkvault:0.3.0` in the existing `.env`, then:
 
 ```sh

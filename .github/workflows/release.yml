@@ -65,16 +65,34 @@ jobs:
           subject-name: ghcr.io/${{ github.repository }}
           subject-digest: ${{ steps.image.outputs.digest }}
           push-to-registry: true
+      - name: Test the exact image selected for publication
+        env:
+          IMAGE: ghcr.io/${{ github.repository }}
+          DIGEST: ${{ steps.image.outputs.digest }}
+        run: |
+          docker pull "$IMAGE@$DIGEST"
+          docker run --rm --network none --read-only --cap-drop ALL --security-opt no-new-privileges \
+            --memory 512m --pids-limit 64 \
+            --tmpfs /tmp:rw,noexec,nosuid,nodev,size=192m,uid=10001,gid=10001,mode=700 \
+            -e DEBUG=true -e DATA_DIR=/tmp/data -e APP_URL=http://localhost \
+            -e SECRET_KEY=release-test-only-secret-with-at-least-sixty-four-characters-000000 \
+            -e ANTIVIRUS_REQUIRED=false --entrypoint timeout "$IMAGE@$DIGEST" \
+            120 /app/.venv/bin/python manage.py test --noinput
       - name: Export portable Docker image
         env:
           IMAGE: ghcr.io/${{ github.repository }}
           VERSION: ${{ steps.version.outputs.value }}
           ARCH: ${{ matrix.arch }}
+          DIGEST: ${{ steps.image.outputs.digest }}
         run: |
-          mkdir -p dist
-          docker pull "$IMAGE:$VERSION-$ARCH"
-          docker tag "$IMAGE:$VERSION-$ARCH" "linkvault:$VERSION"
+          mkdir -p dist digests
+          docker tag "$IMAGE@$DIGEST" "linkvault:$VERSION"
           docker save "linkvault:$VERSION" | gzip > "dist/linkvault-$VERSION-linux-$ARCH.tar.gz"
+          printf '%s\n' "$DIGEST" > "digests/$ARCH.txt"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: digest-${{ matrix.arch }}
+          path: digests/*.txt
       - uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
         with:
           subject-path: dist/*.tar.gz
@@ -104,7 +122,38 @@ jobs:
           pattern: image-*
           merge-multiple: true
           path: dist
-      - name: Publish versioned image index and release assets
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
+        with:
+          pattern: digest-*
+          merge-multiple: true
+          path: digests
+      - name: Assemble tested image digests
+        id: index
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+          IMAGE: ghcr.io/${{ github.repository }}
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib, re, subprocess
+          image, version = os.environ['IMAGE'], os.environ['RELEASE_TAG'][1:]
+          sources = []
+          for arch in ('amd64', 'arm64'):
+              digest = pathlib.Path(f'digests/{arch}.txt').read_text().strip()
+              assert re.fullmatch(r'sha256:[0-9a-f]{64}', digest), 'Invalid build digest'
+              sources.append(f'{image}@{digest}')
+          subprocess.run(['docker', 'buildx', 'imagetools', 'create', '--metadata-file', 'dist/index.json', '-t', f'{image}:{version}', '-t', f'{image}:latest', *sources], check=True)
+          digest = json.loads(pathlib.Path('dist/index.json').read_text())['containerimage.descriptor']['digest']
+          assert re.fullmatch(r'sha256:[0-9a-f]{64}', digest)
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write('digest=' + digest + '\n')
+          pathlib.Path('dist/IMAGE-DIGEST.txt').write_text(image + '@' + digest + '\n')
+          PY
+      - uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        with:
+          subject-name: ghcr.io/${{ github.repository }}
+          subject-digest: ${{ steps.index.outputs.digest }}
+          push-to-registry: true
+      - name: Publish release assets
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
@@ -112,7 +161,6 @@ jobs:
           IMAGE: ghcr.io/${{ github.repository }}
         run: |
           VERSION="${RELEASE_TAG#v}"
-          docker buildx imagetools create -t "$IMAGE:$VERSION" -t "$IMAGE:latest" "$IMAGE:$VERSION-amd64" "$IMAGE:$VERSION-arm64"
-          (cd dist && sha256sum *.tar.gz > SHA256SUMS)
+          (cd dist && sha256sum ./*.tar.gz > SHA256SUMS)
           python3 scripts/release_notes.py > dist/notes.md
-          gh release create "$RELEASE_TAG" --verify-tag --title "LinkVault $VERSION" --notes-file dist/notes.md dist/*.tar.gz dist/SHA256SUMS
+          gh release create "$RELEASE_TAG" --verify-tag --title "LinkVault $VERSION" --notes-file dist/notes.md dist/*.tar.gz dist/SHA256SUMS dist/IMAGE-DIGEST.txt

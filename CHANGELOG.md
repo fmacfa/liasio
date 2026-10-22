@@ -1,5 +1,21 @@
 # Changelog
 
+## Unreleased
+
+### Hardened
+
+- Webhook scheduling rotates across accounts in shared database state, with one in-flight delivery per account. Compose runs two supervised processes, so one slow account cannot occupy both send slots. Five-minute crash leases, bounded attempts and receiver deduplication remain in place.
+- Manual pause, overflow and account suspension cancel pending deliveries, including delayed retries; reactivation also clears legacy disabled queues. Pending MFA login challenges expire across suspension/reactivation.
+- The upload client locks a private state directory, writes unpredictable exclusive temporary files atomically and retains source descriptors while checking for modification. Non-object upload JSON returns 400. Automatic trash purge rechecks retention under the owner lock.
+- Production preview decoders use an additional Landlock filesystem boundary; unsupported hosts refuse previews. Runtime Docker contents are allowlisted and vendor images are pinned by digest. Releases test/export exact build digests, assemble and attest the index from those digests, and document workflow/tag/commit-bound attestation verification.
+
+### Upgrade notes
+
+- Back up the database, files and original keys. Stop webhook workers before migration `0006`, then restart the complete updated stack; do not run old and new dispatchers together. Use `deliver_webhooks --loop --workers 2` for a manual deployment. A single worker remains supported but waits for its current attempt.
+- Production previews require Linux Landlock ABI 3+ (normally Linux 6.2+ with Landlock enabled). Original downloads remain available if this boundary is unavailable. macOS development uses the existing local decoder only in debug mode.
+- Move upload-client state into a caller-owned directory with mode 0700 and keep source files in a trusted, unchanged tree. See the updated English/French automation guides. Existing server-side files and links are unchanged.
+- Pinned image updates must be reviewed and tested; pulling an unchanged digest will not apply newer vendor fixes.
+
 ## 0.4.0 — 2026-10-22
 
 ### Added

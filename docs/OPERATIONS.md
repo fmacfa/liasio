@@ -90,7 +90,9 @@ docker compose up -d
 docker compose ps
 ```
 
-L’application lance les migrations avant Gunicorn. Le lockfile Python fixe les dépendances ; les tags mineurs des images reçoivent des correctifs. Relisez les notes de version et testez les mises à jour avant une instance importante.
+L’application lance les migrations avant Gunicorn. Le lockfile Python et les empreintes des images fixent les dépendances. Les mises à jour des empreintes doivent être revues et testées régulièrement ; télécharger une empreinte inchangée ne récupère pas les nouveaux correctifs du fournisseur. Dependabot suit les images du Dockerfile ; vérifiez aussi les images de services dans Compose et la CI. Relisez les notes de version et testez les mises à jour avant une instance importante.
+
+Pour le renforcement après 0.4.0, arrêtez `webhooks` avant la migration `0006`, puis redémarrez la pile complète. Anciens et nouveaux processus ne doivent pas fonctionner ensemble. Les aperçus exigent désormais Landlock ABI 3+ sur Linux : en son absence, ils restent indisponibles sans bloquer les téléchargements. Les guides d’[automatisation](guide/fr/automation.md) et d’[exploitation](guide/fr/operations.md) précisent les changements du client d’envoi et de la file de livraison.
 
 ## Maintenance et secrets
 
@@ -118,7 +120,7 @@ Si vous remplacez Caddy, maintenez HTTPS et HSTS, la limite de corps, les délai
 
 ## Automatisations et traductions (0.4)
 
-La pile complète comprend le service `webhooks`, avec accès à PostgreSQL et au réseau HTTPS public, sans volume d’originaux. Vérifiez `docker compose logs --tail=50 webhooks` et la page Automatisations. Pour une installation manuelle, superviser `python manage.py deliver_webhooks --loop`. Une file d’événements ne livre rien sans ce processus.
+La pile complète comprend le service `webhooks`, avec deux processus, accès à PostgreSQL et au réseau HTTPS public, sans volume d’originaux. Vérifiez `docker compose logs --tail=50 webhooks` et la page Automatisations. Pour une installation manuelle, superviser `python manage.py deliver_webhooks --loop --workers 2`. Les comptes alternent et ne peuvent occuper qu’un envoi simultané chacun. Une file d’événements ne livre rien sans ce service.
 
 Le chiffrement des destinations, secrets de signature et reçus d’idempotence utilise la même clé stable que la MFA. Préservez `MFA_ENCRYPTION_KEY` (ou `SECRET_KEY` si la clé MFA est absente) lors d’une restauration. Les clés API deviennent invalides après changement de mot de passe/MFA. Les reçus API expirent après 24 h, les livraisons après 30 jours via `housekeeping`.
 

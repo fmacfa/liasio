@@ -17,7 +17,7 @@ from .api_auth import credential_version, digest, valid
 from .mfa import cipher, consume_code
 from .models import APIToken, Audit, User, Webhook, WebhookDelivery
 from .security import limited
-from .webhooks import EVENTS, enqueue, parse_destination
+from .webhooks import EVENTS, enqueue, parse_destination, pause_hook
 
 SCOPES = [
     ("read", _("Lire mes dossiers, fichiers et liens")),
@@ -233,11 +233,7 @@ def webhook_detail(request, pk):
                 )
                 return redirect("webhook", pk=pk)
             if action == "pause":
-                hook.active = False
-                hook.save(update_fields=["active"])
-                hook.deliveries.filter(state="pending").update(
-                    state="canceled", error="endpoint_disabled"
-                )
+                pause_hook(hook)
                 Audit.objects.create(
                     actor=user, action="webhook_paused", target=str(pk)
                 )
@@ -254,6 +250,9 @@ def webhook_detail(request, pk):
                     )
                     return redirect("integrations")
                 if action == "resume":
+                    # Normalize queues left by a pre-upgrade automatic pause too.
+                    if not hook.active:
+                        pause_hook(hook)
                     hook.active, hook.last_error = True, ""
                     hook.save(update_fields=["active", "last_error"])
                 else:

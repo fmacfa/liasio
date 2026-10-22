@@ -248,6 +248,7 @@ class PreviewTests(IsolatedFiles, TestCase):
             self.assertEqual(self.asset.preview_kind, "")
 
 
+@skipUnless(sys.platform == "linux", "Production renderer requires Linux Landlock")
 class RendererProtocolTests(SimpleTestCase):
     """Exercise the production Unix-socket protocol, including real PDFium."""
 

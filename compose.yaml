@@ -71,18 +71,18 @@ services:
       POSTGRES_DB: linkvault
       POSTGRES_USER: linkvault
       DATA_DIR: /data
-    command: ["python", "manage.py", "deliver_webhooks", "--loop"]
+    command: ["python", "manage.py", "deliver_webhooks", "--loop", "--workers", "2"]
     tmpfs: ["/data:rw,noexec,nosuid,nodev,size=8m,uid=10001,gid=10001,mode=700"]
     networks: [backend, updates]
     depends_on:
       app: {condition: service_healthy}
     security_opt: ["no-new-privileges:true"]
     cap_drop: [ALL]
-    mem_limit: 192m
+    mem_limit: 256m
     cpus: 0.5
     pids_limit: 32
   db:
-    image: postgres:17-alpine
+    image: postgres:17-alpine@sha256:1bcc18d81671b02906296aad470ec9778a6b71016ce953092024b680bad007b0
     restart: unless-stopped
     environment:
       POSTGRES_DB: linkvault
@@ -98,7 +98,7 @@ services:
     security_opt: ["no-new-privileges:true"]
     mem_limit: 512m
   clamav:
-    image: clamav/clamav:1.4
+    image: clamav/clamav:1.4@sha256:3bba6dd5ac6663d55b80f86a3126e146612d93b593cc2617188d13f637d91260
     restart: unless-stopped
     volumes:
       - signatures:/var/lib/clamav
@@ -114,7 +114,7 @@ services:
     mem_limit: 4g
     security_opt: ["no-new-privileges:true"]
   caddy:
-    image: caddy:2-alpine
+    image: caddy:2-alpine@sha256:24ec7b05bc532c7bb57f727030c5056e257ff7138b4b50460306819ff79362bd
     restart: unless-stopped
     ports: ["80:80", "443:443", "443:443/udp"]
     environment:
