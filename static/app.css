@@ -2804,3 +2804,51 @@ summary { cursor: pointer; font-weight: 600; padding: 12px 0; }
 .sidebar { overflow-y: auto; }
 
 .integration-panel { padding: 28px; margin-bottom: 24px; }
+
+/* Keep first-time setup within the viewport without clipping validation or zoom. */
+.setup-body .auth-layout { min-height: 100svh; }
+.setup-body .auth-story { padding: 28px clamp(24px, 4vw, 54px); }
+.setup-body .auth-story-content { padding: 24px 0; }
+.setup-body .auth-story h1 { font-size: clamp(32px, 4vw, 48px); margin: 20px 0; }
+.setup-body .auth-lines { margin-top: 28px; gap: 16px; }
+.setup-body .auth-main { padding: 24px clamp(24px, 4vw, 55px); min-height: 0; gap: 16px; }
+.setup-body .auth-main > .language-picker { margin: 0; }
+.setup-body .auth-main-footer { padding: 0; margin: 0; }
+.setup-body .auth-main > a { font-size: 12px; }
+.setup-body .auth-card { max-width: 380px; padding: 16px 0; }
+.setup-progress { list-style: none; display: flex; gap: 28px; padding: 0; margin: 0 0 24px; font-size: 12px; color: var(--muted); }
+.setup-progress li { display: flex; align-items: center; gap: 8px; }
+.setup-progress span { display: grid; place-items: center; width: 26px; height: 26px; border: 1px solid var(--line); border-radius: 50%; }
+.setup-progress [aria-current] { color: var(--green); font-weight: 600; }
+.setup-progress [aria-current] span { background: var(--green); color: white; border-color: var(--green); }
+.setup-form { margin: 0; }
+.setup-form h2 { margin: 10px 0; }
+.setup-form h2:focus { outline: none; }
+.setup-intro { font-size: 13px; line-height: 1.6; margin-bottom: 20px; }
+.setup-form .field { margin-bottom: 16px; }
+.setup-form .field input { font-size: 16px; }
+.setup-form .help { font-size: 11px; }
+.setup-form section + section { margin-top: 24px; }
+.setup-form section[hidden] + section { margin-top: 0; }
+.setup-actions { display: flex; gap: 12px; }
+.setup-actions button[type="submit"] { flex: 1; }
+@media (max-width: 650px) {
+  .setup-body .auth-layout { display: flex; flex-direction: column; }
+  .setup-body .auth-story { padding: 16px 24px; flex-shrink: 0; }
+  .setup-body .auth-main { flex: 1; padding: 16px 24px; gap: 12px; }
+  .setup-form h2 { font-size: clamp(23px, 6.4vw, 28px); }
+}
+@media (max-height: 700px) {
+  .setup-body .auth-main { padding-top: 12px; padding-bottom: 12px; gap: 10px; }
+  .setup-body .auth-card { padding: 6px 0; }
+  .setup-body .auth-main-footer { display: none; }
+  .setup-progress { margin-bottom: 16px; }
+  .setup-form .field { margin-bottom: 12px; }
+  .setup-intro { margin-bottom: 16px; }
+  .setup-body .auth-lines { display: none; }
+}
+@media (max-width: 650px) and (max-height: 600px) {
+  .setup-body .auth-story { padding-top: 8px; padding-bottom: 8px; }
+  .setup-form .eyebrow { display: none; }
+  .setup-progress { margin-bottom: 12px; }
+}

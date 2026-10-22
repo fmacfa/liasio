@@ -59,7 +59,6 @@ class IsolatedFiles:
             ALLOWED_HOSTS=["testserver", "127.0.0.1"],
             SECURE_SSL_REDIRECT=False,
             TRUST_PROXY=False,
-            SETUP_TOKEN="test-bootstrap-token-at-least-32-characters-long",
         )
         self.override.enable()
         self.addCleanup(self.override.disable)
@@ -85,25 +84,22 @@ class IsolatedFiles:
 
 
 class AccountTests(IsolatedFiles, TestCase):
-    def test_first_setup_requires_server_secret_then_closes(self):
+    def test_first_setup_without_installation_key_then_closes(self):
         Instance.objects.update_or_create(pk=1, defaults={"initialized": False})
         data = {
             "email": "Admin@EXAMPLE.com",
             "display_name": "Camille",
             "password": PASSWORD,
             "password_confirm": PASSWORD,
-            "setup_token": "incorrect",
         }
-        self.assertEqual(self.client.post("/setup/", data).status_code, 200)
-        self.assertFalse(User.objects.exists())
-        data["setup_token"] = "clé incorrecte"
-        self.assertEqual(self.client.post("/setup/", data).status_code, 200)
-        self.assertFalse(User.objects.exists())
-        data["setup_token"] = settings.SETUP_TOKEN
         self.assertRedirects(self.client.post("/setup/", data), "/")
         admin = User.objects.get()
         self.assertEqual(admin.email, "admin@example.com")
         self.assertTrue(admin.is_staff)
+        self.assertTrue(admin.is_superuser)
+        self.assertTrue(admin.check_password(PASSWORD))
+        self.assertEqual(admin.branding.name, "Camille")
+        self.assertTrue(Instance.objects.get(pk=1).initialized)
         self.client.logout()
         self.assertRedirects(self.client.post("/setup/", data), "/login/")
         self.assertEqual(User.objects.count(), 1)

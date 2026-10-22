@@ -1,6 +1,5 @@
 from django.utils.translation import gettext_lazy as _
 import csv
-import hmac
 import io
 import json
 import logging
@@ -120,12 +119,7 @@ def setup(request):
     if request.method == "POST":
         if limited(request, "setup", 5):
             return too_many(request)
-        valid_token = len(settings.SETUP_TOKEN) >= 32 and hmac.compare_digest(
-            request.POST.get("setup_token", "").encode(), settings.SETUP_TOKEN.encode()
-        )
-        if not valid_token:
-            form.add_error(None, _("Clé d’installation incorrecte."))
-        elif form.is_valid():
+        if form.is_valid():
             with transaction.atomic():
                 instance = Instance.objects.select_for_update().get(pk=1)
                 if instance.initialized or User.objects.exists():

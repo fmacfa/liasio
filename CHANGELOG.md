@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Changed
+
+- First-time setup now starts directly with email and password, followed by name and password confirmation in a compact two-step form. No installation key is needed. Server-side validation, CSRF, throttling and atomic first-administrator creation remain enforced; setup closes permanently after initialization. English/French guides and screenshots cover the new flow.
+- `SETUP_TOKEN` is no longer read or generated. Existing installations keep their accounts and remain closed to public signup. On a fresh instance, the first person to finish setup becomes the administrator; initialize it before sharing its address.
+
 ### Hardened
 
 - Webhook scheduling rotates across accounts in shared database state, with one in-flight delivery per account. Compose runs two supervised processes, so one slow account cannot occupy both send slots. Five-minute crash leases, bounded attempts and receiver deduplication remain in place.

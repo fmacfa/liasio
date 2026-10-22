@@ -27,7 +27,6 @@ ALLOWED_HOSTS = (
     [origin.hostname, "localhost", "127.0.0.1"] if DEBUG else [origin.hostname]
 )
 CSRF_TRUSTED_ORIGINS = [APP_URL]
-SETUP_TOKEN = os.environ.get("SETUP_TOKEN", "")
 DATA_DIR = Path(os.environ.get("DATA_DIR", BASE_DIR / "data"))
 DATA_DIR.mkdir(mode=0o700, parents=True, exist_ok=True)
 MEDIA_ROOT = DATA_DIR / "files"

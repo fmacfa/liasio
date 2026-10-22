@@ -50,7 +50,6 @@ env = dict(
     TRUST_PROXY="false",
     SECRET_KEY=secrets.token_urlsafe(64),
     MFA_ENCRYPTION_KEY="",
-    SETUP_TOKEN=secrets.token_urlsafe(32),
     MONITOR_EMAIL="",
     MIN_FREE_DISK_BYTES="0",
 )

@@ -16,7 +16,7 @@ French / English interface · **MIT** license · Python / Django · Docker Compo
 
 | Need | Available in version 0.4 |
 | --- | --- |
-| First-time setup | Setup wizard protected by an installation key; create the administrator account with an email address and password |
+| First-time setup | Two short steps: email and password, then name and password confirmation; the first account becomes the administrator |
 | Multiple accounts | Personal invitations valid for 7 days, single-use and revocable; isolated member accounts |
 | File library | Upload files or a complete directory while preserving its structure; add a title, description, and message to the recipient |
 | Upload page | Destination, file/folder selection, progress, pause and resume for 24 hours, then antivirus verification |
@@ -65,10 +65,10 @@ docker compose ps
 ```
 
 4. Wait for ClamAV to become ready; its first startup may take several minutes.
-5. Open `https://files.example.com` and create your account using **SETUP_TOKEN** from your `.env` file, your name, email address, and password.
+5. Open `https://files.example.com`. Enter your email and a password, choose **Continue**, then enter your name and confirm the password. Select **Create my account**. No installation key is needed.
 6. Create a folder, upload files, then select **Create a link**. Choose **FR / EN** to change the interface language.
 
-The configuration script creates `.env` with `0600` permissions and refuses to overwrite an existing file. It contains secrets: never publish it. Once initialization is complete, first-account creation stays closed even if the setup key remains in the configuration.
+The configuration script creates `.env` with `0600` permissions and refuses to overwrite an existing file. It contains secrets: never publish it. The first person to complete setup becomes the administrator: initialize the instance before sharing its address. Setup permanently closes after this account is created; other users join by invitation.
 
 Caddy obtains and renews the TLS certificate. If you use another reverse proxy, read the [operations guide](docs/OPERATIONS.md) (French) before changing the topology.
 
@@ -113,7 +113,6 @@ Configure values in `.env`; [.env.example](.env.example) provides a template.
 | --- | --- |
 | `APP_URL` / `DOMAIN` | Canonical HTTPS origin without a path / domain name |
 | `SECRET_KEY` | Random secret of at least 50 characters; signs sessions and access tokens |
-| `SETUP_TOKEN` | Secret of at least 32 characters for first-account creation |
 | `MAX_FILE_BYTES` | 1073741824: 1 GiB per file |
 | `MAX_UPLOAD_BYTES` | 5368709120: 5 GiB per folder; multipart fallback remains 500 MiB/request |
 | `DEFAULT_QUOTA_BYTES` | 5368709120: 5 GiB for each new account |

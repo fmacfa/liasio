@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LinkVault 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-22 10:05+0200\n"
+"POT-Creation-Date: 2026-10-22 16:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: LinkVault contributors\n"
 "Language-Team: English\n"
@@ -34,7 +34,7 @@ msgstr "Invitation for"
 msgid "Choisissez votre nom et votre mot de passe."
 msgstr "Choose your name and password."
 
-#: templates/account/invitation.html:15 templates/account/setup.html:11
+#: templates/account/invitation.html:15 templates/account/setup.html:31
 msgid "Créer mon compte"
 msgstr "Create my account"
 
@@ -360,22 +360,56 @@ msgstr "Other sessions will be signed out after this change."
 msgid "Mettre à jour le mot de passe"
 msgstr "Update password"
 
-#: templates/account/setup.html:3
+#: templates/account/setup.html:4
 msgid "Première installation · LinkVault"
 msgstr "First-time setup · LinkVault"
 
-#: templates/account/setup.html:5
+#: templates/account/setup.html:8
+msgid "Étapes de création du compte"
+msgstr "Account setup steps"
+
+#: templates/account/setup.html:9
+msgid "Connexion"
+msgstr "Sign in"
+
+#: templates/account/setup.html:10
+#| msgid "Votre nom"
+msgid "Votre profil"
+msgstr "Your profile"
+
+#: templates/account/setup.html:15
 msgid "BIENVENUE CHEZ VOUS"
 msgstr "WELCOME HOME"
 
-#: templates/account/setup.html:6
+#: templates/account/setup.html:16
 msgid "Créons votre espace."
 msgstr "Let’s create your workspace."
 
-#: templates/account/setup.html:7
+#: templates/account/setup.html:17
+#| msgid "Choisissez votre nom et votre mot de passe."
+msgid "Commencez par votre e-mail et un mot de passe."
+msgstr "Start with your email and a password."
+
+#: templates/account/setup.html:21
+msgid "Continuer"
+msgstr "Continue"
+
+#: templates/account/setup.html:24
+msgid "PRESQUE TERMINÉ"
+msgstr "ALMOST THERE"
+
+#: templates/account/setup.html:25
+msgid "Faisons connaissance."
+msgstr "Let’s get to know you."
+
+#: templates/account/setup.html:26
 msgid ""
 "Ce premier compte administrateur vous permettra d’inviter votre équipe."
 msgstr "This first administrator account will let you invite your team."
+
+#: templates/account/setup.html:30
+msgid "Retour"
+msgstr "Back"
 
 #: templates/activity.html:3 templates/layout.html:28
 #: templates/links/list.html:36
@@ -408,15 +442,15 @@ msgid "← Afficher tous les liens"
 msgstr "← Show all links"
 
 #: templates/activity.html:24 templates/integrations/webhook.html:9
-#: vault/views.py:589
+#: vault/views.py:587
 msgid "Événement"
 msgstr "Event"
 
-#: templates/activity.html:25 templates/storage.html:89 vault/views.py:589
+#: templates/activity.html:25 templates/storage.html:89 vault/views.py:587
 msgid "Dossier"
 msgstr "Collection"
 
-#: templates/activity.html:26 vault/views.py:589
+#: templates/activity.html:26 vault/views.py:587
 msgid "Lien"
 msgstr "Link"
 
@@ -570,7 +604,7 @@ msgstr "· Created on"
 msgid "Créer un lien"
 msgstr "Create a link"
 
-#: templates/collections/detail.html:19 vault/forms.py:93
+#: templates/collections/detail.html:19 vault/forms.py:85
 msgid "Présentation"
 msgstr "Introduction"
 
@@ -1101,7 +1135,7 @@ msgstr ""
 "until it starts."
 
 #: templates/integrations/index.html:17 templates/integrations/webhook.html:5
-#: vault/models.py:185
+#: vault/models.py:188
 msgid "Actif"
 msgstr "Active"
 
@@ -1245,7 +1279,7 @@ msgstr "Delete webhook and its history"
 msgid "LinkVault, accueil"
 msgstr "LinkVault home"
 
-#: templates/layout.html:12 vault/models.py:77
+#: templates/layout.html:12 vault/models.py:80
 msgid "Mon espace"
 msgstr "My workspace"
 
@@ -1436,7 +1470,7 @@ msgstr "Actions"
 msgid "Créé le"
 msgstr "Created on"
 
-#: templates/links/list.html:54 vault/forms.py:21 vault/forms.py:81
+#: templates/links/list.html:54 vault/forms.py:21 vault/forms.py:73
 msgid "Mot de passe"
 msgstr "Password"
 
@@ -2050,6 +2084,7 @@ msgid "jours et continueront à compter dans votre quota."
 msgstr "days and will continue to count toward your quota."
 
 #: templates/storage_delete.html:12
+#, python-format
 msgid "%(count)s lien actif sera révoqué."
 msgid_plural "%(count)s liens actifs seront révoqués."
 msgstr[0] "%(count)s active link will be revoked."
@@ -2343,42 +2378,42 @@ msgstr ""
 "In local development mode, the antivirus may be disabled. Unscanned files "
 "remain labeled as such."
 
-#: vault/api.py:130
+#: vault/api.py:133
 msgid "allow_previews doit être un booléen."
 msgstr "allow_previews must be a boolean."
 
-#: vault/api.py:132
+#: vault/api.py:135
 msgid "max_downloads doit être un entier."
 msgstr "max_downloads must be an integer."
 
-#: vault/api.py:137
+#: vault/api.py:140
 msgid "expires_at doit inclure un fuseau horaire (ISO 8601)."
 msgstr "expires_at must include a timezone (ISO 8601)."
 
-#: vault/api.py:157 vault/views.py:492
+#: vault/api.py:167 vault/views.py:490
 msgid "Ajoutez au moins un fichier avant de créer un lien."
 msgstr "Add at least one file before creating a link."
 
-#: vault/api.py:161
+#: vault/api.py:171
 msgid "Des fichiers n’ont pas été analysés par l’antivirus."
 msgstr "Some files have not been scanned for malware."
 
-#: vault/api_auth.py:126
+#: vault/api_auth.py:138
 msgid "Utilisez le type application/json."
 msgstr "Use the application/json content type."
 
-#: vault/api_auth.py:129
+#: vault/api_auth.py:141
 msgid "Un objet JSON est requis."
 msgstr "A JSON object is required."
 
-#: vault/api_auth.py:138
+#: vault/api_auth.py:150
 msgid ""
 "Idempotency-Key est requis (8 à 128 lettres, chiffres, tirets ou "
 "soulignements)."
 msgstr ""
 "Idempotency-Key is required (8–128 letters, digits, hyphens or underscores)."
 
-#: vault/api_auth.py:176
+#: vault/api_auth.py:188
 msgid "Limite quotidienne de créations API atteinte (1 000)."
 msgstr "Daily API creation limit reached (1,000)."
 
@@ -2410,35 +2445,27 @@ msgstr "Confirm password"
 msgid "Les mots de passe ne correspondent pas."
 msgstr "Passwords do not match."
 
-#: vault/forms.py:55 vault/forms.py:76
+#: vault/forms.py:55 vault/forms.py:68
 msgid "Adresse e-mail"
 msgstr "Email address"
 
-#: vault/forms.py:60
-msgid "Clé d’installation"
-msgstr "Setup key"
-
-#: vault/forms.py:63
-msgid "La valeur SETUP_TOKEN du fichier .env de votre serveur."
-msgstr "The SETUP_TOKEN value in your server’s .env file."
-
-#: vault/forms.py:92
+#: vault/forms.py:84
 msgid "Titre du dossier"
 msgstr "Collection title"
 
-#: vault/forms.py:94
+#: vault/forms.py:86
 msgid "Message pour le destinataire"
 msgstr "Message for the recipient"
 
-#: vault/forms.py:101
+#: vault/forms.py:93
 msgid "Présentez ce que vous partagez, donnez du contexte…"
 msgstr "Introduce what you are sharing, add some context…"
 
-#: vault/forms.py:110
+#: vault/forms.py:102
 msgid "Afficher les aperçus des images et PDF"
 msgstr "Show image and PDF previews"
 
-#: vault/forms.py:114
+#: vault/forms.py:106
 msgid ""
 "Images réduites et première page des PDF jusqu’à 20 Mio, visibles avant "
 "téléchargement. Leur consultation ne consomme pas le lien et leur copie "
@@ -2448,75 +2475,75 @@ msgstr ""
 "downloading. Viewing them does not consume the link and they can still be "
 "copied."
 
-#: vault/forms.py:118
+#: vault/forms.py:110
 msgid "Mot de passe du lien"
 msgstr "Link password"
 
-#: vault/forms.py:124
+#: vault/forms.py:116
 msgid "Facultatif · 12 caractères minimum. Communiquez-le par un autre canal."
 msgstr ""
 "Optional · at least 12 characters. Send it through a separate channel."
 
-#: vault/forms.py:132
+#: vault/forms.py:124
 msgid "Nom du lien (visible par vous)"
 msgstr "Link name (visible to you)"
 
-#: vault/forms.py:133
+#: vault/forms.py:125
 msgid "Date d’expiration"
 msgstr "Expiry date"
 
-#: vault/forms.py:134
+#: vault/forms.py:126
 msgid "Nombre maximal de téléchargements"
 msgstr "Maximum downloads"
 
-#: vault/forms.py:138
+#: vault/forms.py:130
 msgid ""
 "Saisissez 1 pour un usage unique. Laissez vide pour un nombre illimité."
 msgstr "Enter 1 for single use. Leave empty for unlimited downloads."
 
-#: vault/forms.py:141
+#: vault/forms.py:133
 msgid ""
 "Facultatif · heure Europe/Berlin par défaut (configurable sur le serveur)."
 msgstr ""
 "Optional · Europe/Berlin time by default (configurable on the server)."
 
-#: vault/forms.py:148
+#: vault/forms.py:140
 msgid "Ex. : Envoi à Camille"
 msgstr "E.g. Delivery to Camille"
 
-#: vault/forms.py:154
+#: vault/forms.py:146
 msgid "Choisissez une date future."
 msgstr "Choose a future date."
 
-#: vault/forms.py:160
+#: vault/forms.py:152
 msgid "Mot de passe du partage"
 msgstr "Share password"
 
-#: vault/forms.py:171
+#: vault/forms.py:163
 msgid "Nom affiché"
 msgstr "Display name"
 
-#: vault/forms.py:172
+#: vault/forms.py:164
 msgid "Signature"
 msgstr "Tagline"
 
-#: vault/forms.py:173
+#: vault/forms.py:165
 msgid "Palette"
 msgstr "Palette"
 
-#: vault/forms.py:174
+#: vault/forms.py:166
 msgid "Texte en pied de page"
 msgstr "Footer text"
 
-#: vault/forms.py:180
+#: vault/forms.py:172
 msgid "Adresse e-mail du membre"
 msgstr "Member’s email address"
 
-#: vault/forms.py:185
+#: vault/forms.py:177
 msgid "Cette adresse possède déjà un compte."
 msgstr "This email address already has an account."
 
-#: vault/forms.py:206
+#: vault/forms.py:198
 msgid ""
 "Votre compte a changé pendant cette opération. Recommencez la connexion ou "
 "la récupération."
@@ -2665,7 +2692,7 @@ msgstr "Public HTTPS, port 443. Internal addresses and redirects are blocked."
 msgid "Événements"
 msgstr "Events"
 
-#: vault/integrations.py:77 vault/mfa.py:165 vault/views.py:902
+#: vault/integrations.py:77 vault/mfa.py:165 vault/views.py:907
 msgid "Mot de passe incorrect."
 msgstr "Incorrect password."
 
@@ -2673,27 +2700,27 @@ msgstr "Incorrect password."
 msgid "Code incorrect, expiré ou déjà utilisé."
 msgstr "Incorrect, expired or already used code."
 
-#: vault/integrations.py:123
+#: vault/integrations.py:127
 msgid "Révoquez une clé avant d’en créer une autre (10 maximum)."
 msgstr "Revoke a key before creating another (maximum 10)."
 
-#: vault/integrations.py:138
+#: vault/integrations.py:142
 msgid "Clé API"
 msgstr "API key"
 
-#: vault/integrations.py:149
+#: vault/integrations.py:153
 msgid "Supprimez un webhook avant d’en créer un autre (10 maximum)."
 msgstr "Delete a webhook before creating another (maximum 10)."
 
-#: vault/integrations.py:164
+#: vault/integrations.py:168
 msgid "Secret de signature"
 msgstr "Signing secret"
 
-#: vault/integrations.py:204
+#: vault/integrations.py:208
 msgid "Clé API révoquée."
 msgstr "API key revoked."
 
-#: vault/integrations.py:228
+#: vault/integrations.py:232
 msgid "Événement de test ajouté à la file d’attente."
 msgstr "Test event added to the delivery queue."
 
@@ -2747,47 +2774,47 @@ msgstr "Too many uploads. Try again later."
 msgid "Quota de stockage insuffisant."
 msgstr "Insufficient storage quota."
 
-#: vault/models.py:69
+#: vault/models.py:72
 msgid "Forêt"
 msgstr "Forest"
 
-#: vault/models.py:70
+#: vault/models.py:73
 msgid "Océan"
 msgstr "Ocean"
 
-#: vault/models.py:71
+#: vault/models.py:74
 msgid "Prune"
 msgstr "Plum"
 
-#: vault/models.py:72
+#: vault/models.py:75
 msgid "Encre"
 msgstr "Ink"
 
-#: vault/models.py:182
+#: vault/models.py:185
 msgid "Révoqué"
 msgstr "Revoked"
 
-#: vault/models.py:183
+#: vault/models.py:186
 msgid "Expiré"
 msgstr "Expired"
 
-#: vault/models.py:184
+#: vault/models.py:187
 msgid "Épuisé"
 msgstr "Exhausted"
 
-#: vault/models.py:224 vault/webhooks.py:34
+#: vault/models.py:227 vault/webhooks.py:43
 msgid "Page ouverte"
 msgstr "Page opened"
 
-#: vault/models.py:225 vault/webhooks.py:35
+#: vault/models.py:228 vault/webhooks.py:44
 msgid "Téléchargement autorisé"
 msgstr "Download authorized"
 
-#: vault/models.py:226 vault/webhooks.py:32
+#: vault/models.py:229 vault/webhooks.py:41
 msgid "Lien créé"
 msgstr "Link created"
 
-#: vault/models.py:227 vault/webhooks.py:33
+#: vault/models.py:230 vault/webhooks.py:42
 msgid "Lien révoqué"
 msgstr "Link revoked"
 
@@ -2847,7 +2874,7 @@ msgstr "Quota updated."
 msgid "Les aperçus de ce lien ont été mis à jour."
 msgstr "Previews for this link have been updated."
 
-#: vault/resumable.py:39 vault/views.py:450
+#: vault/resumable.py:39 vault/resumable.py:103 vault/views.py:448
 msgid "Envoi invalide."
 msgstr "Invalid upload."
 
@@ -2859,87 +2886,87 @@ msgstr "Storage unavailable. Try again or contact the administrator."
 msgid "Cet envoi est terminé, annulé ou expiré."
 msgstr "This upload is complete, canceled or expired."
 
-#: vault/resumable.py:104 vault/storage.py:119 vault/views.py:702
+#: vault/resumable.py:106 vault/storage.py:119 vault/views.py:700
 msgid "Sélectionnez entre 1 et 100 fichiers."
 msgstr "Select between 1 and 100 files."
 
-#: vault/resumable.py:108
+#: vault/resumable.py:110
 msgid "Liste des fichiers invalide."
 msgstr "Invalid file list."
 
-#: vault/resumable.py:112
+#: vault/resumable.py:114
 msgid "Taille de fichier invalide ou trop élevée."
 msgstr "Invalid file size or file too large."
 
-#: vault/resumable.py:116
+#: vault/resumable.py:118
 msgid "Empreinte invalide."
 msgstr "Invalid fingerprint."
 
-#: vault/resumable.py:120
+#: vault/resumable.py:122
 msgid "La taille maximale du dossier est dépassée."
 msgstr "The maximum collection size has been exceeded."
 
-#: vault/resumable.py:134
+#: vault/resumable.py:136
 msgid "Révoquez les liens actifs avant d’importer des fichiers."
 msgstr "Revoke active links before uploading files."
 
-#: vault/resumable.py:139
+#: vault/resumable.py:141
 msgid ""
 "Terminez ou annulez un envoi avant d’en commencer un autre (5 maximum)."
 msgstr "Complete or cancel an upload before starting another (maximum 5)."
 
-#: vault/resumable.py:144
+#: vault/resumable.py:146
 msgid "Quota insuffisant, y compris la corbeille et les envois en attente."
 msgstr "Insufficient quota, including trash and pending uploads."
 
-#: vault/resumable.py:160
+#: vault/resumable.py:162
 msgid ""
 "Chemin déjà présent (corbeille comprise) ou limite de 100 fichiers atteinte."
 msgstr ""
 "Path already exists (including trash), or the 100-file limit has been "
 "reached."
 
-#: vault/resumable.py:164 vault/storage.py:190
+#: vault/resumable.py:166 vault/storage.py:190
 msgid "La taille maximale du dossier est atteinte."
 msgstr "The maximum collection size has been reached."
 
-#: vault/resumable.py:172 vault/storage.py:218
+#: vault/resumable.py:174 vault/storage.py:218
 msgid "Un chemin ne peut pas être à la fois un fichier et un dossier."
 msgstr "A path cannot be both a file and a folder."
 
-#: vault/resumable.py:237
+#: vault/resumable.py:239
 msgid "Bloc invalide."
 msgstr "Invalid chunk."
 
-#: vault/resumable.py:243
+#: vault/resumable.py:245
 msgid "L’intégrité du bloc n’a pas pu être vérifiée. Réessayez."
 msgstr "Chunk integrity could not be verified. Try again."
 
-#: vault/resumable.py:258
+#: vault/resumable.py:260
 msgid "Position modifiée. Reprenez à la position indiquée."
 msgstr "Offset changed. Resume at the indicated offset."
 
-#: vault/resumable.py:264
+#: vault/resumable.py:266
 msgid "Le bloc dépasse la taille déclarée."
 msgstr "The chunk exceeds the declared size."
 
-#: vault/resumable.py:269
+#: vault/resumable.py:271
 msgid "Le serveur manque d’espace disque."
 msgstr "The server is running out of disk space."
 
-#: vault/resumable.py:279
+#: vault/resumable.py:281
 msgid "Bloc manquant sur le serveur."
 msgstr "Chunk missing on the server."
 
-#: vault/resumable.py:323
+#: vault/resumable.py:325
 msgid "Trop de vérifications. Réessayez plus tard."
 msgstr "Too many verifications. Try again later."
 
-#: vault/resumable.py:346
+#: vault/resumable.py:348
 msgid "L’envoi n’est pas encore complet."
 msgstr "The upload is not complete yet."
 
-#: vault/resumable.py:354
+#: vault/resumable.py:356
 msgid "Fichier temporaire incomplet. Annulez puis recommencez l’envoi."
 msgstr "Incomplete temporary file. Cancel the upload and start again."
 
@@ -3029,27 +3056,27 @@ msgstr "This link is no longer available."
 msgid "Un fichier n’est plus disponible ou ne vous appartient pas."
 msgstr "A file is no longer available or does not belong to you."
 
-#: vault/trash.py:212
+#: vault/trash.py:216
 msgid "Élément restauré. Créez de nouveaux liens pour le partager."
 msgstr "Item restored. Create new links to share it."
 
-#: vault/trash.py:238
+#: vault/trash.py:242
 msgid "Élément supprimé définitivement. Le quota a été libéré."
 msgstr "Item permanently deleted. Quota has been released."
 
-#: vault/views.py:77
+#: vault/views.py:76
 msgid "Un instant…"
 msgstr "Just a moment…"
 
-#: vault/views.py:78
+#: vault/views.py:77
 msgid "Trop de tentatives. Réessayez dans quelques minutes."
 msgstr "Too many attempts. Try again in a few minutes."
 
-#: vault/views.py:91
+#: vault/views.py:90
 msgid "Ce lien n’est plus disponible"
 msgstr "This link is no longer available"
 
-#: vault/views.py:93
+#: vault/views.py:92
 msgid ""
 "Il a expiré, a été révoqué ou a atteint sa limite de téléchargements. "
 "Contactez la personne qui vous l’a envoyé."
@@ -3057,44 +3084,40 @@ msgstr ""
 "It has expired, was revoked or has reached its download limit. Contact the "
 "person who sent it."
 
-#: vault/views.py:127
-msgid "Clé d’installation incorrecte."
-msgstr "Incorrect setup key."
-
-#: vault/views.py:176
+#: vault/views.py:170
 msgid "Adresse e-mail ou mot de passe incorrect."
 msgstr "Incorrect email address or password."
 
-#: vault/views.py:295
+#: vault/views.py:289
 msgid "Mot de passe modifié. Les autres sessions seront déconnectées."
 msgstr "Password updated. Other sessions will be signed out."
 
-#: vault/views.py:357
+#: vault/views.py:355
 msgid "Dossier créé. Ajoutez maintenant vos fichiers."
 msgstr "Collection created. Add your files now."
 
-#: vault/views.py:415
+#: vault/views.py:413
 msgid "Présentation mise à jour."
 msgstr "Introduction updated."
 
-#: vault/views.py:434
+#: vault/views.py:432
 msgid "Envoi trop volumineux. Aucun fichier n’a été conservé."
 msgstr "Upload too large. No files were retained."
 
-#: vault/views.py:439
+#: vault/views.py:437
 msgid "Liste des chemins invalide."
 msgstr "Invalid path list."
 
-#: vault/views.py:443
+#: vault/views.py:441
 #, python-format
 msgid "%(count)s fichier(s) ajouté(s) au dossier."
 msgstr "%(count)s file(s) added to the collection."
 
-#: vault/views.py:463
+#: vault/views.py:461
 msgid "Dossier placé dans la corbeille. Tous ses liens ont été révoqués."
 msgstr "Collection moved to the trash. All its links have been revoked."
 
-#: vault/views.py:501
+#: vault/views.py:499
 msgid ""
 "Des fichiers n’ont pas été analysés par l’antivirus. Importez-les à nouveau "
 "dans un dossier avec l’antivirus activé."
@@ -3102,23 +3125,23 @@ msgstr ""
 "Some files have not been scanned for malware. Upload them again into a "
 "collection with the antivirus enabled."
 
-#: vault/views.py:515
+#: vault/views.py:513
 msgid "Lien créé. Vous pouvez le copier et le partager."
 msgstr "Link created. You can copy and share it."
 
-#: vault/views.py:567
+#: vault/views.py:565
 msgid "Lien révoqué. Aucun nouveau téléchargement ne sera autorisé."
 msgstr "Link revoked. No new downloads will be authorized."
 
-#: vault/views.py:589
+#: vault/views.py:587
 msgid "Date (ISO 8601 UTC)"
 msgstr "Date (ISO 8601 UTC)"
 
-#: vault/views.py:639
+#: vault/views.py:637
 msgid "Votre page de partage a été personnalisée."
 msgstr "Your share page has been customized."
 
-#: vault/views.py:720
+#: vault/views.py:718
 #, python-format
 msgid ""
 "%(count)s fichier(s) placé(s) dans la corbeille. Les liens des dossiers "
@@ -3127,69 +3150,74 @@ msgstr ""
 "%(count)s file(s) moved to the trash. Links for the affected collections "
 "have been revoked."
 
-#: vault/views.py:763
+#: vault/views.py:761
 msgid "Invitation créée pour 7 jours. Copiez le lien et envoyez-le au membre."
 msgstr ""
 "Invitation created for 7 days. Copy the link and send it to the member."
 
-#: vault/views.py:793
+#: vault/views.py:791
 msgid "Invitation révoquée."
 msgstr "Invitation revoked."
 
-#: vault/views.py:831
+#: vault/views.py:835
 msgid "Compte mis à jour. Une suspension révoque aussi les liens du membre."
 msgstr "Account updated. Suspending also revokes the member’s links."
 
-#: vault/views.py:929
+#: vault/views.py:934
 msgid "Transfert en attente"
 msgstr "Transfer pending"
 
-#: vault/views.py:931
+#: vault/views.py:936
 msgid ""
 "Le serveur manque d’espace temporaire. Réessayez plus tard ou contactez "
 "l’expéditeur."
 msgstr ""
 "The server lacks temporary space. Try again later or contact the sender."
 
-#: vault/views.py:943
+#: vault/views.py:948
 msgid "Transfert indisponible"
 msgstr "Transfer unavailable"
 
-#: vault/views.py:945
+#: vault/views.py:950
 msgid ""
 "Le fichier n’a pas pu être préparé. Réessayez plus tard ou contactez "
 "l’expéditeur."
 msgstr ""
 "The file could not be prepared. Try again later or contact the sender."
 
-#: vault/views.py:969
+#: vault/views.py:974
 msgid "Page introuvable"
 msgstr "Page not found"
 
-#: vault/views.py:970
+#: vault/views.py:975
 msgid "Cette adresse ne correspond à aucune page disponible."
 msgstr "This address does not match an available page."
 
-#: vault/views.py:981
+#: vault/views.py:986
 msgid "Une erreur est survenue"
 msgstr "An error occurred"
 
-#: vault/views.py:982
+#: vault/views.py:987
 msgid "Réessayez dans quelques instants."
 msgstr "Try again in a few moments."
 
-#: vault/webhooks.py:30
+#: vault/webhooks.py:39
 msgid "Dossier créé"
 msgstr "Collection created"
 
-#: vault/webhooks.py:31
+#: vault/webhooks.py:40
 msgid "Fichiers enregistrés"
 msgstr "Files stored"
 
-#: vault/webhooks.py:66
+#: vault/webhooks.py:75
 msgid ""
 "Utilisez une URL HTTPS publique sur le port 443, sans identifiants, "
 "paramètres ni fragment."
 msgstr ""
 "Use a public HTTPS URL on port 443, without credentials, query parameters or"
 " fragments."
+
+#: templates/account/setup.html:20
+msgid ""
+"Vérifiez les informations ci-dessous et ressaisissez votre mot de passe."
+msgstr "Check the details below and enter your password again."
