@@ -52,9 +52,55 @@ Pour tout faire depuis l’interface, choisissez **Créer plusieurs liens** : in
 
 L’[API des lots](docs/guide/fr/bulk-links-api.md) reçoit des noms ou une quantité et renvoie les liens correspondants dans l’ordre. Les lots apparaissent dans **Mes lots**, sont consultables et exportables en Excel/CSV, avec reprise sans doublons. Utilisez le [client Python](examples/batches.py) depuis un terminal ou Codex, ou appelez l’API depuis le serveur de votre site avec une clé privée.
 
+## Besoins serveur / VPS
+
+Prévoir un serveur Linux avec **Docker Engine et Docker Compose v2**, Git et Python 3 pour la configuration. Les recommandations ci-dessous concernent la pile complète, antivirus compris ; ce sont des points de départ, pas des capacités mesurées ni un nombre maximal d’utilisateurs garanti. Un Gio représente 1 073 741 824 octets ; vérifiez les unités annoncées par votre hébergeur.
+
+| Profil de serveur dédié | Processeur | RAM |
+| --- | --- | --- |
+| Petite instance avec quelques transferts simultanés occasionnels | 2 vCPU | **8 Gio** |
+| Davantage de marge pour les imports, analyses et créations de ZIP simultanés | 4 vCPU | **12–16 Gio** |
+
+### Mémoire vive et swap
+
+La **RAM**, ou mémoire vive, sert au fonctionnement des services. Les limites actuelles de [compose.yaml](compose.yaml) totalisent **6,5 Gio** : ClamAV 4 Gio, application 1 Gio, PostgreSQL et aperçus 512 Mio chacun, maintenance et webhooks 256 Mio chacun. Ce sont des plafonds individuels, pas une consommation constante ou une réservation de mémoire. Linux, Docker, Caddy, les sauvegardes et les constructions d’images ont besoin d’une marge supplémentaire. ClamAV seul [recommande 4 Gio](https://docs.clamav.net/manual/Installing/Docker.html#memory-ram-requirements), avec des pics pendant les mises à jour de signatures.
+
+Sur un **VPS partagé**, ajoutez les besoins de vos sites, bases et applications existantes, y compris leurs pics. Un serveur avec 8 Gio installés mais seulement 2 Gio disponibles n’équivaut pas à un serveur dédié de 8 Gio. CloudPanel ne réduit pas ces besoins ; prévoyez le reverse proxy et les ports déjà utilisés avec le [guide d’exploitation](docs/OPERATIONS.md#autre-reverse-proxy).
+
+Le **swap** utilise de l’espace disque comme réserve de mémoire plus lente. Une zone facultative de **2 à 4 Gio** peut amortir une pression occasionnelle ; elle ne permet pas de dimensionner la pile complète sur un VPS trop petit. Des lectures/écritures fréquentes dans le swap pendant les transferts appellent davantage de RAM ou moins d’applications concurrentes. Le swap réellement accessible à Docker dépend de l’hôte et des réglages des conteneurs ; ce fichier Compose ne définit pas `memswap_limit`. Voir les [limites de mémoire et de swap Docker](https://docs.docker.com/engine/containers/resource_constraints/#--memory-swap-details).
+
+### Espace disque et bande passante
+
+Utilisez un **disque SSD/NVMe avec un système de fichiers local** prenant en charge les verrous POSIX. Prévoyez le système, les images et caches de construction Docker, les signatures antivirus, les journaux et la base de données, **puis ajoutez** :
+
+- Les fichiers conservés, les aperçus générés et la **corbeille de 30 jours** ; l’expiration d’un lien ne supprime pas ses fichiers.
+- Les imports temporaires conservés jusqu’à **24 heures** et les ZIP des téléchargements simultanés. L’admission des imports réserve prudemment deux fois les octets en attente ; celle des ZIP réserve la taille décompressée complète et les métadonnées. Voir les [réservations de disque](docs/RELIABILITY.md#resumable-uploads).
+- Chaque sauvegarde locale conservée et une copie complète supplémentaire pour tester une restauration. Ne comptez pas sur une réduction de taille des fichiers déjà compressés ; gardez aussi des copies chiffrées hors du serveur.
+- Le swap s’il utilise le même disque, avec un objectif d’**au moins 20 % d’espace libre** après ces réserves.
+
+**Exemple de dimensionnement :** 25 Gio pour le système, les données des services et le swap + 20 Gio de fichiers, corbeille comprise + une sauvegarde de 20 Gio + 20 Gio pour son test de restauration + 10 Gio de travail pour les transferts = 95 Gio. Prévoyez **au moins 120 Gio de capacité utilisable du système de fichiers** pour conserver environ 20 % de marge. Adaptez chaque poste à la rétention, à la taille des fichiers et aux transferts simultanés ; ce n’est pas une exigence fixe de disque. La valeur par défaut `MIN_FREE_DISK_BYTES=1073741824` (1 Gio) est un seuil de protection à l’admission, pas l’espace libre conseillé.
+
+Les quotas des comptes ne créent pas de capacité disque. Plusieurs liens réutilisent les mêmes fichiers, mais chaque téléchargement consomme de la bande passante sortante ; vérifiez le volume de trafic inclus et le débit montant de l’hébergeur.
+
+### Noyau et contrôles de capacité
+
+Les aperçus de production exigent **Landlock ABI 3+**, normalement Linux 6.2+ avec Landlock activé. Le noyau en cours d’exécution et les permissions du conteneur doivent réellement le permettre. Si l’isolation des aperçus n’est pas disponible, les cartes des fichiers et les téléchargements des originaux restent accessibles ; voir le [déploiement des aperçus](docs/PREVIEWS.md). Une image de conteneur plus récente ne met pas à jour le noyau de l’hôte.
+
+Exécutez ces contrôles en lecture seule **sur l’hôte Linux**, avant l’installation puis pendant des imports, téléchargements et mises à jour de signatures représentatifs :
+
+```sh
+free -h
+swapon --show
+vmstat 1 5
+df -h
+docker stats --no-stream
+```
+
+Surveillez `available` dans `free`, l’activité durable de `si`/`so` dans les échantillons suivants de `vmstat`, et l’espace libre des systèmes de fichiers contenant les données, Docker et les sauvegardes. Du swap occupé ne prouve pas à lui seul une pression actuelle. Les pages **Stockage / Exploitation** affichent les fichiers, quotas et alertes ; adaptez le VPS aux pics observés.
+
 ## Installer sur votre domaine
 
-Prévoir un serveur Linux avec **Docker Engine et Docker Compose v2**, Git et Python 3 pour la configuration. Pour la pile complète, prévoir **8 Go de RAM** (dont jusqu’à 4 Go pour ClamAV), 2 vCPU et un disque adapté à vos fichiers. Ce dimensionnement est un point de départ, pas un résultat de test de charge.
+Choisissez un serveur selon les [besoins ci-dessus](#besoins-serveur--vps), puis configurez votre domaine :
 
 1. Faites pointer l’enregistrement DNS A, et AAAA si utilisé, de votre domaine vers le serveur.
 2. Autorisez les ports entrants **80 et 443**. La base, l’application et l’antivirus ne doivent pas être exposés directement.
