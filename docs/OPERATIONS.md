@@ -11,7 +11,7 @@ Internet :443 → Caddy → Gunicorn / Django → PostgreSQL (réseau privé)
 
 Seuls Caddy et les ports 80/443 sont accessibles depuis Internet. ClamAV dispose d’une sortie réseau pour mettre à jour ses signatures. Le service applicatif sort sur le réseau frontal pour le SMTP éventuel. Le serveur doit avoir suffisamment de disque pour les fichiers, les ZIP temporaires, la base et les sauvegardes.
 
-Visez 8 Go de RAM pour démarrer avec la pile complète. La limite de ClamAV est 4 Go, en accord avec les [recommandations de son image officielle](https://docs.clamav.net/manual/Installing/Docker.html). Les mises à jour de signatures peuvent augmenter temporairement la consommation.
+Visez 8 Gio de RAM et 2 vCPU pour démarrer sur un serveur dédié à la pile complète. Les plafonds des conteneurs totalisent 6,5 Gio, dont 4 Gio pour ClamAV ; prévoyez aussi les besoins du système et des opérations de maintenance. Les mises à jour de signatures peuvent augmenter temporairement la consommation. La section [Besoins serveur / VPS](../README.fr.md#besoins-serveur--vps), également disponible [en anglais](../README.md#server--vps-requirements), détaille RAM, swap, stockage, sauvegardes, noyau et contrôles de capacité. Sur un VPS partagé, ajoutez les besoins des autres applications.
 
 ## Démarrage et diagnostic
 

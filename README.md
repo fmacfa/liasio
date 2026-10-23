@@ -55,9 +55,55 @@ For a workflow entirely in the interface, use **Create multiple links**: enter a
 
 The [batch API](docs/guide/en/bulk-links-api.md) accepts names or a quantity and returns the corresponding links in order. Batches appear in **My batches**, can be read and exported as Excel/CSV, and support safe retries. Use the included [Python client](examples/batches.py) from a terminal or Codex, or call the API from your website's backend with a private key.
 
+## Server / VPS requirements
+
+Use a Linux server with **Docker Engine and Docker Compose v2**, Git, and Python 3 for configuration. The following are planning recommendations for the complete stack, including antivirus; they are not measured capacity guarantees or a maximum user count. One GiB is 1,073,741,824 bytes; check the units advertised by your hosting provider.
+
+| Dedicated server profile | CPU | RAM |
+| --- | --- | --- |
+| Small instance with occasional simultaneous transfers | 2 vCPUs | **8 GiB** |
+| More headroom for simultaneous uploads, scanning and ZIP generation | 4 vCPUs | **12–16 GiB** |
+
+### RAM and swap
+
+**RAM** is working memory for the running services. The limits in [compose.yaml](compose.yaml) currently total **6.5 GiB**: ClamAV 4 GiB, application 1 GiB, PostgreSQL and previews 512 MiB each, maintenance and webhooks 256 MiB each. These are individual ceilings, not reserved or constant consumption. Linux, Docker, Caddy and backup/build processes need additional memory. ClamAV alone [recommends 4 GiB](https://docs.clamav.net/manual/Installing/Docker.html#memory-ram-requirements), with temporary peaks during signature updates.
+
+On a **shared VPS**, add the needs of your existing sites, databases and applications, including their peaks. A server with 8 GiB installed but only 2 GiB available is not equivalent to a dedicated 8 GiB server. CloudPanel does not reduce these requirements; plan the reverse proxy and existing port bindings using the [operations guide](docs/OPERATIONS.md#autre-reverse-proxy).
+
+**Swap** uses disk space as a slower memory buffer. An optional **2–4 GiB** swap area is a starting allowance for occasional pressure, not a way to fit the complete stack onto an undersized VPS. Frequent swap reads/writes during transfers call for more RAM or less competing workload. Docker's effective swap allowance depends on the host and container settings; this Compose file does not set `memswap_limit`. See [Docker memory and swap limits](https://docs.docker.com/engine/containers/resource_constraints/#--memory-swap-details).
+
+### Disk space and bandwidth
+
+Use **SSD/NVMe storage on a local filesystem** with working POSIX file locks. Budget for the operating system, Docker images/build cache, antivirus signatures, logs and database, **plus**:
+
+- Stored files, generated previews and the **30-day trash**; an expired link does not delete its files.
+- Upload staging retained for up to **24 hours**, and temporary ZIPs for simultaneous downloads. Upload admission conservatively reserves twice the pending bytes; ZIP admission reserves the full uncompressed size plus metadata. See [disk reservations](docs/RELIABILITY.md#resumable-uploads).
+- Every retained local backup and an additional full copy for a restore test. Do not assume already-compressed files will shrink in a backup; keep encrypted copies off the server too.
+- Swap, if stored on the same disk, and a target of **at least 20% free space** after these budgets.
+
+**Planning example:** 25 GiB for the system, service data and swap + 20 GiB of files including trash + one 20 GiB backup + 20 GiB for its restore test + 10 GiB of transfer workspace = 95 GiB. Allow **at least 120 GiB of usable filesystem capacity** to retain roughly 20% headroom. Adjust each allowance to your retention, file sizes and concurrent transfers; this is an example, not a fixed disk requirement. The default `MIN_FREE_DISK_BYTES=1073741824` (1 GiB) is an admission safety floor, not the recommended free space.
+
+Account quotas do not create disk capacity. Multiple sharing links reuse the same files, but every download consumes outbound bandwidth; check both your provider's transfer allowance and uplink speed.
+
+### Kernel and capacity checks
+
+Production previews need **Landlock ABI 3+**, normally Linux 6.2+ with Landlock enabled. The running kernel and container permissions must actually support it. Unsupported preview isolation leaves file cards available and originals downloadable; see [preview deployment](docs/PREVIEWS.md). A newer container image alone cannot upgrade the host kernel.
+
+Run these read-only checks **on the Linux host**, before installation and again during representative uploads, downloads and signature updates:
+
+```sh
+free -h
+swapon --show
+vmstat 1 5
+df -h
+docker stats --no-stream
+```
+
+Check `available` in `free`, sustained `si`/`so` activity in the later `vmstat` samples, and free space on the files, Docker and backup filesystems. Used swap alone does not prove current pressure. Use the application's **Storage / Operations** pages for file counts, quotas and alerts; adapt the VPS size to observed peaks.
+
 ## Install on your domain
 
-Use a Linux server with **Docker Engine and Docker Compose v2**, Git, and Python 3 for configuration. For the complete stack, start with **8 GB of RAM** (including up to 4 GB for ClamAV), 2 vCPUs, and enough disk space for your files. These are starting recommendations, not load-test results.
+Choose a server using the [requirements above](#server--vps-requirements), then configure your domain:
 
 1. Point your domain's DNS A record, and AAAA record if used, to the server.
 2. Allow inbound ports **80 and 443**. Do not expose the database, application, or antivirus service directly.
