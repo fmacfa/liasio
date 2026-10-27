@@ -98,7 +98,7 @@ Pour le renforcement après 0.4.0, arrêtez `webhooks` avant la migration `0006`
 
 Le conteneur `maintenance` exécute la purge toutes les cinq minutes : sessions expirées, limites de fréquence, anciennes invitations, événements au-delà de la rétention, fichiers orphelins de plus de 24 h. Une expiration de lien ne détruit **pas** les fichiers, qui peuvent être utilisés par d’autres liens.
 
-Ne changez pas `SECRET_KEY` à chaque déploiement : sa rotation invalide sessions, invitations et liens de partage. Après suspicion de fuite, changez-la volontairement, redémarrez les services et rediffusez de nouveaux liens. Gardez une politique de sauvegarde des secrets indépendante de celle du dépôt public.
+Ne changez pas `SECRET_KEY` à chaque déploiement : sa rotation invalide sessions, invitations et liens de partage. Après suspicion de fuite, changez-la volontairement, redémarrez tous les services avec la même clé et rediffusez de nouveaux liens. La commande `python manage.py refresh_share_urls` actualise les empreintes des liens courts avec la nouvelle clé ; Docker l’exécute automatiquement au démarrage après les migrations. Exécutez-la aussi après une migration en installation manuelle. Les anciennes adresses restent invalides après rotation. Gardez une politique de sauvegarde des secrets indépendante de celle du dépôt public. La migration `0010` ajoute l’index des liens courts ; un retour à une version précédente doit conserver ce champ et le décodeur des codes de 22 caractères si des liens courts ont déjà été diffusés. Voir [SHARE_LINKS.md](SHARE_LINKS.md).
 
 ## Autre reverse proxy
 

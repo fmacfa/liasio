@@ -35,7 +35,7 @@ Interface français / anglais · Licence **MIT** · Python / Django · Docker Co
 
 **Un dossier n’est stocké qu’une fois.** Vous pouvez créer un lien pour un client avec un mot de passe, un autre qui expire demain et un troisième utilisable une fois.
 
-**Des liens de partage plus courts :** la partie signée après `/s/` passe de 97 à 43 caractères. Recopiez un lien depuis **Mes liens** ou exportez son lot pour obtenir l’URL compacte. Les anciennes URL restent valables avec le même mot de passe, la même expiration et le même compteur de téléchargements. Voir le [format et la compatibilité des liens](docs/SHARE_LINKS.md).
+**Des liens de partage plus courts :** un code opaque de 22 caractères suit `/s/`, à la place des anciens jetons de 43 ou 97 caractères. Recopiez un lien depuis **Mes liens** ou exportez son lot pour obtenir l’URL courte. Les anciennes URL restent valables avec le même mot de passe, la même expiration et le même compteur de téléchargements. Voir le [format, la migration et la compatibilité des liens](docs/SHARE_LINKS.md).
 
 ### Ce que signifie « ouvert » ou « téléchargé »
 
@@ -202,7 +202,7 @@ Les aperçus sont des JPEG réduits, sans métadonnées, générés par un moteu
 - Aucune inscription publique ; initialisation protégée, invitations signées, expirables et consommées une seule fois.
 - Contrôle du propriétaire sur chaque ressource ; un administrateur web ne peut pas parcourir les fichiers d’un autre compte.
 - Sessions serveur, cookies HttpOnly/Secure en production, protection CSRF, validation d’hôte, CSP restrictive, protection contre l’encapsulation.
-- Capacités HMAC-SHA256 non déductibles des seuls identifiants de base ; les URL compactes utilisent une signature d’authentification de 128 bits, les anciennes URL conservent leur signature complète. Mots de passe des liens hachés, aucun jeton de partage en clair dans la base. Voir le [format des jetons](docs/SHARE_LINKS.md).
+- Codes de partage opaques de 128 bits dérivés avec HMAC-SHA256, résolus par un index unique d’empreintes ; ni les identifiants ni ces empreintes ne suffisent à retrouver les codes. Les anciennes URL signées conservent leur validation d’origine. Mots de passe des liens hachés, aucun code de partage en clair dans la base. Voir le [format des jetons](docs/SHARE_LINKS.md).
 - Limitation des tentatives en base, partagée entre workers ; identité IP utilisée sous forme de HMAC pour cette limitation et purgée ensuite.
 - Fichiers hors du répertoire web, noms physiques aléatoires, chemins relatifs validés, contrôle des extensions et des volumes.
 - ClamAV obligatoire dans la pile de production ; réponse inattendue, virus, limite d’analyse ou indisponibilité bloquent l’import.

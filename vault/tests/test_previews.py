@@ -33,6 +33,7 @@ from vault.previews import (
     socket_render,
 )
 from vault.security import capability
+from vault.share_urls import short_code
 from vault.storage import add_files
 from vault.trash import purge, trash_assets
 from .test_security import IsolatedFiles, PASSWORD
@@ -64,7 +65,7 @@ class PreviewTests(IsolatedFiles, TestCase):
         self.link = ShareLink.objects.create(
             collection=self.folder, label="Client", allow_previews=True, max_downloads=1
         )
-        self.token = capability("share", self.link.pk)
+        self.token = short_code(self.link.pk)
         self.url = reverse("file_preview", args=[self.token, self.asset.pk])
 
     def add(self, path, content):
@@ -129,18 +130,21 @@ class PreviewTests(IsolatedFiles, TestCase):
         session.save()
         self.assertEqual(self.client.get(self.url).status_code, 404)
 
-    def test_legacy_preview_uses_same_grant_and_revocation_as_compact_link(self):
-        legacy_url = reverse(
-            "file_preview", args=[legacy_capability("share", self.link.pk), self.asset.pk]
-        )
+    def test_previous_previews_use_same_grant_and_revocation_as_short_link(self):
+        previous_urls = [reverse(
+            "file_preview", args=[encoder("share", self.link.pk), self.asset.pk]
+        ) for encoder in (capability, legacy_capability)]
         self.link.password_hash = make_password(PASSWORD)
         self.link.save(update_fields=["password_hash"])
-        self.assertEqual(self.client.get(legacy_url).status_code, 404)
+        for url in previous_urls:
+            self.assertEqual(self.client.get(url).status_code, 404)
         self.client.post(reverse("unlock", args=[self.token]), {"password": PASSWORD})
-        self.assertEqual(self.client.get(legacy_url).status_code, 200)
+        for url in previous_urls:
+            self.assertEqual(self.client.get(url).status_code, 200)
         self.assertEqual(self.client.get(self.url).status_code, 200)
         ShareLink.objects.filter(pk=self.link.pk).update(revoked_at=timezone.now())
-        self.assertEqual(self.client.get(legacy_url).status_code, 404)
+        for url in previous_urls:
+            self.assertEqual(self.client.get(url).status_code, 404)
         self.assertEqual(self.client.get(self.url).status_code, 404)
 
     def test_revocation_expiry_suspension_trash_optout_and_scanning_block_cache(self):

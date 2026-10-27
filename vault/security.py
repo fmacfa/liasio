@@ -43,7 +43,15 @@ def verify_capability(purpose, token):
     try:
         if not isinstance(token, str):
             raise ValueError
-        if len(token) == 43 and re.fullmatch(r"[A-Za-z0-9_-]{43}", token):
+        if (
+            purpose == "share"
+            and len(token) == 22
+            and re.fullmatch(r"[A-Za-z0-9_-]{21}[AQgw]", token)
+        ):
+            from .share_urls import resolve_short_code
+
+            return resolve_short_code(token)
+        elif len(token) == 43 and re.fullmatch(r"[A-Za-z0-9_-]{43}", token):
             payload = base64.b64decode(token + "=", altchars=b"-_", validate=True)
             parsed = uuid.UUID(bytes=payload[:16])
             # Compare the canonical encoding too: reject alternate padding bits.

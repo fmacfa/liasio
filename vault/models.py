@@ -177,6 +177,14 @@ class Asset(models.Model):
         return preview_kind(self)
 
 
+class ShareLinkQuerySet(models.QuerySet):
+    def bulk_create(self, objs, *args, **kwargs):
+        objs = list(objs)
+        for obj in objs:
+            obj._set_short_code()
+        return super().bulk_create(objs, *args, **kwargs)
+
+
 class ShareLink(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     collection = models.ForeignKey(
@@ -194,9 +202,25 @@ class ShareLink(models.Model):
     downloads = models.PositiveIntegerField(default=0)
     revoked_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    short_code_digest = models.CharField(
+        max_length=64, unique=True, null=True, blank=True, editable=False
+    )
+    objects = ShareLinkQuerySet.as_manager()
 
     class Meta:
         ordering = ["-created_at"]
+
+    def _set_short_code(self):
+        from .share_urls import code_digest, short_code
+
+        if self.pk is None:
+            self.pk = uuid.uuid4()
+        self.short_code_digest = code_digest(short_code(self.pk))
+
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            self._set_short_code()
+        return super().save(*args, **kwargs)
 
     @property
     def status_code(self):
@@ -219,9 +243,9 @@ class ShareLink(models.Model):
 
     @property
     def public_url(self):
-        from .security import capability
+        from .share_urls import preferred_share_token
 
-        return f"{settings.APP_URL}/s/{capability('share', self.id)}/"
+        return f"{settings.APP_URL}/s/{preferred_share_token(self)}/"
 
 
 class LinkBatch(models.Model):
