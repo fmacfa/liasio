@@ -22,6 +22,10 @@ Les URL de partage utilisent désormais un code imprévisible de 22 caractères 
 
 ## Voir ce que découvre le destinataire
 
+Le bouton **Télécharger les fichiers** apparaît directement sous le titre du dossier, avant la liste des fichiers. Il indique la taille du ZIP et les éventuelles limites de validité ou de téléchargement. Un second bouton reste disponible sous les fichiers pour télécharger après les avoir consultés. Les deux boutons téléchargent le même ZIP avec les mêmes conditions d’accès.
+
+![Bouton de téléchargement visible en haut sur mobile](../../screenshots/user-guide/fr/download-top.png)
+
 ![Galerie du destinataire](../../screenshots/user-guide/fr/preview.png)
 
 La liste montre les dossiers et sous-dossiers dépliables, dans leur ordre d’ajout. Avec les aperçus activés, ouvrez **Voir les aperçus des fichiers** : les JPEG, PNG, WebP et GIF (première image), ainsi que les PDF (première page), se consultent avant téléchargement. L’original doit peser au maximum 20 Mio ; les images sont limitées à 24 mégapixels. Les aperçus sont des JPEG réduits et sans métadonnées. Les autres formats affichent leur nom, leur type et leur taille. Un aperçu indisponible n’empêche pas le téléchargement autorisé de l’original.

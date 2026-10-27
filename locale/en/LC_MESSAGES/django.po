@@ -4088,6 +4088,10 @@ msgstr ""
 msgid "Retour aux automatisations"
 msgstr "Back to automations"
 
+#: templates/components/share_download.html:6 templates/branding.html:46
+msgid "Télécharger les fichiers"
+msgstr "Download files"
+
 #~ msgid "Partagé avec Liasio."
 #~ msgstr "Shared with Liasio."
 
