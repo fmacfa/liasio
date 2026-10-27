@@ -5,6 +5,7 @@ import hashlib
 import hmac
 import uuid
 from datetime import timedelta
+from itertools import permutations
 
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
@@ -15,6 +16,7 @@ from django.utils import timezone
 
 from vault.models import Event, Invitation, ShareLink, User
 from vault.security import capability, verify_capability
+from vault.share_urls import short_code
 from .test_security import IsolatedFiles, PASSWORD
 
 
@@ -127,18 +129,21 @@ class CapabilityCompatibilityTests(IsolatedFiles, TestCase):
         self.link = ShareLink.objects.create(
             collection=self.folder, label="Client", max_downloads=1
         )
-        self.short = reverse("share", args=[capability("share", self.link.pk)])
+        self.short = reverse("share", args=[short_code(self.link.pk)])
+        self.compact = reverse("share", args=[capability("share", self.link.pk)])
         self.legacy = reverse("share", args=[legacy_capability("share", self.link.pk)])
+        self.urls = (self.short, self.compact, self.legacy)
 
-    def test_both_urls_share_open_tracking_and_one_download_allowance(self):
-        self.assertEqual(self.client.get(self.legacy).status_code, 200)
-        self.assertEqual(self.client.get(self.short).status_code, 200)
+    def test_all_urls_share_open_tracking_and_one_download_allowance(self):
+        for url in self.urls:
+            self.assertEqual(self.client.get(url).status_code, 200)
         self.assertEqual(Event.objects.filter(link=self.link, kind="opened").count(), 1)
         response = self.client.post(self.legacy + "download/")
         self.assertEqual(response.status_code, 200)
         self.assertTrue(b"".join(response.streaming_content))
-        self.assertEqual(self.client.post(self.short + "download/").status_code, 410)
-        self.assertEqual(self.client.get(self.legacy).status_code, 410)
+        for url in self.urls:
+            self.assertEqual(self.client.post(url + "download/").status_code, 410)
+            self.assertEqual(self.client.get(url).status_code, 410)
         self.assertEqual(
             Event.objects.filter(link=self.link, kind="download_started").count(), 1
         )
@@ -148,7 +153,7 @@ class CapabilityCompatibilityTests(IsolatedFiles, TestCase):
     def test_password_grants_are_shared_without_bypassing_protection(self):
         self.link.password_hash = make_password(PASSWORD)
         self.link.save(update_fields=["password_hash"])
-        for unlock_url, other_url in ((self.short, self.legacy), (self.legacy, self.short)):
+        for unlock_url, other_url in permutations(self.urls, 2):
             with self.subTest(unlock_url=unlock_url):
                 client = Client()
                 for url in (unlock_url, other_url):
@@ -160,13 +165,13 @@ class CapabilityCompatibilityTests(IsolatedFiles, TestCase):
                 )
                 self.assertContains(client.get(other_url), self.folder.title)
 
-    def test_revocation_expiration_and_suspension_apply_to_both_urls(self):
+    def test_revocation_expiration_and_suspension_apply_to_all_urls(self):
         for changes in (
             {"revoked_at": timezone.now()},
             {"revoked_at": None, "expires_at": timezone.now() - timedelta(seconds=1)},
         ):
             ShareLink.objects.filter(pk=self.link.pk).update(**changes)
-            for url in (self.short, self.legacy):
+            for url in self.urls:
                 for suffix in ("", "download/", "unlock/"):
                     response = (
                         self.client.post(url + suffix)
@@ -175,20 +180,20 @@ class CapabilityCompatibilityTests(IsolatedFiles, TestCase):
                     self.assertEqual(response.status_code, 410)
         ShareLink.objects.filter(pk=self.link.pk).update(revoked_at=None, expires_at=None)
         User.objects.filter(pk=self.owner.pk).update(is_active=False)
-        for url in (self.short, self.legacy):
+        for url in self.urls:
             self.assertEqual(self.client.get(url).status_code, 410)
             self.assertEqual(self.client.post(url + "download/").status_code, 410)
 
-    def test_branding_requires_the_same_grant_and_active_link_for_both_formats(self):
+    def test_branding_requires_the_same_grant_and_active_link_for_all_formats(self):
         self.link.password_hash = make_password(PASSWORD)
         self.link.save(update_fields=["password_hash"])
-        for url in (self.short, self.legacy):
+        for url in self.urls:
             self.assertEqual(self.client.get(url + "brand/style/").status_code, 404)
         self.client.post(self.short + "unlock/", {"password": PASSWORD})
-        for url in (self.short, self.legacy):
+        for url in self.urls:
             self.assertEqual(self.client.get(url + "brand/style/").status_code, 200)
         ShareLink.objects.filter(pk=self.link.pk).update(revoked_at=timezone.now())
-        for url in (self.short, self.legacy):
+        for url in self.urls:
             self.assertEqual(self.client.get(url + "brand/style/").status_code, 404)
 
     def test_invitation_remains_single_use_across_both_formats(self):

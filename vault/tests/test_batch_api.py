@@ -8,6 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import timedelta
 from unittest.mock import patch
 
+from django.conf import settings
 from django.contrib.auth.hashers import check_password, make_password
 from django.db import close_old_connections, connections
 from django.test import Client, TestCase, TransactionTestCase
@@ -113,10 +114,12 @@ class BatchAPITests(IsolatedFiles, TestCase):
         self.assertNotIn(" a ", APIReceipt.objects.get().response)
         self.assertNotIn(data["items"][0]["url"], APIReceipt.objects.get().response)
 
-    def test_upgrade_preserves_api_replays_and_exports_current_compact_urls(self):
+    def test_upgrade_preserves_api_replays_and_exports_current_short_urls(self):
         # A pre-upgrade receipt must replay verbatim, even though fresh reads use
         # the new URL representation for those same database links.
-        with patch("vault.security.capability", side_effect=legacy_capability):
+        with patch.object(ShareLink, "public_url", property(
+            lambda link: f"{settings.APP_URL}/s/{legacy_capability('share', link.pk)}/"
+        )):
             original = self.post()
         self.assertEqual(original.status_code, 201)
         old = original.json()
@@ -128,13 +131,13 @@ class BatchAPITests(IsolatedFiles, TestCase):
             [row["id"] for row in old["items"]],
         )
         for row, old_row in zip(current["items"], old["items"], strict=True):
-            self.assertRegex(row["url"], r"/s/[A-Za-z0-9_-]{43}/\Z")
+            self.assertRegex(row["url"], r"/s/[A-Za-z0-9_-]{22}/\Z")
             self.assertRegex(old_row["url"], r"/s/[0-9a-f]{32}\.[0-9a-f]{64}/\Z")
             self.assertEqual(self.client.get(row["url"]).status_code, 200)
             self.assertEqual(self.client.get(old_row["url"]).status_code, 200)
         fresh = self.post(key="compact-creation-request").json()
         for row in fresh["items"]:
-            self.assertRegex(row["url"], r"/s/[A-Za-z0-9_-]{43}/\Z")
+            self.assertRegex(row["url"], r"/s/[A-Za-z0-9_-]{22}/\Z")
         csv_response = self.get(
             reverse("api_link_batch_export", args=[old["id"], "csv"])
         )

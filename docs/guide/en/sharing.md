@@ -18,7 +18,7 @@ Open a collection containing files and choose **Create a link**.
 
 Choose **Create link**. In **My links**, copy the URL and send it to the recipient. Passwords protect both the introduction and file list. A recipient does not need a Liasio account.
 
-Sharing URLs now contain a compact, signed 43-character token after `/s/` instead of the previous 97-character token. Existing links also get this format when copied again; **old URLs still work**. Both addresses point to the same link: passwords, expiry, revocation, activity and the download allowance are shared. Batch exports and fresh API responses use the compact URL too; export again to update a previously downloaded spreadsheet. An API retry may return its original long URL, which remains valid. See [link format and compatibility](../../SHARE_LINKS.md).
+Sharing URLs now contain an unpredictable 22-character code after `/s/` instead of the previous 43- or 97-character tokens. Existing links also get this format when copied again; **old URLs still work**. All addresses point to the same link: passwords, expiry, revocation, activity and the download allowance are shared. Batch exports and fresh API responses use the short URL too; export again to update a previously downloaded spreadsheet. An API retry may return its original longer URL, which remains valid. See [link format and compatibility](../../SHARE_LINKS.md).
 
 ## See what the recipient sees
 
