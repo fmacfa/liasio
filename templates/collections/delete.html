@@ -5,7 +5,7 @@
     <div class="panel narrow form-panel">
         <h1>{% translate "Placer ce dossier dans la corbeille ?" %}</h1>
         <p>
-            <strong>{{ collection.title }}</strong>{% translate ", ses" %} {{ collection.files.count }} {% translate "fichier(s), seront conservés pendant" %} {{ trash_retention }} {% translate "jours. Ses liens seront révoqués. Le quota sera libéré après la suppression définitive." %}
+            {% blocktranslate with title=collection.title days=trash_retention count count=collection.files.count %}<strong>{{ title }}</strong> et son {{ count }} fichier seront conservés pendant {{ days }} jours.{% plural %}<strong>{{ title }}</strong> et ses {{ count }} fichiers seront conservés pendant {{ days }} jours.{% endblocktranslate %} {% translate "Ses liens seront révoqués. Le quota sera libéré après la suppression définitive." %}
         </p>
         <form method="post">
             {% csrf_token %}

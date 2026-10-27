@@ -18,4 +18,4 @@ Version 0.4 · Ces mêmes guides sont accessibles dans votre instance via **Guid
 12. [Liens en lot, Excel et CSV](bulk-links.md)
 13. [Créer, consulter et exporter les lots par API](bulk-links-api.md)
 
-[English](../en/README.md) · [Français](../fr/README.md) · [API reference](../../API.md)
+[English](../en/README.md) · [Français](../fr/README.md) · [Deutsch](../de/README.md) · [API reference](../../API.md)

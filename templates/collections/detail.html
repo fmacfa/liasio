@@ -7,7 +7,7 @@
     <div>
       <div class="eyebrow">{% translate "DOSSIER DE PARTAGE" %}</div>
       <h1>{{ collection.title }}</h1>
-      <p>{{ collection.files.count }} {% translate "fichier" %}{{ collection.files.count|pluralize }} · {{ collection.total_bytes|filesizeformat }} {% translate "· Créé le" %} {{ collection.created_at|date:"DATE_FORMAT" }}</p>
+      <p>{% blocktranslate count count=collection.files.count %}{{ count }} fichier{% plural %}{{ count }} fichiers{% endblocktranslate %} · {{ collection.total_bytes|filesizeformat }} {% translate "· Créé le" %} {{ collection.created_at|date:"DATE_FORMAT" }}</p>
     </div>
     <div class="actions">
     <a class="button secondary" href="{% url 'link_batch_prepare' collection.pk %}">{% translate "Créer plusieurs liens" %}</a>

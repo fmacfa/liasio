@@ -43,13 +43,13 @@ Les contributions sont proposées sous MIT. Aucun CLA n’est demandé par ce d�
 
 ## Traductions et guides
 
-Les messages source sont en français, les catalogues anglais dans `locale/en/LC_MESSAGES/`. Utilisez `gettext_lazy` pour les champs et `translate` / `blocktranslate` dans les templates ; gardez les états métier et identifiants API indépendants des traductions. Les textes JavaScript passent par `gettext` et `interpolate`, servis par `/jsi18n/`. Installez GNU gettext pour extraire et compiler :
+Les messages source sont en français, les catalogues anglais et allemands dans `locale/{en,de}/LC_MESSAGES/`. Utilisez `gettext_lazy` pour les champs et `translate` / `blocktranslate` dans les templates ; gardez les états métier et identifiants API indépendants des traductions. Les textes JavaScript passent par `gettext` et `interpolate`, servis par `/jsi18n/`. Installez GNU gettext pour extraire et compiler :
 
 ```sh
-uv run --env-file .env python manage.py makemessages -l en --ignore=.venv --ignore=.local --ignore=staticfiles --ignore=vault/migrations --ignore=vault/tests
-uv run --env-file .env python manage.py makemessages -l en -d djangojs --ignore=.venv --ignore=.local --ignore=staticfiles
-uv run --env-file .env python manage.py compilemessages -l en --ignore=.venv --ignore=.local
+uv run --env-file .env python manage.py makemessages -l en -l de --ignore=.venv --ignore=.local --ignore=staticfiles --ignore=vault/migrations --ignore=vault/tests
+uv run --env-file .env python manage.py makemessages -l en -l de -d djangojs --ignore=.venv --ignore=.local --ignore=staticfiles
+uv run --env-file .env python manage.py compilemessages -l en -l de --ignore=.venv --ignore=.local
 uv run python scripts/check_documentation.py
 ```
 
-Incluez `.po` et `.mo`, sans entrée vide ou fuzzy. Les guides de `docs/guide/{fr,en}/` sont lus directement par l’application et par GitHub. Mettez à jour les deux langues et les captures locales réelles dans `docs/screenshots/user-guide/`. Utilisez exclusivement des données de démonstration, aucun secret visible. Le vérificateur CI contrôle les liens, images, catalogues compilés et paramètres de traduction.
+Incluez `.po` et `.mo`, sans entrée vide ou fuzzy. Les guides de `docs/guide/{fr,en,de}/` sont lus directement par l’application et par GitHub. Mettez à jour les trois langues et les captures locales réelles dans `docs/screenshots/user-guide/`. Utilisez exclusivement des données de démonstration, aucun secret visible. Le vérificateur CI contrôle les liens, images, catalogues compilés et paramètres de traduction.

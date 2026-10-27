@@ -324,6 +324,47 @@ class Event(models.Model):
 
 
 class Audit(models.Model):
+    # Keep stable audit identifiers in storage; translate only their presentation.
+    ACTION_LABELS = {
+        "instance_initialized": _("Instance initialisée"),
+        "invitation_accepted": _("Invitation acceptée"),
+        "invitation_created": _("Invitation créée"),
+        "invitation_revoked": _("Invitation révoquée"),
+        "login": _("Connexion réussie"),
+        "password_changed": _("Mot de passe modifié"),
+        "member_activated": _("Membre réactivé"),
+        "member_suspended": _("Membre suspendu"),
+        "quota_changed": _("Quota modifié"),
+        "quota_updated": _("Quota modifié"),
+        "collection_created": _("Dossier créé"),
+        "collection_trashed": _("Dossier placé dans la corbeille"),
+        "files_uploaded": _("Fichiers enregistrés"),
+        "files_trashed": _("Fichiers placés dans la corbeille"),
+        "upload_started": _("Envoi démarré"),
+        "upload_canceled": _("Envoi annulé"),
+        "trash_restored": _("Élément restauré"),
+        "trash_purged": _("Élément supprimé définitivement"),
+        "link_created": _("Lien créé"),
+        "link_revoked": _("Lien révoqué"),
+        "link_renamed": _("Lien renommé"),
+        "link_batch_renamed": _("Lot renommé"),
+        "link_batch_deleted": _("Liste de liens supprimée"),
+        "link_previews_changed": _("Aperçus du lien modifiés"),
+        "api_key_created": _("Clé API créée"),
+        "api_key_revoked": _("Clé API révoquée"),
+        "webhook_created": _("Webhook créé"),
+        "webhook_paused": _("Webhook mis en pause"),
+        "webhook_deleted": _("Webhook supprimé"),
+        "webhook_resume": _("Webhook réactivé"),
+        "webhook_rotate": _("Secret du webhook renouvelé"),
+        "webhook_queue_full": _("Webhook mis en pause : file pleine"),
+        "mfa_enabled": _("Double authentification activée"),
+        "mfa_disable": _("Double authentification désactivée"),
+        "mfa_regenerate": _("Codes de récupération renouvelés"),
+        "mfa_recovery_used": _("Code de récupération utilisé"),
+        "backup_restore_verified": _("Restauration de sauvegarde vérifiée"),
+    }
+
     actor = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL
     )
@@ -331,6 +372,10 @@ class Audit(models.Model):
     # An object UUID or numeric id only, never an email, password or capability.
     target = models.CharField(max_length=64, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    @property
+    def action_label(self):
+        return self.ACTION_LABELS.get(self.action, _("Autre action"))
 
     class Meta:
         ordering = ["-created_at", "-id"]
@@ -384,6 +429,16 @@ class OperationalAlert(models.Model):
     notified_at = models.DateTimeField(null=True, blank=True)
     first_seen = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def display_message(self):
+        # Quota messages were interpolated before storage. Translate their
+        # template again using the stable account identifier, not the old text.
+        if self.key.startswith("quota-") and self.key[6:].isdigit():
+            return _(
+                "Le compte n° %(id)s atteint au moins 90 %% de son quota (envois réservés compris)."
+            ) % {"id": self.key[6:]}
+        return _(self.message)
 
 
 class APIToken(models.Model):

@@ -7,8 +7,8 @@
   <h3>{{ item.title }}</h3>
   <p>{{ item.description|default:_('Votre prochain partage commence ici.')|truncatechars:86 }}</p>
   <div class="card-meta">
-    <span>{{ item.files.count }} {% translate "fichier" %}{{ item.files.count|pluralize }} · {{ item.total_bytes|filesizeformat }}</span>
-    <span>{{ item.link_count }} {% translate "lien" %}{{ item.link_count|pluralize }}</span>
+    <span>{% blocktranslate count count=item.files.count %}{{ count }} fichier{% plural %}{{ count }} fichiers{% endblocktranslate %} · {{ item.total_bytes|filesizeformat }}</span>
+    <span>{% blocktranslate count count=item.link_count %}{{ count }} lien{% plural %}{{ count }} liens{% endblocktranslate %}</span>
   </div>
   <div class="card-bottom">{% translate "Modifié le" %} {{ item.updated_at|date:"DATE_FORMAT" }}</div>
 </a>

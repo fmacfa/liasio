@@ -8,9 +8,9 @@ Liasio est le nouveau nom de LinkVault. Le dépôt se trouve désormais sous `fm
 
 Liasio est une application open source de partage de fichiers à installer sur votre serveur. Constituez des dossiers, personnalisez leur présentation et créez plusieurs liens indépendants avec mot de passe, expiration ou limite de téléchargements.
 
-Interface français / anglais · Licence **MIT** · Python / Django · Docker Compose
+Interface français / anglais / allemand · Licence **MIT** · Python / Django · Docker Compose
 
-> **Version 0.4 — automatisations et interface bilingue.** API à permissions limitées, webhooks signés et guides illustrés complètent les aperçus, TOTP, les envois reprenables et la corbeille. Le projet reste jeune, sans audit humain indépendant ni chiffrement de bout en bout.
+> **Version 0.4 — automatisations et interface trilingue.** API à permissions limitées, webhooks signés et guides illustrés complètent les aperçus, TOTP, les envois reprenables et la corbeille. Le projet reste jeune, sans audit humain indépendant ni chiffrement de bout en bout.
 
 ![Tableau de bord Liasio, avec des données fictives](docs/screenshots/dashboard.png)
 
@@ -46,7 +46,7 @@ Interface français / anglais · Licence **MIT** · Python / Django · Docker Co
 
 ## Guides et automatisations
 
-Le **[guide français illustré](docs/guide/fr/README.md)** et sa **[version anglaise](docs/guide/en/README.md)** sont aussi intégrés à l’application, menu **Guide d’utilisation** (`/help/`). Le sélecteur **FR / EN** traduit les formulaires, les messages, la progression et les pages destinataires.
+Le **[guide français illustré](docs/guide/fr/README.md)**, sa **[version anglaise](docs/guide/en/README.md)** et sa **[version allemande](docs/guide/de/README.md)** sont aussi intégrés à l’application, menu **Guide d’utilisation** (`/help/`). Le sélecteur **FR / EN / DE** traduit les formulaires, les messages, la progression et les pages destinataires.
 
 Pour n8n et vos scripts : [référence API](docs/API.md), [guide des automatisations](docs/guide/fr/automation.md), [client Python d’import](examples/upload.py) et [vérificateur de signature](examples/verify_webhook.py). Les clés sont limitées, expirables et révocables ; les webhooks disposent d’un historique et de nouvelles tentatives bornées.
 

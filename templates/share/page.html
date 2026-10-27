@@ -38,7 +38,7 @@
     <section class="share-files">
       <div class="section-heading">
         <h2>{% translate "Votre dossier" %}</h2>
-        <span>{{ collection.files.count }} {% translate "fichier" %}{{ collection.files.count|pluralize }} · {{ collection.total_bytes|filesizeformat }}</span>
+        <span>{% blocktranslate count count=collection.files.count %}{{ count }} fichier{% plural %}{{ count }} fichiers{% endblocktranslate %} · {{ collection.total_bytes|filesizeformat }}</span>
       </div>
       {% include "components/file_tree.html" with nodes=file_tree %}
       {% if link.allow_previews %}

@@ -1,2 +1,8 @@
-{% load i18n %}{% get_current_language as current_language %}
-<form method="post" action="{% url 'set_language' %}" class="language-picker" aria-label="{% translate 'Langue' %}">{% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}"><button type="submit" name="language" value="fr" lang="fr" aria-label="Français" aria-pressed="{% if current_language == 'fr' %}true{% else %}false{% endif %}">FR</button><button type="submit" name="language" value="en" lang="en" aria-label="English" aria-pressed="{% if current_language == 'en' %}true{% else %}false{% endif %}">EN</button></form>
+{% load i18n %}{% get_current_language as current_language %}{% get_available_languages as available_languages %}
+<form method="post" action="{% url 'set_language' %}" class="language-picker" aria-label="{% translate 'Langue' %}">
+  {% csrf_token %}
+  <input type="hidden" name="next" value="{{ request.get_full_path }}">
+  {% for code, name in available_languages %}
+    <button type="submit" name="language" value="{{ code }}" lang="{{ code }}" aria-label="{{ name }}" aria-pressed="{% if current_language == code %}true{% else %}false{% endif %}">{{ code|upper }}</button>
+  {% endfor %}
+</form>

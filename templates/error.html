@@ -2,6 +2,7 @@
 {% load i18n %}
 {% block body_class %}public-body{% endblock %}
 {% block body %}
+  <div class="public-language">{% include "components/language.html" %}</div>
   <header class="public-header">
     <a class="brand" href="{% url 'login' %}">{% include "components/logo.html" %}</a>
   </header>

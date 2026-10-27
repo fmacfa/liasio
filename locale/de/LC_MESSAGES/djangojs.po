@@ -1,0 +1,221 @@
+# English translations for Liasio. MIT license.
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Liasio 0.4.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-27 12:39+0100\n"
+"PO-Revision-Date: 2026-10-27 13:00+0100\n"
+"Last-Translator: Liasio contributors\n"
+"Language-Team: German\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: static/app.js:15
+msgid "Lien copié. Prêt à être partagé."
+msgstr "Link kopiert. Bereit zum Teilen."
+
+#: static/app.js:24
+msgid "Lien à copier"
+msgstr "Link zum Kopieren"
+
+#: static/app.js:27
+msgid "Copiez le texte sélectionné avec votre clavier."
+msgstr "Kopieren Sie den ausgewählten Text mit Ihrer Tastatur."
+
+#: static/app.js:72
+msgid ""
+"%(value1)s fichier(s) sélectionné(s) · %(value2)s octets vers la corbeille"
+msgstr "%(value1)s Datei(en) ausgewählt · %(value2)s Bytes für den Papierkorb"
+
+#: static/app.js:72
+msgid "Sélectionnez les fichiers à supprimer."
+msgstr "Wählen Sie die zu löschenden Dateien aus."
+
+#: static/batches.js:30
+msgid "Noms mis à jour. Vérifiez les lignes avant de continuer."
+msgstr "Namen aktualisiert. Prüfen Sie die Zeilen, bevor Sie fortfahren."
+
+#: static/batches.js:39
+msgid "Création des liens…"
+msgstr "Links werden erstellt…"
+
+#: static/branding.js:14
+msgid "Mon espace"
+msgstr "Mein Arbeitsbereich"
+
+#: static/branding.js:39
+msgid "Optimisation de l’image…"
+msgstr "Bild wird optimiert…"
+
+#: static/branding.js:60
+msgid "Image prête. Enregistrez pour appliquer les changements."
+msgstr "Bild bereit. Speichern Sie, um die Änderungen zu übernehmen."
+
+#: static/branding.js:64
+msgid ""
+"Image non prise en charge. Choisissez un PNG, JPEG ou WebP de moins de 10 "
+"Mio."
+msgstr ""
+"Bild nicht unterstützt. Wählen Sie ein PNG, JPEG oder WebP mit weniger als "
+"10 MiB."
+
+#: static/previews.js:47
+msgid "Préparation de l’aperçu…"
+msgstr "Vorschau wird vorbereitet…"
+
+#: static/previews.js:51
+msgid "Aperçu indisponible"
+msgstr "Vorschau nicht verfügbar"
+
+#: static/previews.js:78
+msgid "Chargement de l’aperçu…"
+msgstr "Vorschau wird geladen…"
+
+#: static/previews.js:87
+msgid "Aperçu de %(value1)s"
+msgstr "Vorschau von %(value1)s"
+
+#: static/previews.js:90
+msgid ""
+"Cet aperçu n’est pas disponible. Fermez cette fenêtre pour retrouver le "
+"téléchargement du dossier."
+msgstr ""
+"Diese Vorschau ist nicht verfügbar. Schließen Sie dieses Fenster, um zum "
+"Download der Sammlung zurückzukehren."
+
+#: static/upload.js:19
+msgid "octets"
+msgstr "Bytes"
+
+#: static/upload.js:20
+msgid "Kio"
+msgstr "KiB"
+
+#: static/upload.js:20
+msgid "Mio"
+msgstr "MiB"
+
+#: static/upload.js:20
+msgid "Gio"
+msgstr "GiB"
+
+#: static/upload.js:28 static/upload.js:43
+msgid "Envoi refusé. Reconnectez-vous si votre session a expiré."
+msgstr ""
+"Upload abgelehnt. Melden Sie sich erneut an, falls Ihre Sitzung abgelaufen "
+"ist."
+
+#: static/upload.js:29
+msgid "Envoi refusé."
+msgstr "Upload abgelehnt."
+
+#: static/upload.js:46 static/upload.js:148 static/upload.js:167
+msgid ""
+"Envoi en pause. Cliquez sur Importer pour reprendre pendant les prochaines "
+"24 h."
+msgstr ""
+"Upload pausiert. Klicken Sie innerhalb der nächsten 24 Stunden auf "
+"Hochladen, um fortzufahren."
+
+#: static/upload.js:51
+msgid "Impossible de retrouver les envois. Reconnectez-vous."
+msgstr "Uploads konnten nicht abgerufen werden. Melden Sie sich erneut an."
+
+#: static/upload.js:57
+msgid ""
+"%(value1)s fichier(s) en attente · %(value2)s % reçus. Resélectionnez les "
+"mêmes fichiers puis cliquez sur Importer pour reprendre."
+msgstr ""
+"%(value1)s ausstehende Datei(en) · %(value2)s % empfangen. Wählen Sie "
+"dieselben Dateien erneut aus und klicken Sie zum Fortsetzen auf Hochladen."
+
+#: static/upload.js:58
+msgid "Annuler cet envoi"
+msgstr "Diesen Upload abbrechen"
+
+#: static/upload.js:70
+msgid "%(count)s fichier(s) · %(size)s"
+msgstr "%(count)s Datei(en) · %(size)s"
+
+#: static/upload.js:94
+msgid "Retirer %(name)s"
+msgstr "%(name)s entfernen"
+
+#: static/upload.js:105
+msgid "Chemins déjà sélectionnés conservés, sans remplacement."
+msgstr "Bereits ausgewählte Pfade wurden ohne Ersetzung beibehalten."
+
+#: static/upload.js:107
+msgid "Maximum : 100 fichiers et 20 niveaux de dossiers par sélection."
+msgstr "Maximal 100 Dateien und 20 Ordnerebenen pro Auswahl."
+
+#: static/upload.js:107
+msgid "Impossible de lire cette sélection. Utilisez les boutons d’ajout."
+msgstr ""
+"Diese Auswahl kann nicht gelesen werden. Verwenden Sie die Schaltflächen zum"
+" Hinzufügen."
+
+#: static/upload.js:127
+msgid "Lecture des dossiers…"
+msgstr "Ordner werden gelesen…"
+
+#: static/upload.js:131
+msgid "Les dossiers vides et les fichiers cachés ne sont pas importés."
+msgstr "Leere Ordner und versteckte Dateien werden nicht hochgeladen."
+
+#: static/upload.js:139
+msgid "Préparation de l’envoi…"
+msgstr "Upload wird vorbereitet…"
+
+#: static/upload.js:156
+msgid ""
+"%(sent)s / %(total)s Mio transmis · %(confirmed)s Mio confirmés par le "
+"serveur"
+msgstr ""
+"%(sent)s / %(total)s MiB übertragen · %(confirmed)s MiB vom Server bestätigt"
+
+#: static/upload.js:159
+msgid "%(speed)s Mio/s · environ %(seconds)s s restantes"
+msgstr "%(speed)s MiB/s · noch etwa %(seconds)s s"
+
+#: static/upload.js:168
+msgid "Envoi de %(value1)s"
+msgstr "%(value1)s wird hochgeladen"
+
+#: static/upload.js:174
+msgid "Position du transfert invalide. Rechargez la page pour reprendre."
+msgstr ""
+"Ungültige Übertragungsposition. Laden Sie die Seite neu, um fortzufahren."
+
+#: static/upload.js:178
+msgid "Envoi en pause avant vérification. Cliquez sur Importer pour terminer."
+msgstr ""
+"Upload vor der Prüfung pausiert. Klicken Sie zum Abschließen auf Hochladen."
+
+#: static/upload.js:179
+msgid "Transfert terminé · analyse antivirus et enregistrement…"
+msgstr "Übertragung abgeschlossen · Virenprüfung und Speichern…"
+
+#: static/upload.js:180
+msgid ""
+"Gardez cette page ouverte. La vérification peut prendre du temps pour un "
+"dossier volumineux."
+msgstr ""
+"Lassen Sie diese Seite geöffnet. Die Prüfung einer großen Sammlung kann "
+"einige Zeit dauern."
+
+#: static/upload.js:186
+msgid ""
+"Connexion interrompue. Vos blocs reçus sont conservés : cliquez sur Importer"
+" pour reprendre."
+msgstr ""
+"Verbindung unterbrochen. Empfangene Datenblöcke bleiben erhalten. Klicken "
+"Sie zum Fortsetzen auf Hochladen."
+
+#: static/upload.js:187
+msgid "En attente"
+msgstr "Ausstehend"

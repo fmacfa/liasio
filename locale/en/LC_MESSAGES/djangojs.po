@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Liasio 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-22 20:08+0200\n"
+"POT-Creation-Date: 2026-10-27 12:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Liasio contributors\n"
 "Language-Team: English\n"
@@ -23,15 +23,15 @@ msgid "Lien à copier"
 msgstr "Link to copy"
 
 #: static/app.js:27
-msgid "Copiez le lien sélectionné avec votre clavier."
-msgstr "Copy the selected link with your keyboard."
+msgid "Copiez le texte sélectionné avec votre clavier."
+msgstr "Copy the selected text with your keyboard."
 
-#: static/app.js:60
+#: static/app.js:72
 msgid ""
 "%(value1)s fichier(s) sélectionné(s) · %(value2)s octets vers la corbeille"
 msgstr "%(value1)s file(s) selected · %(value2)s bytes to move to the trash"
 
-#: static/app.js:60
+#: static/app.js:72
 msgid "Sélectionnez les fichiers à supprimer."
 msgstr "Select files to delete."
 
@@ -40,7 +40,6 @@ msgid "Noms mis à jour. Vérifiez les lignes avant de continuer."
 msgstr "Names updated. Review the rows before continuing."
 
 #: static/batches.js:39
-#| msgid "Préparation de l’envoi…"
 msgid "Création des liens…"
 msgstr "Creating links…"
 
@@ -208,7 +207,3 @@ msgstr ""
 #: static/upload.js:187
 msgid "En attente"
 msgstr "Pending"
-
-#| msgid "Copiez le lien sélectionné avec votre clavier."
-msgid "Copiez le texte sélectionné avec votre clavier."
-msgstr "Copy the selected text with your keyboard."

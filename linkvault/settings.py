@@ -47,9 +47,9 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    "vault.middleware.RequestBoundaryMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
+    "vault.middleware.RequestBoundaryMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -130,7 +130,7 @@ TRUST_PROXY = os.environ.get("TRUST_PROXY", "false").lower() == "true"
 if TRUST_PROXY:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 LANGUAGE_CODE = "fr"
-LANGUAGES = [("fr", "Français"), ("en", "English")]
+LANGUAGES = [("fr", "Français"), ("en", "English"), ("de", "Deutsch")]
 LOCALE_PATHS = [BASE_DIR / "locale"]
 LANGUAGE_COOKIE_SECURE = not DEBUG
 LANGUAGE_COOKIE_HTTPONLY = True

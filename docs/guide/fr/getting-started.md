@@ -24,7 +24,7 @@ Ouvrez le lien personnel transmis par l’administrateur. Vérifiez l’e-mail a
 
 ## Se connecter, choisir sa langue et se déconnecter
 
-Utilisez votre e-mail et votre mot de passe. Si la double authentification est activée, saisissez un nouveau code de votre application ou un code de récupération. Le sélecteur **FR / EN** est disponible sur les pages de connexion, dans l’espace de travail et sur les pages destinataires. Le choix est mémorisé dans un cookie du navigateur ; sans choix explicite, la langue du navigateur est utilisée, avec le français par défaut. Vos noms de fichiers et vos présentations ne sont pas traduits automatiquement.
+Utilisez votre e-mail et votre mot de passe. Si la double authentification est activée, saisissez un nouveau code de votre application ou un code de récupération. Le sélecteur **FR / EN / DE** est disponible sur les pages de connexion, dans l’espace de travail et sur les pages destinataires. Le choix est mémorisé dans un cookie du navigateur ; sans choix explicite, la langue préférée compatible du navigateur est utilisée, y compris sur les pages de téléchargement (de-DE, de-AT et de-CH sélectionnent l’allemand), avec le français par défaut. Un choix manuel reste prioritaire ; supprimer le cookie de langue rétablit la détection automatique. Vos noms de fichiers et vos présentations ne sont pas traduits automatiquement.
 
 Cliquez sur **Se déconnecter** en bas du menu, notamment sur un ordinateur partagé. Mot de passe oublié ? Consultez la [récupération du compte](account.md). L’administrateur doit avoir configuré l’envoi d’e-mails.
 

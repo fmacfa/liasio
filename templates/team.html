@@ -97,7 +97,7 @@
         <tbody>
           {% for audit in audits %}
             <tr>
-              <td>{{ audit.action }}</td>
+              <td>{{ audit.action_label }}</td>
               <td>{{ audit.actor.display_name|default:_('Compte supprimé') }}</td>
               <td>{{ audit.created_at|date:"SHORT_DATETIME_FORMAT" }}</td>
             </tr>

@@ -8,7 +8,7 @@ Liasio is the new name of LinkVault. The repository is now `fmacfa/liasio`. Publ
 
 Liasio is an open-source file-sharing application that you host on your own server. Organize files into folders, customize their presentation, and create independent sharing links with passwords, expiration dates, or download limits.
 
-French / English interface · **MIT** license · Python / Django · Docker Compose
+French / English / German interface · **MIT** license · Python / Django · Docker Compose
 
 > **Version 0.4 — connected workflows, in two languages.** Scoped API keys, signed webhooks and illustrated in-app guides join galleries, TOTP, resumable uploads and recoverable trash. This remains an early release; it has not undergone an independent human security audit and does not provide end-to-end encryption.
 
@@ -32,8 +32,8 @@ French / English interface · **MIT** license · Python / Django · Docker Compo
 | Storage administration | Available disk space, total file count, and per-account usage; quotas editable in the administration page |
 | Access management | Suspend members and revoke their links and sessions; password changes/recovery, optional TOTP and one-use recovery codes |
 | Automations | Scoped, expiring API keys; resumable imports and link creation; signed webhooks, delivery history and bounded retries |
-| Illustrated help | 11 guides in English and French, available on GitHub and under User guide in the application |
-| Languages | French and English, including recipient pages, forms, messages and upload progress |
+| Illustrated help | 13 guides in English, French and German, available on GitHub and under User guide in the application |
+| Languages | French, English and German with automatic browser-language detection, including recipient pages, forms, messages and upload progress |
 | Operations | Automatic HTTPS through Caddy, PostgreSQL, ClamAV antivirus, five-minute health checks, optional alerts, and automatically tested backup restoration |
 
 **A folder is stored only once.** Create a password-protected link for one client, another that expires tomorrow, and a third that allows a single download.
@@ -49,7 +49,7 @@ French / English interface · **MIT** license · Python / Django · Docker Compo
 
 ## User guides and automations
 
-Start with the **[illustrated English guide](docs/guide/en/README.md)** or **[guide français](docs/guide/fr/README.md)**. The same pages and screenshots are built into `/help/`.
+Start with the **[illustrated English guide](docs/guide/en/README.md)**, the **[guide français](docs/guide/fr/README.md)** or the **[deutsches Benutzerhandbuch](docs/guide/de/README.md)**. The same pages and screenshots are built into `/help/`.
 
 For n8n, scripts and other tools, see the [API reference](docs/API.md), the [automation walkthrough](docs/guide/en/automation.md), the [Python upload client](examples/upload.py) and the [webhook signature verifier](examples/verify_webhook.py). No public registration or anonymous upload is added.
 
@@ -121,7 +121,7 @@ docker compose ps
 
 4. Wait for ClamAV to become ready; its first startup may take several minutes.
 5. Open `https://files.example.com`. Enter your email and a password, choose **Continue**, then enter your name and confirm the password. Select **Create my account**. No installation key is needed.
-6. Create a folder, upload files, then select **Create a link**. Choose **FR / EN** to change the interface language.
+6. Create a folder, upload files, then select **Create a link**. Choose **FR / EN / DE** to change the interface language.
 
 The configuration script creates `.env` with `0600` permissions and refuses to overwrite an existing file. It contains secrets: never publish it. The first person to complete setup becomes the administrator: initialize the instance before sharing its address. Setup permanently closes after this account is created; other users join by invitation.
 

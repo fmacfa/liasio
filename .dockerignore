@@ -13,6 +13,7 @@
 !templates/
 !templates/**/
 !templates/**/*.html
+!templates/account/*.txt
 !static/
 !static/*.js
 !static/*.css
