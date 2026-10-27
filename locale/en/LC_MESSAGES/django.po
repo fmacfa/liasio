@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Liasio 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-22 21:07+0200\n"
+"POT-Creation-Date: 2026-10-27 12:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Liasio contributors\n"
 "Language-Team: English\n"
@@ -83,7 +83,7 @@ msgid "Open source · Licence MIT · Auto-hébergé"
 msgstr "Open source · MIT license · Self-hosted"
 
 #: templates/account/layout.html:36 templates/help/guide.html:1
-#: templates/help/index.html:1 templates/layout.html:34
+#: templates/help/index.html:1 templates/layout.html:33
 msgid "Guide d’utilisation"
 msgstr "User guide"
 
@@ -184,7 +184,7 @@ msgid ""
 "Les anciens codes sont désormais invalides. Ne partagez jamais ces codes."
 msgstr "Your previous codes are now invalid. Never share these codes."
 
-#: templates/account/mfa_settings.html:20
+#: templates/account/mfa_settings.html:20 vault/models.py:361
 msgid "Double authentification activée"
 msgstr "Two-factor authentication enabled"
 
@@ -323,7 +323,7 @@ msgid "Réinitialiser votre mot de passe Liasio"
 msgstr "Reset your Liasio password"
 
 #: templates/account/settings.html:3 templates/account/settings.html:9
-#: templates/layout.html:45
+#: templates/layout.html:44
 msgid "Mon compte"
 msgstr "My account"
 
@@ -414,7 +414,7 @@ msgstr "This first administrator account will let you invite your team."
 msgid "Retour"
 msgstr "Back"
 
-#: templates/activity.html:3 templates/layout.html:28
+#: templates/activity.html:3 templates/layout.html:27
 #: templates/links/batch_detail.html:44 templates/links/list.html:40
 msgid "Activité"
 msgstr "Activity"
@@ -444,7 +444,7 @@ msgstr "Export CSV"
 msgid "← Afficher tous les liens"
 msgstr "← Show all links"
 
-#: templates/activity.html:24 templates/integrations/webhook.html:9
+#: templates/activity.html:24 templates/integrations/webhook.html:11
 #: vault/views.py:593
 msgid "Événement"
 msgstr "Event"
@@ -486,7 +486,7 @@ msgstr "Liasio · Your sharing workspace"
 msgid "Aller au contenu"
 msgstr "Skip to content"
 
-#: templates/branding.html:4 templates/layout.html:37
+#: templates/branding.html:4 templates/layout.html:36
 msgid "Page de partage"
 msgstr "Share page"
 
@@ -542,11 +542,11 @@ msgstr "Presentation.pdf"
 msgid "2,4 Mo"
 msgstr "2.4 MB"
 
-#: templates/branding.html:46 templates/share/page.html:73
-msgid "Télécharger le dossier"
-msgstr "Download collection"
+#: templates/branding.html:46 templates/components/share_download.html:6
+msgid "Télécharger les fichiers"
+msgstr "Download files"
 
-#: templates/branding.html:50 templates/share/page.html:113
+#: templates/branding.html:50 templates/share/page.html:97
 msgid "Partagé avec"
 msgstr "Shared with"
 
@@ -567,19 +567,26 @@ msgid "Placer ce dossier dans la corbeille ?"
 msgstr "Move this collection to the trash?"
 
 #: templates/collections/delete.html:8
-msgid ", ses"
-msgstr "and its"
-
-#: templates/collections/delete.html:8
-msgid "fichier(s), seront conservés pendant"
-msgstr "file(s) will be kept for"
+#, python-format
+msgid ""
+"<strong>%(title)s</strong> et son %(count)s fichier seront conservés pendant"
+" %(days)s jours."
+msgid_plural ""
+"<strong>%(title)s</strong> et ses %(count)s fichiers seront conservés "
+"pendant %(days)s jours."
+msgstr[0] ""
+"<strong>%(title)s</strong> and its %(count)s file will be retained for "
+"%(days)s days."
+msgstr[1] ""
+"<strong>%(title)s</strong> and its %(count)s files will be retained for "
+"%(days)s days."
 
 #: templates/collections/delete.html:8
 msgid ""
-"jours. Ses liens seront révoqués. Le quota sera libéré après la suppression "
+"Ses liens seront révoqués. Le quota sera libéré après la suppression "
 "définitive."
 msgstr ""
-"days. Its links will be revoked. Quota is released after permanent deletion."
+"Its links will be revoked. Quota is released after permanent deletion."
 
 #: templates/collections/delete.html:13
 msgid "Conserver le dossier"
@@ -602,10 +609,12 @@ msgid "DOSSIER DE PARTAGE"
 msgstr "SHARED COLLECTION"
 
 #: templates/collections/detail.html:10
-#: templates/components/collection_card.html:10 templates/share/page.html:40
-#: templates/storage_delete.html:8
-msgid "fichier"
-msgstr "file"
+#: templates/components/collection_card.html:10 templates/share/page.html:41
+#, python-format
+msgid "%(count)s fichier"
+msgid_plural "%(count)s fichiers"
+msgstr[0] "%(count)s file"
+msgstr[1] "%(count)s files"
 
 #: templates/collections/detail.html:10
 msgid "· Créé le"
@@ -730,7 +739,7 @@ msgid "Un lien par destinataire, avec ses propres règles."
 msgstr "One link per recipient, each with its own rules."
 
 #: templates/collections/list.html:3 templates/collections/list.html:9
-#: templates/layout.html:24 templates/storage.html:14
+#: templates/layout.html:23 templates/storage.html:14
 msgid "Mes dossiers"
 msgstr "My collections"
 
@@ -782,8 +791,11 @@ msgid "Votre prochain partage commence ici."
 msgstr "Your next share starts here."
 
 #: templates/components/collection_card.html:11
-msgid "lien"
-msgstr "link"
+#, python-format
+msgid "%(count)s lien"
+msgid_plural "%(count)s liens"
+msgstr[0] "%(count)s link"
+msgstr[1] "%(count)s links"
 
 #: templates/components/collection_card.html:13
 msgid "Modifié le"
@@ -826,13 +838,29 @@ msgstr "Previous"
 msgid "Page"
 msgstr "Page"
 
-#: templates/components/pagination.html:8 templates/layout.html:55
+#: templates/components/pagination.html:8 templates/layout.html:54
 msgid "sur"
 msgstr "of"
 
 #: templates/components/pagination.html:11
 msgid "Suivant"
 msgstr "Next"
+
+#: templates/components/share_download.html:6
+msgid "ZIP ·"
+msgstr "ZIP ·"
+
+#: templates/components/share_download.html:12
+msgid "Disponible jusqu’au"
+msgstr "Available until"
+
+#: templates/components/share_download.html:15
+msgid "Un seul téléchargement autorisé, même en cas d’interruption."
+msgstr "One authorized download only, even if interrupted."
+
+#: templates/components/share_download.html:17
+msgid "téléchargements autorisés utilisés"
+msgstr "authorized downloads used"
 
 #: templates/components/upload_form.html:11
 msgid "Faites de la place à vos fichiers."
@@ -869,7 +897,7 @@ msgid "Progression de l’envoi"
 msgstr "Upload progress"
 
 #: templates/components/upload_form.html:39
-#: templates/integrations/webhook.html:8
+#: templates/integrations/webhook.html:10
 msgid "Mettre en pause"
 msgstr "Pause"
 
@@ -1069,7 +1097,7 @@ msgid "Des guides illustrés, du premier fichier à vos automatisations."
 msgstr "Illustrated guides, from your first file to your automations."
 
 #: templates/integrations/index.html:3 templates/integrations/index.html:4
-#: templates/integrations/webhook.html:3 templates/layout.html:33
+#: templates/integrations/webhook.html:3 templates/layout.html:32
 msgid "Automatisations"
 msgstr "Automations"
 
@@ -1103,7 +1131,65 @@ msgstr ""
 "Copy this secret now. It will not be shown again. Keep it in your automation"
 " tool’s credential store."
 
-#: templates/integrations/index.html:8
+#: templates/integrations/index.html:7
+msgid ""
+"Cette clé autorise les commandes API. Utilisez-la comme Bearer dans votre "
+"outil, jamais dans une URL."
+msgstr ""
+"This key authorizes API commands. Use it as a Bearer token in your tool, "
+"never in a URL."
+
+#: templates/integrations/index.html:7
+msgid ""
+"Ce secret sert à vérifier les notifications chez le destinataire. Ce n’est "
+"ni une clé API ni un lien de téléchargement."
+msgstr ""
+"This secret verifies notifications at the receiver. It is neither an API key"
+" nor a download link."
+
+#: templates/integrations/index.html:9
+msgid "VOTRE OUTIL → LIASIO"
+msgstr "YOUR TOOL → LIASIO"
+
+#: templates/integrations/index.html:9
+msgid "Créer des liens : l’API"
+msgstr "Create links: the API"
+
+#: templates/integrations/index.html:9
+msgid ""
+"Envoyez les noms A et B depuis Codex, un terminal ou votre serveur. La "
+"réponse contient le lien A et le lien B. Aucun webhook n’est nécessaire."
+msgstr ""
+"Send names A and B from Codex, a terminal or your server. The response "
+"contains link A and link B. No webhook is needed."
+
+#: templates/integrations/index.html:9 templates/integrations/webhook.html:7
+msgid "Préparer ma commande"
+msgstr "Prepare my command"
+
+#: templates/integrations/index.html:10
+msgid "LIASIO → VOTRE OUTIL"
+msgstr "LIASIO → YOUR TOOL"
+
+#: templates/integrations/index.html:10
+msgid "Recevoir des notifications : les webhooks"
+msgstr "Receive notifications: webhooks"
+
+#: templates/integrations/index.html:10
+msgid ""
+"Votre outil fournit une URL de réception. Liasio y envoie un événement "
+"lorsqu’un lien est créé, ouvert ou téléchargé. Ajouter un webhook ne crée "
+"aucune page sur Liasio."
+msgstr ""
+"Your tool provides a receiver URL. Liasio sends an event there when a link "
+"is created, opened or downloaded. Adding a webhook does not create a page on"
+" Liasio."
+
+#: templates/integrations/index.html:10
+msgid "Configurer les notifications"
+msgstr "Set up notifications"
+
+#: templates/integrations/index.html:12
 msgid ""
 "Les clés accèdent uniquement à votre espace. Un changement de mot de passe "
 "ou de double authentification les invalide. Aucun accès à la gestion des "
@@ -1113,52 +1199,74 @@ msgstr ""
 "authentication invalidates them. They cannot manage members or permanently "
 "delete data."
 
-#: templates/integrations/index.html:10
+#: templates/integrations/index.html:14
 msgid "Clés API"
 msgstr "API keys"
 
-#: templates/integrations/index.html:10
+#: templates/integrations/index.html:14
 msgid "REST · v1"
 msgstr "REST · v1"
 
-#: templates/integrations/index.html:11
+#: templates/integrations/index.html:15
+msgid ""
+"Pour créer des lots et les exporter, cochez read et links:write. Ajoutez "
+"files:write pour importer des fichiers par API."
+msgstr ""
+"To create and export batches, select read and links:write. Add files:write "
+"to upload files through the API."
+
+#: templates/integrations/index.html:16
 msgid "Active"
 msgstr "Active"
 
-#: templates/integrations/index.html:11
+#: templates/integrations/index.html:16
 msgid "Inactive"
 msgstr "Inactive"
 
-#: templates/integrations/index.html:11
+#: templates/integrations/index.html:16 templates/links/list.html:61
+#: vault/forms.py:107 vault/integrations.py:57
+msgid "Sans expiration"
+msgstr "No expiry"
+
+#: templates/integrations/index.html:16
 msgid "Dernière utilisation"
 msgstr "Last used"
 
-#: templates/integrations/index.html:11 templates/links/list.html:103
+#: templates/integrations/index.html:16 templates/links/list.html:103
 #: templates/team.html:63
 msgid "Révoquer"
 msgstr "Revoke"
 
-#: templates/integrations/index.html:11
+#: templates/integrations/index.html:16
 msgid "Aucune clé API pour le moment."
 msgstr "No API keys yet."
 
-#: templates/integrations/index.html:12
+#: templates/integrations/index.html:17
 msgid "Créer une clé API"
 msgstr "Create an API key"
 
-#: templates/integrations/index.html:12
+#: templates/integrations/index.html:17
 msgid "Créer la clé"
 msgstr "Create key"
 
-#: templates/integrations/index.html:15
-msgid "Webhooks"
-msgstr "Webhooks"
+#: templates/integrations/index.html:20
+msgid "Webhooks sortants"
+msgstr "Outgoing webhooks"
 
-#: templates/integrations/index.html:15
+#: templates/integrations/index.html:20
 msgid "HMAC · SHA-256"
 msgstr "HMAC · SHA-256"
 
-#: templates/integrations/index.html:16
+#: templates/integrations/index.html:21
+msgid ""
+"Créez d’abord un point de réception dans votre outil, puis collez son URL "
+"ici. Le secret de signature permet à cet outil de vérifier que la "
+"notification vient de Liasio."
+msgstr ""
+"First create a receiver in your tool, then paste its URL here. The signing "
+"secret lets that tool verify that the notification comes from Liasio."
+
+#: templates/integrations/index.html:22
 msgid ""
 "Le service de livraison n’a pas envoyé de signal récent. Les événements "
 "resteront en attente jusqu’à son démarrage."
@@ -1166,26 +1274,159 @@ msgstr ""
 "The delivery service has not reported recently. Events will remain queued "
 "until it starts."
 
-#: templates/integrations/index.html:17 templates/integrations/webhook.html:5
-#: vault/models.py:217
+#: templates/integrations/index.html:23 templates/integrations/webhook.html:6
+#: vault/models.py:241
 msgid "Actif"
 msgstr "Active"
 
-#: templates/integrations/index.html:17 templates/integrations/webhook.html:5
+#: templates/integrations/index.html:23 templates/integrations/webhook.html:6
 msgid "En pause"
 msgstr "Paused"
 
-#: templates/integrations/index.html:17
+#: templates/integrations/index.html:23
 msgid "Aucun webhook pour le moment."
 msgstr "No webhooks yet."
 
-#: templates/integrations/index.html:18
+#: templates/integrations/index.html:24
 msgid "Ajouter un webhook"
 msgstr "Add a webhook"
 
-#: templates/integrations/index.html:18
+#: templates/integrations/index.html:24
 msgid "Créer le webhook"
 msgstr "Create webhook"
+
+#: templates/integrations/index.html:28
+msgid "Envoyer A et B, recevoir leurs liens"
+msgstr "Send A and B, receive their links"
+
+#: templates/integrations/index.html:28
+msgid "Guide pas à pas"
+msgstr "Step-by-step guide"
+
+#: templates/integrations/index.html:29
+msgid "Adresse de votre API"
+msgstr "Your API address"
+
+#: templates/integrations/index.html:31
+msgid ""
+"Créez une clé API avec read et links:write ci-dessus. Conservez-la dans "
+"votre coffre ; ne la collez pas dans une conversation."
+msgstr ""
+"Create an API key with read and links:write above. Store it in your secret "
+"vault; do not paste it into a conversation."
+
+#: templates/integrations/index.html:32
+msgid ""
+"Choisissez le dossier contenant les fichiers à partager. Chaque nom recevra "
+"un lien distinct vers ce même dossier."
+msgstr ""
+"Choose the collection containing the files to share. Each name will receive "
+"a separate link to that same collection."
+
+#: templates/integrations/index.html:33
+msgid ""
+"Exécutez la commande depuis votre terminal ou le serveur de votre site. La "
+"réponse JSON associe chaque label à son url."
+msgstr ""
+"Run the command from your terminal or your website server. The JSON response"
+" pairs each label with its url."
+
+#: templates/integrations/index.html:36 templates/links/batches.html:10
+msgid "Dossier à partager"
+msgstr "Folder to share"
+
+#: templates/integrations/index.html:36
+msgid "Afficher la commande"
+msgstr "Show command"
+
+#: templates/integrations/index.html:37
+msgid "URL de création pour ce dossier"
+msgstr "Creation URL for this collection"
+
+#: templates/integrations/index.html:38
+msgid "1. Charger ma clé dans le terminal (macOS / Linux)"
+msgstr "1. Load my key in the terminal (macOS / Linux)"
+
+#: templates/integrations/index.html:38
+msgid ""
+"Exécutez cette ligne, puis collez votre clé et appuyez sur Entrée. La saisie"
+" reste masquée et la clé n’est pas écrite dans l’historique des commandes."
+msgstr ""
+"Run this line, then paste your key and press Enter. Input stays hidden and "
+"the key is not written to your command history."
+
+#: templates/integrations/index.html:38
+msgid ""
+"Sur un site web, utilisez le coffre de secrets du serveur. N’insérez jamais "
+"cette clé dans le JavaScript envoyé aux visiteurs."
+msgstr ""
+"For a website, use the server’s secret store. Never put this key in "
+"JavaScript sent to visitors."
+
+#: templates/integrations/index.html:39
+msgid "2. Copier et exécuter la commande de création"
+msgstr "2. Copy and run the creation command"
+
+#: templates/integrations/index.html:39
+msgid ""
+"Remplacez A et B par vos noms. Ces liens n’expirent pas et n’ont pas de "
+"limite de téléchargements. Le dossier doit contenir des fichiers validés."
+msgstr ""
+"Replace A and B with your names. These links do not expire and have no "
+"download limit. The collection must contain validated files."
+
+#: templates/integrations/index.html:39
+msgid "Commande à copier"
+msgstr "Command to copy"
+
+#: templates/integrations/index.html:39
+msgid "Commande copiée."
+msgstr "Command copied."
+
+#: templates/integrations/index.html:39
+msgid "Copier la commande"
+msgstr "Copy command"
+
+#: templates/integrations/index.html:39
+msgid ""
+"Gardez la même Idempotency-Key pour réessayer exactement la même commande "
+"pendant 24 heures. Pour un nouveau lot ou de nouveaux noms, affichez une "
+"nouvelle commande. Conservez l’ID du lot après succès."
+msgstr ""
+"Keep the same Idempotency-Key to retry the exact same command for 24 hours. "
+"For a new batch or new names, display a new command. Save the batch ID after"
+" success."
+
+#: templates/integrations/index.html:40
+msgid ""
+"Créez un dossier et importez ses fichiers pour obtenir une commande adaptée "
+"à votre espace."
+msgstr ""
+"Create a collection and upload its files to get a command for your "
+"workspace."
+
+#: templates/integrations/index.html:40 vault/help.py:28
+msgid "Importer des fichiers"
+msgstr "Upload files"
+
+#: templates/integrations/index.html:41
+msgid "3. Retrouver et exporter la liste"
+msgstr "3. Find and export the list"
+
+#: templates/integrations/index.html:41
+msgid ""
+"La réponse contient items avec label et url, ainsi que exports pour Excel et"
+" CSV. Les adresses d’export API nécessitent la clé. Pour télécharger dans le"
+" navigateur, ouvrez Mes lots et choisissez Télécharger Excel ou Télécharger "
+"CSV."
+msgstr ""
+"The response contains items with label and url, plus exports for Excel and "
+"CSV. API export URLs require the key. To download in your browser, open My "
+"batches and choose Download Excel or Download CSV."
+
+#: templates/integrations/index.html:41
+msgid "Ouvrir Mes lots"
+msgstr "Open My batches"
 
 #: templates/integrations/webhook.html:2
 msgid "· Webhook"
@@ -1196,14 +1437,53 @@ msgid "/ Webhook"
 msgstr "/ Webhook"
 
 #: templates/integrations/webhook.html:5
+msgid "Retour aux automatisations"
+msgstr "Back to automations"
+
+#: templates/integrations/webhook.html:6
 msgid "WEBHOOK"
 msgstr "WEBHOOK"
 
-#: templates/integrations/webhook.html:5
+#: templates/integrations/webhook.html:6
 msgid "Lire le guide"
 msgstr "Read the guide"
 
-#: templates/integrations/webhook.html:6
+#: templates/integrations/webhook.html:7
+msgid "Où vont les notifications ?"
+msgstr "Where do notifications go?"
+
+#: templates/integrations/webhook.html:7
+msgid ""
+"Liasio envoie une requête POST à l’adresse ci-dessous. Cette adresse doit "
+"être créée et activée chez le destinataire (n8n, votre serveur…). "
+"L’enregistrer ici ne crée pas de page, et l’ouvrir dans un navigateur ne "
+"teste pas la réception d’une notification."
+msgstr ""
+"Liasio sends a POST request to the address below. This address must be "
+"created and activated at the receiver (n8n, your server…). Saving it here "
+"does not create a page, and opening it in a browser does not test "
+"notification delivery."
+
+#: templates/integrations/webhook.html:7
+msgid "Copier l’URL de réception"
+msgstr "Copy receiver URL"
+
+#: templates/integrations/webhook.html:7
+msgid ""
+"URL indisponible. Créez un nouveau webhook avec l’adresse de votre "
+"destinataire."
+msgstr "URL unavailable. Create a new webhook with your receiver’s address."
+
+#: templates/integrations/webhook.html:7
+msgid ""
+"Pour envoyer des noms et obtenir des liens de téléchargement, utilisez "
+"l’API. Le secret de signature sert uniquement à vérifier les notifications "
+"reçues."
+msgstr ""
+"To send names and get download links, use the API. The signing secret is "
+"only used to verify incoming notifications."
+
+#: templates/integrations/webhook.html:8
 msgid ""
 "File d’attente pleine : ce webhook a été mis en pause. Vérifiez le "
 "destinataire avant de le réactiver. Les événements produits pendant la pause"
@@ -1212,25 +1492,25 @@ msgstr ""
 "Queue full: this webhook was paused. Check the receiver before reactivating "
 "it. Events produced while paused are not retained."
 
-#: templates/integrations/webhook.html:7
+#: templates/integrations/webhook.html:9
 msgid "Nouveau secret de signature"
 msgstr "New signing secret"
 
-#: templates/integrations/webhook.html:7
+#: templates/integrations/webhook.html:9
 msgid ""
 "Copiez-le maintenant et mettez à jour le destinataire. Les prochaines "
 "tentatives utilisent ce secret."
 msgstr "Copy it now and update the receiver. Future attempts use this secret."
 
-#: templates/integrations/webhook.html:8
+#: templates/integrations/webhook.html:10
 msgid "Événements suivis"
 msgstr "Subscribed events"
 
-#: templates/integrations/webhook.html:8
+#: templates/integrations/webhook.html:10
 msgid "Envoyer un test"
 msgstr "Send a test"
 
-#: templates/integrations/webhook.html:8
+#: templates/integrations/webhook.html:10
 msgid ""
 "Un test est un événement réel envoyé à votre URL. Une requête déjà en cours "
 "peut se terminer après une mise en pause."
@@ -1238,56 +1518,56 @@ msgstr ""
 "A test is a real event sent to your URL. A request already in progress may "
 "finish after pausing."
 
-#: templates/integrations/webhook.html:9
+#: templates/integrations/webhook.html:11
 msgid "Livraisons"
 msgstr "Deliveries"
 
-#: templates/integrations/webhook.html:9
+#: templates/integrations/webhook.html:11
 msgid "Historique : 30 jours"
 msgstr "History: 30 days"
 
-#: templates/integrations/webhook.html:9 templates/team.html:94
+#: templates/integrations/webhook.html:11 templates/team.html:94
 msgid "Date"
 msgstr "Date"
 
-#: templates/integrations/webhook.html:9
+#: templates/integrations/webhook.html:11
 msgid "État"
 msgstr "State"
 
-#: templates/integrations/webhook.html:9
+#: templates/integrations/webhook.html:11
 msgid "Tentatives"
 msgstr "Attempts"
 
-#: templates/integrations/webhook.html:9
+#: templates/integrations/webhook.html:11
 msgid "HTTP"
 msgstr "HTTP"
 
-#: templates/integrations/webhook.html:9
+#: templates/integrations/webhook.html:11
 msgid "Livré"
 msgstr "Delivered"
 
-#: templates/integrations/webhook.html:9
+#: templates/integrations/webhook.html:11
 msgid "En attente"
 msgstr "Pending"
 
-#: templates/integrations/webhook.html:9
+#: templates/integrations/webhook.html:11
 msgid "Annulé"
 msgstr "Canceled"
 
-#: templates/integrations/webhook.html:9
+#: templates/integrations/webhook.html:11
 msgid "Échec"
 msgstr "Failed"
 
-#: templates/integrations/webhook.html:9
+#: templates/integrations/webhook.html:11
 msgid ""
 "Aucune livraison. Envoyez un événement de test pour vérifier la connexion."
 msgstr "No deliveries. Send a test event to check the connection."
 
-#: templates/integrations/webhook.html:10
+#: templates/integrations/webhook.html:12
 msgid "Sécurité et configuration"
 msgstr "Security and configuration"
 
-#: templates/integrations/webhook.html:10
+#: templates/integrations/webhook.html:12
 msgid ""
 "Pour changer l’URL ou les événements, créez un nouveau webhook puis "
 "supprimez celui-ci. Une reprise concerne uniquement les futurs événements."
@@ -1295,15 +1575,15 @@ msgstr ""
 "To change the URL or events, create a new webhook and delete this one. "
 "Resuming only affects future events."
 
-#: templates/integrations/webhook.html:10 templates/team.html:38
+#: templates/integrations/webhook.html:12 templates/team.html:38
 msgid "Réactiver"
 msgstr "Reactivate"
 
-#: templates/integrations/webhook.html:10
+#: templates/integrations/webhook.html:12
 msgid "Renouveler le secret"
 msgstr "Rotate secret"
 
-#: templates/integrations/webhook.html:10
+#: templates/integrations/webhook.html:12
 msgid "Supprimer le webhook et son historique"
 msgstr "Delete webhook and its history"
 
@@ -1319,84 +1599,84 @@ msgstr "My workspace"
 msgid "Partage privé"
 msgstr "Private sharing"
 
-#: templates/layout.html:17
+#: templates/layout.html:16
 msgid "ESPACE DE TRAVAIL"
 msgstr "WORKSPACE"
 
-#: templates/layout.html:18
+#: templates/layout.html:17
 msgid "Navigation principale"
 msgstr "Main navigation"
 
-#: templates/layout.html:20 templates/layout.html:80
+#: templates/layout.html:19 templates/layout.html:79
 msgid "Vue d’ensemble"
 msgstr "Overview"
 
-#: templates/layout.html:22 templates/upload.html:3
+#: templates/layout.html:21 templates/upload.html:3
 msgid "Importer"
 msgstr "Upload"
 
-#: templates/layout.html:26 templates/links/list.html:3
+#: templates/layout.html:25 templates/links/list.html:3
 #: templates/links/list.html:9
 msgid "Mes liens"
 msgstr "My links"
 
-#: templates/layout.html:30 templates/storage.html:3
+#: templates/layout.html:29 templates/storage.html:3
 msgid "Stockage"
 msgstr "Storage"
 
-#: templates/layout.html:32 templates/trash.html:3
+#: templates/layout.html:31 templates/trash.html:3
 msgid "Corbeille"
 msgstr "Trash"
 
-#: templates/layout.html:35
+#: templates/layout.html:34
 msgid "PERSONNALISATION"
 msgstr "CUSTOMIZATION"
 
-#: templates/layout.html:40
+#: templates/layout.html:39
 msgid "Exploitation"
 msgstr "Operations"
 
-#: templates/layout.html:42 templates/team.html:3 templates/team.html:19
+#: templates/layout.html:41 templates/team.html:3 templates/team.html:19
 msgid "Membres"
 msgstr "Members"
 
-#: templates/layout.html:50
+#: templates/layout.html:49
 msgid "Stockage utilisé"
 msgstr "Storage used"
 
-#: templates/layout.html:59
+#: templates/layout.html:58
 msgid "Vos fichiers, votre serveur."
 msgstr "Your files, your server."
 
-#: templates/layout.html:65
+#: templates/layout.html:64
 msgid "Administrateur"
 msgstr "Administrator"
 
-#: templates/layout.html:65 templates/team.html:31
+#: templates/layout.html:64 templates/team.html:31
 msgid "Membre"
 msgstr "Member"
 
-#: templates/layout.html:70 templates/layout.html:71
+#: templates/layout.html:69 templates/layout.html:70
 msgid "Se déconnecter"
 msgstr "Sign out"
 
-#: templates/layout.html:79
+#: templates/layout.html:78
 msgid "Espace de travail"
 msgstr "Workspace"
 
-#: templates/layout.html:84
+#: templates/layout.html:83
 msgid "Auto-hébergé"
 msgstr "Self-hosted"
 
-#: templates/layout.html:84
+#: templates/layout.html:83
 msgid "v"
 msgstr "v"
 
-#: templates/layout.html:91
+#: templates/layout.html:90
 msgid "Liasio · Open source, sous licence MIT."
 msgstr "Liasio · Open source, MIT licensed."
 
-#: templates/layout.html:92
+#: templates/layout.html:91
 msgid "Le partage, en toute simplicité."
 msgstr "Sharing made simple."
 
@@ -1609,10 +1889,6 @@ msgid "Préparez plusieurs liens, retrouvez vos listes et exportez leurs URL."
 msgstr "Prepare multiple links, find your lists and export their URLs."
 
 #: templates/links/batches.html:10
-msgid "Dossier à partager"
-msgstr "Folder to share"
-
-#: templates/links/batches.html:10
 msgid "Choisir un dossier"
 msgstr "Choose a folder"
 
@@ -1763,10 +2039,6 @@ msgstr "No password"
 #: templates/links/list.html:61
 msgid "Jusqu’au"
 msgstr "Until"
-
-#: templates/links/list.html:61 vault/forms.py:107
-msgid "Sans expiration"
-msgstr "No expiry"
 
 #: templates/links/list.html:64
 msgid "Usage unique"
@@ -2012,12 +2284,12 @@ msgstr "enabled,disabled"
 msgid "Quota (Gio)"
 msgstr "Quota (GiB)"
 
-#: templates/operations.html:23
+#: templates/operations.html:20
 #, python-format
 msgid "Quota de %(name)s en Gio"
 msgstr "Quota for %(name)s in GiB"
 
-#: templates/operations.html:23
+#: templates/operations.html:20
 msgid "Mettre à jour"
 msgstr "Update"
 
@@ -2025,51 +2297,51 @@ msgstr "Update"
 msgid "Liasio"
 msgstr "Liasio"
 
-#: templates/share/page.html:39
+#: templates/share/page.html:40
 msgid "Votre dossier"
 msgstr "Your collection"
 
-#: templates/share/page.html:44
+#: templates/share/page.html:45
 msgid "Voir les aperçus des fichiers"
 msgstr "View file previews"
 
-#: templates/share/page.html:45
+#: templates/share/page.html:46
 msgid ""
 "Un aperçu avant de télécharger. Ouvrez une image ou un PDF pour le regarder "
 "de plus près."
 msgstr ""
 "A preview before you download. Open an image or PDF for a closer look."
 
-#: templates/share/page.html:50
+#: templates/share/page.html:51
 msgid "Première page du PDF"
 msgstr "First page of the PDF"
 
-#: templates/share/page.html:50
+#: templates/share/page.html:51
 msgid "Image réduite"
 msgstr "Reduced image"
 
-#: templates/share/page.html:50
+#: templates/share/page.html:51
 #, python-format
 msgid "Aperçu de %(name)s"
 msgstr "Preview of %(name)s"
 
-#: templates/share/page.html:51
+#: templates/share/page.html:52
 msgid "Charger l’aperçu"
 msgstr "Load preview"
 
-#: templates/share/page.html:53
+#: templates/share/page.html:54
 msgid "Agrandir"
 msgstr "Enlarge"
 
-#: templates/share/page.html:57
+#: templates/share/page.html:58
 msgid "À découvrir après téléchargement"
 msgstr "Available after downloading"
 
-#: templates/share/page.html:62
+#: templates/share/page.html:63
 msgid "· PDF, page 1"
 msgstr "· PDF, page 1"
 
-#: templates/share/page.html:67
+#: templates/share/page.html:68
 msgid ""
 "Aperçus des images et PDF jusqu’à 20 Mio. Leur consultation ne consomme pas "
 "de téléchargement. Les fichiers originaux sont dans le dossier ZIP."
@@ -2078,22 +2350,6 @@ msgstr ""
 "download. The original files are in the ZIP collection."
 
 #: templates/share/page.html:73
-msgid "ZIP ·"
-msgstr "ZIP ·"
-
-#: templates/share/page.html:79
-msgid "Disponible jusqu’au"
-msgstr "Available until"
-
-#: templates/share/page.html:83
-msgid "Un seul téléchargement autorisé, même en cas d’interruption."
-msgstr "One authorized download only, even if interrupted."
-
-#: templates/share/page.html:85
-msgid "téléchargements autorisés utilisés"
-msgstr "authorized downloads used"
-
-#: templates/share/page.html:89
 msgid ""
 "L’expéditeur peut consulter les dates d’ouverture de cette page et des "
 "téléchargements autorisés. Aucun outil publicitaire n’est utilisé."
@@ -2101,32 +2357,32 @@ msgstr ""
 "The sender can see when this page was opened and downloads were authorized. "
 "No advertising trackers are used."
 
-#: templates/share/page.html:95
+#: templates/share/page.html:79
 msgid "Fermer l’aperçu"
 msgstr "Close preview"
 
-#: templates/share/page.html:95
+#: templates/share/page.html:79
 msgid "×"
 msgstr "×"
 
-#: templates/share/page.html:98
+#: templates/share/page.html:82
 msgid "Chargement de l’aperçu…"
 msgstr "Loading preview…"
 
-#: templates/share/page.html:102
+#: templates/share/page.html:86
 msgid "Fichier précédent"
 msgstr "Previous file"
 
-#: templates/share/page.html:102 templates/trash.html:20
+#: templates/share/page.html:86 templates/trash.html:20
 #: templates/trash.html:23
 msgid "← Précédent"
 msgstr "← Previous"
 
-#: templates/share/page.html:104
+#: templates/share/page.html:88
 msgid "Fichier suivant"
 msgstr "Next file"
 
-#: templates/share/page.html:104 templates/trash.html:20
+#: templates/share/page.html:88 templates/trash.html:20
 #: templates/trash.html:23
 msgid "Suivant →"
 msgstr "Next →"
@@ -2180,12 +2436,11 @@ msgid "Utilisation de mon stockage"
 msgstr "My storage usage"
 
 #: templates/storage.html:23
-msgid "Dans"
-msgstr "Across"
-
-#: templates/storage.html:23
-msgid "dossier"
-msgstr "collection"
+#, python-format
+msgid "Dans %(count)s dossier"
+msgid_plural "Dans %(count)s dossiers"
+msgstr[0] "In %(count)s collection"
+msgstr[1] "In %(count)s collections"
 
 #: templates/storage.html:27
 msgid "Espace utilisé"
@@ -2379,10 +2634,12 @@ msgstr "← Back to storage"
 msgid "SUPPRESSION RÉCUPÉRABLE"
 msgstr "RECOVERABLE DELETION"
 
-#: templates/storage_delete.html:8 templates/trash.html:20
-#: templates/trash.html:23
-msgid "Supprimer"
-msgstr "Delete"
+#: templates/storage_delete.html:8
+#, python-format
+msgid "Supprimer %(count)s fichier ?"
+msgid_plural "Supprimer %(count)s fichiers ?"
+msgstr[0] "Delete %(count)s file?"
+msgstr[1] "Delete %(count)s files?"
 
 #: templates/storage_delete.html:9
 msgid "seront conservés dans la corbeille pendant"
@@ -2545,6 +2802,10 @@ msgstr "Deleted on"
 #: templates/trash.html:20 templates/trash.html:23
 msgid "Restaurer"
 msgstr "Restore"
+
+#: templates/trash.html:20 templates/trash.html:23
+msgid "Supprimer"
+msgstr "Delete"
 
 #: templates/trash.html:20
 msgid "Aucun dossier dans la corbeille."
@@ -2740,12 +3001,10 @@ msgid "Champs de lot inconnus."
 msgstr "Unknown batch fields."
 
 #: vault/api_batches.py:84
-#| msgid "Indiquez le nombre de liens."
 msgid "Indiquez un nom de lot."
 msgstr "Enter a batch name."
 
 #: vault/api_batches.py:89
-#| msgid "Choisissez une date ou une durée, pas les deux."
 msgid "Fournissez names ou count, mais pas les deux."
 msgstr "Supply names or count, but not both."
 
@@ -2754,14 +3013,10 @@ msgid "names doit contenir de 1 à 200 noms de liens."
 msgstr "names must contain between 1 and 200 link names."
 
 #: vault/api_batches.py:101
-#| msgid "max_downloads doit être un entier."
 msgid "count doit être un entier de 1 à 200."
 msgstr "count must be an integer between 1 and 200."
 
 #: vault/api_batches.py:108
-#| msgid ""
-#| "Chaque cellule doit contenir au plus 1 000 caractères, sans caractères de "
-#| "contrôle."
 msgid "Chaque nom doit contenir de 1 à 80 caractères sur une seule ligne."
 msgstr "Each name must contain 1 to 80 characters on a single line."
 
@@ -2931,7 +3186,7 @@ msgstr "Message for the recipient"
 msgid "Présentez ce que vous partagez, donnez du contexte…"
 msgstr "Introduce what you are sharing, add some context…"
 
-#: vault/forms.py:103
+#: vault/forms.py:103 vault/integrations.py:54
 msgid "Expiration"
 msgstr "Expiry"
 
@@ -2939,7 +3194,7 @@ msgstr "Expiry"
 msgid "À une date précise"
 msgstr "On a specific date"
 
-#: vault/forms.py:109
+#: vault/forms.py:109 vault/integrations.py:56
 msgid "Dans un nombre de jours"
 msgstr "After a number of days"
 
@@ -3116,10 +3371,6 @@ msgstr "Organize collections"
 msgid "Créer un dossier et préparer sa présentation."
 msgstr "Create a collection and prepare its introduction."
 
-#: vault/help.py:28
-msgid "Importer des fichiers"
-msgstr "Upload files"
-
 #: vault/help.py:29
 msgid "Fichiers, dossiers, progression et reprise des envois."
 msgstr "Files, folders, progress and resumable uploads."
@@ -3149,7 +3400,6 @@ msgid "Quantité, import Excel ou CSV, noms et export des URL."
 msgstr "Quantity, Excel or CSV imports, names and URL exports."
 
 #: vault/help.py:48
-#| msgid "Automatiser avec l’API et les webhooks"
 msgid "Automatiser les lots de liens"
 msgstr "Automate link batches"
 
@@ -3205,91 +3455,135 @@ msgstr "Automate with API and webhooks"
 msgid "Clés, import automatique, événements signés et n8n."
 msgstr "Keys, automated uploads, signed events and n8n."
 
-#: vault/integrations.py:23
+#: vault/integrations.py:28
 msgid "Lire mes dossiers, fichiers et liens"
 msgstr "Read my collections, files and links"
 
-#: vault/integrations.py:24
+#: vault/integrations.py:29
 msgid "Créer des dossiers et importer des fichiers"
 msgstr "Create collections and upload files"
 
-#: vault/integrations.py:25
+#: vault/integrations.py:30
 msgid "Créer et révoquer des liens"
 msgstr "Create and revoke links"
 
-#: vault/integrations.py:31 vault/mfa.py:43
+#: vault/integrations.py:36 vault/mfa.py:43
 msgid "Mot de passe actuel"
 msgstr "Current password"
 
-#: vault/integrations.py:36
+#: vault/integrations.py:41
 msgid "Code de double authentification"
 msgstr "Two-factor authentication code"
 
-#: vault/integrations.py:39
+#: vault/integrations.py:44
 msgid "Requis si la double authentification est activée."
 msgstr "Required if two-factor authentication is enabled."
 
-#: vault/integrations.py:44
+#: vault/integrations.py:49
 msgid "Nom de la clé"
 msgstr "Key name"
 
-#: vault/integrations.py:46
+#: vault/integrations.py:51
 msgid "Permissions"
 msgstr "Permissions"
 
-#: vault/integrations.py:49
+#: vault/integrations.py:62
+msgid ""
+"Sans expiration : la clé reste utilisable jusqu’à sa révocation ou un "
+"changement de mot de passe/MFA."
+msgstr ""
+"No expiration: the key remains usable until revoked or your password/MFA "
+"changes."
+
+#: vault/integrations.py:66
 msgid "Validité en jours"
 msgstr "Validity in days"
 
-#: vault/integrations.py:55
+#: vault/integrations.py:83
+msgid "Indiquez une validité de 1 à 365 jours."
+msgstr "Enter a validity period of 1 to 365 days."
+
+#: vault/integrations.py:88
 msgid "Nom du webhook"
 msgstr "Webhook name"
 
-#: vault/integrations.py:57
+#: vault/integrations.py:90
 msgid "URL de réception"
 msgstr "Receiver URL"
 
-#: vault/integrations.py:61
+#: vault/integrations.py:94
 msgid ""
-"HTTPS public, port 443. Les adresses internes et les redirections sont "
-"refusées."
-msgstr "Public HTTPS, port 443. Internal addresses and redirects are blocked."
+"Collez l’URL fournie par votre outil (n8n, votre serveur…). Elle doit déjà "
+"accepter les notifications POST en HTTPS public sur le port 443."
+msgstr ""
+"Paste the URL supplied by your tool (n8n, your server…). It must already "
+"accept POST notifications over public HTTPS on port 443."
 
-#: vault/integrations.py:65
+#: vault/integrations.py:98
 msgid "Événements"
 msgstr "Events"
 
-#: vault/integrations.py:77 vault/mfa.py:165 vault/views.py:936
+#: vault/integrations.py:110 vault/mfa.py:165 vault/views.py:936
 msgid "Mot de passe incorrect."
 msgstr "Incorrect password."
 
-#: vault/integrations.py:80 vault/mfa.py:144 vault/mfa.py:216
+#: vault/integrations.py:113 vault/mfa.py:144 vault/mfa.py:216
 msgid "Code incorrect, expiré ou déjà utilisé."
 msgstr "Incorrect, expired or already used code."
 
-#: vault/integrations.py:127
+#: vault/integrations.py:174
 msgid "Révoquez une clé avant d’en créer une autre (10 maximum)."
 msgstr "Revoke a key before creating another (maximum 10)."
 
-#: vault/integrations.py:142
+#: vault/integrations.py:193
 msgid "Clé API"
 msgstr "API key"
 
-#: vault/integrations.py:153
+#: vault/integrations.py:204
 msgid "Supprimez un webhook avant d’en créer un autre (10 maximum)."
 msgstr "Delete a webhook before creating another (maximum 10)."
 
-#: vault/integrations.py:168
+#: vault/integrations.py:219
 msgid "Secret de signature"
 msgstr "Signing secret"
 
-#: vault/integrations.py:208
+#: vault/integrations.py:280
 msgid "Clé API révoquée."
 msgstr "API key revoked."
 
-#: vault/integrations.py:232
+#: vault/integrations.py:304
 msgid "Événement de test ajouté à la file d’attente."
 msgstr "Test event added to the delivery queue."
+
+#: vault/integrations.py:368
+msgid ""
+"Adresse introuvable : vérifiez le chemin et activez le workflow "
+"destinataire."
+msgstr ""
+"Address not found: check the path and activate the receiving workflow."
+
+#: vault/integrations.py:372
+msgid ""
+"Cette adresse n’accepte pas POST. Utilisez une URL de réception de webhook."
+msgstr "This address does not accept POST. Use a webhook receiver URL."
+
+#: vault/integrations.py:376
+msgid ""
+"Le destinataire refuse l’accès. Vérifiez sa configuration et le secret de "
+"signature."
+msgstr ""
+"The receiver denied access. Check its configuration and the signing secret."
+
+#: vault/integrations.py:379
+msgid "Redirection refusée. Enregistrez directement l’URL HTTPS finale."
+msgstr "Redirect refused. Save the final HTTPS URL directly."
+
+#: vault/integrations.py:382
+msgid ""
+"Destinataire temporairement indisponible. Une reprise est prévue si des "
+"tentatives restent disponibles."
+msgstr ""
+"Receiver temporarily unavailable. A retry is scheduled if attempts remain."
 
 #: vault/link_lists.py:81 vault/link_lists.py:127 vault/link_lists.py:134
 #: vault/link_lists.py:197 vault/link_lists.py:205
@@ -3409,33 +3703,178 @@ msgstr "Ink"
 msgid "Utilisez une couleur au format #123abc."
 msgstr "Use a color in #123abc format."
 
-#: vault/models.py:214
+#: vault/models.py:238
 msgid "Révoqué"
 msgstr "Revoked"
 
-#: vault/models.py:215
+#: vault/models.py:239
 msgid "Expiré"
 msgstr "Expired"
 
-#: vault/models.py:216
+#: vault/models.py:240
 msgid "Épuisé"
 msgstr "Exhausted"
 
-#: vault/models.py:289 vault/webhooks.py:43
+#: vault/models.py:313 vault/webhooks.py:43
 msgid "Page ouverte"
 msgstr "Page opened"
 
-#: vault/models.py:290 vault/webhooks.py:44
+#: vault/models.py:314 vault/webhooks.py:44
 msgid "Téléchargement autorisé"
 msgstr "Download authorized"
 
-#: vault/models.py:291 vault/webhooks.py:41
+#: vault/models.py:315 vault/models.py:347 vault/webhooks.py:41
 msgid "Lien créé"
 msgstr "Link created"
 
-#: vault/models.py:292 vault/webhooks.py:42
+#: vault/models.py:316 vault/models.py:348 vault/webhooks.py:42
 msgid "Lien révoqué"
 msgstr "Link revoked"
+
+#: vault/models.py:329
+msgid "Instance initialisée"
+msgstr "Instance initialized"
+
+#: vault/models.py:330
+msgid "Invitation acceptée"
+msgstr "Invitation accepted"
+
+#: vault/models.py:331
+msgid "Invitation créée"
+msgstr "Invitation created"
+
+#: vault/models.py:332
+msgid "Invitation révoquée"
+msgstr "Invitation revoked"
+
+#: vault/models.py:333
+msgid "Connexion réussie"
+msgstr "Signed in"
+
+#: vault/models.py:334
+msgid "Mot de passe modifié"
+msgstr "Password changed"
+
+#: vault/models.py:335
+msgid "Membre réactivé"
+msgstr "Member reactivated"
+
+#: vault/models.py:336
+msgid "Membre suspendu"
+msgstr "Member suspended"
+
+#: vault/models.py:337 vault/models.py:338
+msgid "Quota modifié"
+msgstr "Quota changed"
+
+#: vault/models.py:339 vault/webhooks.py:39
+msgid "Dossier créé"
+msgstr "Collection created"
+
+#: vault/models.py:340
+msgid "Dossier placé dans la corbeille"
+msgstr "Collection moved to trash"
+
+#: vault/models.py:341 vault/webhooks.py:40
+msgid "Fichiers enregistrés"
+msgstr "Files stored"
+
+#: vault/models.py:342
+msgid "Fichiers placés dans la corbeille"
+msgstr "Files moved to trash"
+
+#: vault/models.py:343
+msgid "Envoi démarré"
+msgstr "Upload started"
+
+#: vault/models.py:344
+msgid "Envoi annulé"
+msgstr "Upload canceled"
+
+#: vault/models.py:345
+msgid "Élément restauré"
+msgstr "Item restored"
+
+#: vault/models.py:346
+msgid "Élément supprimé définitivement"
+msgstr "Item permanently deleted"
+
+#: vault/models.py:349
+msgid "Lien renommé"
+msgstr "Link renamed"
+
+#: vault/models.py:350
+msgid "Lot renommé"
+msgstr "Batch renamed"
+
+#: vault/models.py:351
+msgid "Liste de liens supprimée"
+msgstr "Link list deleted"
+
+#: vault/models.py:352
+msgid "Aperçus du lien modifiés"
+msgstr "Link previews changed"
+
+#: vault/models.py:353
+msgid "Clé API créée"
+msgstr "API key created"
+
+#: vault/models.py:354
+msgid "Clé API révoquée"
+msgstr "API key revoked"
+
+#: vault/models.py:355
+msgid "Webhook créé"
+msgstr "Webhook created"
+
+#: vault/models.py:356
+msgid "Webhook mis en pause"
+msgstr "Webhook paused"
+
+#: vault/models.py:357
+msgid "Webhook supprimé"
+msgstr "Webhook deleted"
+
+#: vault/models.py:358
+msgid "Webhook réactivé"
+msgstr "Webhook reactivated"
+
+#: vault/models.py:359
+msgid "Secret du webhook renouvelé"
+msgstr "Webhook secret rotated"
+
+#: vault/models.py:360
+msgid "Webhook mis en pause : file pleine"
+msgstr "Webhook paused: queue full"
+
+#: vault/models.py:362
+msgid "Double authentification désactivée"
+msgstr "Two-factor authentication disabled"
+
+#: vault/models.py:363
+msgid "Codes de récupération renouvelés"
+msgstr "Recovery codes replaced"
+
+#: vault/models.py:364
+msgid "Code de récupération utilisé"
+msgstr "Recovery code used"
+
+#: vault/models.py:365
+msgid "Restauration de sauvegarde vérifiée"
+msgstr "Backup restore verified"
+
+#: vault/models.py:378
+msgid "Autre action"
+msgstr "Other action"
+
+#: vault/models.py:439 vault/operations.py:108
+#, python-format
+msgid ""
+"Le compte n° %(id)s atteint au moins 90 %% de son quota (envois réservés "
+"compris)."
+msgstr ""
+"Account #%(id)s has reached at least 90%% of its quota (including reserved "
+"uploads)."
 
 #: vault/operations.py:91
 msgid ""
@@ -3462,15 +3901,6 @@ msgid ""
 "d’exploitation."
 msgstr ""
 "No backup restore has been verified recently. See the operations guide."
-
-#: vault/operations.py:108
-#, python-format
-msgid ""
-"Le compte n° %(id)s atteint au moins 90 %% de son quota (envois réservés "
-"compris)."
-msgstr ""
-"Account #%(id)s has reached at least 90%% of its quota (including reserved "
-"uploads)."
 
 #: vault/operations.py:121
 msgid "[Liasio] Intervention nécessaire"
@@ -3816,14 +4246,6 @@ msgstr "An error occurred"
 msgid "Réessayez dans quelques instants."
 msgstr "Try again in a few moments."
 
-#: vault/webhooks.py:39
-msgid "Dossier créé"
-msgstr "Collection created"
-
-#: vault/webhooks.py:40
-msgid "Fichiers enregistrés"
-msgstr "Files stored"
-
 #: vault/webhooks.py:75
 msgid ""
 "Utilisez une URL HTTPS publique sur le port 443, sans identifiants, "
@@ -3831,269 +4253,3 @@ msgid ""
 msgstr ""
 "Use a public HTTPS URL on port 443, without credentials, query parameters or"
 " fragments."
-
-msgid ""
-"Cette clé autorise les commandes API. Utilisez-la comme Bearer dans votre "
-"outil, jamais dans une URL."
-msgstr ""
-"This key authorizes API commands. Use it as a Bearer token in your tool, "
-"never in a URL."
-
-msgid ""
-"Ce secret sert à vérifier les notifications chez le destinataire. Ce n’est "
-"ni une clé API ni un lien de téléchargement."
-msgstr ""
-"This secret verifies notifications at the receiver. It is neither an API key"
-" nor a download link."
-
-msgid "VOTRE OUTIL → LIASIO"
-msgstr "YOUR TOOL → LIASIO"
-
-#| msgid "Créer des liens en lot"
-msgid "Créer des liens : l’API"
-msgstr "Create links: the API"
-
-msgid ""
-"Envoyez les noms A et B depuis Codex, un terminal ou votre serveur. La "
-"réponse contient le lien A et le lien B. Aucun webhook n’est nécessaire."
-msgstr ""
-"Send names A and B from Codex, a terminal or your server. The response "
-"contains link A and link B. No webhook is needed."
-
-#| msgid "Préparer un lot"
-msgid "Préparer ma commande"
-msgstr "Prepare my command"
-
-msgid "LIASIO → VOTRE OUTIL"
-msgstr "LIASIO → YOUR TOOL"
-
-msgid "Recevoir des notifications : les webhooks"
-msgstr "Receive notifications: webhooks"
-
-msgid ""
-"Votre outil fournit une URL de réception. Liasio y envoie un événement "
-"lorsqu’un lien est créé, ouvert ou téléchargé. Ajouter un webhook ne crée "
-"aucune page sur Liasio."
-msgstr ""
-"Your tool provides a receiver URL. Liasio sends an event there when a link "
-"is created, opened or downloaded. Adding a webhook does not create a page on"
-" Liasio."
-
-#| msgid "Configurer mon application"
-msgid "Configurer les notifications"
-msgstr "Set up notifications"
-
-msgid ""
-"Pour créer des lots et les exporter, cochez read et links:write. Ajoutez "
-"files:write pour importer des fichiers par API."
-msgstr ""
-"To create and export batches, select read and links:write. Add files:write "
-"to upload files through the API."
-
-#| msgid "Webhooks"
-msgid "Webhooks sortants"
-msgstr "Outgoing webhooks"
-
-msgid ""
-"Créez d’abord un point de réception dans votre outil, puis collez son URL "
-"ici. Le secret de signature permet à cet outil de vérifier que la "
-"notification vient de Liasio."
-msgstr ""
-"First create a receiver in your tool, then paste its URL here. The signing "
-"secret lets that tool verify that the notification comes from Liasio."
-
-#| msgid "Envoyer des noms, recevoir les liens et exporter par API."
-msgid "Envoyer A et B, recevoir leurs liens"
-msgstr "Send A and B, receive their links"
-
-msgid "Guide pas à pas"
-msgstr "Step-by-step guide"
-
-msgid "Adresse de votre API"
-msgstr "Your API address"
-
-msgid ""
-"Créez une clé API avec read et links:write ci-dessus. Conservez-la dans "
-"votre coffre ; ne la collez pas dans une conversation."
-msgstr ""
-"Create an API key with read and links:write above. Store it in your secret "
-"vault; do not paste it into a conversation."
-
-msgid ""
-"Choisissez le dossier contenant les fichiers à partager. Chaque nom recevra "
-"un lien distinct vers ce même dossier."
-msgstr ""
-"Choose the collection containing the files to share. Each name will receive "
-"a separate link to that same collection."
-
-msgid ""
-"Exécutez la commande depuis votre terminal ou le serveur de votre site. La "
-"réponse JSON associe chaque label à son url."
-msgstr ""
-"Run the command from your terminal or your website server. The JSON response"
-" pairs each label with its url."
-
-msgid "Afficher la commande"
-msgstr "Show command"
-
-#| msgid "La bonne présentation, pour chaque destinataire."
-msgid "URL de création pour ce dossier"
-msgstr "Creation URL for this collection"
-
-msgid "1. Charger ma clé dans le terminal (macOS / Linux)"
-msgstr "1. Load my key in the terminal (macOS / Linux)"
-
-msgid ""
-"Exécutez cette ligne, puis collez votre clé et appuyez sur Entrée. La saisie"
-" reste masquée et la clé n’est pas écrite dans l’historique des commandes."
-msgstr ""
-"Run this line, then paste your key and press Enter. Input stays hidden and "
-"the key is not written to your command history."
-
-msgid ""
-"Sur un site web, utilisez le coffre de secrets du serveur. N’insérez jamais "
-"cette clé dans le JavaScript envoyé aux visiteurs."
-msgstr ""
-"For a website, use the server’s secret store. Never put this key in "
-"JavaScript sent to visitors."
-
-msgid "2. Copier et exécuter la commande de création"
-msgstr "2. Copy and run the creation command"
-
-msgid ""
-"Remplacez A et B par vos noms. Ces liens n’expirent pas et n’ont pas de "
-"limite de téléchargements. Le dossier doit contenir des fichiers validés."
-msgstr ""
-"Replace A and B with your names. These links do not expire and have no "
-"download limit. The collection must contain validated files."
-
-msgid "Commande à copier"
-msgstr "Command to copy"
-
-msgid "Commande copiée."
-msgstr "Command copied."
-
-#| msgid "Copier le lien"
-msgid "Copier la commande"
-msgstr "Copy command"
-
-msgid ""
-"Gardez la même Idempotency-Key pour réessayer exactement la même commande "
-"pendant 24 heures. Pour un nouveau lot ou de nouveaux noms, affichez une "
-"nouvelle commande. Conservez l’ID du lot après succès."
-msgstr ""
-"Keep the same Idempotency-Key to retry the exact same command for 24 hours. "
-"For a new batch or new names, display a new command. Save the batch ID after"
-" success."
-
-msgid ""
-"Créez un dossier et importez ses fichiers pour obtenir une commande adaptée "
-"à votre espace."
-msgstr ""
-"Create a collection and upload its files to get a command for your "
-"workspace."
-
-msgid "3. Retrouver et exporter la liste"
-msgstr "3. Find and export the list"
-
-msgid ""
-"La réponse contient items avec label et url, ainsi que exports pour Excel et"
-" CSV. Les adresses d’export API nécessitent la clé. Pour télécharger dans le"
-" navigateur, ouvrez Mes lots et choisissez Télécharger Excel ou Télécharger "
-"CSV."
-msgstr ""
-"The response contains items with label and url, plus exports for Excel and "
-"CSV. API export URLs require the key. To download in your browser, open My "
-"batches and choose Download Excel or Download CSV."
-
-#| msgid "Mes lots"
-msgid "Ouvrir Mes lots"
-msgstr "Open My batches"
-
-msgid "Où vont les notifications ?"
-msgstr "Where do notifications go?"
-
-msgid ""
-"Liasio envoie une requête POST à l’adresse ci-dessous. Cette adresse doit "
-"être créée et activée chez le destinataire (n8n, votre serveur…). "
-"L’enregistrer ici ne crée pas de page, et l’ouvrir dans un navigateur ne "
-"teste pas la réception d’une notification."
-msgstr ""
-"Liasio sends a POST request to the address below. This address must be "
-"created and activated at the receiver (n8n, your server…). Saving it here "
-"does not create a page, and opening it in a browser does not test "
-"notification delivery."
-
-#| msgid "URL de réception"
-msgid "Copier l’URL de réception"
-msgstr "Copy receiver URL"
-
-msgid ""
-"URL indisponible. Créez un nouveau webhook avec l’adresse de votre "
-"destinataire."
-msgstr "URL unavailable. Create a new webhook with your receiver’s address."
-
-msgid ""
-"Pour envoyer des noms et obtenir des liens de téléchargement, utilisez "
-"l’API. Le secret de signature sert uniquement à vérifier les notifications "
-"reçues."
-msgstr ""
-"To send names and get download links, use the API. The signing secret is "
-"only used to verify incoming notifications."
-
-msgid ""
-"Sans expiration : la clé reste utilisable jusqu’à sa révocation ou un "
-"changement de mot de passe/MFA."
-msgstr ""
-"No expiration: the key remains usable until revoked or your password/MFA "
-"changes."
-
-#| msgid "Indiquez le nombre de jours."
-msgid "Indiquez une validité de 1 à 365 jours."
-msgstr "Enter a validity period of 1 to 365 days."
-
-msgid ""
-"Collez l’URL fournie par votre outil (n8n, votre serveur…). Elle doit déjà "
-"accepter les notifications POST en HTTPS public sur le port 443."
-msgstr ""
-"Paste the URL supplied by your tool (n8n, your server…). It must already "
-"accept POST notifications over public HTTPS on port 443."
-
-msgid ""
-"Adresse introuvable : vérifiez le chemin et activez le workflow "
-"destinataire."
-msgstr ""
-"Address not found: check the path and activate the receiving workflow."
-
-msgid ""
-"Cette adresse n’accepte pas POST. Utilisez une URL de réception de webhook."
-msgstr "This address does not accept POST. Use a webhook receiver URL."
-
-msgid ""
-"Le destinataire refuse l’accès. Vérifiez sa configuration et le secret de "
-"signature."
-msgstr ""
-"The receiver denied access. Check its configuration and the signing secret."
-
-msgid "Redirection refusée. Enregistrez directement l’URL HTTPS finale."
-msgstr "Redirect refused. Save the final HTTPS URL directly."
-
-msgid ""
-"Destinataire temporairement indisponible. Une reprise est prévue si des "
-"tentatives restent disponibles."
-msgstr ""
-"Receiver temporarily unavailable. A retry is scheduled if attempts remain."
-
-#: templates/integrations/webhook.html:5
-msgid "Retour aux automatisations"
-msgstr "Back to automations"
-
-#: templates/components/share_download.html:6 templates/branding.html:46
-msgid "Télécharger les fichiers"
-msgstr "Download files"
-
-#~ msgid "Partagé avec Liasio."
-#~ msgstr "Shared with Liasio."
-
-#~ msgid "L"
-#~ msgstr "L"

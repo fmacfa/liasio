@@ -20,7 +20,7 @@
         {% include "components/icon.html" with name="file" %}
       </div>
       <strong>{{ file_count }}</strong>
-      <small>{% translate "Dans" %} {{ collection_count }} {% translate "dossier" %}{{ collection_count|pluralize }}</small>
+      <small>{% blocktranslate count count=collection_count %}Dans {{ count }} dossier{% plural %}Dans {{ count }} dossiers{% endblocktranslate %}</small>
     </article>
     <article class="stat">
       <div class="spread">

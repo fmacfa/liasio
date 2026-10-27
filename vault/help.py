@@ -100,7 +100,9 @@ def guide(request, slug):
     item = next((g for g in GUIDES if g[0] == slug), None)
     if item is None:
         raise Http404
-    language = "en" if get_language().startswith("en") else "fr"
+    language = (get_language() or settings.LANGUAGE_CODE).split("-")[0]
+    if language not in dict(settings.LANGUAGES):
+        language = settings.LANGUAGE_CODE
     source = settings.BASE_DIR / "docs" / "guide" / language / f"{slug}.md"
     parser = MarkdownIt("commonmark", {"html": False}).enable("table")
     tokens = parser.parse(source.read_text())

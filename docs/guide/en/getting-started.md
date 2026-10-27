@@ -24,7 +24,7 @@ Open the personal invitation supplied by the administrator. Check the email addr
 
 ## Sign in, choose a language and sign out
 
-Use your account email and password. If two-factor authentication is enabled, enter a fresh app code or one recovery code. The **FR / EN** selector is available on sign-in, workspace and recipient pages. Your choice is remembered in a browser cookie; without a choice, the browser language is used, with French as fallback. Your file names and written introductions are never automatically translated.
+Use your account email and password. If two-factor authentication is enabled, enter a fresh app code or one recovery code. The **FR / EN / DE** selector is available on sign-in, workspace and recipient pages. Your choice is remembered in a browser cookie; without a choice, the browser’s preferred supported language is used, including on download pages (regional German codes such as de-DE, de-AT and de-CH select German), with French as fallback. A manual choice takes precedence; removing the language cookie restores automatic detection. Your file names and written introductions are never automatically translated.
 
 Use **Sign out** at the bottom of the sidebar, especially on a shared computer. Forgotten password? Choose **Forgot your password?** and follow the [account recovery guide](account.md). Email delivery must be configured by the administrator.
 

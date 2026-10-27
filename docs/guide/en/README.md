@@ -18,4 +18,4 @@ Version 0.4 · The same guides are available inside your instance under **User g
 12. [Bulk links, Excel and CSV](bulk-links.md)
 13. [Create, read and export batches through the API](bulk-links-api.md)
 
-[English](../en/README.md) · [Français](../fr/README.md) · [API reference](../../API.md)
+[English](../en/README.md) · [Français](../fr/README.md) · [Deutsch](../de/README.md) · [API reference](../../API.md)

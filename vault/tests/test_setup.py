@@ -25,8 +25,12 @@ class SetupTests(IsolatedFiles, TestCase):
         super().setUp()
         Instance.objects.update_or_create(pk=1, defaults={"initialized": False})
 
-    def test_setup_in_both_languages_needs_no_installation_key(self):
-        for language, title in (("fr", "Créons votre espace."), ("en", "Let’s create your workspace.")):
+    def test_setup_in_all_languages_needs_no_installation_key(self):
+        for language, title in (
+            ("fr", "Créons votre espace."),
+            ("en", "Let’s create your workspace."),
+            ("de", "Richten wir Ihren Arbeitsbereich ein."),
+        ):
             response = self.client.get("/setup/", HTTP_ACCEPT_LANGUAGE=language)
             self.assertContains(response, title)
             self.assertNotContains(response, "setup_token")

@@ -5,7 +5,7 @@
     <a href="{% url 'storage' %}" class="back-link">{% translate "← Retour au stockage" %}</a>
     <div class="panel form-panel narrow">
         <span class="eyebrow">{% translate "SUPPRESSION RÉCUPÉRABLE" %}</span>
-        <h1>{% translate "Supprimer" %} {{ files|length }} {% translate "fichier" %}{{ files|length|pluralize }} ?</h1>
+        <h1>{% blocktranslate count count=files|length %}Supprimer {{ count }} fichier ?{% plural %}Supprimer {{ count }} fichiers ?{% endblocktranslate %}</h1>
         <p class="muted spaced"><strong>{{ freed|filesizeformat }}</strong> {% translate "seront conservés dans la corbeille pendant" %} {{ trash_retention }} {% translate "jours et continueront à compter dans votre quota." %}</p>
         <div class="notice">
             <p>
