@@ -1,0 +1,21 @@
+{% load i18n %}
+<div class="share-download{% if position == 'top' %} share-download-top{% endif %}">
+  <form method="post" action="{% url 'download' token %}">
+    {% csrf_token %}
+    <button type="submit" class="button full download-button"{% if link.expires_at or link.max_downloads %} aria-describedby="download-conditions-{{ position }}"{% endif %}>
+      {% include "components/icon.html" with name="download" %}{% translate "Télécharger les fichiers" %} <span>{% translate "ZIP ·" %} {{ collection.total_bytes|filesizeformat }}</span>
+    </button>
+  </form>
+  {% if link.expires_at or link.max_downloads %}
+    <div class="download-conditions" id="download-conditions-{{ position }}">
+      {% if link.expires_at %}
+        <span>{% include "components/icon.html" with name="clock" %}{% translate "Disponible jusqu’au" %} {{ link.expires_at|date:"DATETIME_FORMAT" }}</span>
+      {% endif %}
+      {% if link.max_downloads == 1 %}
+        <span>{% include "components/icon.html" with name="lock" %}{% translate "Un seul téléchargement autorisé, même en cas d’interruption." %}</span>
+      {% elif link.max_downloads %}
+        <span>{{ link.downloads }} / {{ link.max_downloads }} {% translate "téléchargements autorisés utilisés" %}</span>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>

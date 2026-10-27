@@ -32,7 +32,7 @@ class LanguageTests(IsolatedFiles, TestCase):
                 Event(link=self.link, kind="opened").get_kind_display(), "Page opened"
             )
         share = self.client.get(f"/s/{capability('share', self.link.pk)}/")
-        self.assertContains(share, "Download collection")
+        self.assertContains(share, "Download files")
         self.assertContains(share, self.folder.title)
         self.assertEqual(self.link.downloads, 0)
         self.client.post("/language/", {"language": "fr", "next": "/links/"})

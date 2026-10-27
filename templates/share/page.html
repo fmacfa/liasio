@@ -26,7 +26,8 @@
     <div class="share-intro">
       <span class="eyebrow">{% translate "DES FICHIERS POUR VOUS" %}</span>
       <h1>{{ collection.title }}</h1>
-      <p class="pre-line">{{ collection.description }}</p>
+      {% include "components/share_download.html" with position="top" %}
+      {% if collection.description %}<p class="pre-line">{{ collection.description }}</p>{% endif %}
     </div>
     {% if collection.recipient_note %}
       <div class="recipient-note">
@@ -67,24 +68,7 @@
       <p class="preview-note">{% translate "Aperçus des images et PDF jusqu’à 20 Mio. Leur consultation ne consomme pas de téléchargement. Les fichiers originaux sont dans le dossier ZIP." %}</p>
       </details>
       {% endif %}
-      <form method="post" action="{% url 'download' token %}">
-        {% csrf_token %}
-        <button class="button full download-button">
-          {% include "components/icon.html" with name="download" %}{% translate "Télécharger le dossier" %} <span>{% translate "ZIP ·" %} {{ collection.total_bytes|filesizeformat }}</span>
-        </button>
-      </form>
-      <div class="download-conditions">
-        {% if link.expires_at %}
-          <span>
-          {% include "components/icon.html" with name="clock" %}{% translate "Disponible jusqu’au" %} {{ link.expires_at|date:"DATETIME_FORMAT" }}</span>
-        {% endif %}
-        {% if link.max_downloads == 1 %}
-          <span>
-          {% include "components/icon.html" with name="lock" %}{% translate "Un seul téléchargement autorisé, même en cas d’interruption." %}</span>
-        {% elif link.max_downloads %}
-          <span>{{ link.downloads }} / {{ link.max_downloads }} {% translate "téléchargements autorisés utilisés" %}</span>
-        {% endif %}
-      </div>
+      {% include "components/share_download.html" with position="bottom" %}
     </section>
     <p class="privacy-note">{% translate "L’expéditeur peut consulter les dates d’ouverture de cette page et des téléchargements autorisés. Aucun outil publicitaire n’est utilisé." %}</p>
   </main>

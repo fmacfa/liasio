@@ -22,6 +22,10 @@ Sharing URLs now contain an unpredictable 22-character code after `/s/` instead 
 
 ## See what the recipient sees
 
+The **Download files** button is visible directly below the collection title, before the file list. It shows the ZIP size and any expiry or download limit. A second button remains below the files, so recipients can download after reviewing them as well. Both buttons download the same ZIP with the same access rules.
+
+![Download button visible at the top on mobile](../../screenshots/user-guide/en/download-top.png)
+
 ![Recipient gallery](../../screenshots/user-guide/en/preview.png)
 
 The list shows expandable folders and subfolders in their order of addition. With previews enabled, expand **View file previews**: JPEG, PNG, WebP and GIF images (first frame), and PDFs (first page), can be viewed before downloading. The original must be at most 20 MiB; images are limited to 24 megapixels. Previews are smaller, metadata-free JPEGs. Other file types display their name, type and size. A missing preview never prevents an authorized original download.
