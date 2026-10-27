@@ -18,6 +18,8 @@ Ouvrez un dossier contenant des fichiers puis cliquez sur **Créer un lien**.
 
 Cliquez sur **Créer le lien**. Dans **Mes liens**, copiez l’URL et transmettez-la au destinataire. Le mot de passe protège aussi la présentation et la liste des fichiers. Le destinataire n’a pas besoin d’un compte Liasio.
 
+Les URL de partage utilisent désormais un jeton signé compact de 43 caractères après `/s/`, contre 97 auparavant. Les liens existants adoptent aussi ce format lorsque vous les recopiez ; **les anciennes URL fonctionnent toujours**. Les deux adresses désignent le même lien : mot de passe, expiration, révocation, activité et nombre de téléchargements sont communs. Les exports de lots et les nouvelles réponses API utilisent également l’URL compacte ; refaites un export pour actualiser un fichier Excel déjà téléchargé. Une nouvelle tentative API peut renvoyer son URL longue d’origine, qui reste valable. Voir le [format et la compatibilité des liens](../../SHARE_LINKS.md).
+
 ## Voir ce que découvre le destinataire
 
 ![Galerie du destinataire](../../screenshots/user-guide/fr/preview.png)

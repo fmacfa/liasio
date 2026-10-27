@@ -36,6 +36,7 @@ from vault.security import capability
 from vault.storage import add_files
 from vault.trash import purge, trash_assets
 from .test_security import IsolatedFiles, PASSWORD
+from .test_capabilities import legacy_capability
 
 
 def picture(format="PNG", size=(120, 80)):
@@ -126,6 +127,20 @@ class PreviewTests(IsolatedFiles, TestCase):
         session = self.client.session
         session["grants"] = {str(self.link.pk): time.time() - 1}
         session.save()
+        self.assertEqual(self.client.get(self.url).status_code, 404)
+
+    def test_legacy_preview_uses_same_grant_and_revocation_as_compact_link(self):
+        legacy_url = reverse(
+            "file_preview", args=[legacy_capability("share", self.link.pk), self.asset.pk]
+        )
+        self.link.password_hash = make_password(PASSWORD)
+        self.link.save(update_fields=["password_hash"])
+        self.assertEqual(self.client.get(legacy_url).status_code, 404)
+        self.client.post(reverse("unlock", args=[self.token]), {"password": PASSWORD})
+        self.assertEqual(self.client.get(legacy_url).status_code, 200)
+        self.assertEqual(self.client.get(self.url).status_code, 200)
+        ShareLink.objects.filter(pk=self.link.pk).update(revoked_at=timezone.now())
+        self.assertEqual(self.client.get(legacy_url).status_code, 404)
         self.assertEqual(self.client.get(self.url).status_code, 404)
 
     def test_revocation_expiry_suspension_trash_optout_and_scanning_block_cache(self):

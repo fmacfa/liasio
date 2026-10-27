@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Generate compact 43-character signed sharing and invitation tokens instead of 97-character hexadecimal tokens, while continuing to accept existing URLs. Interface copies, API reads and batch exports use the compact form; original idempotency responses remain intact. Both formats share access rules and counters. No migration is needed; rollback builds must retain compact decoding once new URLs have been distributed. See [format and compatibility](docs/SHARE_LINKS.md).
+
 - Clarify API commands versus outgoing webhook notifications, show owner-only receiver URLs and delivery error explanations, and provide collection-specific batch commands in Automations.
 - Add optional non-expiring API keys with unchanged revocation, scope and account protections; migrate existing expiry dates unchanged.
 - Remove numeric spinners from all application inputs, including API validity and member quotas; document the workflow in French and English.

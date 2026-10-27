@@ -31,6 +31,7 @@ from vault.models import (
     WebhookDelivery,
 )
 from .test_security import IsolatedFiles
+from .test_capabilities import legacy_capability
 
 
 def api_key(owner, scopes=None):
@@ -111,6 +112,52 @@ class BatchAPITests(IsolatedFiles, TestCase):
         self.assertEqual(read["X-Content-Type-Options"], "nosniff")
         self.assertNotIn(" a ", APIReceipt.objects.get().response)
         self.assertNotIn(data["items"][0]["url"], APIReceipt.objects.get().response)
+
+    def test_upgrade_preserves_api_replays_and_exports_current_compact_urls(self):
+        # A pre-upgrade receipt must replay verbatim, even though fresh reads use
+        # the new URL representation for those same database links.
+        with patch("vault.security.capability", side_effect=legacy_capability):
+            original = self.post()
+        self.assertEqual(original.status_code, 201)
+        old = original.json()
+        self.assertEqual(self.post().json(), old)
+        current = self.get(reverse("api_link_batch", args=[old["id"]])).json()
+        urls = [row["url"] for row in current["items"]]
+        self.assertEqual(
+            [row["id"] for row in current["items"]],
+            [row["id"] for row in old["items"]],
+        )
+        for row, old_row in zip(current["items"], old["items"], strict=True):
+            self.assertRegex(row["url"], r"/s/[A-Za-z0-9_-]{43}/\Z")
+            self.assertRegex(old_row["url"], r"/s/[0-9a-f]{32}\.[0-9a-f]{64}/\Z")
+            self.assertEqual(self.client.get(row["url"]).status_code, 200)
+            self.assertEqual(self.client.get(old_row["url"]).status_code, 200)
+        fresh = self.post(key="compact-creation-request").json()
+        for row in fresh["items"]:
+            self.assertRegex(row["url"], r"/s/[A-Za-z0-9_-]{43}/\Z")
+        csv_response = self.get(
+            reverse("api_link_batch_export", args=[old["id"], "csv"])
+        )
+        self.assertEqual(csv_response.status_code, 200)
+        rows = list(csv.DictReader(
+            io.StringIO(csv_response.content.decode("utf-8-sig")), delimiter=";"
+        ))
+        self.assertEqual([row["Liasio URL"] for row in rows], urls)
+        xlsx_response = self.get(
+            reverse("api_link_batch_export", args=[old["id"], "xlsx"])
+        )
+        self.assertEqual(xlsx_response.status_code, 200)
+        book = load_workbook(io.BytesIO(xlsx_response.content), read_only=True)
+        rows = list(book.active.values)
+        column = rows[0].index("Liasio URL")
+        self.assertEqual([row[column] for row in rows[1:]], urls)
+        book.close()
+        self.client.force_login(self.user)
+        self.assertContains(self.client.get(reverse("link_batches")), old["name"])
+        detail = self.client.get(reverse("link_batch", args=[old["id"]]))
+        for url in urls:
+            self.assertContains(detail, url)
+            self.assertContains(self.client.get(reverse("links")), url)
 
     def test_quantity_limits_and_optional_conditions(self):
         response = self.post({"name": "Generated", "count": 200})
