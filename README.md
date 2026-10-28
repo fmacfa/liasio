@@ -19,7 +19,7 @@ French / English / German interface · **MIT** license · Python / Django · Doc
 | Need | Available in version 0.4 |
 | --- | --- |
 | First-time setup | Two short steps: email and password, then name and password confirmation; the first account becomes the administrator |
-| Multiple accounts | Personal invitations valid for 7 days, single-use and revocable; isolated member accounts |
+| Multiple accounts | Personal invitations valid for 7 days, single-use and revocable; private accounts with explicit Reader/Collaborator access per collection |
 | File library | Upload files or a complete directory while preserving its structure; add a title, description, and message to the recipient |
 | Upload page | Mixed file/folder drops, cumulative selection, real byte progress, pause/resume for 24 hours, then antivirus verification |
 | Sharing page | Per-account logo, background image, custom colors, name, tagline and footer, with a live preview |

@@ -18,6 +18,7 @@ from django.utils import timezone
 
 from .models import Asset, Audit, Collection, Event, ShareLink, UploadPart, User
 from .capacity import LeasedFile, reserve_temporary
+from .access import collection_for, locked_collection
 
 
 def safe_path(value):
@@ -115,6 +116,7 @@ def add_files(
     upload_session=None,
     capacity_reserved=False,
 ):
+    collection_for(owner, collection_id, write=True)
     if not uploads or len(uploads) > 100 or len(paths) != len(uploads):
         raise ValidationError(_("Sélectionnez entre 1 et 100 fichiers."))
     normalized = [safe_path(p) for p in paths]
@@ -141,10 +143,7 @@ def add_files(
     written = []
     try:
         with transaction.atomic():
-            user = User.objects.select_for_update().get(pk=owner.pk)
-            collection = Collection.objects.select_for_update().get(
-                pk=collection_id, owner=user
-            )
+            collection, user = locked_collection(owner, collection_id)
             if not user.is_active:
                 raise ValidationError(_("Compte désactivé."))
             if available_links(collection.links.all()).exists():
@@ -237,7 +236,7 @@ def add_files(
                 session.save(update_fields=["state"])
             collection.save(update_fields=["updated_at"])
             Audit.objects.create(
-                actor=user, action="files_uploaded", target=str(collection.pk)
+                actor=owner, action="files_uploaded", target=str(collection.pk)
             )
     except Exception:
         for name in written:
@@ -255,6 +254,47 @@ def delete_assets(owner, identifiers):
     from .trash import trash_assets
 
     return trash_assets(owner, identifiers)
+
+
+def member_bundle(actor, collection_id):
+    """Authenticated download, independent of recipient links and their counters."""
+    collection = collection_for(actor, collection_id)
+    files = list(collection.files.all())
+    if not files:
+        raise ValidationError(_("Ce dossier est vide."))
+    if settings.ANTIVIRUS_REQUIRED and any(not f.scanned for f in files):
+        raise ValidationError(_("Ce dossier contient des fichiers non analysés."))
+    size = (
+        sum(f.size + 2 * len(f.path.encode("utf-8")) + 256 for f in files) + 1024 * 1024
+    )
+    lease = reserve_temporary(size, owner_id=collection.owner_id)
+    try:
+        bundle = LeasedFile(
+            tempfile.TemporaryFile(dir=settings.FILE_UPLOAD_TEMP_DIR), lease
+        )
+    except BaseException:
+        lease.close()
+        raise
+    try:
+        with zipfile.ZipFile(
+            bundle, "w", compression=zipfile.ZIP_STORED, allowZip64=True
+        ) as archive:
+            for asset in files:
+                archive.write(asset.blob.path, arcname=asset.path)
+        bundle.seek(0)
+        with transaction.atomic():
+            locked, _owner = locked_collection(actor, collection_id, write=False)
+            if set(locked.files.values_list("pk", flat=True)) != {f.pk for f in files}:
+                raise ValidationError(
+                    _("Le dossier a changé. Relancez le téléchargement.")
+                )
+            Audit.objects.create(
+                actor=actor, action="collection_downloaded", target=str(collection_id)
+            )
+        return bundle
+    except BaseException:
+        bundle.close()
+        raise
 
 
 def download_bundle(link):

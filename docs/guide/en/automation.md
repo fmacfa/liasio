@@ -118,3 +118,7 @@ n8n references: [Webhook trigger](https://docs.n8n.io/integrations/builtin/core-
 In **Automations**, revoke the affected API key, create a replacement and update your tool’s secret store. For a webhook, open its detail page → **Security and configuration → Rotate secret**, then update the receiver’s verifier. Do not share the new value in a conversation or screenshot. Rotating a webhook secret does not replace an API key: they are separate credentials.
 
 Non-expiring keys count toward the same limit of ten unexpired, unrevoked keys. Existing keys keep their expiry dates; create a new key to change the lifetime. No expiration does not bypass revocation, password/MFA invalidation or account suspension.
+
+## Use a shared collection
+
+Use your own API key. Its scopes and your collection role both apply: Readers can read collection metadata; Collaborators can upload with `files:write`, create links and batches with `links:write`, and read/export links and batches with `read`. Quota and webhooks remain with the owner. Upload sessions are accessible only to their initiator or the owner. Removing access also blocks API resumption and creation-receipt replays for that collection. See [Members](team.md).

@@ -114,3 +114,7 @@ Für andere URLs oder Ereignisse erstellen und testen Sie einen Ersatz-Webhook u
 Wurde ein Schlüssel offengelegt, widerrufen Sie den betroffenen API-Schlüssel und ersetzen Sie ihn im Werkzeug. Bei einem Webhook erneuern Sie den Signaturschlüssel unter **Sicherheit und Konfiguration** und aktualisieren die Empfängerprüfung. Beide Arten von Schlüsseln sind unabhängig voneinander.
 
 n8n-Dokumentation (Englisch): [Webhook-Trigger](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook/) · [HTTP-Request-Zugangsdaten](https://docs.n8n.io/integrations/builtin/credentials/httprequest/).
+
+## Eine freigegebene Sammlung verwenden
+
+Verwenden Sie Ihren eigenen API-Schlüssel. Schlüsselrechte und Sammlungsrolle gelten gemeinsam: Leser können Sammlungsmetadaten lesen; Mitwirkende können mit `files:write` hochladen, mit `links:write` Links und Stapel erstellen und mit `read` Links und Stapel lesen und exportieren. Kontingent und Webhooks bleiben beim Eigentümer. Upload-Sitzungen sind nur für den Initiator oder Eigentümer zugänglich. Ein Zugriffsverlust blockiert auch die API-Fortsetzung und wiederholte Erstellungsantworten für diese Sammlung. Siehe [Mitglieder](team.md).

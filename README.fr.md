@@ -19,7 +19,7 @@ Interface français / anglais / allemand · Licence **MIT** · Python / Django �
 | Besoin | Disponible dans la version 0.4 |
 | --- | --- |
 | Première connexion | Deux étapes courtes : e-mail et mot de passe, puis nom et confirmation ; le premier compte devient administrateur |
-| Plusieurs comptes | Invitations personnelles, valables 7 jours, usage unique, révocables ; comptes membres isolés |
+| Plusieurs comptes | Invitations personnelles, valables 7 jours, usage unique, révocables ; comptes privés avec accès Lecteur/Collaborateur par dossier |
 | Bibliothèque | Import de fichiers ou d’un dossier avec son arborescence, titre, présentation et message au destinataire |
 | Page Importer | Dépôt mixte de fichiers et dossiers, sélection cumulative, progression réelle en octets, pause et reprise pendant 24 h, puis vérification |
 | Page de partage | Logo, image de fond, couleurs libres, nom, signature et pied de page propres à chaque compte ; aperçu en direct |

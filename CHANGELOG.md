@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Add explicit per-folder team access: Readers can browse and download; Collaborators can also edit the presentation, upload files, and manage links, batches, exports and recipient activity. Owners manage grants and retain file/folder deletion rights. Invitations and administrator status do not automatically reveal another account's folders. The same grants and API-key scopes apply to API calls, with owner storage quotas and actor audit attribution.
+- Add owner controls under **Members → Manage access** and inside each folder, plus illustrated French, English and German guides. Permission removal or downgrade cancels the member's pending uploads and blocks subsequent operations, including cached API creation responses. Existing recipient links remain valid until separately revoked.
+- Migration `0011` adds collection grants and a nullable upload initiator without changing existing ownership or sharing any existing folders. Back up first and restart application and worker processes together after migration.
+
 - Show a prominent **Download files** button below the shared collection title, before long file lists, while retaining the bottom button. Both show the ZIP size and applicable limits and submit the same protected download action. Update French/English labels and sharing guides.
 
 - Generate opaque 22-character sharing codes backed by a unique SHA-256 lookup, retaining 128 bits of unpredictability and accepting existing 43- and 97-character signed URLs. Interface copies, API reads and batch exports use the short form; original idempotency responses remain intact. All formats share access rules and counters. Migration `0010` backfills only the new digest field; `refresh_share_urls` repairs lookups after intentional key rotation and runs automatically at Docker startup. Invitation tokens remain 43 characters with legacy compatibility. Rollback builds must retain the decoder and index once short URLs have been distributed. See [format and compatibility](docs/SHARE_LINKS.md).

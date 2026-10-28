@@ -21,7 +21,8 @@ from django.views.decorators.http import require_GET, require_POST
 from scripts.preview_runtime import MAX_OUTPUT, MAX_SOURCE, render
 
 from .capacity import CapacityUnavailable, reserve_temporary
-from .models import Asset, Audit, ShareLink, User
+from .access import collections_for, locked_collection
+from .models import Asset, Audit, ShareLink
 from .security import limited, rate_allowed, verify_capability
 
 CACHE_BYTES = 256 * 1024**2
@@ -249,14 +250,14 @@ def toggle(request, pk):
     value = request.POST.get("enabled")
     if value not in {"0", "1"}:
         return HttpResponse(status=400)
+    link = get_object_or_404(
+        ShareLink, pk=pk, collection__in=collections_for(request.user, write=True)
+    )
     with transaction.atomic():
-        owner = get_object_or_404(
-            User.objects.select_for_update(), pk=request.user.pk, is_active=True
-        )
-        link = get_object_or_404(ShareLink, pk=pk, collection__owner=owner)
+        locked_collection(request.user, link.collection_id, request=request)
         ShareLink.objects.filter(pk=link.pk).update(allow_previews=value == "1")
         Audit.objects.create(
-            actor=owner, action="link_previews_changed", target=str(pk)
+            actor=request.user, action="link_previews_changed", target=str(pk)
         )
     messages.success(request, _("Les aperçus de ce lien ont été mis à jour."))
     return redirect("links")

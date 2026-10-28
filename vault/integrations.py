@@ -20,7 +20,8 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.views.decorators.http import require_http_methods, require_POST
 from .api_auth import credential_version, digest, valid
 from .mfa import cipher, consume_code
-from .models import APIToken, Audit, Collection, User, Webhook
+from .access import collections_for
+from .models import APIToken, Audit, User, Webhook
 from .security import limited
 from .webhooks import EVENTS, enqueue, parse_destination, pause_hook
 
@@ -119,7 +120,7 @@ def confirmed(user, form):
 @require_http_methods(["GET", "POST"])
 @sensitive_post_parameters()
 def index(request):
-    collections = Collection.objects.filter(owner=request.user)
+    collections = collections_for(request.user, write=True)
     selected = request.GET.get("collection")
     if selected:
         try:

@@ -73,13 +73,15 @@ class RequestBoundaryMiddleware:
         if request.path.endswith("/links/batch/") and request.method == "POST":
             if not request.user.is_authenticated:
                 return HttpResponse(_("Authentification requise."), status=403)
-            from .models import Collection
+            from .access import collections_for
             from .capacity import CapacityUnavailable, reserve_temporary
             from .security import limited, rate_allowed
 
-            if not Collection.objects.filter(
-                pk=view_kwargs.get("pk"), owner=request.user
-            ).exists():
+            if (
+                not collections_for(request.user, write=True)
+                .filter(pk=view_kwargs.get("pk"))
+                .exists()
+            ):
                 return HttpResponse(_("Dossier introuvable."), status=404)
             if not request.META.get("CONTENT_LENGTH"):
                 return HttpResponse(_("Content-Length requis."), status=411)
@@ -118,20 +120,24 @@ class RequestBoundaryMiddleware:
             # middleware has already populated request.user in its request phase.
             if not request.user.is_authenticated:
                 return HttpResponse(_("Authentification requise."), status=403)
-            from .models import Collection, User
+            from .access import collections_for
             from .capacity import CapacityUnavailable, reserve_temporary
             from .security import limited
 
-            if not Collection.objects.filter(
-                pk=view_kwargs.get("pk"), owner=request.user
-            ).exists():
+            collection = (
+                collections_for(request.user, write=True)
+                .select_related("owner")
+                .filter(pk=view_kwargs.get("pk"))
+                .first()
+            )
+            if collection is None:
                 return HttpResponse(_("Dossier introuvable."), status=404)
 
             if limited(request, "upload", 60, 3600):
                 return HttpResponse(
                     _("Trop d’envois. Réessayez plus tard."), status=429
                 )
-            user = User.objects.get(pk=request.user.pk)
+            user = collection.owner
             remaining = max(0, user.quota_bytes - user.used_bytes - user.reserved_bytes)
             length = int(request.META.get("CONTENT_LENGTH") or 0)
             if not user.is_active or remaining == 0 or length > remaining + 1024 * 1024:

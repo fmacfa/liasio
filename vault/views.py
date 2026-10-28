@@ -60,6 +60,7 @@ from .models import (
 from .security import limited, rate_allowed, verify_capability
 from .mfa import begin_login, complete_login
 from .file_tree import file_tree
+from .access import collections_for, collection_for, locked_collection, role_for
 from .storage import (
     add_files,
     available_links,
@@ -297,12 +298,18 @@ def account(request):
 @require_GET
 def dashboard(request):
     collections = (
-        request.user.collections.prefetch_related("files")
+        collections_for(request.user)
+        .prefetch_related("files")
+        .select_related("owner")
         .annotate(link_count=Count("links", distinct=True))
         .order_by("-updated_at", "-pk")
     )
-    links = ShareLink.objects.filter(collection__owner=request.user)
-    events = Event.objects.filter(link__collection__owner=request.user)
+    links = ShareLink.objects.filter(
+        collection__in=collections_for(request.user, write=True)
+    )
+    events = Event.objects.filter(
+        link__collection__in=collections_for(request.user, write=True)
+    )
     return render(
         request,
         "dashboard.html",
@@ -323,7 +330,9 @@ def dashboard(request):
 def collections(request):
     query = request.GET.get("q", "")[:120]
     items = (
-        request.user.collections.prefetch_related("files")
+        collections_for(request.user)
+        .prefetch_related("files")
+        .select_related("owner")
         .annotate(link_count=Count("links", distinct=True))
         .order_by("-updated_at", "-pk")
     )
@@ -366,7 +375,10 @@ def collection_create(request):
 @require_GET
 def collection_detail(request, pk):
     item = get_object_or_404(
-        Collection.objects.prefetch_related("files", "links"), pk=pk, owner=request.user
+        collections_for(request.user)
+        .prefetch_related("files", "links")
+        .select_related("owner"),
+        pk=pk,
     )
     return render(
         request,
@@ -375,6 +387,11 @@ def collection_detail(request, pk):
             "nav": "collections",
             "collection": item,
             "file_tree": file_tree(item.files.all()),
+            "access_role": role_for(request.user, item),
+            "can_manage": collections_for(request.user, write=True)
+            .filter(pk=pk)
+            .exists(),
+            "is_owner": item.owner_id == request.user.pk,
             "max_file_mb": settings.MAX_FILE_BYTES // 1024**2,
             "max_upload_mb": settings.MAX_UPLOAD_BYTES // 1024**2,
         },
@@ -391,13 +408,15 @@ def upload_page(request):
             identifier = uuid.UUID(selected)
         except ValueError:
             raise Http404 from None
-        item = get_object_or_404(Collection, pk=identifier, owner=request.user)
+        item = collection_for(request.user, identifier, write=True)
     return render(
         request,
         "upload.html",
         {
             "nav": "upload",
-            "destinations": request.user.collections.all(),
+            "destinations": collections_for(request.user, write=True).select_related(
+                "owner"
+            ),
             "collection": item,
             "max_file_mb": settings.MAX_FILE_BYTES // 1024**2,
             "max_upload_mb": settings.MAX_UPLOAD_BYTES // 1024**2,
@@ -406,12 +425,44 @@ def upload_page(request):
 
 
 @login_required
+@require_POST
+def collection_download(request, pk):
+    item = collection_for(request.user, pk)
+    if limited(request, "member-download", 30, 3600):
+        return too_many(request)
+    from .storage import member_bundle
+
+    try:
+        bundle = member_bundle(request.user, pk)
+    except (ValidationError, OSError):
+        messages.error(
+            request,
+            _(
+                "Le téléchargement ne peut pas être préparé. Vérifiez les fichiers ou réessayez plus tard."
+            ),
+        )
+        return redirect("collection", pk=pk)
+    return FileResponse(
+        bundle,
+        as_attachment=True,
+        filename=(slugify(item.title) or "dossier") + ".zip",
+        content_type="application/octet-stream",
+    )
+
+
+@login_required
 @require_http_methods(["GET", "POST"])
 def collection_edit(request, pk):
-    item = get_object_or_404(Collection, pk=pk, owner=request.user)
+    item = collection_for(request.user, pk, write=True)
     form = CollectionForm(request.POST or None, instance=item)
     if request.method == "POST" and form.is_valid():
-        form.save()
+        with transaction.atomic():
+            locked, _owner = locked_collection(request.user, pk, request=request)
+            for field in ("title", "description", "recipient_note"):
+                setattr(locked, field, form.cleaned_data[field])
+            locked.save(
+                update_fields=["title", "description", "recipient_note", "updated_at"]
+            )
         messages.success(request, _("Présentation mise à jour."))
         return redirect("collection", pk=pk)
     return render(
@@ -424,7 +475,7 @@ def collection_edit(request, pk):
 @login_required
 @require_POST
 def collection_upload(request, pk):
-    item = get_object_or_404(Collection, pk=pk, owner=request.user)
+    item = collection_for(request.user, pk, write=True)
     try:
         # Multipart parsing happens after authentication and ownership checks
         # when CSRF is supplied in a header by the enhanced upload UI.
@@ -471,7 +522,7 @@ def collection_delete(request, pk):
 @login_required
 @require_http_methods(["GET", "POST"])
 def link_create(request, pk):
-    item = get_object_or_404(Collection, pk=pk, owner=request.user)
+    item = collection_for(request.user, pk, write=True)
     form = LinkForm(
         request.POST or None,
         initial={
@@ -485,12 +536,7 @@ def link_create(request, pk):
             return too_many(request)
         with transaction.atomic():
             # Lock the collection so upload and link creation cannot race.
-            owner = User.objects.select_for_update().get(pk=request.user.pk)
-            if not owner.is_active:
-                raise Http404
-            locked = Collection.objects.select_for_update().get(
-                pk=pk, owner=request.user
-            )
+            locked, owner = locked_collection(request.user, pk, request=request)
             if not locked.files.exists():
                 form.add_error(
                     None, _("Ajoutez au moins un fichier avant de créer un lien.")
@@ -529,7 +575,9 @@ def link_create(request, pk):
 def links(request):
     query = request.GET.get("q", "")[:120]
     items = (
-        ShareLink.objects.filter(collection__owner=request.user)
+        ShareLink.objects.filter(
+            collection__in=collections_for(request.user, write=True)
+        )
         .select_related("collection")
         .annotate(open_count=Count("events", filter=Q(events__kind="opened")))
         .order_by("-created_at", "-pk")
@@ -557,8 +605,11 @@ def links(request):
 @login_required
 @require_POST
 def link_revoke(request, pk):
-    link = get_object_or_404(ShareLink, pk=pk, collection__owner=request.user)
+    link = get_object_or_404(
+        ShareLink, pk=pk, collection__in=collections_for(request.user, write=True)
+    )
     with transaction.atomic():
+        locked_collection(request.user, link.collection_id, request=request)
         changed = ShareLink.objects.filter(pk=pk, revoked_at__isnull=True).update(
             revoked_at=timezone.now()
         )
@@ -576,9 +627,9 @@ def link_revoke(request, pk):
 @login_required
 @require_GET
 def activity(request):
-    events = Event.objects.filter(link__collection__owner=request.user).select_related(
-        "link__collection"
-    )
+    events = Event.objects.filter(
+        link__collection__in=collections_for(request.user, write=True)
+    ).select_related("link__collection")
     link_id = request.GET.get("link", "")
     if link_id:
         try:
@@ -613,9 +664,7 @@ def activity(request):
         response = HttpResponse(
             "\ufeff" + output.getvalue(), content_type="text/csv; charset=utf-8"
         )
-        response["Content-Disposition"] = (
-            'attachment; filename="liasio-activity.csv"'
-        )
+        response["Content-Disposition"] = 'attachment; filename="liasio-activity.csv"'
         return response
     page = Paginator(events, 30).get_page(request.GET.get("page"))
     return render(

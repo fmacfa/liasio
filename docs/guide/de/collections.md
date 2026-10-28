@@ -30,3 +30,7 @@ Sobald die Dateien bereit sind, wählen Sie **Link erstellen** oder **Mehrere Li
 ## Ordnerstruktur
 
 Hochgeladene Ordner lassen sich aufklappen und zeigen Dateien und Unterordner. Jeder Ordner zeigt Dateianzahl und Größe. Einzelne Dateien bleiben auf ihrer ursprünglichen Ebene. Die Reihenfolge der Ordner richtet sich nach ihrem ersten Auftreten; spätere Uploads folgen früheren. ZIP-Archiv und Empfängerseite behalten diese Pfade. Leere Ordner werden nicht gespeichert.
+
+## Sammlungen im Team teilen
+
+Eine Einladung allein gewährt keinen Sammlungszugriff. Der Eigentümer vergibt Leser oder Mitwirkender unter **Zugriff verwalten**. Freigegebene Sammlungen erscheinen unter **Meine Sammlungen**; nur Mitwirkende können Dateien hinzufügen und Links verwalten. Löschen und Zugriffsverwaltung bleiben dem Eigentümer vorbehalten. Siehe [Mitglieder und Zugriffsstufen](team.md).

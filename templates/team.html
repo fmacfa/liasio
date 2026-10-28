@@ -8,7 +8,7 @@
       <h1>
         {% translate "Mieux partager, ensemble" %}<span class="green">.</span>
       </h1>
-      <p>{% translate "Chaque membre dispose de ses propres dossiers, liens et paramètres." %}</p>
+      <p>{% translate "Chaque membre possède son espace. Partagez vos dossiers en choisissant ses droits d’accès." %}</p>
     </div>
     <span class="badge success">{% include "components/icon.html" with name="lock" %}{% translate "Sur invitation uniquement" %}</span>
   </div>
@@ -30,6 +30,7 @@
             <span class="badge {% if member.is_active %}success{% endif %}">
               {% if not member.is_active %}{% translate "Suspendu" %}{% elif member.is_staff %}{% translate "Admin" %}{% else %}{% translate "Membre" %}{% endif %}
             </span>
+            {% if member.is_active and member.pk != user.pk %}<a class="text-link" href="{% url 'member_access' member.pk %}">{% translate "Gérer les accès" %}</a>{% endif %}
             {% if not member.is_staff %}
               <form method="post"
                     action="{% url 'member_toggle' member.pk %}"

@@ -2,11 +2,11 @@
 
 [Illustrated English guide](guide/en/automation.md) · [Guide français illustré](guide/fr/automation.md)
 
-Base path: `/api/v1/`. HTTPS in production. Authentication: `Authorization: Bearer lv_<id>.<secret>`. Session cookies and query-string keys are never accepted. Keys belong to one user; all lookups enforce that ownership. Only the web interface can create/revoke keys, after account authentication.
+Base path: `/api/v1/`. HTTPS in production. Authentication: `Authorization: Bearer lv_<id>.<secret>`. Session cookies and query-string keys are never accepted. Keys belong to one user; all lookups enforce collection ownership or explicit team access. Only the web interface can create/revoke keys, after account authentication.
 
 Keys can expire after 1–365 days (90 by default), or have no expiration when explicitly selected in Automations. Both count toward the ten-key limit and remain subject to revocation, account suspension and password/MFA changes. Existing keys retain their expiry. Key lifetime is separate from share-link lifetime. Automations also provides a collection-specific creation command with no embedded credential.
 
-Send JSON with `Content-Type: application/json`, except binary chunks. Use `Accept-Language: en` or `fr` for translated validation messages. Error **codes**, field names, status enums and event names remain stable, untranslated identifiers. Empty optional fields may be omitted. UUID path parameters are canonical UUID strings.
+Send JSON with `Content-Type: application/json`, except binary chunks. Use `Accept-Language: en`, `fr` or `de` for translated validation messages. Error **codes**, field names, status enums and event names remain stable, untranslated identifiers. Empty optional fields may be omitted. UUID path parameters are canonical UUID strings.
 
 ## Routes and permissions
 
@@ -82,7 +82,7 @@ POST `collections/{id}/link-batches/` with a required `Idempotency-Key` and:
 
 Both creation and detail responses contain `id` (batch UUID), `collection_id`, `name`, `state` (`complete`, `draft`, `expired`), `count` (source row count), ISO 8601 `created_at`/nullable `completed_at`, `view_url`, `api_url`, `exports`, `headers`, `source_rows` and `items`. Each item is a link object as described above, plus its **1-based `position`**, ordered like `names`. Its `id` is a link UUID, and its `label` is the current name. URLs in `exports.xlsx` / `exports.csv` require Bearer authentication; `view_url` requires a browser login. None of these management URLs grants anonymous access.
 
-List responses omit `headers`, `source_rows` and `items`, use the usual 50-entry pagination, and include both API and browser batches. Optional `?collection_id=UUID` must refer to an owned, non-trashed collection. Drafts and expired drafts have an empty `items` list and `exports: null`; trying to export either returns 404. New API batches are completed directly, without a draft confirmation step. Trashed or deleted collections make their batches unavailable.
+List responses omit `headers`, `source_rows` and `items`, use the usual 50-entry pagination, and include both API and browser batches. Optional `?collection_id=UUID` must refer to an owned or collaborator-accessible, non-trashed collection. Drafts and expired drafts have an empty `items` list and `exports: null`; trying to export either returns 404. New API batches are completed directly, without a draft confirmation step. Trashed or deleted collections make their batches unavailable.
 
 Exports contain original source columns, current link labels, URLs and UTC dates/status/counters. They use the same formula-neutralization rules as browser exports. Renaming a link in the interface is reflected by subsequent reads/exports without changing its URL. Reads and exports do not count as recipient opens/downloads. A saved export is a snapshot and never updates itself. No password is included. List deletion, renaming and link revocation remain available in the interface; the existing API also supports individual link revocation.
 
@@ -115,7 +115,7 @@ Four creation routes require `Idempotency-Key`: collections, upload sessions, in
 
 Receipts are not permanent deduplication. Persist resource IDs and use status/read routes after 24 hours; do not blindly resubmit old creates. Per owner: 600 API requests/minute and 1,000 retained creation receipts/day. An additional IP ceiling is 1,200 requests/minute; upload starts/finalizations also have a 30/hour/IP guard. HTTP 429 includes `Retry-After`. Retry transient 429/502/503/504 with bounded backoff and the same idempotency key; never automatically repeat a new creation with a new key.
 
-Errors generally use `{ "error": { "code": "…", "message": "…" } }`; form validation returns `error.fields`. Chunk offset conflicts additionally include top-level `offset`. Statuses: 400 invalid request, 401 invalid/missing key, 403 missing scope, 404 unavailable/not owned, 409 conflict, 413 request too large, 429 throttled, 503 unavailable storage. Reverse proxies may return their own error pages. Never log Authorization headers, passwords or whole link responses.
+Errors generally use `{ "error": { "code": "…", "message": "…" } }`; form validation returns `error.fields`. Chunk offset conflicts additionally include top-level `offset`. Statuses: 400 invalid request, 401 invalid/missing key, 403 missing scope, 404 unavailable/not permitted, 409 conflict, 413 request too large, 429 throttled, 503 unavailable storage. Reverse proxies may return their own error pages. Never log Authorization headers, passwords or whole link responses.
 
 ## Outgoing webhook contract
 
@@ -133,3 +133,11 @@ Managed through **Automations**, separately from API keys. See the [illustrated 
 Collection/upload events contain only `collection_id`; link events also contain `link_id`. The test event contains `message: "Liasio test"`. Verify HMAC-SHA256 over `timestamp + "." + exact raw body` using the signing secret bytes, reject timestamps outside ±300 seconds, and deduplicate `id` durably. [Receiver verifier](../examples/verify_webhook.py) · [Upload client](../examples/upload.py).
 
 Security rationale: [OWASP SSRF prevention](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html). Each attempt revalidates all DNS answers, pins a public address while verifying TLS for the original hostname, ignores environment proxies and never follows redirects. A 20-second deadline covers DNS, connection, TLS and response headers. No response body is read or retained. Protect database and encryption keys in backups.
+
+## Shared collection permissions
+
+An invitation creates an isolated account; owners grant `reader` or `collaborator` access per collection in the web interface. Administrators do not inherit file access. API key scopes never override a collection grant: `read` permits collection metadata for Readers, while link and batch metadata/exports require Collaborator or Owner. Uploads also require Collaborator/Owner plus `files:write`; link/batch writes require `links:write`. No API route grants team access.
+
+Shared uploads reserve and charge the collection owner’s quota. Pending-session limits and stored-batch capacity also belong to that owner. Sessions are visible only to the initiating collaborator or owner; another collaborator cannot modify them. Audit entries identify the actor; file/link events go to the collection owner’s webhooks and branding remains theirs.
+
+Permission is rechecked under ordered actor/owner account locks followed by the collection lock, before writes and before replaying creation receipts. Grant removal or downgrade to Reader cancels that member’s pending uploads and releases reservations. The owner may cancel these uploads too. Previously authorized transfers may finish. Existing recipient links remain valid until separately revoked; they belong to the collection rather than to the collaborator who created them. Owner suspension blocks shared access. New collections remain private until explicitly shared.
