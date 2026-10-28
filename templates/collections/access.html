@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% load i18n %}
+{% block breadcrumb %}{% translate "Gérer les accès" %}{% endblock %}
+{% block content %}
+<a class="back-link" href="{% url 'collection' collection.pk %}">← {{ collection.title }}</a>
+<div class="page-heading"><div><div class="eyebrow">{% translate "VOTRE ÉQUIPE" %}</div><h1>{% translate "Gérer les accès" %}<span class="green">.</span></h1><p>{{ collection.title }}</p></div></div>
+<div class="editor-grid"><section>
+  <form method="post" class="panel form-panel">{% csrf_token %}
+    <h2>{% translate "Ajouter ou modifier un accès" %}</h2>
+    {% include "components/form.html" %}
+    <button class="button">{% translate "Enregistrer les accès" %}</button>
+  </form>
+  <div class="panel spaced"><h2>{% translate "Membres autorisés" %}</h2>
+    {% for grant in grants %}
+      <div class="member-row"><div class="member-info"><strong>{{ grant.user.display_name }}</strong><small>{{ grant.user.email }}</small><small>{{ grant.get_role_display }}{% if not grant.user.is_active %} · {% translate "Suspendu" %}{% endif %}</small></div></div>
+    {% empty %}<p>{% translate "Ce dossier est privé. Aucun autre membre n’y a accès." %}</p>{% endfor %}
+  </div>
+  <p class="footnote">{% translate "Pour retirer un accès, saisissez l’adresse du membre et choisissez Aucun accès. Les liens publics déjà créés restent valables ; révoquez-les séparément si nécessaire." %}</p>
+</section><aside>{% include "components/access_roles.html" %}</aside></div>
+{% endblock %}

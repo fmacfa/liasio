@@ -116,3 +116,7 @@ Références n8n : [Webhook trigger](https://docs.n8n.io/integrations/builtin/co
 ## Si une clé ou un secret a été partagé
 
 Dans **Automatisations**, révoquez la clé API concernée, créez-en une nouvelle et mettez à jour le coffre de votre outil. Pour un webhook, ouvrez sa fiche → **Sécurité et configuration → Renouveler le secret**, puis mettez à jour le vérificateur chez le destinataire. Ne partagez pas la nouvelle valeur dans une conversation ou une capture. Renouveler le secret du webhook ne remplace pas la clé API : ce sont deux accès distincts.
+
+## Utiliser un dossier partagé
+
+Utilisez votre propre clé API. Son périmètre et votre rôle sur le dossier se cumulent : un lecteur peut consulter les métadonnées ; un collaborateur peut importer avec `files:write`, créer des liens et lots avec `links:write`, et lire/exporter les liens et lots avec `read`. Le quota et les webhooks restent ceux du propriétaire. Les sessions d’import ne sont accessibles qu’à leur initiateur ou au propriétaire. Un retrait d’accès bloque aussi les reprises API et les réponses d’idempotence des créations dans ce dossier. Voir [Membres](team.md).

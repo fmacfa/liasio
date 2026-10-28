@@ -11,6 +11,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 
 from . import resumable
+from .access import collections_for, collection_for, locked_collection
 from .api_auth import (
     api,
     authorize_current,
@@ -83,7 +84,7 @@ def page(request, queryset, serialize):
 def collections(request):
     return page(
         request,
-        Collection.objects.filter(owner=request.user)
+        collections_for(request.user)
         .prefetch_related("files")
         .order_by("-created_at", "pk"),
         collection_data,
@@ -92,9 +93,7 @@ def collections(request):
 
 @api("read")
 def collection(request, pk):
-    return JsonResponse(
-        collection_data(get_object_or_404(Collection, owner=request.user, pk=pk))
-    )
+    return JsonResponse(collection_data(collection_for(request.user, pk)))
 
 
 @api("files:write", ("POST",))
@@ -154,8 +153,7 @@ def create_link(request, pk):
     prepare_receipt(request)
     form = LinkForm(link_form_values(data))
     with transaction.atomic():
-        owner = User.objects.select_for_update().get(pk=request.user.pk)
-        authorize_current(request, owner)
+        item, owner = locked_collection(request.user, pk, request=request)
         previous = replay(request)
         if previous is not None:
             return previous
@@ -171,9 +169,6 @@ def create_link(request, pk):
                 },
                 status=400,
             )
-        item = get_object_or_404(
-            Collection.objects.select_for_update(), owner=owner, pk=pk
-        )
         if not item.files.exists():
             raise ValidationError(
                 _("Ajoutez au moins un fichier avant de créer un lien.")
@@ -188,7 +183,9 @@ def create_link(request, pk):
             link.password_hash = make_password(form.cleaned_data["password"])
         link.save()
         Event.objects.create(link=link, kind="created")
-        Audit.objects.create(actor=owner, action="link_created", target=str(link.pk))
+        Audit.objects.create(
+            actor=request.user, action="link_created", target=str(link.pk)
+        )
         return remember(request, JsonResponse(link_data(link), status=201))
 
 
@@ -196,7 +193,9 @@ def create_link(request, pk):
 def links(request):
     return page(
         request,
-        ShareLink.objects.filter(collection__owner=request.user)
+        ShareLink.objects.filter(
+            collection__in=collections_for(request.user, write=True)
+        )
         .select_related("collection")
         .order_by("-created_at", "pk"),
         link_data,
@@ -209,7 +208,7 @@ def link(request, pk):
         link_data(
             get_object_or_404(
                 ShareLink.objects.select_related("collection"),
-                collection__owner=request.user,
+                collection__in=collections_for(request.user, write=True),
                 pk=pk,
             )
         )
@@ -218,15 +217,19 @@ def link(request, pk):
 
 @api("links:write", ("POST",))
 def revoke_link(request, pk):
+    link = get_object_or_404(
+        ShareLink, collection__in=collections_for(request.user, write=True), pk=pk
+    )
     with transaction.atomic():
-        user = User.objects.select_for_update().get(pk=request.user.pk)
-        authorize_current(request, user)
-        link = get_object_or_404(ShareLink, collection__owner=user, pk=pk)
+        locked_collection(request.user, link.collection_id, request=request)
+        link.refresh_from_db()
         if not link.revoked_at:
             link.revoked_at = timezone.now()
             link.save(update_fields=["revoked_at"])
             Event.objects.create(link=link, kind="revoked")
-            Audit.objects.create(actor=user, action="link_revoked", target=str(pk))
+            Audit.objects.create(
+                actor=request.user, action="link_revoked", target=str(pk)
+            )
     return JsonResponse(link_data(link))
 
 

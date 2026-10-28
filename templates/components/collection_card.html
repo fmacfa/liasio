@@ -5,6 +5,7 @@
     <span class="card-arrow">↗</span>
   </div>
   <h3>{{ item.title }}</h3>
+  {% if item.owner_id != user.pk %}<span class="badge">{% blocktranslate with name=item.owner.display_name %}Partagé par {{ name }}{% endblocktranslate %}</span>{% endif %}
   <p>{{ item.description|default:_('Votre prochain partage commence ici.')|truncatechars:86 }}</p>
   <div class="card-meta">
     <span>{% blocktranslate count count=item.files.count %}{{ count }} fichier{% plural %}{{ count }} fichiers{% endblocktranslate %} · {{ item.total_bytes|filesizeformat }}</span>

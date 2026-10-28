@@ -14,10 +14,10 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from . import batches
+from .access import collections_for, locked_collection
 from .api import link_data, link_form_values, page
 from .api_auth import (
     api,
-    authorize_current,
     error,
     json_body,
     prepare_receipt,
@@ -25,7 +25,6 @@ from .api_auth import (
     replay,
 )
 from .link_lists import MAX_LINKS
-from .models import Collection, User
 
 CONDITION_FIELDS = {
     "expires_at",
@@ -123,14 +122,6 @@ def conditions_form(values):
     return form
 
 
-def locked_owner(request):
-    owner = get_object_or_404(
-        User.objects.select_for_update(), pk=request.user.pk, is_active=True
-    )
-    authorize_current(request, owner)
-    return owner
-
-
 @api("links:write", ("POST",))
 def create(request, pk):
     try:
@@ -141,11 +132,10 @@ def create(request, pk):
     # Replays precede time-dependent validation, quotas and expensive hashing.
     # Do not keep an owner lock during password hashing: it also guards uploads.
     with transaction.atomic():
-        owner = locked_owner(request)
+        collection, owner = locked_collection(request.user, pk, request=request)
         previous = replay(request)
         if previous is not None:
             return previous
-        get_object_or_404(Collection, pk=pk, owner=owner)
         batches.check_batch_capacity(owner)
         if batches.rate_limited(request, "batch-prepare", 10):
             return error(
@@ -156,20 +146,17 @@ def create(request, pk):
     password = conditions.cleaned_data["password"]
     password_hash = make_password(password) if password else ""
     with transaction.atomic():
-        owner = locked_owner(request)
+        collection, owner = locked_collection(request.user, pk, request=request)
         previous = replay(request)
         if previous is not None:
             return previous
-        collection = get_object_or_404(
-            Collection.objects.select_for_update(), pk=pk, owner=owner
-        )
         # Resolve durations at creation and reject a date that expired while waiting.
         conditions = conditions_form(values)
         batch = batches.new_batch(
             owner, collection, name, ["Name"], [[label] for label in labels]
         )
         batches.complete_batch(
-            batch, owner, labels, conditions.cleaned_data, password_hash
+            batch, request.user, labels, conditions.cleaned_data, password_hash
         )
         return remember(
             request, JsonResponse(batch_data(batch, details=True), status=201)
@@ -178,10 +165,10 @@ def create(request, pk):
 
 @api("read")
 def index(request):
-    queryset = batches.owner_batches(request.user).order_by("-created_at", "-pk")
+    queryset = batches.accessible_batches(request.user).order_by("-created_at", "-pk")
     if "collection_id" in request.GET:
         collection = get_object_or_404(
-            Collection, pk=request.GET["collection_id"], owner=request.user
+            collections_for(request.user, write=True), pk=request.GET["collection_id"]
         )
         queryset = queryset.filter(collection=collection)
     return page(request, queryset, batch_data)
@@ -189,14 +176,14 @@ def index(request):
 
 @api("read")
 def detail(request, pk):
-    return JsonResponse(batch_data(batches.owned_batch(request, pk), details=True))
+    return JsonResponse(batch_data(batches.accessible_batch(request, pk), details=True))
 
 
 @api("read")
 def export(request, pk, format):
     if format not in ("xlsx", "csv"):
         raise Http404
-    batch = batches.owned_batch(request, pk)
+    batch = batches.accessible_batch(request, pk)
     if not batch.completed_at:
         raise Http404
     if batches.rate_limited(request, "batch-export", 60):

@@ -10,17 +10,22 @@
       <p>{% blocktranslate count count=collection.files.count %}{{ count }} fichier{% plural %}{{ count }} fichiers{% endblocktranslate %} · {{ collection.total_bytes|filesizeformat }} {% translate "· Créé le" %} {{ collection.created_at|date:"DATE_FORMAT" }}</p>
     </div>
     <div class="actions">
+    {% if collection.files.exists %}<form method="post" action="{% url 'collection_download' collection.pk %}">{% csrf_token %}<button class="button secondary">{% translate "Télécharger les fichiers" %}</button></form>{% endif %}
+    {% if can_manage %}
     <a class="button secondary" href="{% url 'link_batch_prepare' collection.pk %}">{% translate "Créer plusieurs liens" %}</a>
     <a class="button" href="{% url 'link_create' collection.pk %}">
     {% include "components/icon.html" with name="link" %}{% translate "Créer un lien" %}</a>
+    {% endif %}
     </div>
   </div>
+  <div class="notice"><p>{% if is_owner %}{% translate "Propriétaire" %}{% elif access_role == "collaborator" %}{% translate "Collaborateur" %}{% else %}{% translate "Lecteur" %}{% endif %} · {% translate "Propriétaire du dossier :" %} {{ collection.owner.display_name }}{% if is_owner %} · <a href="{% url 'collection_access' collection.pk %}">{% translate "Gérer les accès" %}</a>{% endif %}</p></div>
   <div class="detail-grid">
     <section>
+      {% if collection.description or collection.recipient_note or can_manage %}
       <div class="panel description-panel">
         <div class="section-heading">
           <h2>{% translate "Présentation" %}</h2>
-          <a class="text-link" href="{% url 'collection_edit' collection.pk %}">{% translate "Modifier ↗" %}</a>
+          {% if can_manage %}<a class="text-link" href="{% url 'collection_edit' collection.pk %}">{% translate "Modifier ↗" %}</a>{% endif %}
         </div>
         <p class="pre-line">{{ collection.description|default:_('Ajoutez une présentation pour accueillir vos destinataires.') }}</p>
         {% if collection.recipient_note %}
@@ -29,6 +34,7 @@
           </blockquote>
         {% endif %}
       </div>
+      {% endif %}
       <div class="panel file-panel">
         <div class="section-heading">
           <h2>
@@ -36,11 +42,12 @@
           </h2>
           <span>{{ collection.total_bytes|filesizeformat }}</span>
         </div>
-        {% include "components/file_tree.html" with nodes=file_tree %}
+        {% if not file_tree and not can_manage %}<p class="quiet-empty">{% translate "Ce dossier est vide." %}</p>{% else %}{% include "components/file_tree.html" with nodes=file_tree %}{% endif %}
       </div>
-      {% include "components/upload_form.html" %}
+      {% if can_manage %}{% include "components/upload_form.html" %}{% endif %}
     </section>
     <aside>
+      {% if can_manage %}
       <div class="panel">
         <div class="section-heading">
           <h2>{% translate "Liens du dossier" %}</h2>
@@ -67,8 +74,10 @@
         <h3>{% translate "Un dossier, plusieurs liens." %}</h3>
         <p>{% translate "Partagez les mêmes fichiers avec des conditions et un historique différents pour chaque destinataire." %}</p>
       </div>
-      <a class="danger-link"
-         href="{% url 'collection_delete' collection.pk %}">{% translate "Supprimer ce dossier" %}</a>
+      {% endif %}
+      {% include "components/access_roles.html" %}
+      {% if is_owner %}<a class="danger-link"
+         href="{% url 'collection_delete' collection.pk %}">{% translate "Supprimer ce dossier" %}</a>{% endif %}
     </aside>
   </div>
 {% endblock %}

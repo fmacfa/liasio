@@ -112,3 +112,7 @@ Persist the batch ID: after 24 hours, use the read endpoint, because receipts ex
 Limits shared with the interface: 10 preparations per hour per account, 100 saved batches and 60 exports per hour; additional IP limits apply. Creation JSON is limited to 256 KiB. Retrying a successful creation does not consume the preparation budget, but general API limits still apply. For HTTP 429, honor `Retry-After` and retain the operation key. Errors 400/403/404 require a correction instead of an automatic retry.
 
 [API reference](../../API.md) · [Batches in the interface](bulk-links.md) · [Automations](automation.md) · [Back to the guide](README.md)
+
+## Use a shared collection
+
+Use your own API key. Its scopes and your collection role both apply: Readers can read collection metadata; Collaborators can upload with `files:write`, create links and batches with `links:write`, and read/export links and batches with `read`. Quota and webhooks remain with the owner. Upload sessions are accessible only to their initiator or the owner. Removing access also blocks API resumption and creation-receipt replays for that collection. See [Members](team.md).

@@ -224,7 +224,13 @@ def collection_created(sender, instance, created, raw=False, **kwargs):
 @receiver(post_save, sender=Audit)
 def files_uploaded(sender, instance, created, raw=False, **kwargs):
     if created and not raw and instance.action == "files_uploaded":
-        enqueue(instance.actor_id, "files.uploaded", {"collection_id": instance.target})
+        owner_id = (
+            Collection.all_objects.filter(pk=instance.target)
+            .values_list("owner_id", flat=True)
+            .first()
+        )
+        if owner_id is not None:
+            enqueue(owner_id, "files.uploaded", {"collection_id": instance.target})
 
 
 @receiver(post_save, sender=Event)

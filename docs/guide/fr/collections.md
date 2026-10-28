@@ -30,3 +30,7 @@ Une fois les fichiers prêts, choisissez **Créer un lien**. Vous pouvez créer 
 ## Arborescence des fichiers
 
 Les dossiers importés sont dépliables. Leur nom, le nombre de fichiers et leur taille sont affichés ; les fichiers individuels restent au niveau où ils ont été ajoutés. Le même chemin est conservé dans le ZIP et sur la page destinataire. Les dossiers vides ne sont pas stockés.
+
+## Dossiers partagés avec l’équipe
+
+Une invitation seule ne donne pas accès aux dossiers. Le propriétaire attribue le rôle Lecteur ou Collaborateur via **Gérer les accès**. Les dossiers partagés apparaissent dans **Mes dossiers** ; seuls les collaborateurs peuvent ajouter des fichiers et gérer les liens. Le propriétaire conserve les suppressions et les accès. Voir [Membres et niveaux d’accès](team.md).

@@ -30,3 +30,7 @@ Once files are ready, choose **Create a link**. You can issue multiple links wit
 ## Directory structure
 
 Imported folders expand to show their files and subfolders. Each folder shows its file count and size; individual files stay at their original level. The same paths are retained in the ZIP and recipient page. Empty folders are not stored.
+
+## Collections shared with your team
+
+An invitation alone does not grant collection access. The owner assigns Reader or Collaborator through **Manage access**. Shared collections appear in **My collections**; only collaborators can add files and manage links. Deletion and access management remain with the owner. See [Members and access levels](team.md).

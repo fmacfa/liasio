@@ -141,6 +141,31 @@ class Collection(models.Model):
         return sum(f.size for f in self.files.all())
 
 
+class CollectionAccess(models.Model):
+    ROLES = [("reader", _("Lecteur")), ("collaborator", _("Collaborateur"))]
+    collection = models.ForeignKey(
+        Collection, on_delete=models.CASCADE, related_name="access_grants"
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="collection_access",
+    )
+    role = models.CharField(max_length=16, choices=ROLES)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["collection", "user"], name="unique_collection_access"
+            ),
+            models.CheckConstraint(
+                condition=models.Q(role__in=["reader", "collaborator"]),
+                name="valid_collection_access_role",
+            ),
+        ]
+
+
 class Asset(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     collection = models.ForeignKey(
@@ -337,6 +362,8 @@ class Audit(models.Model):
         "quota_changed": _("Quota modifié"),
         "quota_updated": _("Quota modifié"),
         "collection_created": _("Dossier créé"),
+        "collection_access_changed": _("Accès au dossier modifiés"),
+        "collection_downloaded": _("Dossier téléchargé par un membre"),
         "collection_trashed": _("Dossier placé dans la corbeille"),
         "files_uploaded": _("Fichiers enregistrés"),
         "files_trashed": _("Fichiers placés dans la corbeille"),
@@ -394,6 +421,13 @@ def upload_expiry():
 class UploadSession(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    initiated_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="initiated_uploads",
+    )
     collection = models.ForeignKey(Collection, on_delete=models.CASCADE)
     size = models.PositiveBigIntegerField()
     state = models.CharField(max_length=12, default="pending")

@@ -14,13 +14,15 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.db import transaction
-from django.http import Http404, JsonResponse
+from django.db.models import Q
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.views.decorators.http import require_GET, require_POST
 
-from .api_auth import authorize_current, replay, remember
-from .models import Asset, Audit, Collection, UploadPart, UploadSession, User
+from .api_auth import replay, remember
+from .access import collections_for, collection_for, locked_collection
+from .models import Asset, Audit, UploadPart, UploadSession, User
 from .capacity import capacity_lock, check_capacity
 from .security import limited
 from .storage import add_files, available_links, safe_path
@@ -77,6 +79,26 @@ def describe(session):
     }
 
 
+def session_for(user, pk):
+    return get_object_or_404(
+        UploadSession.objects.select_related("collection").filter(
+            Q(owner=user)
+            | Q(initiated_by=user, collection__in=collections_for(user, write=True)),
+        ),
+        pk=pk,
+    )
+
+
+def locked_session(request, pk):
+    initial = session_for(request.user, pk)
+    if initial.collection.deleted_at:
+        ensure_pending(initial)
+    _collection, owner = locked_collection(
+        request.user, initial.collection_id, request=request
+    )
+    return session_for(request.user, pk), owner
+
+
 def ensure_pending(session):
     if (
         session.state != "pending"
@@ -125,12 +147,10 @@ def start(request, pk):
         from .models import Instance
 
         Instance.objects.select_for_update().get(pk=1)
-        user = User.objects.select_for_update().get(pk=request.user.pk)
-        authorize_current(request, user)
+        collection, user = locked_collection(request.user, pk, request=request)
         previous = replay(request)
         if previous is not None:
             return previous
-        collection = get_object_or_404(Collection, pk=pk, owner=user)
         if not user.is_active or available_links(collection.links.all()).exists():
             raise ValidationError(
                 _("Révoquez les liens actifs avant d’importer des fichiers.")
@@ -175,7 +195,7 @@ def start(request, pk):
             )
         capacity_needed(total)
         session = UploadSession.objects.create(
-            owner=user, collection=collection, size=total
+            owner=user, initiated_by=request.user, collection=collection, size=total
         )
         UploadPart.objects.bulk_create(
             [
@@ -186,7 +206,7 @@ def start(request, pk):
         user.reserved_bytes += total
         user.save(update_fields=["reserved_bytes"])
         Audit.objects.create(
-            actor=user, action="upload_started", target=str(session.pk)
+            actor=request.user, action="upload_started", target=str(session.pk)
         )
         return remember(request, JsonResponse(describe(session), status=201))
 
@@ -195,23 +215,21 @@ def start(request, pk):
 @require_GET
 @json_errors
 def status(request, pk):
-    session = get_object_or_404(
-        UploadSession.objects.select_related("collection"), pk=pk, owner=request.user
-    )
+    session = session_for(request.user, pk)
     return JsonResponse(describe(session))
 
 
 @login_required
 @require_GET
 def pending(request, pk):
-    collection = get_object_or_404(Collection, pk=pk, owner=request.user)
+    collection = collection_for(request.user, pk, write=True)
     return JsonResponse(
         {
             "sessions": [
                 describe(s)
                 for s in UploadSession.objects.filter(
+                    Q(owner=request.user) | Q(initiated_by=request.user),
                     collection=collection,
-                    owner=request.user,
                     state="pending",
                     expires_at__gt=timezone.now(),
                 ).order_by("created_at")
@@ -225,9 +243,9 @@ def pending(request, pk):
 @json_errors
 def chunk(request, pk, part_id):
     # Check ownership before reading any uploaded bytes.
-    get_object_or_404(
-        UploadPart, pk=part_id, session_id=pk, session__owner=request.user
-    )
+    initial = session_for(request.user, pk)
+    ensure_pending(initial)
+    get_object_or_404(UploadPart, pk=part_id, session=initial)
     length = int(request.META.get("CONTENT_LENGTH") or -1)
     offset = int(request.headers.get("Upload-Offset", "-1"))
     checksum = request.headers.get("Upload-Checksum", "")
@@ -245,13 +263,7 @@ def chunk(request, pk, part_id):
             _("L’intégrité du bloc n’a pas pu être vérifiée. Réessayez.")
         )
     with transaction.atomic():
-        user = User.objects.select_for_update().get(pk=request.user.pk)
-        authorize_current(request, user)
-        if not user.is_active:
-            raise Http404
-        session = get_object_or_404(
-            UploadSession.objects.select_related("collection"), pk=pk, owner=user
-        )
+        session, user = locked_session(request, pk)
         ensure_pending(session)
         part = get_object_or_404(UploadPart, pk=part_id, session=session)
         if offset != part.offset:
@@ -291,7 +303,7 @@ def chunk(request, pk, part_id):
     return JsonResponse({"offset": part.offset})
 
 
-def cancel_session(owner, pk):
+def cancel_session(owner, pk, *, actor=None):
     with transaction.atomic():
         user = User.objects.select_for_update().get(pk=owner.pk)
         session = get_object_or_404(UploadSession, pk=pk, owner=user)
@@ -300,7 +312,9 @@ def cancel_session(owner, pk):
             user.save(update_fields=["reserved_bytes"])
             session.state = "canceled"
             session.save(update_fields=["state"])
-            Audit.objects.create(actor=user, action="upload_canceled", target=str(pk))
+            Audit.objects.create(
+                actor=actor or user, action="upload_canceled", target=str(pk)
+            )
         transaction.on_commit(
             lambda: shutil.rmtree(
                 settings.UPLOAD_STAGING_ROOT / str(pk), ignore_errors=True
@@ -312,7 +326,9 @@ def cancel_session(owner, pk):
 @require_POST
 @json_errors
 def cancel(request, pk):
-    cancel_session(request.user, pk)
+    with transaction.atomic():
+        _session, owner = locked_session(request, pk)
+        cancel_session(owner, pk, actor=request.user)
     return JsonResponse({"state": "canceled"})
 
 
@@ -327,11 +343,7 @@ def finish(request, pk):
     # The user lock serializes finalization, chunk writes, deletes and quota changes.
     # A crashed worker rolls back DB state; its staged blocks remain resumable.
     with transaction.atomic():
-        user = User.objects.select_for_update().get(pk=request.user.pk)
-        authorize_current(request, user)
-        session = get_object_or_404(
-            UploadSession.objects.select_related("collection"), pk=pk, owner=user
-        )
+        session, user = locked_session(request, pk)
         if session.state == "complete":
             return JsonResponse(
                 {
@@ -358,7 +370,7 @@ def finish(request, pk):
                     )
                 files.append(File(path.open("rb"), name=part.path))
             add_files(
-                user,
+                request.user,
                 session.collection_id,
                 files,
                 [p.path for p in parts],

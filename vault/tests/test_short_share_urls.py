@@ -170,4 +170,5 @@ class ShortShareMigrationTests(TransactionTestCase):
                 self.assertEqual(verify_capability("share", short_code(row["id"])), row["id"])
             self.assertEqual(after, before)
         finally:
-            MigrationExecutor(connection).migrate(self.new)
+            executor = MigrationExecutor(connection)
+            executor.migrate(executor.loader.graph.leaf_nodes())

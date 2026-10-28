@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% load i18n %}
+{% block breadcrumb %}{% translate "Gérer les accès" %}{% endblock %}
+{% block content %}
+<a class="back-link" href="{% url 'team' %}">← {% translate "Membres" %}</a>
+<div class="page-heading"><div><div class="eyebrow">{% translate "VOTRE ÉQUIPE" %}</div><h1>{% translate "Gérer les accès" %}<span class="green">.</span></h1><p>{{ member.display_name }} · {{ member.email }}</p></div></div>
+<div class="editor-grid"><section>
+  <form method="post" class="panel form-panel">{% csrf_token %}
+    <h2>{% translate "Mes dossiers" %}</h2>
+    <p>{% translate "Choisissez les droits de ce membre pour chacun de vos dossiers." %}</p>
+    {% include "components/form.html" %}
+    <button class="button">{% translate "Enregistrer les accès" %}</button>
+  </form>
+  <p class="footnote">{% translate "Retirer l’accès bloque les nouvelles actions et annule les imports en attente de ce membre. Un transfert déjà autorisé peut se terminer. Les liens publics existants doivent être révoqués séparément." %}</p>
+</section><aside>{% include "components/access_roles.html" %}</aside></div>
+{% endblock %}

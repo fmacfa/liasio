@@ -13,9 +13,23 @@ from vault import (
     brand_media,
     batches,
     api_batches,
+    team_access,
 )
 
 urlpatterns = [
+    path(
+        "collections/<uuid:pk>/access/",
+        team_access.collection_access,
+        name="collection_access",
+    ),
+    path(
+        "collections/<uuid:pk>/download/",
+        views.collection_download,
+        name="collection_download",
+    ),
+    path(
+        "team/members/<int:pk>/access/", team_access.member_access, name="member_access"
+    ),
     path("help/", help.index, name="help"),
     path("help/<slug:slug>/", help.guide, name="guide"),
     path("language/", set_language, name="set_language"),

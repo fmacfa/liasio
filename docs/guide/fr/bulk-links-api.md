@@ -112,3 +112,7 @@ Conservez l’ID du lot : après 24 heures, utilisez la consultation, car les re
 Limites communes à l’interface et à l’API : 10 préparations par heure et par compte, 100 lots conservés et 60 exports par heure ; des limites par IP s’ajoutent. Les requêtes JSON de création sont limitées à 256 Kio. Les nouvelles tentatives d’une création déjà réussie ne consomment pas le budget de préparation, mais restent soumises aux limites générales de l’API. En cas de HTTP 429, respectez `Retry-After` et conservez la clé d’opération. Les erreurs 400/403/404 demandent une correction, pas une répétition automatique.
 
 [Référence API](../../API.md) · [Lots dans l’interface](bulk-links.md) · [Automatisations](automation.md) · [Retour au guide](README.md)
+
+## Utiliser un dossier partagé
+
+Utilisez votre propre clé API. Son périmètre et votre rôle sur le dossier se cumulent : un lecteur peut consulter les métadonnées ; un collaborateur peut importer avec `files:write`, créer des liens et lots avec `links:write`, et lire/exporter les liens et lots avec `read`. Le quota et les webhooks restent ceux du propriétaire. Les sessions d’import ne sont accessibles qu’à leur initiateur ou au propriétaire. Un retrait d’accès bloque aussi les reprises API et les réponses d’idempotence des créations dans ce dossier. Voir [Membres](team.md).

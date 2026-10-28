@@ -20,7 +20,8 @@ from django.views.decorators.http import require_GET, require_http_methods, requ
 
 from .forms import LinkForm
 from .link_lists import MAX_LINKS, read_list, spreadsheet_response
-from .models import Audit, Collection, Event, LinkBatch, LinkBatchItem, ShareLink, User
+from .access import collections_for, collection_for, locked_collection
+from .models import Audit, Event, LinkBatch, LinkBatchItem, ShareLink
 from .security import limited, rate_allowed
 
 MAX_SAVED_BATCHES = 100
@@ -89,15 +90,13 @@ class NamesForm(forms.Form):
             )
 
 
-def owner_batches(user):
-    return LinkBatch.objects.filter(
-        collection__owner=user, collection__deleted_at__isnull=True
-    )
+def accessible_batches(user):
+    return LinkBatch.objects.filter(collection__in=collections_for(user, write=True))
 
 
-def owned_batch(request, pk):
+def accessible_batch(request, pk):
     return get_object_or_404(
-        owner_batches(request.user).select_related("collection"), pk=pk
+        accessible_batches(request.user).select_related("collection"), pk=pk
     )
 
 
@@ -155,15 +154,16 @@ def index(request):
     if collection_id:
         try:
             collection = get_object_or_404(
-                Collection, pk=collection_id, owner=request.user
+                collections_for(request.user, write=True), pk=collection_id
             )
         except ValidationError:
             raise Http404 from None
         return redirect("link_batch_prepare", pk=collection.pk)
     batches = (
-        owner_batches(request.user)
+        accessible_batches(request.user)
         .select_related("collection")
         .annotate(link_count=Count("items"))
+        .order_by("-created_at", "-pk")
     )
     page = Paginator(batches, 20).get_page(request.GET.get("page"))
     return render(
@@ -173,7 +173,7 @@ def index(request):
             "nav": "links",
             "batches": page,
             "page": page,
-            "collections": Collection.objects.filter(owner=request.user),
+            "collections": collections_for(request.user, write=True),
         },
     )
 
@@ -181,7 +181,7 @@ def index(request):
 @login_required
 @require_http_methods(["GET", "POST"])
 def prepare(request, pk):
-    collection = get_object_or_404(Collection, pk=pk, owner=request.user)
+    collection = collection_for(request.user, pk, write=True)
     form = SourceForm(
         request.POST if request.method == "POST" else None,
         request.FILES or None,
@@ -202,14 +202,7 @@ def prepare(request, pk):
                         [[] for _number in range(form.cleaned_data["count"])],
                     )
                 with transaction.atomic():
-                    owner = get_object_or_404(
-                        User.objects.select_for_update(),
-                        pk=request.user.pk,
-                        is_active=True,
-                    )
-                    locked = get_object_or_404(
-                        Collection.objects.select_for_update(), pk=pk, owner=owner
-                    )
+                    locked, owner = locked_collection(request.user, pk, request=request)
                     batch = new_batch(
                         owner, locked, form.cleaned_data["name"], headers, rows
                     )
@@ -255,25 +248,22 @@ def create_links(request, batch, names, conditions):
     password = conditions.cleaned_data["password"]
     password_hash = make_password(password) if password else ""
     with transaction.atomic():
-        owner = get_object_or_404(
-            User.objects.select_for_update(), pk=request.user.pk, is_active=True
-        )
-        collection = get_object_or_404(
-            Collection.objects.select_for_update(), pk=batch.collection_id, owner=owner
+        collection, owner = locked_collection(
+            request.user, batch.collection_id, request=request
         )
         batch = get_object_or_404(
             LinkBatch.objects.select_for_update(), pk=batch.pk, collection=collection
         )
         complete_batch(
             batch,
-            owner,
+            request.user,
             [names.cleaned_data[f"label_{i}"] for i in range(len(batch.source_rows))],
             conditions.cleaned_data,
             password_hash,
         )
 
 
-def complete_batch(batch, owner, labels, conditions, password_hash):
+def complete_batch(batch, actor, labels, conditions, password_hash):
     """Shared browser/API write path; caller holds owner, collection and batch locks.
 
     A newly inserted batch is already private to the caller's transaction. Hashing
@@ -314,7 +304,7 @@ def complete_batch(batch, owner, labels, conditions, password_hash):
         Event.objects.create(link=link, kind="created")  # Transactional webhook outbox.
     Audit.objects.bulk_create(
         [
-            Audit(actor=owner, action="link_created", target=str(link.pk))
+            Audit(actor=actor, action="link_created", target=str(link.pk))
             for link in links
         ]
     )
@@ -325,7 +315,7 @@ def complete_batch(batch, owner, labels, conditions, password_hash):
 @login_required
 @require_http_methods(["GET", "POST"])
 def detail(request, pk):
-    batch = owned_batch(request, pk)
+    batch = accessible_batch(request, pk)
     column = selected_column(batch, request.POST.get("label_column"))
     items = (
         list(batch.items.select_related("link__collection"))
@@ -371,13 +361,8 @@ def detail(request, pk):
                 return redirect("link_batch", pk=pk)
         elif action == "rename" and batch.completed_at and names.is_valid():
             with transaction.atomic():
-                owner = get_object_or_404(
-                    User.objects.select_for_update(), pk=request.user.pk, is_active=True
-                )
-                collection = get_object_or_404(
-                    Collection.objects.select_for_update(),
-                    pk=batch.collection_id,
-                    owner=owner,
+                collection, owner = locked_collection(
+                    request.user, batch.collection_id, request=request
                 )
                 locked = get_object_or_404(
                     LinkBatch.objects.select_for_update(),
@@ -392,7 +377,7 @@ def detail(request, pk):
                     [item.link for item in current], ["label"]
                 )
                 Audit.objects.create(
-                    actor=owner, action="link_batch_renamed", target=str(pk)
+                    actor=request.user, action="link_batch_renamed", target=str(pk)
                 )
             messages.success(
                 request, _("Noms enregistrés. Les URL restent identiques.")
@@ -431,7 +416,7 @@ def detail(request, pk):
 def export(request, pk, format):
     if format not in ("csv", "xlsx"):
         raise Http404
-    batch = owned_batch(request, pk)
+    batch = accessible_batch(request, pk)
     if not batch.completed_at:
         raise Http404
     if rate_limited(request, "batch-export", 60):
@@ -501,19 +486,18 @@ def template(request, format):
 @login_required
 @require_POST
 def delete(request, pk):
-    batch = owned_batch(request, pk)
+    batch = accessible_batch(request, pk)
     with transaction.atomic():
-        owner = get_object_or_404(
-            User.objects.select_for_update(), pk=request.user.pk, is_active=True
-        )
-        collection = get_object_or_404(
-            Collection.objects.select_for_update(), pk=batch.collection_id, owner=owner
+        collection, owner = locked_collection(
+            request.user, batch.collection_id, request=request
         )
         locked = get_object_or_404(
             LinkBatch.objects.select_for_update(), pk=pk, collection=collection
         )
         locked.delete()  # Only the list and its associations; share links survive.
-        Audit.objects.create(actor=owner, action="link_batch_deleted", target=str(pk))
+        Audit.objects.create(
+            actor=request.user, action="link_batch_deleted", target=str(pk)
+        )
     messages.success(
         request,
         _("Liste supprimée. Les liens déjà créés restent disponibles dans Mes liens."),
@@ -527,7 +511,7 @@ def rename(request, pk):
     link = get_object_or_404(
         ShareLink,
         pk=pk,
-        collection__owner=request.user,
+        collection__in=collections_for(request.user, write=True),
         collection__deleted_at__isnull=True,
     )
     form = NamesForm([link.label], request.POST if request.method == "POST" else None)
@@ -535,20 +519,17 @@ def rename(request, pk):
         if rate_limited(request, "link-rename", 60):
             return throttled()
         with transaction.atomic():
-            owner = get_object_or_404(
-                User.objects.select_for_update(), pk=request.user.pk, is_active=True
-            )
-            collection = get_object_or_404(
-                Collection.objects.select_for_update(),
-                pk=link.collection_id,
-                owner=owner,
+            collection, owner = locked_collection(
+                request.user, link.collection_id, request=request
             )
             locked = get_object_or_404(
                 ShareLink.objects.select_for_update(), pk=pk, collection=collection
             )
             locked.label = form.cleaned_data["label_0"]
             locked.save(update_fields=["label"])
-            Audit.objects.create(actor=owner, action="link_renamed", target=str(pk))
+            Audit.objects.create(
+                actor=request.user, action="link_renamed", target=str(pk)
+            )
         messages.success(request, _("Noms enregistrés. Les URL restent identiques."))
         return redirect("links")
     return render(

@@ -112,3 +112,7 @@ Bewahren Sie die Stapel-ID auf. Nach 24 Stunden verwenden Sie den Leseendpunkt; 
 Gemeinsame Grenzen mit der Oberfläche: zehn Vorbereitungen pro Stunde und Konto, 100 gespeicherte Stapel und 60 Exporte pro Stunde; zusätzliche IP-Grenzen gelten. Erstellungs-JSON ist auf 256 KiB begrenzt. Erfolgreiche Wiederholungen verbrauchen kein weiteres Vorbereitungskontingent, aber allgemeine API-Grenzen gelten. Beachten Sie bei HTTP 429 `Retry-After` und behalten Sie den Vorgangsschlüssel. Fehler 400/403/404 erfordern eine Korrektur statt automatischer Wiederholung.
 
 [API-Referenz (Englisch)](../../API.md) · [Stapel in der Oberfläche](bulk-links.md) · [Automatisierungen](automation.md) · [Zum Benutzerhandbuch](README.md)
+
+## Eine freigegebene Sammlung verwenden
+
+Verwenden Sie Ihren eigenen API-Schlüssel. Schlüsselrechte und Sammlungsrolle gelten gemeinsam: Leser können Sammlungsmetadaten lesen; Mitwirkende können mit `files:write` hochladen, mit `links:write` Links und Stapel erstellen und mit `read` Links und Stapel lesen und exportieren. Kontingent und Webhooks bleiben beim Eigentümer. Upload-Sitzungen sind nur für den Initiator oder Eigentümer zugänglich. Ein Zugriffsverlust blockiert auch die API-Fortsetzung und wiederholte Erstellungsantworten für diese Sammlung. Siehe [Mitglieder](team.md).

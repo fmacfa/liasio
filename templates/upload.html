@@ -28,7 +28,7 @@
                             <option value="">{% translate "Choisir un dossier…" %}</option>
                             {% for item in destinations %}
                                 <option value="{{ item.pk }}"
-                                        {% if collection.pk == item.pk %}selected{% endif %}>{{ item.title }}</option>
+                                        {% if collection.pk == item.pk %}selected{% endif %}>{{ item.title }}{% if item.owner_id != user.pk %} · {{ item.owner.display_name }}{% endif %}</option>
                             {% endfor %}
                         </select>
                     </div>
