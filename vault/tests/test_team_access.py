@@ -10,6 +10,8 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.http import Http404
 from django.test import Client, TestCase, TransactionTestCase, skipUnlessDBFeature
 from django.db import connections, transaction, close_old_connections
+from django.db import connection
+from django.db.migrations.executor import MigrationExecutor
 from django.urls import reverse
 from django.utils import timezone
 from openpyxl import load_workbook
@@ -506,6 +508,44 @@ class TeamAccessTests(IsolatedFiles, TestCase):
         self.assertEqual(
             self.client.get(f"/collections/{created.pk}/").status_code, 404
         )
+
+
+class TeamAccessMigrationTests(TransactionTestCase):
+    def test_existing_folders_remain_private_and_upload_ownership_is_preserved(self):
+        old = [("vault", "0010_sharelink_short_code_digest")]
+        executor = MigrationExecutor(connection)
+        executor.migrate(old)
+        try:
+            apps = executor.loader.project_state(old).apps
+            owner = apps.get_model("vault", "User").objects.create(
+                email="owner-migration@example.com",
+                display_name="Owner",
+                password="!",
+                used_bytes=123,
+                reserved_bytes=456,
+            )
+            folder = apps.get_model("vault", "Collection").objects.create(
+                owner=owner, title="Previously private"
+            )
+            session = apps.get_model("vault", "UploadSession").objects.create(
+                owner=owner, collection=folder, size=456
+            )
+            before = apps.get_model("vault", "UploadSession").objects.values().get(
+                pk=session.pk
+            )
+            executor = MigrationExecutor(connection)
+            executor.migrate(executor.loader.graph.leaf_nodes())
+            after = UploadSession.objects.values().get(pk=session.pk)
+            self.assertIsNone(after.pop("initiated_by_id"))
+            self.assertEqual(after, before)
+            self.assertFalse(CollectionAccess.objects.exists())
+            self.assertEqual(Collection.objects.get(pk=folder.pk).owner_id, owner.pk)
+            current = UploadSession.objects.select_related("owner").get(pk=session.pk)
+            self.assertEqual(current.owner.used_bytes, 123)
+            self.assertEqual(current.owner.reserved_bytes, 456)
+        finally:
+            executor = MigrationExecutor(connection)
+            executor.migrate(executor.loader.graph.leaf_nodes())
 
 
 class TeamAccessConcurrencyTests(IsolatedFiles, TransactionTestCase):
