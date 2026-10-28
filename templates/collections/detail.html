@@ -21,6 +21,7 @@
   <div class="notice"><p>{% if is_owner %}{% translate "Propriétaire" %}{% elif access_role == "collaborator" %}{% translate "Collaborateur" %}{% else %}{% translate "Lecteur" %}{% endif %} · {% translate "Propriétaire du dossier :" %} {{ collection.owner.display_name }}{% if is_owner %} · <a href="{% url 'collection_access' collection.pk %}">{% translate "Gérer les accès" %}</a>{% endif %}</p></div>
   <div class="detail-grid">
     <section>
+      {% if collection.description or collection.recipient_note or can_manage %}
       <div class="panel description-panel">
         <div class="section-heading">
           <h2>{% translate "Présentation" %}</h2>
@@ -33,6 +34,7 @@
           </blockquote>
         {% endif %}
       </div>
+      {% endif %}
       <div class="panel file-panel">
         <div class="section-heading">
           <h2>
@@ -40,7 +42,7 @@
           </h2>
           <span>{{ collection.total_bytes|filesizeformat }}</span>
         </div>
-        {% include "components/file_tree.html" with nodes=file_tree %}
+        {% if not file_tree and not can_manage %}<p class="quiet-empty">{% translate "Ce dossier est vide." %}</p>{% else %}{% include "components/file_tree.html" with nodes=file_tree %}{% endif %}
       </div>
       {% if can_manage %}{% include "components/upload_form.html" %}{% endif %}
     </section>
