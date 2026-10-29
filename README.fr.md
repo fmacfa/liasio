@@ -175,14 +175,14 @@ Toutes les valeurs sont configurées dans `.env` ; un modèle est fourni dans [.
 | `TIME_ZONE` | `Europe/Berlin`, dates stockées en UTC et affichées dans ce fuseau |
 | `ANTIVIRUS_REQUIRED` | `true` en production ; les imports échouent si l’analyse ne peut pas aboutir |
 | `CLAMAV_HOST` | `clamav` dans Compose ; service privé, jamais exposé à Internet |
-| `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD` | SMTP facultatif pour récupérer un mot de passe |
+| `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD` | SMTP facultatif : récupération, envois validés, codes destinataires et notifications |
 | `EMAIL_USE_TLS` / `EMAIL_USE_SSL` | STARTTLS par défaut ; ne pas activer les deux simultanément |
 | `DEFAULT_FROM_EMAIL` | Adresse d’expédition autorisée par votre serveur SMTP |
 | `TRUST_PROXY` | `true` uniquement derrière le proxy isolé prévu dans Compose |
 
 La limite de 100 fichiers par dossier est fixe dans cette version. Les formats acceptés sont définis dans `ALLOWED_EXTENSIONS`. Pour augmenter les tailles, ajustez aussi Caddy et les limites ClamAV ; voir le guide d’exploitation.
 
-Les invitations créent un lien à copier et transmettre. Elles n’envoient pas d’e-mail automatiquement. Sans SMTP, l’administrateur du serveur peut réinitialiser un mot de passe via `manage.py changepassword`.
+Les invitations créent un lien à copier et transmettre. Avec SMTP configuré, **Préparer un e-mail** permet de relire le destinataire et le message puis de confirmer l’envoi. La création seule n’envoie rien. Sans SMTP, l’administrateur du serveur peut réinitialiser un mot de passe via `manage.py changepassword`.
 
 ## Fiabilité de la version 0.2
 
@@ -225,7 +225,7 @@ Les aperçus sont des JPEG réduits, sans métadonnées, générés par un moteu
 
 Les fichiers sont lisibles par l’administrateur du système d’exploitation : **ce n’est pas du chiffrement de bout en bout**. Utilisez un volume et des sauvegardes chiffrés si nécessaire. Un antivirus ne garantit pas l’absence de menace. Le contrôle d’extension n’est pas une validation complète du contenu de tous les formats acceptés. L’application n’est pas conçue pour des dépôts anonymes massifs.
 
-[Politique de sécurité](SECURITY.md) · [Modèle de sécurité](docs/SECURITY_MODEL.md) · [Sauvegarde, restauration, maintenance](docs/OPERATIONS.md)
+[Politique de sécurité](SECURITY.fr.md) · [Modèle de sécurité](docs/SECURITY_MODEL.md) · [Sauvegarde, restauration, maintenance](docs/OPERATIONS.md)
 
 ## Vérifier et contribuer
 
@@ -240,7 +240,7 @@ La [synthèse de revue préalable](docs/SECURITY_REVIEW.md) (anglais) décrit la
 
 La suite couvre notamment les droits entre comptes, les limites d’import, les invitations, le CSRF, les mots de passe de liens, la traversée de chemins, la suppression et les accès simultanés. Le workflow GitHub teste SQLite et PostgreSQL, construit l’image et vérifie l’antivirus avec sa signature de test EICAR.
 
-Voir [CONTRIBUTING.md](CONTRIBUTING.md) pour l’organisation du code et [ROADMAP.md](ROADMAP.md) pour les prochaines évolutions.
+Voir [la contribution en français](CONTRIBUTING.fr.md), [la feuille de route](ROADMAP.md), [la politique de maintenance](docs/MAINTENANCE.md), [les mesures de charge](docs/benchmarks/README.md) et [le cahier d’audit humain indépendant](docs/INDEPENDENT_AUDIT.md).
 
 ## Inspirations et positionnement
 

@@ -17,7 +17,7 @@ Open **My collections**, search by title and select a collection. Its detail pag
 
 ![Collection detail and actions](../../screenshots/user-guide/en/collection-detail.jpg)
 
-Files are different: revoke every active link before adding or changing the collection’s contents. This keeps an already shared bundle consistent. A collection may contain up to 100 files, including files still in the trash; size limits depend on server configuration.
+Freeze active legacy links from **Versions**, or revoke them, before adding or replacing files. New links can pin a version or explicitly follow updates. A collection may contain up to 100 files, including files still in the trash; size limits depend on server configuration.
 
 ## Delete a collection
 
