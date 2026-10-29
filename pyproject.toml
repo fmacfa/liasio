@@ -20,6 +20,7 @@ dependencies = [
   "defusedxml>=0.7.1,<1",
   "django-storages[s3]>=1.14.6,<2",
   "authlib>=1.6,<2",
+  "requests>=2.32,<3",
 ]
 
 [dependency-groups]

@@ -681,6 +681,7 @@ dependencies = [
     { name = "psycopg", extra = ["binary"] },
     { name = "pyotp" },
     { name = "pypdfium2" },
+    { name = "requests" },
     { name = "segno" },
     { name = "whitenoise" },
 ]
@@ -711,6 +712,7 @@ requires-dist = [
     { name = "psycopg", extras = ["binary"], specifier = ">=3.2.10,<4" },
     { name = "pyotp", specifier = ">=2.9,<3" },
     { name = "pypdfium2", specifier = ">=5.14,<6" },
+    { name = "requests", specifier = ">=2.32,<3" },
     { name = "segno", specifier = ">=1.6,<2" },
     { name = "whitenoise", specifier = ">=6.11.0,<7" },
 ]
