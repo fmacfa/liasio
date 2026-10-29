@@ -53,6 +53,7 @@
               <small>{% translate "Expire le" %} {{ invitation.expires_at|date:"SHORT_DATETIME_FORMAT" }}</small>
             </div>
             <div class="row-actions">
+              {% if invitation.invited_by_id == user.pk %}<a class="text-link" href="{% url 'mail_compose' %}?invitation={{ invitation.pk }}">{% translate "Préparer un e-mail" %}</a>{% endif %}
               <button class="icon-button"
                       data-copy="{{ invitation.public_url }}"
                       title="{% translate "Copier l’invitation" %}"

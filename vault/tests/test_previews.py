@@ -23,7 +23,6 @@ from vault.forms import LinkForm
 from vault.models import Asset, Collection, Event, ShareLink
 from vault.previews import (
     CACHE_ENTRIES,
-    PreviewBusy,
     PreviewUnavailable,
     cache_directory,
     cache_path,
@@ -131,9 +130,12 @@ class PreviewTests(IsolatedFiles, TestCase):
         self.assertEqual(self.client.get(self.url).status_code, 404)
 
     def test_previous_previews_use_same_grant_and_revocation_as_short_link(self):
-        previous_urls = [reverse(
-            "file_preview", args=[encoder("share", self.link.pk), self.asset.pk]
-        ) for encoder in (capability, legacy_capability)]
+        previous_urls = [
+            reverse(
+                "file_preview", args=[encoder("share", self.link.pk), self.asset.pk]
+            )
+            for encoder in (capability, legacy_capability)
+        ]
         self.link.password_hash = make_password(PASSWORD)
         self.link.save(update_fields=["password_hash"])
         for url in previous_urls:

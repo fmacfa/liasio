@@ -30,9 +30,7 @@ for domain in ("django", "djangojs"):
             errors.append(f"Missing catalog: {path.relative_to(ROOT)}")
             continue
         entries = polib.pofile(path)
-        keys = {
-            (e.msgctxt, e.msgid, e.msgid_plural) for e in entries if not e.obsolete
-        }
+        keys = {(e.msgctxt, e.msgid, e.msgid_plural) for e in entries if not e.obsolete}
         if reference is not None and keys != reference:
             errors.append(f"Catalog coverage differs: {language}/{domain}")
         reference = keys
@@ -62,20 +60,14 @@ for domain in ("django", "djangojs"):
 
 source_guides = {p.name for p in (ROOT / "docs/guide/fr").glob("*.md")}
 for language in languages:
-    translated_guides = {
-        p.name for p in (ROOT / "docs/guide" / language).glob("*.md")
-    }
+    translated_guides = {p.name for p in (ROOT / "docs/guide" / language).glob("*.md")}
     if translated_guides != source_guides:
         errors.append(f"Guide coverage differs: {language}")
 
 pages = list((ROOT / "docs/guide").rglob("*.md")) + [ROOT / "docs/API.md"]
 for path in pages:
     text = path.read_text()
-    if (
-        path.name != "README.md"
-        and path.parent.name in languages
-        and "![" not in text
-    ):
+    if path.name != "README.md" and path.parent.name in languages and "![" not in text:
         errors.append(f"Guide has no screenshot: {path.relative_to(ROOT)}")
     for href in re.findall(r"!\[[^\]]*\]\(([^)]+)\)", text):
         if path.parent.name in languages and "/user-guide/" in href:

@@ -28,3 +28,7 @@ Pour la mise à jour de renforcement depuis 0.4.0, arrêtez le service de webhoo
 Les aperçus de production nécessitent Linux avec Landlock ABI 3+ (normalement Linux 6.2+ avec Landlock activé). Si indisponible, le décodeur refuse le rendu et affiche la carte de remplacement ; les originaux restent téléchargeables. Voir le [déploiement des aperçus](../../PREVIEWS.md). Les images fournisseur sont fixées par empreinte : révisez et testez régulièrement leurs mises à jour, car télécharger la même empreinte ne récupère pas de nouveaux correctifs.
 
 L’historique des livraisons est conservé 30 jours et nettoyé par la maintenance. Cette version ne s’installe pas automatiquement sur un VPS : configurez le domaine, HTTPS, la capacité et les sauvegardes avant l’exposition publique.
+
+## Configuration, e-mails et restauration
+
+Le [guide d’exploitation avancée](advanced-operations.md) couvre le diagnostic, le test SMTP envoyé uniquement à l’administrateur demandeur, les sessions, OIDC, S3 privé et la sauvegarde/restauration chiffrée hors serveur. Consultez **E-mails** pour les échecs : la remise SMTP ne confirme ni la réception ni la lecture. Les services facultatifs nécessitent une configuration de l’hébergeur.

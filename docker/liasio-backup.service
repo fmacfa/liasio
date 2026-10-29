@@ -1,0 +1,14 @@
+[Unit]
+Description=Verified and encrypted Liasio off-server backup
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/liasio
+EnvironmentFile=/etc/liasio-backup.env
+ExecStart=/usr/bin/python3 /opt/liasio/scripts/offsite_backup.py backup
+UMask=0077
+Nice=10
+IOSchedulingClass=idle
+TimeoutStartSec=6h

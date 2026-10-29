@@ -82,6 +82,7 @@
             </td>
             <td>
               <div class="row-actions">
+                <a class="text-button" href="{% url 'mail_compose' %}?link={{ link.pk }}">{% translate "Préparer un e-mail" %}</a>
                 <a class="text-button" href="{% url 'link_rename' link.pk %}">{% translate "Renommer" %}</a>
                 <button class="icon-button"
                         data-copy="{{ link.public_url }}"

@@ -12,6 +12,7 @@
     <div class="actions">
     {% if collection.files.exists %}<form method="post" action="{% url 'collection_download' collection.pk %}">{% csrf_token %}<button class="button secondary">{% translate "Télécharger les fichiers" %}</button></form>{% endif %}
     {% if can_manage %}
+    <a class="button secondary" href="{% url 'versions' collection.pk %}">{% translate "Versions" %}</a>
     <a class="button secondary" href="{% url 'link_batch_prepare' collection.pk %}">{% translate "Créer plusieurs liens" %}</a>
     <a class="button" href="{% url 'link_create' collection.pk %}">
     {% include "components/icon.html" with name="link" %}{% translate "Créer un lien" %}</a>
@@ -78,6 +79,7 @@
       {% include "components/access_roles.html" %}
       {% if is_owner %}<a class="danger-link"
          href="{% url 'collection_delete' collection.pk %}">{% translate "Supprimer ce dossier" %}</a>{% endif %}
+      {% if is_owner %}<p><a href="{% url 'collection_workspace' collection.pk %}">{% translate "Équipe et propriété" %}</a></p>{% endif %}
     </aside>
   </div>
 {% endblock %}

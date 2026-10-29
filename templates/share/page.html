@@ -38,14 +38,15 @@
     <section class="share-files">
       <div class="section-heading">
         <h2>{% translate "Votre dossier" %}</h2>
-        <span>{% blocktranslate count count=collection.files.count %}{{ count }} fichier{% plural %}{{ count }} fichiers{% endblocktranslate %} · {{ collection.total_bytes|filesizeformat }}</span>
+        <span>{% blocktranslate count count=share_files|length %}{{ count }} fichier{% plural %}{{ count }} fichiers{% endblocktranslate %} · {{ share_size|filesizeformat }}</span>
       </div>
-      {% include "components/file_tree.html" with nodes=file_tree %}
+      {% include "components/file_tree.html" with nodes=file_tree selectable=True selection_form="selected-download" %}
+      <form id="selected-download" method="post" action="{% url 'download' token %}">{% csrf_token %}<input type="hidden" name="selection" value="1"><button class="button secondary">{% translate "Télécharger la sélection" %}</button><p class="footnote">{% translate "Une sélection consomme un téléchargement. Un seul fichier est envoyé directement ; plusieurs fichiers sont regroupés en ZIP." %}</p></form>
       {% if link.allow_previews %}
       <details class="gallery-details"><summary>{% translate "Voir les aperçus des fichiers" %}</summary>
       <p class="gallery-intro">{% translate "Un aperçu avant de télécharger. Ouvrez une image ou un PDF pour le regarder de plus près." %}</p>
       <div class="file-gallery" data-file-gallery>
-        {% for file in collection.files.all %}
+        {% for file in share_files %}
         <article class="file-card">
           {% if file.preview_kind %}
           <a class="preview-tile" href="{% url 'file_preview' token file.pk %}" data-preview data-name="{{ file.path }}" data-detail="{{ file.size|filesizeformat }} · {% if file.preview_kind == 'pdf' %}{% translate "Première page du PDF" %}{% else %}{% translate "Image réduite" %}{% endif %}" aria-label="{% blocktranslate with name=file.path %}Aperçu de {{ name }}{% endblocktranslate %}">

@@ -11,6 +11,7 @@
     <button class="button full">{% translate "Se connecter" %} {% include "components/icon.html" with name="arrow" %}</button>
   </form>
   <a class="forgot-link" href="{% url 'password_reset' %}">{% translate "Mot de passe oublié ?" %}</a>
+  {% if oidc_enabled %}<form method="post" action="{% url 'oidc_login' %}">{% csrf_token %}<button class="button secondary full">{% translate "Connexion d’entreprise" %}</button></form>{% endif %}
   <div class="auth-notice">
     {% include "components/icon.html" with name="users" %}
     <p>{% translate "Vous rejoignez une équipe ? Utilisez le lien d’invitation envoyé par votre administrateur." %}</p>

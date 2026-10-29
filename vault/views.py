@@ -433,7 +433,10 @@ def collection_download(request, pk):
     from .storage import member_bundle
 
     try:
-        bundle = member_bundle(request.user, pk)
+        identifiers = (
+            request.POST.getlist("assets") if request.POST.get("selection") else None
+        )
+        bundle = member_bundle(request.user, pk, identifiers)
     except (ValidationError, OSError):
         messages.error(
             request,
@@ -488,7 +491,14 @@ def collection_upload(request, pk):
         paths = json.loads(paths_json) if paths_json else [f.name for f in uploads]
         if not isinstance(paths, list) or any(not isinstance(p, str) for p in paths):
             raise ValidationError(_("Liste des chemins invalide."))
-        add_files(request.user, item.pk, uploads, paths, capacity_reserved=True)
+        add_files(
+            request.user,
+            item.pk,
+            uploads,
+            paths,
+            capacity_reserved=True,
+            replace_files=request.POST.get("replace_existing") == "1",
+        )
         messages.success(
             request,
             _("%(count)s fichier(s) ajouté(s) au dossier.") % {"count": len(uploads)},
@@ -525,6 +535,8 @@ def link_create(request, pk):
     item = collection_for(request.user, pk, write=True)
     form = LinkForm(
         request.POST or None,
+        user=request.user,
+        collection=item,
         initial={
             "expires_at": timezone.localtime() + timedelta(days=7),
             "expiry_mode": "days",
@@ -554,6 +566,19 @@ def link_create(request, pk):
             else:
                 link = form.save(commit=False)
                 link.collection = locked
+                from .versions import content_settings
+
+                try:
+                    content = content_settings(locked, request.user, form.cleaned_data)
+                except ValidationError as exc:
+                    form.add_error(None, exc)
+                    return render(
+                        request,
+                        "links/form.html",
+                        {"nav": "links", "form": form, "collection": item},
+                    )
+                for key, value in content.items():
+                    setattr(link, key, value)
                 if form.cleaned_data["password"]:
                     link.password_hash = make_password(form.cleaned_data["password"])
                 link.save()
@@ -924,9 +949,15 @@ def public_link(token):
     )
 
 
-def can_open(request, link):
+def password_allowed(request, link):
     grant = request.session.get("grants", {}).get(str(link.pk), 0)
     return not link.password_hash or grant > timezone.now().timestamp()
+
+
+def can_open(request, link):
+    from .recipients import allowed
+
+    return password_allowed(request, link) and allowed(request, link)
 
 
 @require_safe
@@ -937,9 +968,9 @@ def share(request, token):
     if link.status_code != "active" or not link.collection.owner.is_active:
         return unavailable(request)
     if not can_open(request, link):
-        return render(
-            request, "share/unlock.html", {"form": UnlockForm(), "token": token}
-        )
+        from .recipients import gate
+
+        return gate(request, link, token)
     now = timezone.now().timestamp()
     seen = request.session.get("seen_links", {})
     if request.method == "GET" and seen.get(str(link.pk), 0) < now - 1800:
@@ -948,13 +979,18 @@ def share(request, token):
         seen = {k: v for k, v in seen.items() if v > now - 1800}
         seen[str(link.pk)] = now
         request.session["seen_links"] = dict(list(seen.items())[-100:])
+    from .versions import files_for
+
+    shared_files = list(files_for(link))
     return render(
         request,
         "share/page.html",
         {
             "link": link,
             "collection": link.collection,
-            "file_tree": file_tree(link.collection.files.all()),
+            "file_tree": file_tree(shared_files),
+            "share_files": shared_files,
+            "share_size": sum(f.size for f in shared_files),
             "branding": getattr(link.collection.owner, "branding", None),
             "token": token,
         },
@@ -996,14 +1032,28 @@ def download(request, token):
     if link.status_code != "active" or not link.collection.owner.is_active:
         return unavailable(request)
     if not can_open(request, link):
-        return render(
-            request,
-            "share/unlock.html",
-            {"form": UnlockForm(), "token": token},
-            status=403,
-        )
+        from .recipients import gate
+
+        return gate(request, link, token, status=403)
+    identifiers = (
+        request.POST.getlist("assets") if request.POST.get("selection") else None
+    )
+    raw = identifiers is not None and len(identifiers) == 1
+    filename = (slugify(link.collection.title) or "dossier") + ".zip"
     try:
-        bundle = download_bundle(link)
+        if raw:
+            from .versions import files_for
+            from .storage import selected_files
+
+            filename = selected_files(files_for(link), identifiers)[0].path.rsplit(
+                "/", 1
+            )[-1]
+        bundle = download_bundle(
+            link,
+            identifiers,
+            raw=raw,
+            authorize=lambda current: can_open(request, current),
+        )
     except CapacityUnavailable:
         return render(
             request,
@@ -1033,7 +1083,7 @@ def download(request, token):
     return FileResponse(
         bundle,
         as_attachment=True,
-        filename=(slugify(link.collection.title) or "dossier") + ".zip",
+        filename=filename,
         content_type="application/octet-stream",
     )
 

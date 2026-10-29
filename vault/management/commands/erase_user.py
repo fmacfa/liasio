@@ -25,6 +25,10 @@ class Command(BaseCommand):
                 raise CommandError(
                     "Administrator erasure is disabled. Transfer administration first."
                 )
+            if user.managed_workspaces.exists():
+                raise CommandError(
+                    "Transfer responsibility for this account's team spaces before erasing it."
+                )
             blobs = list(
                 Asset.all_objects.filter(collection__owner=user).values_list(
                     "blob", flat=True

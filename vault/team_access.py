@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
-from .access import lock_accounts
+from .access import collections_for, lock_accounts, lock_workspace
 from .models import Audit, Collection, CollectionAccess, UploadSession, User
 from .security import limited
 
@@ -20,6 +20,7 @@ def set_access(owner, collection_id, member, role):
     if role not in {"", "reader", "collaborator"} or member.pk == owner.pk:
         raise Http404
     with transaction.atomic():
+        lock_workspace(get_object_or_404(Collection, pk=collection_id, owner=owner))
         lock_accounts(owner, member.pk)
         collection = get_object_or_404(
             Collection.objects.select_for_update(), pk=collection_id, owner=owner
@@ -33,7 +34,12 @@ def set_access(owner, collection_id, member, role):
             )
         else:
             current.delete()
-        if role != "collaborator":
+        if (
+            role != "collaborator"
+            and not collections_for(member, write=True)
+            .filter(pk=collection.pk)
+            .exists()
+        ):
             # Release the owner's reserved quota immediately on downgrade/removal.
             from .resumable import cancel_session
 
@@ -137,6 +143,13 @@ def member_access(request, pk):
                 status=429,
             )
         with transaction.atomic():
+            from .models import Workspace
+
+            list(
+                Workspace.objects.select_for_update()
+                .filter(pk__in={c.workspace_id for c in collections if c.workspace_id})
+                .order_by("pk")
+            )
             lock_accounts(request.user, member.pk)
             for collection in sorted(collections, key=lambda c: c.pk):
                 set_access(

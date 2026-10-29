@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Liasio 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-27 12:39+0100\n"
+"POT-Creation-Date: 2026-10-29 08:58+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Liasio contributors\n"
 "Language-Team: English\n"
@@ -14,24 +14,121 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: static/app.js:15
+#: static/api-explorer.js:9
+msgid "Lister les dossiers accessibles"
+msgstr "List accessible collections"
+
+#: static/api-explorer.js:10
+msgid "Créer un dossier"
+msgstr "Create a collection"
+
+#: static/api-explorer.js:11
+msgid "Consulter un dossier et ses fichiers"
+msgstr "Read collection and files"
+
+#: static/api-explorer.js:12
+msgid "Créer un lien avec ses conditions"
+msgstr "Create a controlled share link"
+
+#: static/api-explorer.js:13
+msgid "Lister les liens gérables"
+msgstr "List manageable links"
+
+#: static/api-explorer.js:14
+msgid "Consulter un lien"
+msgstr "Read a link"
+
+#: static/api-explorer.js:15
+msgid "Révoquer un lien"
+msgstr "Revoke a link"
+
+#: static/api-explorer.js:16
+#| msgid "Création des liens…"
+msgid "Créer un lot de liens"
+msgstr "Create an atomic batch"
+
+#: static/api-explorer.js:17
+msgid "Lister Mes lots"
+msgstr "List My batches"
+
+#: static/api-explorer.js:18
+msgid "Consulter un lot et ses liens nommés"
+msgstr "Read a batch and its named links"
+
+#: static/api-explorer.js:19
+msgid "Exporter en Excel ou CSV"
+msgstr "Export Excel or CSV"
+
+#: static/api-explorer.js:20
+msgid "Lister mes modèles de partage"
+msgstr "List private sharing presets"
+
+#: static/api-explorer.js:21
+msgid "Préparer un import avec reprise"
+msgstr "Reserve a resumable upload"
+
+#: static/api-explorer.js:22
+msgid "Lister les imports reprenables"
+msgstr "List resumable uploads"
+
+#: static/api-explorer.js:23
+msgid "Consulter la progression enregistrée"
+msgstr "Read durable offsets"
+
+#: static/api-explorer.js:24
+msgid "Envoyer un bloc avec son empreinte"
+msgstr "Upload one checksummed block"
+
+#: static/api-explorer.js:25
+msgid "Analyser et terminer l’import"
+msgstr "Scan and finalize upload"
+
+#: static/api-explorer.js:26
+msgid "Annuler l’import et libérer le quota"
+msgstr "Cancel upload and release quota"
+
+#: static/api-explorer.js:39
+msgid "Permission requise :"
+msgstr "Required scope:"
+
+#: static/api-explorer.js:39
+msgid "Seules les ressources actuellement accessibles sont renvoyées."
+msgstr "Only currently accessible resources are returned."
+
+#: static/api-explorer.js:70
+msgid "Impossible de charger la spécification API."
+msgstr "Unable to load the API specification."
+
+#: static/api-explorer.js:76
+msgid "Confirmez cette action avant de l’exécuter."
+msgstr "Confirm this action before executing it."
+
+#: static/api-explorer.js:101
+msgid ""
+"Requête impossible. Vérifiez le JSON et la connexion. Réutilisez la même clé"
+" d’idempotence en cas de doute."
+msgstr ""
+"Request failed. Check the JSON and connection. If uncertain, reuse the same "
+"idempotency key."
+
+#: static/app.js:29
 msgid "Lien copié. Prêt à être partagé."
 msgstr "Link copied. Ready to share."
 
-#: static/app.js:24
+#: static/app.js:38
 msgid "Lien à copier"
 msgstr "Link to copy"
 
-#: static/app.js:27
+#: static/app.js:41
 msgid "Copiez le texte sélectionné avec votre clavier."
 msgstr "Copy the selected text with your keyboard."
 
-#: static/app.js:72
+#: static/app.js:86
 msgid ""
 "%(value1)s fichier(s) sélectionné(s) · %(value2)s octets vers la corbeille"
 msgstr "%(value1)s file(s) selected · %(value2)s bytes to move to the trash"
 
-#: static/app.js:72
+#: static/app.js:86
 msgid "Sélectionnez les fichiers à supprimer."
 msgstr "Select files to delete."
 
@@ -85,41 +182,41 @@ msgstr ""
 "This preview is unavailable. Close this window to find the collection "
 "download."
 
-#: static/upload.js:19
+#: static/upload.js:20
 msgid "octets"
 msgstr "bytes"
 
-#: static/upload.js:20
+#: static/upload.js:21
 msgid "Kio"
 msgstr "KiB"
 
-#: static/upload.js:20
+#: static/upload.js:21
 msgid "Mio"
 msgstr "MiB"
 
-#: static/upload.js:20
+#: static/upload.js:21
 msgid "Gio"
 msgstr "GiB"
 
-#: static/upload.js:28 static/upload.js:43
+#: static/upload.js:29 static/upload.js:44
 msgid "Envoi refusé. Reconnectez-vous si votre session a expiré."
 msgstr "Upload refused. Sign in again if your session has expired."
 
-#: static/upload.js:29
+#: static/upload.js:30
 msgid "Envoi refusé."
 msgstr "Upload rejected."
 
-#: static/upload.js:46 static/upload.js:148 static/upload.js:167
+#: static/upload.js:47 static/upload.js:149 static/upload.js:169
 msgid ""
 "Envoi en pause. Cliquez sur Importer pour reprendre pendant les prochaines "
 "24 h."
 msgstr "Upload paused. Click Upload to resume within the next 24 hours."
 
-#: static/upload.js:51
+#: static/upload.js:52
 msgid "Impossible de retrouver les envois. Reconnectez-vous."
 msgstr "Could not retrieve uploads. Sign in again."
 
-#: static/upload.js:57
+#: static/upload.js:58
 msgid ""
 "%(value1)s fichier(s) en attente · %(value2)s % reçus. Resélectionnez les "
 "mêmes fichiers puis cliquez sur Importer pour reprendre."
@@ -127,76 +224,76 @@ msgstr ""
 "%(value1)s pending file(s) · %(value2)s % received. Select the same files "
 "and click Upload to resume."
 
-#: static/upload.js:58
+#: static/upload.js:59
 msgid "Annuler cet envoi"
 msgstr "Cancel this upload"
 
-#: static/upload.js:70
+#: static/upload.js:71
 msgid "%(count)s fichier(s) · %(size)s"
 msgstr "%(count)s file(s) · %(size)s"
 
-#: static/upload.js:94
+#: static/upload.js:95
 msgid "Retirer %(name)s"
 msgstr "Remove %(name)s"
 
-#: static/upload.js:105
+#: static/upload.js:106
 msgid "Chemins déjà sélectionnés conservés, sans remplacement."
 msgstr "Already selected paths were kept without replacement."
 
-#: static/upload.js:107
+#: static/upload.js:108
 msgid "Maximum : 100 fichiers et 20 niveaux de dossiers par sélection."
 msgstr "Maximum: 100 files and 20 folder levels per selection."
 
-#: static/upload.js:107
+#: static/upload.js:108
 msgid "Impossible de lire cette sélection. Utilisez les boutons d’ajout."
 msgstr "Cannot read this selection. Use the add buttons."
 
-#: static/upload.js:127
+#: static/upload.js:128
 msgid "Lecture des dossiers…"
 msgstr "Reading folders…"
 
-#: static/upload.js:131
+#: static/upload.js:132
 msgid "Les dossiers vides et les fichiers cachés ne sont pas importés."
 msgstr "Empty folders and hidden files are not imported."
 
-#: static/upload.js:139
+#: static/upload.js:140
 msgid "Préparation de l’envoi…"
 msgstr "Preparing upload…"
 
-#: static/upload.js:156
+#: static/upload.js:158
 msgid ""
 "%(sent)s / %(total)s Mio transmis · %(confirmed)s Mio confirmés par le "
 "serveur"
 msgstr ""
 "%(sent)s / %(total)s MiB sent · %(confirmed)s MiB confirmed by the server"
 
-#: static/upload.js:159
+#: static/upload.js:161
 msgid "%(speed)s Mio/s · environ %(seconds)s s restantes"
 msgstr "%(speed)s MiB/s · about %(seconds)s s remaining"
 
-#: static/upload.js:168
+#: static/upload.js:170
 msgid "Envoi de %(value1)s"
 msgstr "Uploading %(value1)s"
 
-#: static/upload.js:174
+#: static/upload.js:176
 msgid "Position du transfert invalide. Rechargez la page pour reprendre."
 msgstr "Invalid upload offset. Reload the page to resume."
 
-#: static/upload.js:178
+#: static/upload.js:180
 msgid "Envoi en pause avant vérification. Cliquez sur Importer pour terminer."
 msgstr "Upload paused before verification. Click Upload to finish."
 
-#: static/upload.js:179
+#: static/upload.js:181
 msgid "Transfert terminé · analyse antivirus et enregistrement…"
 msgstr "Upload complete · scanning and saving…"
 
-#: static/upload.js:180
+#: static/upload.js:182
 msgid ""
 "Gardez cette page ouverte. La vérification peut prendre du temps pour un "
 "dossier volumineux."
 msgstr "Keep this page open. Checking a large folder may take some time."
 
-#: static/upload.js:186
+#: static/upload.js:188
 msgid ""
 "Connexion interrompue. Vos blocs reçus sont conservés : cliquez sur Importer"
 " pour reprendre."
@@ -204,6 +301,6 @@ msgstr ""
 "Connection interrupted. Received chunks are retained: click Upload to "
 "resume."
 
-#: static/upload.js:187
+#: static/upload.js:189
 msgid "En attente"
 msgstr "Pending"

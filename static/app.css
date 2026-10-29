@@ -2970,3 +2970,44 @@ summary { cursor: pointer; font-weight: 600; padding: 12px 0; }
 .api-example-form .field { flex: 1; margin: 0; min-width: 0; }
 .api-start details p, .api-start h3 { margin-top: 18px; }
 @media (max-width: 760px) { .api-example-form { flex-direction: column; align-items: stretch; } }
+
+/* Team and integration workflows. */
+.workspace-card { display: block; margin-bottom: 1rem; }
+.mail-body { margin-top: 1rem; line-height: 1.7; overflow-wrap: anywhere; }
+.api-result { max-width: 100%; overflow: auto; padding: 1rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+#api-parameters { display: grid; gap: .5rem; }
+.public-main { max-width: 980px; margin: 2rem auto; padding: 0 1rem; }
+
+#api-explorer { min-width: 0; max-width: 100%; }
+#api-explorer select, #api-explorer textarea, #api-explorer input:not([type=checkbox]) { min-width: 0; width: 100%; max-width: 100%; }
+
+/* Consistent controls and spacing for team, version and delivery workflows. */
+.workflow > h1 { margin-bottom: 18px; }
+.workflow > p { margin-bottom: 20px; line-height: 1.65; }
+.workflow > .panel, .workflow > form.panel { margin-top: 20px; }
+.workflow .editor-grid > section, .workflow .editor-grid > aside { display: grid; gap: 20px; min-width: 0; }
+.workflow .collection-card { display: block; }
+.workflow .panel h2 { margin-bottom: 16px; }
+.workflow .form-panel > label, #api-parameters > label { display: block; color: #485d4e; font-size: 13px; font-weight: 500; margin: 16px 0 8px; }
+.workflow .form-panel > input:not([type=hidden]):not([type=checkbox]),
+.workflow .form-panel > select, .workflow .form-panel > textarea,
+#api-parameters > input {
+  width: 100%; min-width: 0; min-height: 44px; padding: 11px 12px;
+  border: 1px solid #dce4d7; border-radius: 7px; background: #fdfefc;
+  color: var(--ink); font: inherit; font-size: 14px; margin-bottom: 16px;
+}
+.workflow .form-panel > label:has(input[type=checkbox]), .workflow .panel form > label:has(input[type=checkbox]) {
+  display: flex; align-items: flex-start; gap: 10px; margin: 18px 0; font-size: 13px; line-height: 1.6;
+}
+.workflow input[type=checkbox] { width: 18px; height: 18px; flex: 0 0 18px; accent-color: var(--green); margin-top: 2px; }
+.workflow .button + .button { margin-left: 8px; }
+.workflow .panel > p, .workflow .panel > ul { margin: 12px 0; }
+.workflow .text-button { margin-bottom: 12px; }
+.workflow .panel form + form { margin-top: 18px; }
+#api-parameters { gap: 0; }
+#api-explorer textarea { font-family: ui-monospace, monospace; }
+@media (max-width: 600px) {
+  .workflow .form-panel > input:not([type=hidden]):not([type=checkbox]),
+  .workflow .form-panel > select, .workflow .form-panel > textarea, #api-parameters > input { font-size: 16px; }
+  .workflow .button + .button { margin: 10px 0 0; }
+}

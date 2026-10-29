@@ -1,0 +1,6 @@
+{% extends "layout.html" %}{% load i18n %}
+{% block breadcrumb %}{% translate "Espaces d’équipe" %}{% endblock %}
+{% block content %}<div class="workflow">
+<div class="page-heading"><div><h1>{% translate "Espaces d’équipe" %}</h1><p>{% translate "Organisez vos membres en groupes et partagez les dossiers choisis." %}</p></div></div>
+<div class="editor-grid"><section>{% for workspace in workspaces %}<a class="panel workspace-card" href="{% url 'workspace' workspace.pk %}"><h2>{{ workspace.name }}</h2><p>{{ workspace.owner.display_name }}</p></a>{% empty %}<p>{% translate "Aucun espace d’équipe pour le moment." %}</p>{% endfor %}</section><form method="post" class="panel form-panel">{% csrf_token %}<h2>{% translate "Créer un espace" %}</h2>{% include "components/form.html" %}<button class="button">{% translate "Créer" %}</button></form></div>
+</div>{% endblock %}

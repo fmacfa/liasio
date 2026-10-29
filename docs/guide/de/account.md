@@ -26,3 +26,7 @@ Bestätigen Sie auf derselben Seite Passwort und einen gültigen App- oder Wiede
 Wählen Sie bei der Anmeldung **Passwort vergessen?**. Ist SMTP eingerichtet und existiert ein passendes aktives Konto, wird ein persönlicher Link gesendet, der eine Stunde gültig ist. Die Antwort bleibt für unbekannte Adressen absichtlich gleich. Die E-Mail verwendet die Sprache der Anfrage. Ein Passwort-Reset umgeht die Zwei-Faktor-Authentifizierung nicht.
 
 Bei verlorener Authentifizierungs-App verwenden Sie einen Wiederherstellungscode. Sind App und Wiederherstellungscodes verloren, wenden Sie sich an die Administration für einen kontrollierten Wiederherstellungsprozess. Es gibt keine öffentliche MFA-Umgehung. Eine abgelaufene Einladung benötigt eine neue Einladung und keinen Passwort-Reset.
+
+## Sitzungen und Teamschutz
+
+Unter [Aktive Sitzungen](advanced-operations.md) sehen Sie Ihre Geräte und können eine einzelne Sitzung oder alle anderen Geräte abmelden. Bestehende Sitzungen werden beim Upgrade übernommen; das ursprüngliche Gerät kann unbekannt sein. Wenn ein [Team-Arbeitsbereich](workspaces.md) MFA verlangt, müssen Sie diese einrichten und können sie während dieser Verpflichtung nicht deaktivieren. Eine optionale Unternehmensanmeldung wird ausdrücklich im Konto verknüpft; eine identische E-Mail-Adresse führt nie zur Zusammenführung von Identitäten.

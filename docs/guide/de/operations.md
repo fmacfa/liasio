@@ -30,3 +30,7 @@ Beim Sicherheitsupdate von 0.4.0 stoppen Sie den Webhook-Dienst vor Migration `0
 Produktionsvorschauen benötigen Linux Landlock ABI 3+, normalerweise Linux 6.2+ mit aktiviertem Landlock. Fehlt dies, verweigert der Decoder das Rendern und zeigt stattdessen eine Dateikarte. Originaldownloads bleiben möglich. Siehe [Vorschau-Deployment (Englisch)](../../PREVIEWS.md). Container-Images sind über Digests festgelegt; prüfen und testen Sie Aktualisierungen regelmäßig. Derselbe Digest lädt keine neueren Sicherheitskorrekturen.
 
 Die Wartung bereinigt den Zustellverlauf nach 30 Tagen. Vor einer öffentlichen Bereitstellung richten Sie Domain, HTTPS, ausreichende Kapazität und Backups ein. [Serveranforderungen im README (Englisch)](../../../README.md) beschreiben CPU, RAM, Festplattenspeicher und Swap.
+
+## Konfiguration, E-Mails und Wiederherstellung
+
+Der [Leitfaden zum erweiterten Betrieb](advanced-operations.md) beschreibt Diagnose, SMTP-Test ausschließlich an die eigene Administratoradresse, Sitzungen, OIDC, privaten S3-Speicher und verschlüsselte externe Sicherung/Wiederherstellung. Prüfen Sie **E-Mails** auf Fehler: Die SMTP-Übergabe bestätigt weder Empfang noch Lesen. Optionale Dienste müssen vom Betreiber konfiguriert werden.

@@ -10,13 +10,13 @@ Liasio is an open-source file-sharing application that you host on your own serv
 
 French / English / German interface · **MIT** license · Python / Django · Docker Compose
 
-> **Version 0.4 — connected workflows, in two languages.** Scoped API keys, signed webhooks and illustrated in-app guides join galleries, TOTP, resumable uploads and recoverable trash. This remains an early release; it has not undergone an independent human security audit and does not provide end-to-end encryption.
+> **Version 0.5 — team and client workflows.** Team spaces and groups, immutable versions, client file requests, recipient verification, reviewed emails, private S3 storage and OIDC. The interface and illustrated guides are available in French, English and German. This remains a pre-1.0 release; an independent human security audit is still pending and files are not end-to-end encrypted.
 
 ![Liasio dashboard with fictional demo data](docs/screenshots/dashboard.png)
 
 ## Features
 
-| Need | Available in version 0.4 |
+| Need | Available in version 0.5 |
 | --- | --- |
 | First-time setup | Two short steps: email and password, then name and password confirmation; the first account becomes the administrator |
 | Multiple accounts | Personal invitations valid for 7 days, single-use and revocable; private accounts with explicit Reader/Collaborator access per collection |
@@ -32,11 +32,19 @@ French / English / German interface · **MIT** license · Python / Django · Doc
 | Storage administration | Available disk space, total file count, and per-account usage; quotas editable in the administration page |
 | Access management | Suspend members and revoke their links and sessions; password changes/recovery, optional TOTP and one-use recovery codes |
 | Automations | Scoped, expiring API keys; resumable imports and link creation; signed webhooks, delivery history and bounded retries |
-| Illustrated help | 13 guides in English, French and German, available on GitHub and under User guide in the application |
+| Team spaces | Groups, Reader/Collaborator grants, owner transfers and optional mandatory MFA |
+| Document versions | Frozen or updating links, explicit file replacement, version restoration and selective downloads |
+| Client deposits | Upload-only links with expiry, byte and submission limits, scanning and resumable transfers |
+| Email workflows | Individual/batch/invitation drafts, reusable templates, explicit approval, bounded retries and opt-in self-notifications |
+| Verified recipients | Email allowlists and browser-bound one-time codes before viewing or downloading |
+| Account security | Active sessions with revocation and optional explicitly linked OIDC identities |
+| Hosting choices | Private local or S3-compatible originals, encrypted off-server restic backups and restore workflow |
+| API tooling | OpenAPI 3.1 contract and a same-instance interactive explorer; names/emails to personalized links and Excel/CSV exports |
+| Illustrated help | 19 guides in English, French and German, available on GitHub and under User guide in the application |
 | Languages | French, English and German with automatic browser-language detection, including recipient pages, forms, messages and upload progress |
 | Operations | Automatic HTTPS through Caddy, PostgreSQL, ClamAV antivirus, five-minute health checks, optional alerts, and automatically tested backup restoration |
 
-**A folder is stored only once.** Create a password-protected link for one client, another that expires tomorrow, and a third that allows a single download.
+**Links reuse stored files.** Replacing a file retains its older bytes while a version references them; retained versions count toward the owner’s quota. Create a password-protected link for one client, another that expires tomorrow, and a third that allows a single download.
 
 **Shorter sharing URLs:** an opaque 22-character code follows `/s/`, replacing the previous 43- or 97-character tokens. Copy a link again from **My links** or export its batch to get the short URL. Previously shared URLs remain valid with the same password, expiry and download counter. See [link format, migration and compatibility](docs/SHARE_LINKS.md).
 
@@ -51,7 +59,7 @@ French / English / German interface · **MIT** license · Python / Django · Doc
 
 Start with the **[illustrated English guide](docs/guide/en/README.md)**, the **[guide français](docs/guide/fr/README.md)** or the **[deutsches Benutzerhandbuch](docs/guide/de/README.md)**. The same pages and screenshots are built into `/help/`.
 
-For n8n, scripts and other tools, see the [API reference](docs/API.md), the [automation walkthrough](docs/guide/en/automation.md), the [Python upload client](examples/upload.py) and the [webhook signature verifier](examples/verify_webhook.py). No public registration or anonymous upload is added.
+For n8n, scripts and other tools, see the [API reference](docs/API.md), the [automation walkthrough](docs/guide/en/automation.md), the [Python upload client](examples/upload.py) and the [webhook signature verifier](examples/verify_webhook.py). Public registration stays closed. Anonymous uploads require an owner-created, expiring file-request capability.
 
 For a workflow entirely in the interface, use **Create multiple links**: enter a quantity or upload an Excel/CSV list, check the names and conditions, then download the completed list. Original columns and row order are kept as values. See the [bulk-link guide](docs/guide/en/bulk-links.md), including the downloadable template, limits and illustrated steps.
 
@@ -68,7 +76,7 @@ Use a Linux server with **Docker Engine and Docker Compose v2**, Git, and Python
 
 ### RAM and swap
 
-**RAM** is working memory for the running services. The limits in [compose.yaml](compose.yaml) currently total **6.5 GiB**: ClamAV 4 GiB, application 1 GiB, PostgreSQL and previews 512 MiB each, maintenance and webhooks 256 MiB each. These are individual ceilings, not reserved or constant consumption. Linux, Docker, Caddy and backup/build processes need additional memory. ClamAV alone [recommends 4 GiB](https://docs.clamav.net/manual/Installing/Docker.html#memory-ram-requirements), with temporary peaks during signature updates.
+**RAM** is working memory for the running services. The limits in [compose.yaml](compose.yaml) currently total **6.75 GiB**: ClamAV 4 GiB, application 1 GiB, PostgreSQL and previews 512 MiB each, maintenance, webhooks and email workers 256 MiB each. These are individual ceilings, not reserved or constant consumption. Linux, Docker, Caddy and backup/build processes need additional memory. ClamAV alone [recommends 4 GiB](https://docs.clamav.net/manual/Installing/Docker.html#memory-ram-requirements), with temporary peaks during signature updates.
 
 On a **shared VPS**, add the needs of your existing sites, databases and applications, including their peaks. A server with 8 GiB installed but only 2 GiB available is not equivalent to a dedicated 8 GiB server. CloudPanel does not reduce these requirements; plan the reverse proxy and existing port bindings using the [operations guide](docs/OPERATIONS.md#autre-reverse-proxy).
 
@@ -131,11 +139,11 @@ Caddy obtains and renews the TLS certificate. If you use another reverse proxy, 
 
 Versioned images are published by GitHub Actions with a software bill of materials (SBOM) and provenance. Releases also provide a compressed Docker archive for offline installation. See [releases](https://github.com/fmacfa/liasio/releases) and the [changelog](CHANGELOG.md).
 
-Set `LINKVAULT_IMAGE=ghcr.io/fmacfa/linkvault:0.4.0` in `.env` to use the registry image, then `docker compose pull app maintenance preview webhooks` and `docker compose up -d --no-build`. For source builds, keep the default and use `--build`.
+Set `LINKVAULT_IMAGE=ghcr.io/fmacfa/liasio:0.5.0` in `.env` to use the registry image, then `docker compose pull app maintenance preview webhooks mail` and `docker compose up -d --no-build`. For source builds, keep the default and use `--build`.
 
 Before upgrading from 0.1, preserve your original keys and take a complete backup. Read the [upgrade and reliability guide](docs/RELIABILITY.md), including MFA key handling, trash quotas, monitoring and restore verification.
 
-Source builds after 0.4.0 include the [unreleased hardening changes](CHANGELOG.md#unreleased): fair webhook dispatch, stronger file/state handling and preview isolation. Stop webhook workers before migration `0006` and restart the updated stack together. Production previews require Linux Landlock ABI 3+; see the [updated operations guide](docs/guide/en/operations.md). The existing 0.4.0 image does not contain these changes. Vendor images are pinned by digest and require reviewed updates; future release notes provide workflow/tag/commit-bound attestation verification and an immutable image reference.
+Version 0.5 includes the hardening changes made after 0.4, together with additive migrations through `0017`. Follow the [0.5 upgrade guide](docs/UPGRADING_0_5.md), preserve the original keys and restart every writer with the same image. Production previews still require Linux Landlock ABI 3+; disabling previews keeps original downloads available. Release assets include exact image digests, SBOM and workflow/tag/commit-bound attestations.
 
 ## Try it locally
 
@@ -175,14 +183,14 @@ Configure values in `.env`; [.env.example](.env.example) provides a template.
 | `TIME_ZONE` | `Europe/Berlin`; timestamps are stored in UTC and displayed in this time zone |
 | `ANTIVIRUS_REQUIRED` | `true` in production; uploads fail if scanning cannot complete |
 | `CLAMAV_HOST` | `clamav` in Compose; a private service that must never be exposed to the Internet |
-| `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD` | Optional SMTP settings for password recovery |
+| `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD` | Optional SMTP for recovery, reviewed deliveries, recipient codes and notifications |
 | `EMAIL_USE_TLS` / `EMAIL_USE_SSL` | STARTTLS by default; do not enable both at the same time |
 | `DEFAULT_FROM_EMAIL` | Sender address authorized by your SMTP server |
 | `TRUST_PROXY` | `true` only behind the isolated reverse proxy supplied in Compose |
 
 This version has a fixed limit of 100 files per folder. Accepted file extensions are configured through `ALLOWED_EXTENSIONS`. If you increase upload sizes, also adjust Caddy and ClamAV limits; see the operations guide.
 
-Invitations generate a link to copy and share. They do not send email automatically. Without SMTP, the server administrator can reset a password using `manage.py changepassword`.
+Invitations generate a link to copy and share. With SMTP configured, choose **Prepare an email**, review the recipient/message and confirm sending. Creating an invitation alone never sends it. Without SMTP, the server administrator can reset a password using `manage.py changepassword`.
 
 ## Reliability
 
@@ -221,7 +229,7 @@ Previews are reduced, metadata-free JPEGs generated by an isolated renderer. The
 
 The operating-system administrator can read stored files: **this is not end-to-end encryption**. Use encrypted volumes and backups where needed. Antivirus scanning does not guarantee that a file is harmless. Extension checks do not fully validate the contents of every accepted format. This application is not designed for large-scale anonymous uploads.
 
-Supporting guides are currently in French: [security policy](SECURITY.md), [security model](docs/SECURITY_MODEL.md), and [backup, restore, and maintenance](docs/OPERATIONS.md).
+See the English [security policy](SECURITY.md), French [security model](docs/SECURITY_MODEL.md) and [operations reference](docs/OPERATIONS.md), plus the illustrated guides in all three interface languages.
 
 ## Testing and contributing
 
@@ -236,7 +244,7 @@ The [pre-release review summary](docs/SECURITY_REVIEW.md) records the automated 
 
 The test suite covers account isolation, upload limits, invitations, CSRF, link passwords, path traversal, deletion, and concurrent access. The GitHub workflow tests SQLite and PostgreSQL, builds the container image, and checks antivirus behavior using the EICAR test signature.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the code organization and [ROADMAP.md](ROADMAP.md) for planned improvements. Both documents are currently in French.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the code organization and [ROADMAP.md](ROADMAP.md) for planned improvements. The contribution and security policies include preserved French versions. [Maintenance policy](docs/MAINTENANCE.md) · [Measured load checks](docs/benchmarks/README.md) · [Independent audit brief](docs/INDEPENDENT_AUDIT.md).
 
 ## Inspiration and scope
 

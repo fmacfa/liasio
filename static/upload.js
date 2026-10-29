@@ -11,6 +11,7 @@
   const metrics = form.querySelector("[data-upload-metrics]"), pending = form.querySelector("[data-pending-uploads]");
   const clear = form.querySelector("[data-clear-upload]");
   const csrf = form.querySelector("[name=csrfmiddlewaretoken]").value;
+  const sessionBase = form.dataset.sessionBase || "/uploads/";
   let files = [], busy = false, selecting = false, paused = false, sessions = [], xhr = null;
   const hex = buffer => [...new Uint8Array(buffer)].map(n => n.toString(16).padStart(2, "0")).join("");
   const digest = async blob => hex(await crypto.subtle.digest("SHA-256", await blob.arrayBuffer()));
@@ -56,7 +57,7 @@
       const received = session.parts.reduce((n, p) => n + p.offset, 0);
       text.textContent = interpolate(gettext("%(value1)s fichier(s) en attente · %(value2)s % reçus. Resélectionnez les mêmes fichiers puis cliquez sur Importer pour reprendre."), {value1: session.parts.length, value2: Math.round(received / Math.max(1, session.size) * 100)}, true);
       cancel.textContent = gettext("Annuler cet envoi"); cancel.type = "button"; cancel.className = "button secondary";
-      cancel.addEventListener("click", async () => { if (busy) return; try { await api(`/uploads/${session.id}/cancel/`, "{}"); await refresh(); } catch (e) { summary.textContent = e.message; } });
+      cancel.addEventListener("click", async () => { if (busy) return; try { await api(`${sessionBase}${session.id}/cancel/`, "{}"); await refresh(); } catch (e) { summary.textContent = e.message; } });
       row.append(text, cancel); pending.append(row);
     }
   };
@@ -146,8 +147,9 @@
         manifest.push({path, size: file.size, fingerprint: await digest(sample)});
       }
       if (paused) throw new Error(gettext("Envoi en pause. Cliquez sur Importer pour reprendre pendant les prochaines 24 h."));
-      let session = sessions.find(s => s.parts.length === manifest.length && s.parts.every(p => manifest.some(f => f.path === p.path && f.size === p.size && f.fingerprint === p.fingerprint)));
-      if (!session) session = await api(form.dataset.startUrl, JSON.stringify({files: manifest}));
+      const replaceExisting = Boolean(form.elements.replace_existing?.checked);
+      let session = sessions.find(s => Boolean(s.replace_existing) === replaceExisting && s.parts.length === manifest.length && s.parts.every(p => manifest.some(f => f.path === p.path && f.size === p.size && f.fingerprint === p.fingerprint)));
+      if (!session) session = await api(form.dataset.startUrl, JSON.stringify({files: manifest, replace_existing: replaceExisting}));
       const total = files.reduce((n, item) => n + item.file.size, 0);
       const baseline = core.progress(session.parts, total).confirmed, started = performance.now();
       const update = (inFlight = 0) => {
@@ -169,7 +171,7 @@
           const block = file.slice(part.offset, Math.min(part.size, part.offset + session.chunk_bytes));
           const checksum = await digest(block);
           if (paused) continue;
-          const result = await blockRequest(`/uploads/${session.id}/parts/${part.id}/chunk/`, block, part.offset, checksum, update);
+          const result = await blockRequest(`${sessionBase}${session.id}/parts/${part.id}/chunk/`, block, part.offset, checksum, update);
           xhr = null;
           if (!core.validOffset(result.offset, part.size) || result.error && ++conflicts > 3) throw new Error(gettext("Position du transfert invalide. Rechargez la page pour reprendre."));
           part.offset = result.offset; update();
@@ -179,7 +181,7 @@
       pause.hidden = true; phase.textContent = gettext("Transfert terminé · analyse antivirus et enregistrement…");
       metrics.textContent = gettext("Gardez cette page ouverte. La vérification peut prendre du temps pour un dossier volumineux.");
       progress.value = 100; percent.textContent = "100 %";
-      const result = await api(`/uploads/${session.id}/finish/`, "{}");
+      const result = await api(`${sessionBase}${session.id}/finish/`, "{}");
       busy = false; window.location.assign(result.redirect);
     } catch (error) {
       xhr = null;

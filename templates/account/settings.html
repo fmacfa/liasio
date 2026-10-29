@@ -2,6 +2,7 @@
 {% load i18n %}
 {% block breadcrumb %}{% translate "Mon compte" %}{% endblock %}
 {% block content %}
+  {% if oidc_enabled %}<a class="button secondary" href="{% url 'oidc_settings' %}">{% translate "Connexion d’entreprise" %}</a>{% endif %}
     <div class="page-heading">
         <div>
             <div class="eyebrow">{% translate "VOTRE ACCÈS PERSONNEL" %}</div>
@@ -19,4 +20,5 @@
         {% include "components/form.html" %}
         <button class="button">{% translate "Mettre à jour le mot de passe" %}</button>
     </form>
+    <p><a class="button secondary" href="{% url 'sessions' %}">{% translate "Sessions actives" %}</a></p>
 {% endblock %}

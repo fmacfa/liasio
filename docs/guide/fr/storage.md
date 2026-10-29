@@ -25,3 +25,7 @@ Ouvrez **Corbeille**. Les dossiers entiers et les fichiers supprimés individuel
 Pour libérer immédiatement le quota, choisissez **Supprimer définitivement**, vérifiez puis confirmez. Les originaux conservés sont effacés ; cette action ne s’annule pas depuis Liasio. Sinon, la maintenance purge après la durée configurée (30 jours par défaut). Restaurer un dossier ne restaure que les fichiers supprimés avec lui ; les fichiers supprimés auparavant restent dans la corbeille.
 
 Pour un quota plus élevé, demandez à l’administrateur de le modifier dans [Exploitation](operations.md). Vider la corbeille ne corrige pas la consommation d’une autre application : une saturation générale nécessite une intervention sur le serveur.
+
+## Versions et stockage objet
+
+Les [versions](versions.md) conservées comptent aussi dans le quota. Remplacer un document peut donc augmenter l’utilisation sans changer le nombre de fichiers actuels. Supprimez les versions obsolètes avant de purger leurs fichiers référencés ; les anciennes copies sans référence sont supprimées après le délai de conservation. Avec le [stockage S3](advanced-operations.md), le quota compte les originaux stockés tandis que les chiffres du disque concernent les imports et archives temporaires locaux : ce sont deux ressources distinctes.

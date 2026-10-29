@@ -58,3 +58,7 @@ Les listes sont privées au compte qui possède le dossier, ne sont jamais affic
 La [création de lots par API](bulk-links-api.md) permet d’envoyer des noms ou une quantité depuis Codex, un terminal ou le serveur d’un site, puis de récupérer les liens et les exports Excel/CSV. Ces lots apparaissent dans **Mes lots** et restent accessibles dans l’interface.
 
 [Conditions des liens](sharing.md) · [Automatisations API et webhooks](automation.md) · [Retour au guide](README.md)
+
+## Réutiliser des conditions et préparer les e-mails
+
+Choisissez un modèle de partage et vérifiez durée, limites et obligation de mot de passe. Avec SMTP configuré, choisissez la colonne d’adresses puis **Vérifier l’adresse e-mail de chaque ligne** pour réserver chaque lien à son destinataire, ou indiquez une liste commune d’adresses autorisées. Après génération, **Préparer les e-mails** reprend les adresses du tableau. Relisez chaque message et confirmez explicitement l’envoi. Les modèles et limites sont détaillés dans le [guide des e-mails](email.md).

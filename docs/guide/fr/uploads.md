@@ -25,7 +25,7 @@ La barre progresse avec les octets réellement transmis par le navigateur, y com
 
 **Mettre en pause** interrompt la requête du bloc en cours. Les blocs confirmés sont conservés. Cliquez sur **Importer les fichiers** pour reprendre. Après un rechargement ou une coupure, sélectionnez les mêmes fichiers et dossiers : le serveur retrouve leurs positions pendant 24 heures. Un bloc non confirmé peut être envoyé à nouveau ; il n’est pas compté deux fois.
 
-Les envois en attente proposent **Annuler cet envoi**. Cette action libère le quota réservé ; la maintenance supprime les sessions expirées. Un compte peut avoir cinq envois en attente. Révoquez les liens actifs avant d’ajouter des fichiers à une collection déjà partagée.
+Les envois en attente proposent **Annuler cet envoi**. Cette action libère le quota réservé ; la maintenance supprime les sessions expirées. Un compte peut avoir cinq envois en attente. Figez d’abord les anciens liens actifs depuis **Versions**, ou révoquez-les. Les nouveaux liens peuvent conserver une version figée ou suivre les mises à jour. Voir les [versions et remplacements](versions.md).
 
 Si le quota ou le disque est plein, utilisez [Stockage](storage.md) ou contactez l’administrateur. En cas de refus antivirus, examinez le fichier original sans désactiver la protection.
 

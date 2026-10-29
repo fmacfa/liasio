@@ -51,3 +51,7 @@ Listen gehören ausschließlich dem Eigentümer der Sammlung, erscheinen nie fü
 Für automatisierte Listen lesen Sie [Stapel per API](bulk-links-api.md). Diese erscheinen ebenfalls unter **Meine Stapel**.
 
 [Linkbedingungen](sharing.md) · [API und Webhooks](automation.md) · [Zum Benutzerhandbuch](README.md)
+
+## Bedingungen wiederverwenden und E-Mails vorbereiten
+
+Wählen Sie eine Freigabevorlage und prüfen Sie Gültigkeit, Limits und Passwortpflicht. Bei konfiguriertem SMTP können Sie die E-Mail-Spalte und **E-Mail-Adresse jeder Zeile prüfen** auswählen, um jeden Link auf seinen Empfänger zu beschränken, oder eine gemeinsame Empfängerliste angeben. Nach der Erstellung übernimmt **E-Mails vorbereiten** die Adressen aus der Tabelle. Prüfen Sie jede Nachricht und bestätigen Sie den Versand ausdrücklich. Vorlagen und Limits erklärt die [E-Mail-Anleitung](email.md).

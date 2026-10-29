@@ -185,15 +185,18 @@ class LanguageTests(IsolatedFiles, TestCase):
         self.assertContains(response, "1 Datei ·")
         self.link.delete()
         add_files(
-            self.user, self.folder.pk,
-            [SimpleUploadedFile("second.txt", b"two")], ["second.txt"],
+            self.user,
+            self.folder.pk,
+            [SimpleUploadedFile("second.txt", b"two")],
+            ["second.txt"],
         )
         self.link = ShareLink.objects.create(collection=self.folder, label="Customer")
         self.assertContains(
             browser.get(self.link.public_url, HTTP_ACCEPT_LANGUAGE="de"), "2 Dateien ·"
         )
         self.assertContains(
-            browser.get("/jsi18n/", HTTP_ACCEPT_LANGUAGE="de-AT"), "Upload wird vorbereitet"
+            browser.get("/jsi18n/", HTTP_ACCEPT_LANGUAGE="de-AT"),
+            "Upload wird vorbereitet",
         )
         response = browser.post(
             "/login/", {"email": "invalid", "password": "x"}, HTTP_ACCEPT_LANGUAGE="de"
@@ -217,7 +220,8 @@ class LanguageTests(IsolatedFiles, TestCase):
             self.assertEqual(self.link.status_code, "active")
             self.assertEqual(str(self.link.status), "Aktiv")
             self.assertEqual(
-                Event(link=self.link, kind="opened").get_kind_display(), "Seite geöffnet"
+                Event(link=self.link, kind="opened").get_kind_display(),
+                "Seite geöffnet",
             )
 
     @override_settings(
@@ -245,8 +249,11 @@ class LanguageTests(IsolatedFiles, TestCase):
 
     def test_early_upload_rejections_use_the_browser_language(self):
         response = Client().generic(
-            "POST", "/collections/", data=b"x",
-            CONTENT_LENGTH=str(2 * 1024**2), HTTP_ACCEPT_LANGUAGE="de-CH",
+            "POST",
+            "/collections/",
+            data=b"x",
+            CONTENT_LENGTH=str(2 * 1024**2),
+            HTTP_ACCEPT_LANGUAGE="de-CH",
         )
         self.assertContains(response, "Upload zu groß.", status_code=413)
         self.assertEqual(response.headers["Content-Language"], "de")

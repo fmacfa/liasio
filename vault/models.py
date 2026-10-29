@@ -41,6 +41,11 @@ class User(AbstractUser):
     mfa_version = models.UUIDField(default=uuid.uuid4, editable=False)
     mfa_last_step = models.BigIntegerField(default=-1)
     recovery_codes = models.JSONField(default=list, blank=True)
+    mail_lease = models.UUIDField(null=True, editable=False)
+    mail_lease_until = models.DateTimeField(null=True, editable=False)
+    mail_last_claimed = models.DateTimeField(null=True, editable=False)
+    notify_downloads = models.BooleanField(default=False)
+    notify_uploads = models.BooleanField(default=False)
     # Shared by all dispatch processes: one in-flight webhook per owner.
     webhook_lease = models.UUIDField(null=True, editable=False)
     webhook_lease_until = models.DateTimeField(null=True, editable=False)
@@ -128,6 +133,20 @@ class Collection(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True, db_index=True)
+    workspace = models.ForeignKey(
+        "Workspace",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="collections",
+    )
+    file_request = models.ForeignKey(
+        "FileRequest",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="submissions",
+    )
     objects = LiveManager()
     all_objects = models.Manager()
 
@@ -166,6 +185,11 @@ class CollectionAccess(models.Model):
         ]
 
 
+class CurrentAssetManager(LiveManager):
+    def get_queryset(self):
+        return super().get_queryset().filter(superseded_at__isnull=True)
+
+
 class Asset(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     collection = models.ForeignKey(
@@ -178,7 +202,8 @@ class Asset(models.Model):
     scanned = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     deleted_at = models.DateTimeField(null=True, blank=True, db_index=True)
-    objects = LiveManager()
+    superseded_at = models.DateTimeField(null=True, blank=True, db_index=True)
+    objects = CurrentAssetManager()
     all_objects = models.Manager()
 
     class Meta:
@@ -187,7 +212,9 @@ class Asset(models.Model):
         default_manager_name = "objects"
         constraints = [
             models.UniqueConstraint(
-                fields=["collection", "path"], name="unique_collection_path"
+                fields=["collection", "path"],
+                condition=models.Q(superseded_at__isnull=True),
+                name="unique_current_collection_path",
             )
         ]
 
@@ -217,7 +244,16 @@ class ShareLink(models.Model):
     )
     label = models.CharField(max_length=80)
     password_hash = models.CharField(max_length=256, blank=True)
+    allowed_emails = models.JSONField(default=list, blank=True)
     allow_previews = models.BooleanField(default=False)
+    follow_updates = models.BooleanField(default=False)
+    revision = models.ForeignKey(
+        "CollectionRevision",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="links",
+    )
     expires_at = models.DateTimeField(null=True, blank=True)
     max_downloads = models.PositiveIntegerField(
         null=True,
@@ -364,6 +400,11 @@ class Audit(models.Model):
         "collection_created": _("Dossier créé"),
         "collection_access_changed": _("Accès au dossier modifiés"),
         "collection_downloaded": _("Dossier téléchargé par un membre"),
+        "workspace_created": _("Espace d’équipe créé"),
+        "workspace_changed": _("Espace d’équipe modifié"),
+        "group_changed": _("Groupe modifié"),
+        "collection_workspace_changed": _("Espace du dossier modifié"),
+        "collection_transferred": _("Propriété du dossier transférée"),
         "collection_trashed": _("Dossier placé dans la corbeille"),
         "files_uploaded": _("Fichiers enregistrés"),
         "files_trashed": _("Fichiers placés dans la corbeille"),
@@ -390,6 +431,16 @@ class Audit(models.Model):
         "mfa_regenerate": _("Codes de récupération renouvelés"),
         "mfa_recovery_used": _("Code de récupération utilisé"),
         "backup_restore_verified": _("Restauration de sauvegarde vérifiée"),
+        "revision_created": _("Version enregistrée"),
+        "revision_deleted": _("Version supprimée"),
+        "revision_restored": _("Version restaurée"),
+        "sessions_revoked": _("Sessions déconnectées"),
+        "mail_queued": _("E-mails confirmés pour envoi"),
+        "file_request_created": _("Demande de fichiers créée"),
+        "file_request_received": _("Dépôt client reçu"),
+        "file_request_revoked": _("Demande de fichiers révoquée"),
+        "oidc_linked": _("Identité d’entreprise reliée"),
+        "oidc_unlinked": _("Identité d’entreprise dissociée"),
     }
 
     actor = models.ForeignKey(
@@ -406,6 +457,93 @@ class Audit(models.Model):
 
     class Meta:
         ordering = ["-created_at", "-id"]
+
+
+class MailBatch(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    confirmed_at = models.DateTimeField(null=True)
+
+
+class OIDCIdentity(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="oidc_identities"
+    )
+    issuer = models.URLField(max_length=500)
+    subject = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["issuer", "subject"], name="unique_oidc_subject"
+            ),
+            models.UniqueConstraint(
+                fields=["user", "issuer"], name="unique_user_oidc_issuer"
+            ),
+        ]
+
+
+class MailDelivery(models.Model):
+    STATES = [
+        ("draft", _("Brouillon")),
+        ("pending", _("En attente")),
+        ("sending", _("En cours")),
+        ("sent", _("Transmis au serveur mail")),
+        ("failed", _("Échec")),
+        ("canceled", _("Annulé")),
+    ]
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    sender = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="mail_deliveries"
+    )
+    batch = models.ForeignKey(
+        MailBatch, null=True, on_delete=models.CASCADE, related_name="deliveries"
+    )
+    recipient = models.EmailField()
+    payload = models.TextField()
+    kind = models.CharField(max_length=16)
+    state = models.CharField(
+        max_length=16, choices=STATES, default="draft", db_index=True
+    )
+    link = models.ForeignKey(ShareLink, null=True, on_delete=models.SET_NULL)
+    invitation = models.ForeignKey(Invitation, null=True, on_delete=models.SET_NULL)
+    attempts = models.PositiveSmallIntegerField(default=0)
+    next_attempt = models.DateTimeField(default=timezone.now)
+    lease = models.UUIDField(null=True)
+    lease_until = models.DateTimeField(null=True)
+    expires_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    sent_at = models.DateTimeField(null=True)
+    error = models.CharField(max_length=24, blank=True)
+
+
+class MailTemplate(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=80)
+    subject = models.CharField(max_length=160)
+    body = models.TextField(max_length=10000)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["owner", "name"], name="unique_mail_template"
+            )
+        ]
+
+
+class RecipientChallenge(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    link = models.ForeignKey(ShareLink, on_delete=models.CASCADE)
+    email = models.EmailField()
+    code_hash = models.CharField(max_length=64)
+    session_digest = models.CharField(max_length=64)
+    attempts = models.PositiveSmallIntegerField(default=0)
+    expires_at = models.DateTimeField()
+    verified_at = models.DateTimeField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class RateBucket(models.Model):
@@ -431,8 +569,46 @@ class UploadSession(models.Model):
     collection = models.ForeignKey(Collection, on_delete=models.CASCADE)
     size = models.PositiveBigIntegerField()
     state = models.CharField(max_length=12, default="pending")
+    replace_files = models.BooleanField(default=False)
+    file_request = models.ForeignKey(
+        "FileRequest", null=True, on_delete=models.SET_NULL
+    )
+    browser_digest = models.CharField(max_length=64, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField(default=upload_expiry, db_index=True)
+
+
+class FileRequest(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=120)
+    description = models.TextField(max_length=2000, blank=True)
+    max_bytes = models.PositiveBigIntegerField()
+    max_submissions = models.PositiveIntegerField(default=20)
+    received_bytes = models.PositiveBigIntegerField(default=0)
+    received_count = models.PositiveIntegerField(default=0)
+    expires_at = models.DateTimeField()
+    revoked_at = models.DateTimeField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def active(self):
+        return (
+            not self.revoked_at
+            and self.expires_at > timezone.now()
+            and self.owner.is_active
+        )
+
+    @property
+    def public_url(self):
+        from .security import capability
+
+        return (
+            settings.APP_URL
+            + "/file-requests/"
+            + capability("file-request", self.pk)
+            + "/"
+        )
 
 
 class UploadPart(models.Model):
@@ -538,3 +714,159 @@ class WebhookDelivery(models.Model):
 
     class Meta:
         indexes = [models.Index(fields=["state", "next_at"], name="webhook_due_idx")]
+
+
+class Workspace(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=80)
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        related_name="managed_workspaces",
+    )
+    require_mfa = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["name", "pk"]
+
+    def __str__(self):
+        return self.name
+
+
+class WorkspaceMember(models.Model):
+    workspace = models.ForeignKey(
+        Workspace, on_delete=models.CASCADE, related_name="members"
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="workspace_memberships",
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["workspace", "user"], name="workspace_member_unique"
+            )
+        ]
+
+
+class TeamGroup(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    workspace = models.ForeignKey(
+        Workspace, on_delete=models.CASCADE, related_name="groups"
+    )
+    name = models.CharField(max_length=80)
+    members = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, blank=True, related_name="team_groups"
+    )
+
+    class Meta:
+        ordering = ["name", "pk"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["workspace", "name"], name="workspace_group_name_unique"
+            )
+        ]
+
+    def __str__(self):
+        return self.name
+
+
+class GroupAccess(models.Model):
+    group = models.ForeignKey(
+        TeamGroup, on_delete=models.CASCADE, related_name="grants"
+    )
+    collection = models.ForeignKey(
+        Collection, on_delete=models.CASCADE, related_name="group_grants"
+    )
+    role = models.CharField(max_length=16, choices=CollectionAccess.ROLES)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["group", "collection"], name="group_collection_unique"
+            ),
+            models.CheckConstraint(
+                condition=models.Q(role__in=["reader", "collaborator"]),
+                name="group_access_valid_role",
+            ),
+        ]
+
+
+class SharingPreset(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="sharing_presets",
+    )
+    name = models.CharField(max_length=80)
+    expires_in_days = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1), MaxValueValidator(3650)],
+    )
+    max_downloads = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1), MaxValueValidator(100000)],
+    )
+    password_required = models.BooleanField(default=False)
+    allow_previews = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["name", "pk"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["owner", "name"], name="owner_preset_name_unique"
+            )
+        ]
+
+    def __str__(self):
+        return self.name
+
+
+class CollectionRevision(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    collection = models.ForeignKey(
+        Collection, on_delete=models.CASCADE, related_name="revisions"
+    )
+    number = models.PositiveIntegerField()
+    name = models.CharField(max_length=80, blank=True)
+    assets = models.ManyToManyField(Asset, related_name="revisions")
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL
+    )
+
+    class Meta:
+        ordering = ["-number"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["collection", "number"],
+                name="collection_revision_number_unique",
+            )
+        ]
+
+    def __str__(self):
+        return f"v{self.number}" + (f" · {self.name}" if self.name else "")
+
+
+class LoginSession(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    session = models.OneToOneField(
+        "sessions.Session", on_delete=models.CASCADE, related_name="login_info"
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="login_sessions",
+    )
+    user_agent = models.CharField(max_length=240, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_seen = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ["-last_seen"]

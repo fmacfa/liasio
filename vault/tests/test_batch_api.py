@@ -11,7 +11,7 @@ from unittest.mock import patch
 from django.conf import settings
 from django.contrib.auth.hashers import check_password, make_password
 from django.db import close_old_connections, connections
-from django.test import Client, TestCase, TransactionTestCase
+from django.test import Client, TestCase, TransactionTestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
 from openpyxl import load_workbook
@@ -114,12 +114,78 @@ class BatchAPITests(IsolatedFiles, TestCase):
         self.assertNotIn(" a ", APIReceipt.objects.get().response)
         self.assertNotIn(data["items"][0]["url"], APIReceipt.objects.get().response)
 
+    @override_settings(EMAIL_HOST="smtp.example.test")
+    def test_recipient_batches_preserve_emails_in_exports_and_verify_each_link(self):
+        body = {
+            "name": "Recipients",
+            "recipients": [
+                {"name": "Alice", "email": "Alice@example.test"},
+                {"name": "Bob", "email": "bob@example.test"},
+            ],
+            "verify_recipients": True,
+            "conditions": {"expires_in_days": 30, "max_downloads": 3},
+        }
+        response = self.post(body)
+        self.assertEqual(response.status_code, 201, response.content)
+        data = response.json()
+        self.assertEqual(data["headers"], ["Name", "Email"])
+        self.assertEqual(
+            data["source_rows"],
+            [["Alice", "alice@example.test"], ["Bob", "bob@example.test"]],
+        )
+        self.assertEqual(
+            [r["allowed_emails"] for r in data["items"]],
+            [["alice@example.test"], ["bob@example.test"]],
+        )
+        self.assertEqual(self.post(body).json(), data)
+        exported = self.get(reverse("api_link_batch_export", args=[data["id"], "xlsx"]))
+        self.assertEqual(exported.status_code, 200)
+        book = load_workbook(io.BytesIO(exported.content), read_only=True)
+        rows = list(book.active.values)
+        email_index = rows[0].index("Email")
+        self.assertEqual(
+            [row[email_index] for row in rows[1:]],
+            ["alice@example.test", "bob@example.test"],
+        )
+        book.close()
+        self.client.force_login(self.user)
+        self.assertContains(self.client.get(reverse("link_batches")), "Recipients")
+
+    def test_recipient_batch_invalid_inputs_are_atomic(self):
+        base = {
+            "name": "Recipients",
+            "recipients": [{"name": "Alice", "email": "alice@example.test"}],
+        }
+        for body in [
+            dict(base, names=["A"]),
+            dict(base, verify_recipients=True),
+            dict(base, verify_recipients="true"),
+            dict(base, recipients=[{"name": "Alice", "email": "bad"}]),
+            dict(
+                base,
+                recipients=[
+                    {"name": "Alice", "email": "alice@example.test", "extra": "bad"}
+                ],
+            ),
+        ]:
+            self.assertEqual(self.post(body).status_code, 400)
+        self.assertEqual(LinkBatch.objects.count(), 0)
+        self.assertEqual(ShareLink.objects.count(), 0)
+        self.assertEqual(self.post(base).status_code, 201)
+        self.assertEqual(ShareLink.objects.get().allowed_emails, [])
+
     def test_upgrade_preserves_api_replays_and_exports_current_short_urls(self):
         # A pre-upgrade receipt must replay verbatim, even though fresh reads use
         # the new URL representation for those same database links.
-        with patch.object(ShareLink, "public_url", property(
-            lambda link: f"{settings.APP_URL}/s/{legacy_capability('share', link.pk)}/"
-        )):
+        with patch.object(
+            ShareLink,
+            "public_url",
+            property(
+                lambda link: (
+                    f"{settings.APP_URL}/s/{legacy_capability('share', link.pk)}/"
+                )
+            ),
+        ):
             original = self.post()
         self.assertEqual(original.status_code, 201)
         old = original.json()
@@ -142,9 +208,11 @@ class BatchAPITests(IsolatedFiles, TestCase):
             reverse("api_link_batch_export", args=[old["id"], "csv"])
         )
         self.assertEqual(csv_response.status_code, 200)
-        rows = list(csv.DictReader(
-            io.StringIO(csv_response.content.decode("utf-8-sig")), delimiter=";"
-        ))
+        rows = list(
+            csv.DictReader(
+                io.StringIO(csv_response.content.decode("utf-8-sig")), delimiter=";"
+            )
+        )
         self.assertEqual([row["Liasio URL"] for row in rows], urls)
         xlsx_response = self.get(
             reverse("api_link_batch_export", args=[old["id"], "xlsx"])

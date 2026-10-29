@@ -1,17 +1,17 @@
-# Politique de sécurité
+# Security policy
 
-La branche principale de Liasio 0.4 reçoit les correctifs. Le projet est jeune et n’a pas encore fait l’objet d’un audit humain indépendant.
+**English** · [Français](SECURITY.fr.md)
 
-## Signaler une vulnérabilité
+The latest published 0.5 release receives fixes; older minor releases should be upgraded. This pre-1.0 project has not undergone an independent human security audit. See [maintenance and release policy](docs/MAINTENANCE.md).
 
-Utilisez le [signalement privé GitHub](https://github.com/fmacfa/liasio/security/advisories/new). N’ouvrez pas une issue publique contenant un secret, un lien réel, un fichier client ou une procédure d’exploitation contre une installation existante.
+## Private disclosure
 
-Incluez la version/commit, les conditions de reproduction sur une installation de test, le résultat attendu, le résultat observé et l’impact potentiel. Ne testez que les systèmes que vous êtes autorisé à examiner.
+Use [GitHub private vulnerability reporting](https://github.com/fmacfa/liasio/security/advisories/new). Do not open public issues containing credentials, real sharing URLs, customer files or exploitation instructions against a live installation. Provide the immutable version/commit, an isolated reproduction, expected/observed behavior and impact. Test only systems you are authorized to examine. There is no guaranteed response-time SLA.
 
-## Périmètre sensible
+## Sensitive boundaries
 
-Initialisation, invitations, sessions, réinitialisation des mots de passe, isolation des comptes, traversée de chemins, imports, antivirus, quotas, capacités des liens, concurrence des téléchargements, exports et suppression.
+Review setup, invitations, password recovery, MFA/OIDC, session revocation, group/individual authorization, ownership transfer, upload-only capabilities, path traversal, antivirus, disk/quota admission, immutable versions, link capabilities/passwords/recipient codes, concurrency, API scopes/replays, SSRF-resistant webhooks, approved email queues, private object storage, exports, deletion and recoverability. Deployment scripts and native preview isolation are in scope too.
 
-Le [modèle de sécurité](docs/SECURITY_MODEL.md) documente les garanties visées et les limites. Avant de publier une instance, suivez le [guide d’exploitation](docs/OPERATIONS.md).
+The [security model](docs/SECURITY_MODEL.md), [0.5 upgrade guide](docs/UPGRADING_0_5.md) and [independent audit brief](docs/INDEPENDENT_AUDIT.md) describe intended properties and review evidence. A passing automated check does not prove the absence of vulnerabilities.
 
-Un lien volontairement transmis à une personne peut être retransmis. La révocation ne supprime pas une copie déjà téléchargée. Le serveur peut lire les fichiers. Ces comportements sont documentés et ne constituent pas un chiffrement de bout en bout.
+Files are readable by the server/operator; this is not end-to-end encryption. Recipients can re-share content they have received. Revocation blocks future authorizations and cannot erase copies or necessarily stop an already-authorized download. Email acceptance and download authorization are not proof of final receipt. These are documented product limits, not promises of stronger guarantees.

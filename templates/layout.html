@@ -15,6 +15,7 @@
             </div>
             <span class="nav-caption">{% translate "ESPACE DE TRAVAIL" %}</span>
             <nav aria-label="{% translate "Navigation principale" %}">
+                <a class="nav-item {% if nav == 'workspaces' %}active{% endif %}" href="{% url 'workspaces' %}">{% include "components/icon.html" with name="users" %}{% translate "Espaces d’équipe" %}</a>
                 <a class="nav-item {% if nav == 'dashboard' %}active{% endif %}"
                    href="{% url 'dashboard' %}">{% include "components/icon.html" with name="grid" %}{% translate "Vue d’ensemble" %}</a>
                 <a class="nav-item {% if nav == 'upload' %}active{% endif %}"
@@ -32,6 +33,9 @@
                 <a class="nav-item {% if nav == 'integrations' %}active{% endif %}" href="{% url 'integrations' %}">{% include "components/icon.html" with name="link" %}{% translate "Automatisations" %}</a>
                 <a class="nav-item {% if nav == 'help' %}active{% endif %}" href="{% url 'help' %}">{% include "components/icon.html" with name="folder" %}{% translate "Guide d’utilisation" %}</a>
                 <span class="nav-caption second-caption">{% translate "PERSONNALISATION" %}</span>
+                <a class="nav-item {% if nav == 'presets' %}active{% endif %}" href="{% url 'presets' %}">{% include "components/icon.html" with name="settings" %}{% translate "Modèles de partage" %}</a>
+                <a class="nav-item {% if nav == 'mail' %}active{% endif %}" href="{% url 'mail' %}">{% include "components/icon.html" with name="link" %}{% translate "E-mails" %}</a>
+                <a class="nav-item {% if nav == 'requests' %}active{% endif %}" href="{% url 'file_requests' %}">{% include "components/icon.html" with name="upload" %}{% translate "Demandes de fichiers" %}</a>
                 <a class="nav-item {% if nav == 'branding' %}active{% endif %}"
                    href="{% url 'branding' %}">{% include "components/icon.html" with name="palette" %}{% translate "Page de partage" %}</a>
                 {% if user.is_staff %}

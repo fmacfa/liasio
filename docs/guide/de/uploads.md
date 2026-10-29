@@ -23,7 +23,7 @@ Die Anzeige folgt den vom Browser tatsächlich übertragenen Bytes, auch innerha
 
 **Pausieren** unterbricht die aktuelle Blockanfrage. Bestätigte Blöcke bleiben erhalten. **Dateien hochladen** setzt fort. Nach Neuladen oder Verbindungsverlust wählen Sie dieselben Dateien und Ordner erneut aus; der Server behält bestätigte Positionen 24 Stunden lang. Ein unbestätigter Block kann erneut übertragen werden, wird aber nicht doppelt gezählt.
 
-Mit **Diesen Upload abbrechen** geben Sie reserviertes Kontingent frei. Die Wartung entfernt abgelaufene Uploads. Pro Konto sind fünf ausstehende Uploads erlaubt. Widerrufen Sie aktive Links, bevor Sie Dateien einer bereits geteilten Sammlung ändern.
+Mit **Diesen Upload abbrechen** geben Sie reserviertes Kontingent frei. Die Wartung entfernt abgelaufene Uploads. Pro Konto sind fünf ausstehende Uploads erlaubt. Legen Sie ältere aktive Links zuerst unter **Versionen** fest oder widerrufen Sie sie. Neue Links können eine feste Version behalten oder Änderungen übernehmen. Siehe [Versionen und Ersetzungen](versions.md).
 
 Bei fehlendem Kontingent hilft [Speicher](storage.md); bei fehlendem Serverspeicher wenden Sie sich an die Administration. Prüfen Sie eine Virenschutz-Ablehnung, statt den Schutz auszuschalten.
 

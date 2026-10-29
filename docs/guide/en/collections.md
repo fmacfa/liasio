@@ -17,7 +17,7 @@ Open **My collections**, search by title and select a collection. Its detail pag
 
 ![Collection detail and actions](../../screenshots/user-guide/en/collection-detail.jpg)
 
-Files are different: revoke every active link before adding or changing the collection’s contents. This keeps an already shared bundle consistent. A collection may contain up to 100 files, including files still in the trash; size limits depend on server configuration.
+Freeze active legacy links from **Versions**, or revoke them, before adding or replacing files. New links can pin a version or explicitly follow updates. A collection may contain up to 100 files, including files still in the trash; size limits depend on server configuration.
 
 ## Delete a collection
 
@@ -34,3 +34,5 @@ Imported folders expand to show their files and subfolders. Each folder shows it
 ## Collections shared with your team
 
 An invitation alone does not grant collection access. The owner assigns Reader or Collaborator through **Manage access**. Shared collections appear in **My collections**; only collaborators can add files and manage links. Deletion and access management remain with the owner. See [Members and access levels](team.md).
+
+Legacy active links must first be frozen from **Versions** (or revoked). New links may keep a fixed version or follow updates. See [versions and replacements](versions.md).

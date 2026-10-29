@@ -1,6 +1,6 @@
 # Liasio-Benutzerhandbuch
 
-Version 0.4 · Dieselben Anleitungen finden Sie in Ihrer Instanz unter **Benutzerhandbuch**. Die Bilder sind echte Aufnahmen einer lokalen Entwicklungsumgebung mit ausschließlich fiktiven Daten. Virenschutz und Betriebsdienste hängen von der Serverkonfiguration ab. Es werden keine echten Zugangsdaten gezeigt.
+Version 0.5 · Dieselben Anleitungen finden Sie in Ihrer Instanz unter **Benutzerhandbuch**. Die Bilder sind echte Aufnahmen einer lokalen Entwicklungsumgebung mit ausschließlich fiktiven Daten. Virenschutz und Betriebsdienste hängen von der Serverkonfiguration ab. Es werden keine echten Zugangsdaten gezeigt.
 
 ![Das deutsche Benutzerhandbuch](../../screenshots/user-guide/de/help.png)
 
@@ -17,5 +17,11 @@ Version 0.4 · Dieselben Anleitungen finden Sie in Ihrer Instanz unter **Benutze
 11. [API, Webhooks und n8n](automation.md)
 12. [Linkstapel, Excel und CSV](bulk-links.md)
 13. [Stapel per API erstellen, abrufen und exportieren](bulk-links-api.md)
+14. [Team-Arbeitsbereiche und Gruppen](workspaces.md)
+15. [Versionen und gezielte Downloads](versions.md)
+16. [E-Mails und bestätigte Empfänger](email.md)
+17. [Kundendateien empfangen](file-requests.md)
+18. [Erweitertes Hosting und Kontosicherheit](advanced-operations.md)
+19. [API-Explorer](api-explorer.md)
 
 [English](../en/README.md) · [Français](../fr/README.md) · **Deutsch** · [API-Referenz (Englisch)](../../API.md)

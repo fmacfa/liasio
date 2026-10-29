@@ -150,6 +150,7 @@ def challenge(request):
 @sensitive_post_parameters()
 def settings_view(request):
     from .views import too_many
+    from .sessions import requires_mfa
 
     error = None
     codes = None
@@ -161,6 +162,11 @@ def settings_view(request):
         action = request.POST.get("action")
         with transaction.atomic():
             user = User.objects.select_for_update().get(pk=request.user.pk)
+            if action == "disable" and requires_mfa(user):
+                messages.error(
+                    request, _("Votre équipe exige la double authentification.")
+                )
+                return redirect("mfa_settings")
             if len(password) > 128 or not user.check_password(password):
                 error = _("Mot de passe incorrect.")
             elif action == "begin" and not user.mfa_secret:
@@ -249,6 +255,7 @@ def settings_view(request):
             "setup_secret": setup_secret,
             "password_form": PasswordForm(),
             "code_form": CodeForm(),
+            "mfa_required": requires_mfa(request.user),
         },
     )
 
@@ -266,9 +273,7 @@ def qr(request):
         secret = cipher().decrypt(pending["secret"].encode()).decode()
     except (KeyError, InvalidToken):
         raise Http404 from None
-    uri = pyotp.TOTP(secret).provisioning_uri(
-        request.user.email, issuer_name="Liasio"
-    )
+    uri = pyotp.TOTP(secret).provisioning_uri(request.user.email, issuer_name="Liasio")
     output = io.BytesIO()
     segno.make(uri, micro=False).save(output, kind="svg", scale=5)
     return HttpResponse(output.getvalue(), content_type="image/svg+xml")

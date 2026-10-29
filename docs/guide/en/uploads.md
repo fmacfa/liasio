@@ -25,7 +25,7 @@ The meter follows bytes actually transmitted by your browser, including progress
 
 **Pause** interrupts the current block request. Confirmed blocks are retained. Choose **Upload files** to resume. After reloading or losing connectivity, reselect the same files and folders: the server retains their offsets for 24 hours. An unconfirmed block may be retransmitted; it is not counted twice.
 
-Pending uploads offer **Cancel this upload**, which releases reserved quota. Maintenance removes expired sessions. Each account can have five pending sessions. Revoke active links before adding files to an already shared collection.
+Pending uploads offer **Cancel this upload**, which releases reserved quota. Maintenance removes expired sessions. Each account can have five pending sessions. Legacy active links must first be frozen from **Versions** (or revoked). New links may keep a fixed version or follow updates. See [versions and replacements](versions.md).
 
 If quota or disk space runs out, use [Storage](storage.md) or contact the administrator. Investigate an antivirus rejection without disabling protection.
 

@@ -1,31 +1,19 @@
-# Évolutions proposées
+# Liasio roadmap
 
-La version 0.4 ajoute l’API à permissions limitées, les webhooks signés, les guides illustrés et l’interface français/anglais. La [version 0.3](CHANGELOG.md) ajoute une galerie d’images et des aperçus de la première page des PDF, avec un moteur isolé. Elle complète TOTP, les codes de récupération, la corbeille, les transferts reprenables, les quotas administrables, la surveillance, la restauration testée et la publication des images Docker de la version 0.2.
+## Delivered in 0.5
 
-## Prochaines priorités
+Team spaces and groups, folder/space ownership transfer, mandatory team MFA and active-session controls; immutable versions, explicit replacement/restoration and selective downloads; sharing presets; reviewed email drafts/templates/notifications, verified recipients and upload-only client requests; recipient lists through API with Excel/CSV export; private S3, explicit OIDC identity binding, encrypted off-server restic backups, diagnostics, OpenAPI/explorer, browser/network tests and EN/FR/DE documentation. See [CHANGELOG.md](CHANGELOG.md) for details and [upgrade instructions](docs/UPGRADING_0_5.md) before installation.
 
-- Passkeys, obligation de MFA par politique d’équipe et écran des sessions actives.
-- Audit humain indépendant avant une version 1.0 et exercices de restauration hors du serveur d’origine.
-- Sauvegardes chiffrées vers un stockage externe, avec rétention configurable.
-- Mesures de charge sur plusieurs tailles de serveurs et tests de réseaux instables.
-- Logo et couverture, décodés puis réencodés en images sûres.
+## Before 1.0
 
-## Échanges clients
+- Independent human security review and remediation/retest, using [the prepared audit brief](docs/INDEPENDENT_AUDIT.md).
+- Deployment-specific benchmarks on several VPS sizes and a human recovery exercise onto a separate host. Current automated measurements are bounded test scenarios, not a capacity certification.
+- Evaluate usability/accessibility with real users and document operational support expectations.
 
-- Liens de demande de fichiers, temporaires, avec quota dédié et antivirus obligatoire.
-- Stockage S3 compatible et service de téléchargement séparé.
-- Vérification du destinataire par code e-mail et notifications facultatives de téléchargement.
-- Versions immuables des dossiers et remplacement explicite des documents.
-- Politique de suppression des dossiers distincte de l’expiration de leurs liens.
+## Future design work
 
-## Organisations et intégrations
+Passkeys; a separate download tier and distributed upload staging; additional languages and preview formats; optional folder-retention policies independent of link expiry; additional integration events/connectors; and end-to-end encryption with a deliberate key/recovery design. These are not represented as existing 0.5 features. End-to-end encryption would change server-side antivirus and preview capabilities.
 
-- Espaces d’équipe, SSO OIDC et rôles plus fins.
-- Davantage d’événements et connecteurs natifs, politique d’archivage des automatisations.
-- Nouvelles langues après stabilisation des catalogues français/anglais.
-- Étendre les formats de prévisualisation en conservant l’isolation du moteur et l’absence de contenu actif.
-- Chiffrement de bout en bout conçu séparément, avec gestion de clés et récupération explicites. Il change les possibilités d’analyse antivirus côté serveur.
+## Principles retained
 
-## Choix à conserver
-
-Pas d’import anonyme par défaut, pas de consommation d’un lien par une simple ouverture, aucune prétention de preuve de réception, pas de suivi publicitaire et des comportements d’échec documentés.
+Private-by-default accounts and folders, explicit upload-only capabilities rather than open anonymous storage, no download consumption on page views, no claims of guaranteed receipt, no advertising tracking and documented failure/recovery behavior.

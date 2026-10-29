@@ -1,0 +1,15 @@
+{% extends "layout.html" %}{% load i18n %}
+{% block breadcrumb %}{{ workspace.name }}{% endblock %}
+{% block content %}<div class="workflow">
+<a class="back-link" href="{% url 'workspaces' %}">← {% translate "Espaces d’équipe" %}</a>
+<div class="page-heading"><div><h1>{{ workspace.name }}</h1><p>{% translate "L’appartenance à un espace ne donne pas automatiquement accès aux dossiers. Leurs propriétaires choisissent les groupes autorisés." %}</p></div>{% if is_owner %}<a class="button" href="{% url 'group_create' workspace.pk %}">{% translate "Créer un groupe" %}</a>{% endif %}</div>
+<div class="editor-grid"><section>
+<div class="panel"><h2>{% translate "Groupes" %}</h2>{% for group in groups %}<div class="spread"><p><strong>{{ group.name }}</strong> · {{ group.members.count }} {% translate "membre(s)" %}</p>{% if is_owner %}<a href="{% url 'group_edit' workspace.pk group.pk %}">{% translate "Modifier" %}</a>{% endif %}</div>{% empty %}<p>{% translate "Aucun groupe pour le moment." %}</p>{% endfor %}</div>
+<div class="panel"><h2>{% translate "Membres" %}</h2>{% for member in members %}<div class="spread"><p>{{ member.user.display_name }} · {{ member.user.email }}</p>{% if is_owner and member.user_id != workspace.owner_id %}<form method="post">{% csrf_token %}<input type="hidden" name="action" value="remove"><input type="hidden" name="member" value="{{ member.pk }}"><button class="button secondary">{% translate "Retirer" %}</button></form>{% endif %}</div>{% endfor %}</div>
+<h2>{% translate "Dossiers accessibles" %}</h2>{% for collection in collections %}{% include "components/collection_card.html" with item=collection %}{% empty %}<p>{% translate "Aucun dossier partagé avec vous dans cet espace." %}</p>{% endfor %}
+</section>{% if is_owner %}<aside>
+<form method="post" class="panel form-panel">{% csrf_token %}<input type="hidden" name="action" value="add"><h2>{% translate "Ajouter un membre existant" %}</h2>{% include "components/form.html" with form=member_form %}<button class="button">{% translate "Ajouter" %}</button></form>
+<form method="post" class="panel form-panel">{% csrf_token %}<input type="hidden" name="action" value="settings"><h2>{% translate "Paramètres" %}</h2>{% include "components/form.html" with form=settings_form %}<button class="button">{% translate "Enregistrer" %}</button></form>
+<form method="post" class="panel form-panel">{% csrf_token %}<input type="hidden" name="action" value="transfer"><h2>{% translate "Transférer la responsabilité" %}</h2><label for="new-workspace-owner">{% translate "Nouveau responsable" %}</label><select id="new-workspace-owner" name="user" required>{% for member in members %}{% if member.user_id != workspace.owner_id %}<option value="{{ member.user_id }}">{{ member.user.email }}</option>{% endif %}{% endfor %}</select><label><input type="checkbox" name="confirm" value="transfer" required> {% translate "Je confirme le transfert de responsabilité de cet espace." %}</label><button class="button secondary">{% translate "Transférer" %}</button></form>
+</aside>{% endif %}</div>
+</div>{% endblock %}

@@ -3,7 +3,7 @@
   <form method="post" action="{% url 'download' token %}">
     {% csrf_token %}
     <button type="submit" class="button full download-button"{% if link.expires_at or link.max_downloads %} aria-describedby="download-conditions-{{ position }}"{% endif %}>
-      {% include "components/icon.html" with name="download" %}{% translate "Télécharger les fichiers" %} <span>{% translate "ZIP ·" %} {{ collection.total_bytes|filesizeformat }}</span>
+      {% include "components/icon.html" with name="download" %}{% translate "Télécharger les fichiers" %} <span>{% translate "ZIP ·" %} {{ share_size|filesizeformat }}</span>
     </button>
   </form>
   {% if link.expires_at or link.max_downloads %}

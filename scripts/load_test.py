@@ -21,6 +21,7 @@ import subprocess
 import sys
 import tempfile
 import threading
+import tomllib
 import time
 import urllib.error
 import urllib.parse
@@ -263,7 +264,11 @@ try:
             elapsed = time.monotonic() - started
             manage("verify_storage")
             report = {
-                "version": "0.3.0",
+                "version": tomllib.loads((ROOT / "pyproject.toml").read_text())[
+                    "project"
+                ]["version"],
+                "architecture": platform.machine(),
+                "logical_cpus": os.cpu_count(),
                 "platform": platform.system(),
                 "python": platform.python_version(),
                 "database": args.database,

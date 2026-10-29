@@ -8,7 +8,9 @@ from vault.share_urls import code_digest, short_code
 
 
 class Command(BaseCommand):
-    help = "Refresh short sharing URL lookups without changing access rules or counters."
+    help = (
+        "Refresh short sharing URL lookups without changing access rules or counters."
+    )
 
     def add_arguments(self, parser):
         parser.add_argument("--database", default=DEFAULT_DB_ALIAS)

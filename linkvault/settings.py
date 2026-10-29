@@ -54,6 +54,7 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "vault.mfa.MFASessionMiddleware",
+    "vault.sessions.SessionInventoryMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -147,6 +148,35 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"
     },
 }
+STORAGE_BACKEND = os.environ.get("STORAGE_BACKEND", "local")
+S3_BUCKET = os.environ.get("S3_BUCKET", "")
+S3_ENDPOINT = os.environ.get("S3_ENDPOINT", "")
+S3_REGION = os.environ.get("S3_REGION", "us-east-1")
+S3_ADDRESSING_STYLE = os.environ.get("S3_ADDRESSING_STYLE", "auto")
+S3_ENCRYPTION = os.environ.get("S3_ENCRYPTION", "AES256")
+S3_KMS_KEY_ID = os.environ.get("S3_KMS_KEY_ID", "")
+if STORAGE_BACKEND not in ("local", "s3"):
+    raise ImproperlyConfigured("STORAGE_BACKEND must be local or s3.")
+if STORAGE_BACKEND == "s3":
+    if (
+        not S3_BUCKET
+        or S3_ADDRESSING_STYLE not in ("auto", "path", "virtual")
+        or S3_ENCRYPTION not in ("AES256", "aws:kms")
+    ):
+        raise ImproperlyConfigured("Invalid private S3 configuration.")
+    if S3_ENDPOINT:
+        endpoint = urlparse(S3_ENDPOINT)
+        if (
+            endpoint.scheme not in (["https", "http"] if DEBUG else ["https"])
+            or not endpoint.hostname
+            or endpoint.username
+            or endpoint.password
+            or endpoint.query
+            or endpoint.fragment
+            or endpoint.path not in ("", "/")
+        ):
+            raise ImproperlyConfigured("S3_ENDPOINT must be a trusted HTTPS origin.")
+    STORAGES["default"] = {"BACKEND": "vault.object_storage.PrivateS3Storage"}
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 FILE_UPLOAD_PERMISSIONS = 0o600
 FILE_UPLOAD_DIRECTORY_PERMISSIONS = 0o700
@@ -201,8 +231,25 @@ LOGGING = {
 }
 
 # Reliability and account protection (v0.2).
-APP_VERSION = "0.4.0"
+APP_VERSION = "0.5.0"
 MFA_ENCRYPTION_KEY = os.environ.get("MFA_ENCRYPTION_KEY", "")
+OIDC_ISSUER = os.environ.get("OIDC_ISSUER", "").strip()
+OIDC_CLIENT_ID = os.environ.get("OIDC_CLIENT_ID", "")
+OIDC_CLIENT_SECRET = os.environ.get("OIDC_CLIENT_SECRET", "")
+if any((OIDC_ISSUER, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET)):
+    oidc_origin = urlparse(OIDC_ISSUER)
+    if (
+        not all((OIDC_ISSUER, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET))
+        or oidc_origin.scheme != "https"
+        or not oidc_origin.hostname
+        or oidc_origin.username
+        or oidc_origin.password
+        or oidc_origin.query
+        or oidc_origin.fragment
+    ):
+        raise ImproperlyConfigured(
+            "Configure OIDC_ISSUER (HTTPS), OIDC_CLIENT_ID and OIDC_CLIENT_SECRET together."
+        )
 TRASH_RETENTION_DAYS = max(1, int(os.environ.get("TRASH_RETENTION_DAYS", 30)))
 UPLOAD_STAGING_ROOT = DATA_DIR / "uploads"
 UPLOAD_STAGING_ROOT.mkdir(mode=0o700, parents=True, exist_ok=True)

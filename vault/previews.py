@@ -22,7 +22,7 @@ from scripts.preview_runtime import MAX_OUTPUT, MAX_SOURCE, render
 
 from .capacity import CapacityUnavailable, reserve_temporary
 from .access import collections_for, locked_collection
-from .models import Asset, Audit, ShareLink
+from .models import Audit, ShareLink
 from .security import limited, rate_allowed, verify_capability
 
 CACHE_BYTES = 256 * 1024**2
@@ -184,7 +184,15 @@ def derivative(asset):
                 with tempfile.TemporaryDirectory(
                     dir=settings.FILE_UPLOAD_TEMP_DIR
                 ) as directory:
-                    data = render(asset.blob.path, kind, directory)
+                    try:
+                        original = asset.blob.path
+                    except NotImplementedError:
+                        from .storage import copy_original
+
+                        original = str(Path(directory) / "original")
+                        with open(original, "wb") as destination:
+                            copy_original(asset, destination)
+                    data = render(original, kind, directory)
             else:
                 # No in-process/native decoding fallback on a production server.
                 raise PreviewUnavailable
@@ -214,7 +222,9 @@ def authorized_asset(request, token, asset_id):
         raise Http404
     if not can_open(request, link):
         raise Http404
-    asset = get_object_or_404(Asset, pk=asset_id, collection=link.collection)
+    from .versions import files_for
+
+    asset = get_object_or_404(files_for(link), pk=asset_id)
     if not preview_kind(asset):
         raise Http404
     return asset

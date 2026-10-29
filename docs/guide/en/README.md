@@ -1,6 +1,6 @@
 # Liasio user guide
 
-Version 0.4 · The same guides are available inside your instance under **User guide**. Screenshots are actual local application captures with fictional demonstration data, in the matching interface language. They show a local development environment; antivirus and operational services depend on deployment configuration. No real credentials are shown.
+Version 0.5 · The same guides are available inside your instance under **User guide**. Screenshots are actual local application captures with fictional demonstration data, in the matching interface language. They show a local development environment; antivirus and operational services depend on deployment configuration. No real credentials are shown.
 
 ![Liasio guide](../../screenshots/user-guide/en/help.png)
 
@@ -17,5 +17,11 @@ Version 0.4 · The same guides are available inside your instance under **User g
 11. [API, webhooks and n8n](automation.md)
 12. [Bulk links, Excel and CSV](bulk-links.md)
 13. [Create, read and export batches through the API](bulk-links-api.md)
+14. [Team workspaces and groups](workspaces.md)
+15. [Versions and selective downloads](versions.md)
+16. [Emails and verified recipients](email.md)
+17. [Receive client files](file-requests.md)
+18. [Advanced hosting and account controls](advanced-operations.md)
+19. [API explorer](api-explorer.md)
 
 [English](../en/README.md) · [Français](../fr/README.md) · [Deutsch](../de/README.md) · [API reference](../../API.md)

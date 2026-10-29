@@ -530,14 +530,16 @@ class TeamAccessMigrationTests(TransactionTestCase):
             session = apps.get_model("vault", "UploadSession").objects.create(
                 owner=owner, collection=folder, size=456
             )
-            before = apps.get_model("vault", "UploadSession").objects.values().get(
-                pk=session.pk
+            before = (
+                apps.get_model("vault", "UploadSession")
+                .objects.values()
+                .get(pk=session.pk)
             )
             executor = MigrationExecutor(connection)
             executor.migrate(executor.loader.graph.leaf_nodes())
             after = UploadSession.objects.values().get(pk=session.pk)
             self.assertIsNone(after.pop("initiated_by_id"))
-            self.assertEqual(after, before)
+            self.assertEqual({key: after[key] for key in before}, before)
             self.assertFalse(CollectionAccess.objects.exists())
             self.assertEqual(Collection.objects.get(pk=folder.pk).owner_id, owner.pk)
             current = UploadSession.objects.select_related("owner").get(pk=session.pk)

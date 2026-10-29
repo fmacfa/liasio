@@ -83,7 +83,7 @@ class CapabilityCodecTests(SimpleTestCase):
             altered = (
                 legacy[:position]
                 + ("0" if legacy[position] != "0" else "1")
-                + legacy[position + 1:]
+                + legacy[position + 1 :]
             )
             with self.subTest(legacy_position=position), self.assertRaises(Http404):
                 verify_capability("share", altered)
@@ -98,10 +98,24 @@ class CapabilityCodecTests(SimpleTestCase):
         )
         legacy = legacy_capability("share", self.identifier)
         for bad in (
-            noncanonical, token + "=", token[:-1], token + "A", token + "\n",
-            "+" + token[1:], "/" + token[1:], "é" + token[1:],
-            self.identifier.hex, str(self.identifier), legacy.upper(), legacy + "\n",
-            "A" * 10000, "", None, 0, {}, token.encode(),
+            noncanonical,
+            token + "=",
+            token[:-1],
+            token + "A",
+            token + "\n",
+            "+" + token[1:],
+            "/" + token[1:],
+            "é" + token[1:],
+            self.identifier.hex,
+            str(self.identifier),
+            legacy.upper(),
+            legacy + "\n",
+            "A" * 10000,
+            "",
+            None,
+            0,
+            {},
+            token.encode(),
         ):
             with self.subTest(value=repr(bad)[:80]), self.assertRaises(Http404):
                 verify_capability("share", bad)
@@ -175,10 +189,13 @@ class CapabilityCompatibilityTests(IsolatedFiles, TestCase):
                 for suffix in ("", "download/", "unlock/"):
                     response = (
                         self.client.post(url + suffix)
-                        if suffix else self.client.get(url)
+                        if suffix
+                        else self.client.get(url)
                     )
                     self.assertEqual(response.status_code, 410)
-        ShareLink.objects.filter(pk=self.link.pk).update(revoked_at=None, expires_at=None)
+        ShareLink.objects.filter(pk=self.link.pk).update(
+            revoked_at=None, expires_at=None
+        )
         User.objects.filter(pk=self.owner.pk).update(is_active=False)
         for url in self.urls:
             self.assertEqual(self.client.get(url).status_code, 410)
@@ -203,11 +220,14 @@ class CapabilityCompatibilityTests(IsolatedFiles, TestCase):
             )
             token = encoder("invite", invite.pk)
             url = reverse("accept_invitation", args=[token])
-            response = Client().post(url, {
-                "display_name": "Invited",
-                "password": PASSWORD,
-                "password_confirm": PASSWORD,
-            })
+            response = Client().post(
+                url,
+                {
+                    "display_name": "Invited",
+                    "password": PASSWORD,
+                    "password_confirm": PASSWORD,
+                },
+            )
             self.assertEqual(response.status_code, 302)
             self.assertTrue(
                 User.objects.filter(email=invite.email, is_staff=False).exists()

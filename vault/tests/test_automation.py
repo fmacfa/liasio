@@ -4,10 +4,9 @@ import secrets
 from datetime import timedelta
 from unittest.mock import patch, MagicMock
 
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db import transaction
 from django.test import Client, TestCase, SimpleTestCase
-from django.utils import timezone, translation
+from django.utils import timezone
 from django.core.exceptions import ValidationError
 
 from vault.api_auth import credential_version, digest
@@ -15,14 +14,12 @@ from vault.mfa import cipher
 from vault.models import (
     APIToken,
     APIReceipt,
-    Audit,
     Collection,
-    Event,
     ShareLink,
     Webhook,
     WebhookDelivery,
 )
-from vault.storage import add_files, download_bundle
+from vault.storage import download_bundle
 from vault.trash import trash_collection
 from vault.webhooks import (
     enqueue,

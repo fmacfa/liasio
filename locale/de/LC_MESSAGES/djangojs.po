@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Liasio 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-27 12:39+0100\n"
+"POT-Creation-Date: 2026-10-29 08:58+0100\n"
 "PO-Revision-Date: 2026-10-27 13:00+0100\n"
 "Last-Translator: Liasio contributors\n"
 "Language-Team: German\n"
@@ -14,24 +14,121 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: static/app.js:15
+#: static/api-explorer.js:9
+msgid "Lister les dossiers accessibles"
+msgstr "Zugängliche Ordner auflisten"
+
+#: static/api-explorer.js:10
+msgid "Créer un dossier"
+msgstr "Ordner erstellen"
+
+#: static/api-explorer.js:11
+msgid "Consulter un dossier et ses fichiers"
+msgstr "Ordner und Dateien anzeigen"
+
+#: static/api-explorer.js:12
+msgid "Créer un lien avec ses conditions"
+msgstr "Link mit Bedingungen erstellen"
+
+#: static/api-explorer.js:13
+msgid "Lister les liens gérables"
+msgstr "Verwaltbare Links auflisten"
+
+#: static/api-explorer.js:14
+msgid "Consulter un lien"
+msgstr "Link anzeigen"
+
+#: static/api-explorer.js:15
+msgid "Révoquer un lien"
+msgstr "Link widerrufen"
+
+#: static/api-explorer.js:16
+#| msgid "Création des liens…"
+msgid "Créer un lot de liens"
+msgstr "Link-Stapel erstellen"
+
+#: static/api-explorer.js:17
+msgid "Lister Mes lots"
+msgstr "Meine Stapel auflisten"
+
+#: static/api-explorer.js:18
+msgid "Consulter un lot et ses liens nommés"
+msgstr "Stapel und benannte Links anzeigen"
+
+#: static/api-explorer.js:19
+msgid "Exporter en Excel ou CSV"
+msgstr "Als Excel oder CSV exportieren"
+
+#: static/api-explorer.js:20
+msgid "Lister mes modèles de partage"
+msgstr "Meine Freigabevorlagen auflisten"
+
+#: static/api-explorer.js:21
+msgid "Préparer un import avec reprise"
+msgstr "Fortsetzbaren Upload vorbereiten"
+
+#: static/api-explorer.js:22
+msgid "Lister les imports reprenables"
+msgstr "Fortsetzbare Uploads auflisten"
+
+#: static/api-explorer.js:23
+msgid "Consulter la progression enregistrée"
+msgstr "Gespeicherten Fortschritt anzeigen"
+
+#: static/api-explorer.js:24
+msgid "Envoyer un bloc avec son empreinte"
+msgstr "Block mit Prüfsumme senden"
+
+#: static/api-explorer.js:25
+msgid "Analyser et terminer l’import"
+msgstr "Upload prüfen und abschließen"
+
+#: static/api-explorer.js:26
+msgid "Annuler l’import et libérer le quota"
+msgstr "Upload abbrechen und Kontingent freigeben"
+
+#: static/api-explorer.js:39
+msgid "Permission requise :"
+msgstr "Erforderliche Berechtigung:"
+
+#: static/api-explorer.js:39
+msgid "Seules les ressources actuellement accessibles sont renvoyées."
+msgstr "Es werden nur aktuell zugängliche Ressourcen zurückgegeben."
+
+#: static/api-explorer.js:70
+msgid "Impossible de charger la spécification API."
+msgstr "Die API-Spezifikation konnte nicht geladen werden."
+
+#: static/api-explorer.js:76
+msgid "Confirmez cette action avant de l’exécuter."
+msgstr "Bestätigen Sie diese Aktion vor der Ausführung."
+
+#: static/api-explorer.js:101
+msgid ""
+"Requête impossible. Vérifiez le JSON et la connexion. Réutilisez la même clé"
+" d’idempotence en cas de doute."
+msgstr ""
+"Anfrage fehlgeschlagen. Prüfen Sie JSON und Verbindung. Verwenden Sie im "
+"Zweifel denselben Idempotenzschlüssel erneut."
+
+#: static/app.js:29
 msgid "Lien copié. Prêt à être partagé."
 msgstr "Link kopiert. Bereit zum Teilen."
 
-#: static/app.js:24
+#: static/app.js:38
 msgid "Lien à copier"
 msgstr "Link zum Kopieren"
 
-#: static/app.js:27
+#: static/app.js:41
 msgid "Copiez le texte sélectionné avec votre clavier."
 msgstr "Kopieren Sie den ausgewählten Text mit Ihrer Tastatur."
 
-#: static/app.js:72
+#: static/app.js:86
 msgid ""
 "%(value1)s fichier(s) sélectionné(s) · %(value2)s octets vers la corbeille"
 msgstr "%(value1)s Datei(en) ausgewählt · %(value2)s Bytes für den Papierkorb"
 
-#: static/app.js:72
+#: static/app.js:86
 msgid "Sélectionnez les fichiers à supprimer."
 msgstr "Wählen Sie die zu löschenden Dateien aus."
 
@@ -87,33 +184,33 @@ msgstr ""
 "Diese Vorschau ist nicht verfügbar. Schließen Sie dieses Fenster, um zum "
 "Download der Sammlung zurückzukehren."
 
-#: static/upload.js:19
+#: static/upload.js:20
 msgid "octets"
 msgstr "Bytes"
 
-#: static/upload.js:20
+#: static/upload.js:21
 msgid "Kio"
 msgstr "KiB"
 
-#: static/upload.js:20
+#: static/upload.js:21
 msgid "Mio"
 msgstr "MiB"
 
-#: static/upload.js:20
+#: static/upload.js:21
 msgid "Gio"
 msgstr "GiB"
 
-#: static/upload.js:28 static/upload.js:43
+#: static/upload.js:29 static/upload.js:44
 msgid "Envoi refusé. Reconnectez-vous si votre session a expiré."
 msgstr ""
 "Upload abgelehnt. Melden Sie sich erneut an, falls Ihre Sitzung abgelaufen "
 "ist."
 
-#: static/upload.js:29
+#: static/upload.js:30
 msgid "Envoi refusé."
 msgstr "Upload abgelehnt."
 
-#: static/upload.js:46 static/upload.js:148 static/upload.js:167
+#: static/upload.js:47 static/upload.js:149 static/upload.js:169
 msgid ""
 "Envoi en pause. Cliquez sur Importer pour reprendre pendant les prochaines "
 "24 h."
@@ -121,11 +218,11 @@ msgstr ""
 "Upload pausiert. Klicken Sie innerhalb der nächsten 24 Stunden auf "
 "Hochladen, um fortzufahren."
 
-#: static/upload.js:51
+#: static/upload.js:52
 msgid "Impossible de retrouver les envois. Reconnectez-vous."
 msgstr "Uploads konnten nicht abgerufen werden. Melden Sie sich erneut an."
 
-#: static/upload.js:57
+#: static/upload.js:58
 msgid ""
 "%(value1)s fichier(s) en attente · %(value2)s % reçus. Resélectionnez les "
 "mêmes fichiers puis cliquez sur Importer pour reprendre."
@@ -133,74 +230,74 @@ msgstr ""
 "%(value1)s ausstehende Datei(en) · %(value2)s % empfangen. Wählen Sie "
 "dieselben Dateien erneut aus und klicken Sie zum Fortsetzen auf Hochladen."
 
-#: static/upload.js:58
+#: static/upload.js:59
 msgid "Annuler cet envoi"
 msgstr "Diesen Upload abbrechen"
 
-#: static/upload.js:70
+#: static/upload.js:71
 msgid "%(count)s fichier(s) · %(size)s"
 msgstr "%(count)s Datei(en) · %(size)s"
 
-#: static/upload.js:94
+#: static/upload.js:95
 msgid "Retirer %(name)s"
 msgstr "%(name)s entfernen"
 
-#: static/upload.js:105
+#: static/upload.js:106
 msgid "Chemins déjà sélectionnés conservés, sans remplacement."
 msgstr "Bereits ausgewählte Pfade wurden ohne Ersetzung beibehalten."
 
-#: static/upload.js:107
+#: static/upload.js:108
 msgid "Maximum : 100 fichiers et 20 niveaux de dossiers par sélection."
 msgstr "Maximal 100 Dateien und 20 Ordnerebenen pro Auswahl."
 
-#: static/upload.js:107
+#: static/upload.js:108
 msgid "Impossible de lire cette sélection. Utilisez les boutons d’ajout."
 msgstr ""
 "Diese Auswahl kann nicht gelesen werden. Verwenden Sie die Schaltflächen zum"
 " Hinzufügen."
 
-#: static/upload.js:127
+#: static/upload.js:128
 msgid "Lecture des dossiers…"
 msgstr "Ordner werden gelesen…"
 
-#: static/upload.js:131
+#: static/upload.js:132
 msgid "Les dossiers vides et les fichiers cachés ne sont pas importés."
 msgstr "Leere Ordner und versteckte Dateien werden nicht hochgeladen."
 
-#: static/upload.js:139
+#: static/upload.js:140
 msgid "Préparation de l’envoi…"
 msgstr "Upload wird vorbereitet…"
 
-#: static/upload.js:156
+#: static/upload.js:158
 msgid ""
 "%(sent)s / %(total)s Mio transmis · %(confirmed)s Mio confirmés par le "
 "serveur"
 msgstr ""
 "%(sent)s / %(total)s MiB übertragen · %(confirmed)s MiB vom Server bestätigt"
 
-#: static/upload.js:159
+#: static/upload.js:161
 msgid "%(speed)s Mio/s · environ %(seconds)s s restantes"
 msgstr "%(speed)s MiB/s · noch etwa %(seconds)s s"
 
-#: static/upload.js:168
+#: static/upload.js:170
 msgid "Envoi de %(value1)s"
 msgstr "%(value1)s wird hochgeladen"
 
-#: static/upload.js:174
+#: static/upload.js:176
 msgid "Position du transfert invalide. Rechargez la page pour reprendre."
 msgstr ""
 "Ungültige Übertragungsposition. Laden Sie die Seite neu, um fortzufahren."
 
-#: static/upload.js:178
+#: static/upload.js:180
 msgid "Envoi en pause avant vérification. Cliquez sur Importer pour terminer."
 msgstr ""
 "Upload vor der Prüfung pausiert. Klicken Sie zum Abschließen auf Hochladen."
 
-#: static/upload.js:179
+#: static/upload.js:181
 msgid "Transfert terminé · analyse antivirus et enregistrement…"
 msgstr "Übertragung abgeschlossen · Virenprüfung und Speichern…"
 
-#: static/upload.js:180
+#: static/upload.js:182
 msgid ""
 "Gardez cette page ouverte. La vérification peut prendre du temps pour un "
 "dossier volumineux."
@@ -208,7 +305,7 @@ msgstr ""
 "Lassen Sie diese Seite geöffnet. Die Prüfung einer großen Sammlung kann "
 "einige Zeit dauern."
 
-#: static/upload.js:186
+#: static/upload.js:188
 msgid ""
 "Connexion interrompue. Vos blocs reçus sont conservés : cliquez sur Importer"
 " pour reprendre."
@@ -216,6 +313,6 @@ msgstr ""
 "Verbindung unterbrochen. Empfangene Datenblöcke bleiben erhalten. Klicken "
 "Sie zum Fortsetzen auf Hochladen."
 
-#: static/upload.js:187
+#: static/upload.js:189
 msgid "En attente"
 msgstr "Ausstehend"

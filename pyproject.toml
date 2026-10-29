@@ -1,6 +1,6 @@
 [project]
 name = "linkvault"
-version = "0.4.0"
+version = "0.5.0"
 description = "Self-hosted file collections, beautiful share pages, and controlled download links."
 requires-python = ">=3.12,<3.15"
 license = "MIT"
@@ -18,14 +18,29 @@ dependencies = [
   "markdown-it-py>=4,<5",
   "openpyxl>=3.1.5,<4",
   "defusedxml>=0.7.1,<1",
+  "django-storages[s3]>=1.14.6,<2",
+  "authlib>=1.6,<2",
+  "requests>=2.32,<3",
 ]
 
 [dependency-groups]
 dev = [
     "bandit>=1.8,<2",
+    "moto[s3]>=5,<6",
+    "openapi-spec-validator>=0.7,<1",
     "pip-audit>=2.9.0,<3",
+    "playwright>=1.56,<2",
     "polib>=1.2,<2",
+    "ruff>=0.14,<1",
 ]
 
 [tool.uv]
 package = false
+
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+extend-exclude = [".local", "vault/migrations"]
+
+[tool.ruff.lint]
+select = ["E9", "F63", "F7", "F82", "F401"]

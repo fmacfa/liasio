@@ -10,6 +10,7 @@
   <a class="back-link" href="{% url 'link_batches' %}">{% translate "← Mes lots" %}</a>
   <div class="page-heading"><div><div class="eyebrow">{% if batch.completed_at %}{% translate "VOS LIENS SONT PRÊTS" %}{% else %}{% translate "ÉTAPE 2 SUR 2" %}{% endif %}</div><h1>{{ batch.name }}</h1><p>{{ batch.source_rows|length }} {% translate "liens pour" %} <a href="{% url 'collection' batch.collection_id %}">{{ batch.collection.title }}</a></p></div>
     {% if batch.completed_at %}
+      <a class="button secondary" href="{% url 'mail_compose' %}?batch={{ batch.pk }}">{% translate "Préparer les e-mails" %}</a>
       <div class="actions"><a class="button" href="{% url 'link_batch_export' batch.pk 'xlsx' %}">
         {% include "components/icon.html" with name="download" %}
       {% translate "Télécharger Excel" %}</a><a class="button secondary"
