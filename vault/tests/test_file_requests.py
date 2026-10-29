@@ -6,12 +6,15 @@ from django.core.exceptions import ValidationError
 from django.test import Client, TestCase, override_settings
 from django.utils import timezone
 
+from .test_security import IsolatedFiles
+
 from vault.models import Asset, Collection, FileRequest, Instance, UploadSession, User
 
 
 @override_settings(ANTIVIRUS_REQUIRED=False)
-class FileRequestTests(TestCase):
+class FileRequestTests(IsolatedFiles, TestCase):
     def setUp(self):
+        super().setUp()
         Instance.objects.update_or_create(pk=1, defaults={"initialized": True})
         self.owner = User.objects.create_user(
             "owner@example.test", "password", quota_bytes=1024**2

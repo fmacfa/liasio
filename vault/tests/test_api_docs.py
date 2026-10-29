@@ -12,10 +12,12 @@ except ImportError:
         "OpenAPI validator runs in development/CI tests, not runtime images."
     ) from None
 
+from .test_security import IsolatedFiles
+
 from vault.models import Instance, User
 
 
-class APIDocumentationTests(TestCase):
+class APIDocumentationTests(IsolatedFiles, TestCase):
     def test_checked_in_contract_is_valid_reproducible_and_matches_routes(self):
         Instance.objects.update_or_create(pk=1, defaults={"initialized": True})
         spec = self.client.get("/api/openapi.json").json()

@@ -66,6 +66,16 @@ jobs:
       - run: python3 scripts/configure.py --domain files.example.com
       - run: docker compose config --quiet
       - run: docker compose build app
+      - name: Test runtime image without development packages or startup preparation
+        run: |
+          built_image="$(docker compose config --format json | python3 -c 'import json,sys; print(json.load(sys.stdin)["services"]["app"]["image"])')"
+          docker run --rm --network none --read-only --cap-drop ALL --security-opt no-new-privileges \
+            --memory 512m --pids-limit 64 \
+            --tmpfs /tmp:rw,noexec,nosuid,nodev,size=192m,uid=10001,gid=10001,mode=700 \
+            -e DEBUG=true -e DATA_DIR=/tmp/data -e APP_URL=http://localhost \
+            -e SECRET_KEY=ci-runtime-test-only-secret-with-at-least-sixty-four-characters-000000 \
+            -e ANTIVIRUS_REQUIRED=false --entrypoint timeout "$built_image" \
+            120 /app/.venv/bin/python manage.py test --noinput
       - run: docker compose up -d --wait --wait-timeout 600 db clamav app webhooks mail
       - run: docker compose exec -T app python manage.py check --deploy --fail-level ERROR
       - name: Verify packaged guides and screenshots

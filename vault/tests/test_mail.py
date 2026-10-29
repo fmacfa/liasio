@@ -8,6 +8,8 @@ from django.test import Client, TestCase, override_settings
 from django.utils import timezone
 
 from vault.mail import claim, deliver_one, enqueue, payload, render_message
+from .test_security import IsolatedFiles
+
 from vault.models import (
     Collection,
     Instance,
@@ -24,8 +26,9 @@ from vault.storage import add_files
     EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
     ANTIVIRUS_REQUIRED=False,
 )
-class MailTests(TestCase):
+class MailTests(IsolatedFiles, TestCase):
     def setUp(self):
+        super().setUp()
         Instance.objects.update_or_create(pk=1, defaults={"initialized": True})
         self.user = User.objects.create_user(
             "sender@example.test", "strong-pass", display_name="Sender"

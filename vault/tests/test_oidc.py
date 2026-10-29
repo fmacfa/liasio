@@ -13,6 +13,8 @@ from joserfc import jwt
 from joserfc.jwk import RSAKey
 from django.test import Client, TestCase, override_settings
 
+from .test_security import IsolatedFiles
+
 from vault.models import Instance, OIDCIdentity, User
 
 
@@ -21,13 +23,14 @@ from vault.models import Instance, OIDCIdentity, User
     OIDC_CLIENT_ID="liasio-test",
     OIDC_CLIENT_SECRET="fixture-secret",
 )
-class OIDCTests(TestCase):
+class OIDCTests(IsolatedFiles, TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         cls.key = RSAKey.generate_key(2048)
 
     def setUp(self):
+        super().setUp()
         Instance.objects.update_or_create(pk=1, defaults={"initialized": True})
         self.user = User.objects.create_user(
             "member@example.test", "local-test-password"
