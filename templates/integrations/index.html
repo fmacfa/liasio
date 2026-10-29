@@ -3,6 +3,7 @@
 {% block title %}{% translate "Automatisations" %} {% translate "· Liasio" %}{% endblock %}
 {% block breadcrumb %}{% translate "Automatisations" %}{% endblock %}
 {% block content %}
+<a class="button secondary" href="{% url 'api_explorer' %}">{% translate "Ouvrir l’explorateur API" %}</a>
 <header class="page-heading"><div><p class="eyebrow">{% translate "API & WEBHOOKS" %}</p><h1>{% translate "Vos outils, connectés." %}</h1><p class="page-subtitle">{% translate "Importez des fichiers, créez des liens et recevez les événements dans vos workflows." %}</p></div><a class="button secondary" href="{% url 'guide' 'automation' %}">{% translate "Guide des automatisations" %} ↗</a></header>
 {% if secret %}<section class="panel secret-panel" role="status"><h2>{{ secret_kind }}</h2><p>{% translate "Copiez ce secret maintenant. Il ne sera plus affiché. Conservez-le dans le coffre de votre outil d’automatisation." %}</p><code class="secret-value">{{ secret }}</code><p>{% if request.POST.action == 'token' %}{% translate "Cette clé autorise les commandes API. Utilisez-la comme Bearer dans votre outil, jamais dans une URL." %}{% else %}{% translate "Ce secret sert à vérifier les notifications chez le destinataire. Ce n’est ni une clé API ni un lien de téléchargement." %}{% endif %}</p></section>{% endif %}
 <div class="integration-grid automation-overview">

@@ -1,6 +1,24 @@
 # Changelog
 
-## Unreleased
+## 0.5.0 — 2026-10-29
+
+### Team and client workflows
+
+- Team spaces, membership groups and per-folder group grants; explicit folder/space ownership transfer; quota-aware transfers and workspace MFA requirements.
+- Immutable file versions, optional updating links, replacement and version restore; selective original/ZIP downloads with one-use accounting and retained-byte quotas.
+- Reusable sharing presets, recipient allowlists and browser-bound email OTPs. API batches can accept named email recipients and require verification per link while preserving My batches and Excel/CSV exports.
+- Reviewed individual, batch and invitation email drafts, templates, encrypted bounded queues, fair account scheduling, retries, cancellation and opt-in self-notifications. New `mail` worker; SMTP acceptance is not proof of delivery.
+- Upload-only client requests with expiration, byte/submission limits, browser-isolated resumable uploads, checksums and the existing scan/quota pipeline.
+- Active-session inventory/revocation, optional OIDC with explicit account binding, PKCE/state/nonce validation and continued local MFA.
+- Optional private S3-compatible originals, hash-verified storage migration, backend-neutral backups, encrypted restic off-server backup/retention and empty-target restoration.
+- Configuration diagnostics/self SMTP test, OpenAPI 3.1 and a self-hosted API explorer; real Chromium desktop/mobile/interrupted-upload tests, lint/format checks and updated EN/FR/DE guides.
+- English contribution/security policies with French versions retained, upgrade/maintenance documentation and an external-audit brief. No independent human audit is claimed.
+
+### Upgrade from 0.4
+
+Read [UPGRADING_0_5.md](docs/UPGRADING_0_5.md) before installing migrations through `0017`. Preserve original keys, stop all writers, upgrade every service together and start the new mail worker. Existing folders remain private and legacy URLs remain valid. Freeze legacy links before replacing files; new links default to a file snapshot. S3, SMTP and OIDC require operator configuration. Container ceilings total 6.75 GiB before host/backup overhead.
+
+### Changes since the previous published release
 
 - Add explicit per-folder team access: Readers can browse and download; Collaborators can also edit the presentation, upload files, and manage links, batches, exports and recipient activity. Owners manage grants and retain file/folder deletion rights. Invitations and administrator status do not automatically reveal another account's folders. The same grants and API-key scopes apply to API calls, with owner storage quotas and actor audit attribution.
 - Add owner controls under **Members → Manage access** and inside each folder, plus illustrated French, English and German guides. Permission removal or downgrade cancels the member's pending uploads and blocks subsequent operations, including cached API creation responses. Existing recipient links remain valid until separately revoked.
@@ -23,7 +41,6 @@
 - Use the approved geometric logo throughout the interface, sharing-page credit, favicon and home-screen icon. Custom workspace branding remains available.
 - Preserve existing share signatures, MFA encryption keys, API v1 header names, deployment identifiers and repository URLs for upgrade compatibility.
 
-## Unreleased
 
 ### Changed
 

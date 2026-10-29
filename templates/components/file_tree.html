@@ -4,6 +4,7 @@
     <li>
       {% if node.file %}
         <div class="file-row">
+          {% if selectable %}<input type="checkbox" name="assets" value="{{ node.file.pk }}" form="{{ selection_form }}" aria-label="{% blocktranslate with name=node.file.path %}Sélectionner {{ name }}{% endblocktranslate %}">{% endif %}
           <span class="file-type">{{ node.file.extension }}</span>
           <div class="file-info">
             <strong title="{{ node.file.path }}">{{ node.name }}</strong>

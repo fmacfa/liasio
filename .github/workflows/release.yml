@@ -163,4 +163,4 @@ jobs:
           VERSION="${RELEASE_TAG#v}"
           (cd dist && sha256sum ./*.tar.gz > SHA256SUMS)
           python3 scripts/release_notes.py > dist/notes.md
-          gh release create "$RELEASE_TAG" --verify-tag --title "LinkVault $VERSION" --notes-file dist/notes.md dist/*.tar.gz dist/SHA256SUMS dist/IMAGE-DIGEST.txt
+          gh release create "$RELEASE_TAG" --verify-tag --title "Liasio $VERSION" --notes-file dist/notes.md dist/*.tar.gz dist/SHA256SUMS dist/IMAGE-DIGEST.txt

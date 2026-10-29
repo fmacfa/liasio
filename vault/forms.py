@@ -1,5 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 from django import forms
+from django.conf import settings
 from django.contrib.auth import password_validation
 from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
 from django.core.exceptions import ValidationError
@@ -99,6 +100,66 @@ class CollectionForm(forms.ModelForm):
 
 
 class LinkForm(forms.ModelForm):
+    allowed_emails = forms.CharField(
+        label=_("Destinataires autorisés"),
+        required=False,
+        widget=forms.Textarea(attrs={"rows": 3}),
+        max_length=26000,
+        help_text=_(
+            "Facultatif : une adresse par ligne. Un code envoyé par e-mail sera exigé avant de voir les fichiers. Le serveur SMTP doit être configuré."
+        ),
+    )
+
+    def clean_allowed_emails(self):
+        from .recipients import emails
+
+        value = emails(self.cleaned_data["allowed_emails"])
+        if value and not settings.EMAIL_HOST:
+            raise ValidationError(
+                _("Configurez le serveur SMTP avant de limiter les destinataires.")
+            )
+        return value
+
+    def __init__(self, *args, user=None, collection=None, **kwargs):
+        import json
+        from .models import SharingPreset, CollectionRevision
+        from .presets import values
+
+        super().__init__(*args, **kwargs)
+        presets = (
+            SharingPreset.objects.filter(owner=user)
+            if user
+            else SharingPreset.objects.none()
+        )
+        self.fields["preset"] = forms.ModelChoiceField(
+            label=_("Modèle de conditions"),
+            queryset=presets,
+            required=False,
+            empty_label=_("Conditions personnalisées"),
+            widget=forms.Select(
+                attrs={
+                    "data-presets": json.dumps({str(p.pk): values(p) for p in presets})
+                }
+            ),
+        )
+        self.fields["revision_id"] = forms.ModelChoiceField(
+            label=_("Version du dossier"),
+            queryset=CollectionRevision.objects.filter(collection=collection)
+            if collection
+            else CollectionRevision.objects.none(),
+            required=False,
+            empty_label=_("Figer les fichiers actuels"),
+        )
+        self.order_fields(["preset", *self.field_order])
+
+    follow_updates = forms.BooleanField(
+        label=_("Suivre les futures mises à jour"),
+        required=False,
+        help_text=_(
+            "Le destinataire verra les nouveaux fichiers et remplacements. Sinon, le lien reste attaché à une version figée."
+        ),
+    )
+
     expiry_mode = forms.ChoiceField(
         label=_("Expiration"),
         required=False,
@@ -147,7 +208,13 @@ class LinkForm(forms.ModelForm):
 
     class Meta:
         model = ShareLink
-        fields = ["label", "expires_at", "max_downloads", "allow_previews"]
+        fields = [
+            "label",
+            "expires_at",
+            "max_downloads",
+            "allow_previews",
+            "allowed_emails",
+        ]
         labels = {
             "label": _("Nom du lien (visible par vous)"),
             "expires_at": _("Date d’expiration"),
@@ -180,6 +247,16 @@ class LinkForm(forms.ModelForm):
     def clean(self):
         data = super().clean()
         mode = data.get("expiry_mode")
+        preset = data.get("preset")
+        if preset and preset.password_required and not data.get("password"):
+            self.add_error(
+                "password",
+                _("Ce modèle exige un mot de passe pour chaque nouveau lien."),
+            )
+        if data.get("follow_updates") and data.get("revision_id"):
+            raise ValidationError(
+                _("Choisissez une version figée ou le suivi des mises à jour.")
+            )
         if not mode:  # Existing API clients supply only expires_at.
             if data.get("expires_at") and data.get("expires_in_days"):
                 raise ValidationError(

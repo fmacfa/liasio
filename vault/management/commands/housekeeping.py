@@ -49,8 +49,16 @@ class Command(BaseCommand):
             from vault.batches import cleanup_drafts
 
             purge_expired()
+            from vault.versions import purge_unreferenced_versions
+
+            purge_unreferenced_versions()
             cleanup_expired()
             cleanup_drafts()
+            from vault.mail import cleanup
+            from vault.models import RecipientChallenge
+
+            cleanup()
+            RecipientChallenge.objects.filter(expires_at__lte=now).delete()
             from vault.previews import cleanup_cache
 
             cleanup_cache()

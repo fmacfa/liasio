@@ -17,7 +17,7 @@ Dans **Mes dossiers**, recherchez un titre puis ouvrez le dossier. Sa fiche pré
 
 ![Détail d’un dossier et actions](../../screenshots/user-guide/fr/collection-detail.jpg)
 
-Pour modifier les fichiers, révoquez d’abord tous les liens actifs : un dossier déjà partagé doit garder un contenu cohérent. Un dossier peut contenir jusqu’à 100 fichiers, y compris ceux encore dans la corbeille ; les limites de taille dépendent du serveur.
+Figez d’abord les anciens liens actifs depuis **Versions**, ou révoquez-les. Les nouveaux liens peuvent conserver une version figée ou suivre les mises à jour. Voir les [versions et remplacements](versions.md). Un dossier peut contenir jusqu’à 100 fichiers, y compris ceux encore dans la corbeille ; les limites de taille dépendent du serveur.
 
 ## Supprimer un dossier
 

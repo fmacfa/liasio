@@ -21,7 +21,7 @@ from .api_auth import (
     remember,
 )
 from .forms import CollectionForm, LinkForm
-from .models import Audit, Collection, Event, ShareLink, User
+from .models import Audit, Event, ShareLink, User
 
 
 def text_fields(data, fields):
@@ -61,6 +61,9 @@ def link_data(item):
         "status": item.status_code,
         "password_protected": bool(item.password_hash),
         "allow_previews": item.allow_previews,
+        "allowed_emails": item.allowed_emails,
+        "follow_updates": item.follow_updates,
+        "revision_id": str(item.revision_id) if item.revision_id else None,
         "max_downloads": item.max_downloads,
         "downloads": item.downloads,
         "expires_at": item.expires_at.isoformat() if item.expires_at else None,
@@ -125,6 +128,12 @@ def create_collection(request):
 def link_form_values(data):
     """Strict JSON types and timezone parsing shared by single and bulk creation."""
     data = dict(data)
+    if "allowed_emails" in data:
+        from .recipients import emails
+
+        if not isinstance(data["allowed_emails"], list):
+            raise ValidationError(_("allowed_emails doit être une liste d’adresses."))
+        data["allowed_emails"] = "\n".join(emails(data["allowed_emails"]))
     text_fields(data, ["label", "password", "expires_at", "expiry_mode"])
     if (
         data.get("expires_in_days") is not None
@@ -135,6 +144,8 @@ def link_form_values(data):
         raise ValidationError(_("Choisissez une date ou une durée, pas les deux."))
     if "allow_previews" in data and type(data["allow_previews"]) is not bool:
         raise ValidationError(_("allow_previews doit être un booléen."))
+    if "follow_updates" in data and type(data["follow_updates"]) is not bool:
+        raise ValidationError(_("follow_updates doit être un booléen."))
     if data.get("max_downloads") is not None and type(data["max_downloads"]) is not int:
         raise ValidationError(_("max_downloads doit être un entier."))
     if data.get("expires_at"):
@@ -151,12 +162,16 @@ def link_form_values(data):
 def create_link(request, pk):
     data = json_body(request)
     prepare_receipt(request)
-    form = LinkForm(link_form_values(data))
     with transaction.atomic():
         item, owner = locked_collection(request.user, pk, request=request)
         previous = replay(request)
         if previous is not None:
             return previous
+        from .presets import apply_preset
+
+        form = LinkForm(
+            link_form_values(apply_preset(request.user, data)), collection=item
+        )
         # A retry can arrive after the original link's expiry. Replay its receipt
         # before applying the time-dependent validation for a new creation.
         if not form.is_valid():
@@ -179,6 +194,12 @@ def create_link(request, pk):
             )
         link = form.save(commit=False)
         link.collection = item
+        from .versions import content_settings
+
+        for key, value in content_settings(
+            item, request.user, form.cleaned_data
+        ).items():
+            setattr(link, key, value)
         if form.cleaned_data["password"]:
             link.password_hash = make_password(form.cleaned_data["password"])
         link.save()

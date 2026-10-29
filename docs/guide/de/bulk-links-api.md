@@ -116,3 +116,7 @@ Gemeinsame Grenzen mit der Oberfläche: zehn Vorbereitungen pro Stunde und Konto
 ## Eine freigegebene Sammlung verwenden
 
 Verwenden Sie Ihren eigenen API-Schlüssel. Schlüsselrechte und Sammlungsrolle gelten gemeinsam: Leser können Sammlungsmetadaten lesen; Mitwirkende können mit `files:write` hochladen, mit `links:write` Links und Stapel erstellen und mit `read` Links und Stapel lesen und exportieren. Kontingent und Webhooks bleiben beim Eigentümer. Upload-Sitzungen sind nur für den Initiator oder Eigentümer zugänglich. Ein Zugriffsverlust blockiert auch die API-Fortsetzung und wiederholte Erstellungsantworten für diese Sammlung. Siehe [Mitglieder](team.md).
+
+## Namen und Adressen gemeinsam (0.5)
+
+Senden Sie anstelle von `names` oder `count` die Liste `"recipients": [{"name":"Alice","email":"alice@example.test"},{"name":"Bob","email":"bob@example.test"}]`. Die Namens- und E-Mail-Spalten bleiben in **Meine Stapel** sowie Excel-/CSV-Exporten erhalten. Mit `"verify_recipients": true` wird ein eigener E-Mail-Code für jeden Empfänger verlangt. Dies erfordert SMTP und ist nicht mit einer gemeinsamen `allowed_emails`-Liste kombinierbar. Versand-E-Mails werden nicht automatisch gesendet. Die Bedingungen unterstützen außerdem `preset_id`, `follow_updates`, `revision_id` und `allowed_emails`; siehe [API-Referenz](../../API.md) und [interaktiver Explorer](api-explorer.md).

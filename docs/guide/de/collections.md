@@ -17,7 +17,7 @@ Suchen Sie unter **Meine Sammlungen** nach einem Titel und öffnen Sie die Samml
 
 ![Dateien und Aktionen einer Sammlung](../../screenshots/user-guide/de/collection-detail.png)
 
-Widerrufen Sie alle aktiven Links, bevor Sie Dateien ergänzen oder ändern. So bleibt eine bereits geteilte Zusammenstellung konsistent. Eine Sammlung enthält höchstens 100 Dateien, einschließlich ihrer Dateien im Papierkorb. Größenlimits hängen von der Serverkonfiguration ab.
+Legen Sie ältere aktive Links zuerst unter **Versionen** fest oder widerrufen Sie sie. Neue Links können eine feste Version behalten oder Änderungen übernehmen. Siehe [Versionen und Ersetzungen](versions.md). Eine Sammlung enthält höchstens 100 Dateien, einschließlich ihrer Dateien im Papierkorb. Größenlimits hängen von der Serverkonfiguration ab.
 
 ## Löschen und wiederherstellen
 

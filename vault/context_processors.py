@@ -8,4 +8,5 @@ def brand(request):
         "development": settings.DEBUG,
         "antivirus_enabled": bool(settings.CLAMAV_HOST),
         "app_url": settings.APP_URL,
+        "oidc_enabled": bool(settings.OIDC_ISSUER),
     }

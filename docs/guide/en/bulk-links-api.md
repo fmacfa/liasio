@@ -116,3 +116,7 @@ Limits shared with the interface: 10 preparations per hour per account, 100 save
 ## Use a shared collection
 
 Use your own API key. Its scopes and your collection role both apply: Readers can read collection metadata; Collaborators can upload with `files:write`, create links and batches with `links:write`, and read/export links and batches with `read`. Quota and webhooks remain with the owner. Upload sessions are accessible only to their initiator or the owner. Removing access also blocks API resumption and creation-receipt replays for that collection. See [Members](team.md).
+
+## Names and email addresses together (0.5)
+
+Instead of `names` or `count`, send `"recipients": [{"name":"Alice","email":"alice@example.test"},{"name":"Bob","email":"bob@example.test"}]`. Name/email columns remain in **My batches** and Excel/CSV exports. Set `"verify_recipients": true` to require a separate email code for each recipient; this needs SMTP and cannot be combined with a common `allowed_emails` list. It does not send delivery emails automatically. Conditions also accept `preset_id`, `follow_updates`, `revision_id` and `allowed_emails`; see the [API reference](../../API.md) and [interactive explorer](api-explorer.md).

@@ -1,0 +1,49 @@
+{
+  "version": "0.5.0",
+  "architecture": "arm64",
+  "logical_cpus": 8,
+  "platform": "Darwin",
+  "python": "3.13.12",
+  "database": "sqlite",
+  "antivirus": false,
+  "concurrent_users": 4,
+  "mib_per_user": 64,
+  "total_upload_bytes": 268435456,
+  "total_download_bytes": 268435456,
+  "elapsed_seconds": 2.94,
+  "upload_plus_download_mib_per_second": 173.85,
+  "http_requests_measured": 104,
+  "request_median_ms": 27.12,
+  "request_p95_ms": 252.26,
+  "results": [
+    {
+      "user": 0,
+      "bytes": 67108864,
+      "sha256_verified": true,
+      "resume_verified": true,
+      "one_use_verified": true
+    },
+    {
+      "user": 1,
+      "bytes": 67108864,
+      "sha256_verified": true,
+      "resume_verified": true,
+      "one_use_verified": true
+    },
+    {
+      "user": 2,
+      "bytes": 67108864,
+      "sha256_verified": true,
+      "resume_verified": true,
+      "one_use_verified": true
+    },
+    {
+      "user": 3,
+      "bytes": 67108864,
+      "sha256_verified": true,
+      "resume_verified": true,
+      "one_use_verified": true
+    }
+  ],
+  "limitations": "Loopback generated text fixture; not an Internet bandwidth, proxy, malware efficacy or maximum-capacity certification. HTTP latency excludes streamed ZIP downloads."
+}

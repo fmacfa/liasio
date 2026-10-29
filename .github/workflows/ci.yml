@@ -37,6 +37,7 @@ jobs:
           enable-cache: true
       - run: python3 scripts/configure.py --dev
       - run: uv sync --frozen
+      - run: uv run ruff check vault linkvault scripts && uv run ruff format --check vault linkvault scripts
       - run: uv run --env-file .env python manage.py collectstatic --noinput
       - run: uv run --env-file .env python manage.py test --noinput
       - run: uv run python scripts/check_documentation.py
@@ -45,6 +46,18 @@ jobs:
       - run: uv run bandit -r vault linkvault -x vault/tests,vault/migrations -ll
       - run: node --check static/app.js && node --check static/upload.js && node --check static/previews.js && node --check static/setup.js && node --check static/branding.js && node --check static/upload-core.js && node --check static/batches.js
       - run: node --test scripts/tests/*.test.cjs
+      - run: node --check static/api-explorer.js
+      - name: Browser regressions (desktop, mobile and interrupted upload)
+        if: matrix.database == 'sqlite'
+        run: |
+          uv run playwright install --with-deps chromium
+          uv run --env-file .env python manage.py test scripts.browser_tests --noinput
+      - name: Encrypted backup round-trip (disposable local restic repository)
+        if: matrix.database == 'sqlite'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y restic
+          python3 scripts/tests/test_offsite_backup.py
   containers:
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -53,21 +66,22 @@ jobs:
       - run: python3 scripts/configure.py --domain files.example.com
       - run: docker compose config --quiet
       - run: docker compose build app
-      - run: docker compose up -d --wait --wait-timeout 600 db clamav app webhooks
+      - run: docker compose up -d --wait --wait-timeout 600 db clamav app webhooks mail
       - run: docker compose exec -T app python manage.py check --deploy --fail-level ERROR
       - name: Verify packaged guides and screenshots
         run: docker compose exec -T app python manage.py test vault.tests.test_localization --noinput
-      - name: Verify webhook worker heartbeat
+      - name: Verify background worker heartbeats
         run: |
           docker compose exec -T app python manage.py shell <<'PY'
           import time
           from datetime import timedelta
           from django.utils import timezone
           from vault.models import ServiceState
-          deadline = time.monotonic() + 30
-          while not ServiceState.objects.filter(key='webhooks', updated_at__gte=timezone.now() - timedelta(minutes=1)).exists():
-              assert time.monotonic() < deadline, 'Webhook worker did not start'
-              time.sleep(1)
+          for worker in ('webhooks', 'mail'):
+              deadline = time.monotonic() + 30
+              while not ServiceState.objects.filter(key=worker, updated_at__gte=timezone.now() - timedelta(minutes=1)).exists():
+                  assert time.monotonic() < deadline, f'{worker} worker did not start'
+                  time.sleep(1)
           PY
       - run: docker compose exec -T -e RUN_CLAMAV_INTEGRATION=1 app python manage.py test vault.tests.test_antivirus_live --noinput
       - run: docker compose exec -T -e RUN_PREVIEW_INTEGRATION=1 app python manage.py test vault.tests.test_previews.LiveRendererTests --noinput

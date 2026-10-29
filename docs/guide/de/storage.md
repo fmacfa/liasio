@@ -23,3 +23,7 @@ Unter **Papierkorb** erscheinen vollständig gelöschte Sammlungen und einzeln g
 Um Kontingent sofort freizugeben, wählen Sie **Löschen**, prüfen die Bestätigungsseite und bestätigen **Endgültig löschen**. Die Originale werden entfernt und lassen sich über Liasio nicht wiederherstellen. Andernfalls leert die Wartung den Papierkorb nach der konfigurierten Aufbewahrungszeit, standardmäßig 30 Tagen. Beim Wiederherstellen einer Sammlung kehren nur Dateien zurück, die zusammen mit ihr gelöscht wurden; zuvor gelöschte Dateien bleiben im Papierkorb.
 
 Ein größeres Kontingent kann die Administration unter [Betrieb](operations.md) einstellen. Das Leeren des Papierkorbs behebt keinen Speicherverbrauch anderer Anwendungen auf dem VPS; dafür ist Serveradministration erforderlich.
+
+## Versionen und Objektspeicher
+
+Aufbewahrte [Versionen](versions.md) zählen ebenfalls zum Kontingent. Das Ersetzen eines Dokuments kann deshalb den Verbrauch erhöhen, ohne die aktuelle Dateianzahl zu ändern. Löschen Sie nicht mehr benötigte Versionen, bevor Sie deren referenzierte Dateien endgültig entfernen. Nicht mehr referenzierte ältere Kopien werden nach der Aufbewahrungsfrist gelöscht. Bei [S3-Speicher](advanced-operations.md) zählt das Kontingent die gespeicherten Originale, während Datenträgerwerte lokale Uploads und temporäre Archive betreffen: Dies sind unterschiedliche Ressourcen.

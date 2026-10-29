@@ -39,3 +39,9 @@ Cliquez sur une miniature pour l’agrandir. Utilisez les boutons précédent/su
 Dans **Mes liens**, recherchez, filtrez les liens actifs, activez ou masquez les aperçus, consultez les compteurs ou cliquez sur **Révoquer**. Confirmez pour bloquer les prochains accès. Pour changer un mot de passe, une expiration ou une limite, créez un nouveau lien et révoquez l’ancien.
 
 L’ouverture d’une page ne consomme pas un lien à usage unique. Un téléchargement ZIP autorisé le consomme, même interrompu. Un lien révoqué, expiré ou épuisé ne peut plus démarrer un téléchargement ; un transfert déjà en cours peut se terminer. La révocation n’efface pas les copies déjà téléchargées.
+
+## Modèles, versions et vérification des destinataires
+
+Ouvrez **Modèles de partage** pour enregistrer un nom, une durée, une limite de téléchargements, les aperçus et l’obligation éventuelle d’un mot de passe. Le modèle ne stocke jamais le mot de passe lui-même. Sélectionnez-le lors de la préparation du lien ou du lot, puis vérifiez les valeurs finales ; modifier le modèle ne change pas les liens existants. Consultez les [versions](versions.md) pour figer les fichiers ou suivre leurs modifications, et les [destinataires vérifiés](email.md) pour imposer un code e-mail en plus du mot de passe éventuel. Le destinataire peut aussi ne télécharger qu’une sélection de fichiers.
+
+![Conditions de partage réutilisables](../../screenshots/user-guide/fr/presets.png)

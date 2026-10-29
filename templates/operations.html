@@ -18,4 +18,5 @@
        name="quota_gib"
        required
        aria-label="{% blocktranslate with name=member.display_name %}Quota de {{ name }} en Gio{% endblocktranslate %}"></label><button class="button secondary">{% translate "Mettre à jour" %}</button></form></div>{% endfor %}</section>
+<section class="panel spaced"><h2>{% translate "Diagnostic de configuration" %}</h2><p>{% translate "Les options non activées ne sont pas toutes des erreurs : choisissez les services adaptés à votre installation." %}</p><dl>{% for label, enabled in diagnostics %}<div class="spread"><dt>{{ label }}</dt><dd>{{ enabled|yesno:_("Oui,Non") }}</dd></div>{% endfor %}</dl><form method="post" action="{% url 'smtp_test' %}">{% csrf_token %}<p>{% translate "Ce test envoie un message uniquement à votre adresse d’administrateur." %}</p><button class="button secondary">{% translate "M’envoyer un e-mail de test" %}</button></form></section>
 {% endblock %}

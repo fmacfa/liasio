@@ -1,7 +1,5 @@
 """Small deterministic regressions for the hardening policy; no external I/O."""
 
-import json
-import os
 import stat
 import subprocess
 import sys

@@ -1,0 +1,2469 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Liasio API",
+    "version": "0.5.0",
+    "description": "Self-hosted file sharing. API keys are sent only as Authorization: Bearer. Browser cookies are never API credentials. A download event means authorization, not confirmed receipt."
+  },
+  "servers": [
+    {
+      "url": "/api/v1"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "Liasio API key"
+      }
+    }
+  },
+  "paths": {
+    "/collections/": {
+      "get": {
+        "summary": "List accessible collections",
+        "operationId": "get_collections",
+        "tags": [
+          "read"
+        ],
+        "description": "Required scope: read. Only currently accessible resources are returned.",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "title": {
+                            "type": "string",
+                            "maxLength": 120
+                          },
+                          "description": {
+                            "type": "string",
+                            "maxLength": 4000
+                          },
+                          "recipient_note": {
+                            "type": "string",
+                            "maxLength": 300
+                          },
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "files": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "format": "uuid"
+                                },
+                                "path": {
+                                  "type": "string"
+                                },
+                                "size": {
+                                  "type": "integer"
+                                },
+                                "sha256": {
+                                  "type": "string"
+                                },
+                                "scanned": {
+                                  "type": "boolean"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "next_offset": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing, expired or revoked API key"
+          },
+          "403": {
+            "description": "Missing scope"
+          },
+          "404": {
+            "description": "Resource inaccessible"
+          },
+          "409": {
+            "description": "Idempotency mismatch or changed upload offset"
+          },
+          "429": {
+            "description": "Rate limit"
+          },
+          "503": {
+            "description": "Capacity or storage unavailable"
+          }
+        }
+      }
+    },
+    "/collections/create/": {
+      "post": {
+        "summary": "Create a collection",
+        "operationId": "post_collections_create",
+        "tags": [
+          "files:write"
+        ],
+        "description": "Required scope: files:write. Only currently accessible resources are returned.",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_-]{8,128}$"
+            },
+            "description": "Creation requires this header. Replay lasts 24h; reusing with different input fails."
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "maxLength": 120
+                    },
+                    "description": {
+                      "type": "string",
+                      "maxLength": 4000
+                    },
+                    "recipient_note": {
+                      "type": "string",
+                      "maxLength": 300
+                    },
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "files": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "path": {
+                            "type": "string"
+                          },
+                          "size": {
+                            "type": "integer"
+                          },
+                          "sha256": {
+                            "type": "string"
+                          },
+                          "scanned": {
+                            "type": "boolean"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing, expired or revoked API key"
+          },
+          "403": {
+            "description": "Missing scope"
+          },
+          "404": {
+            "description": "Resource inaccessible"
+          },
+          "409": {
+            "description": "Idempotency mismatch or changed upload offset"
+          },
+          "429": {
+            "description": "Rate limit"
+          },
+          "503": {
+            "description": "Capacity or storage unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "title"
+                ],
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "maxLength": 120
+                  },
+                  "description": {
+                    "type": "string",
+                    "maxLength": 4000
+                  },
+                  "recipient_note": {
+                    "type": "string",
+                    "maxLength": 300
+                  }
+                }
+              },
+              "example": {
+                "title": "Client documents"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/collections/{id}/": {
+      "get": {
+        "summary": "Read collection and files",
+        "operationId": "get_collections_id",
+        "tags": [
+          "read"
+        ],
+        "description": "Required scope: read. Only currently accessible resources are returned.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "maxLength": 120
+                    },
+                    "description": {
+                      "type": "string",
+                      "maxLength": 4000
+                    },
+                    "recipient_note": {
+                      "type": "string",
+                      "maxLength": 300
+                    },
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "files": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "path": {
+                            "type": "string"
+                          },
+                          "size": {
+                            "type": "integer"
+                          },
+                          "sha256": {
+                            "type": "string"
+                          },
+                          "scanned": {
+                            "type": "boolean"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing, expired or revoked API key"
+          },
+          "403": {
+            "description": "Missing scope"
+          },
+          "404": {
+            "description": "Resource inaccessible"
+          },
+          "409": {
+            "description": "Idempotency mismatch or changed upload offset"
+          },
+          "429": {
+            "description": "Rate limit"
+          },
+          "503": {
+            "description": "Capacity or storage unavailable"
+          }
+        }
+      }
+    },
+    "/collections/{id}/links/": {
+      "post": {
+        "summary": "Create a controlled share link",
+        "operationId": "post_collections_id_links",
+        "tags": [
+          "links:write"
+        ],
+        "description": "Required scope: links:write. Only currently accessible resources are returned.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_-]{8,128}$"
+            },
+            "description": "Creation requires this header. Replay lasts 24h; reusing with different input fails."
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "collection_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "label": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "password_protected": {
+                      "type": "boolean"
+                    },
+                    "allow_previews": {
+                      "type": "boolean"
+                    },
+                    "follow_updates": {
+                      "type": "boolean"
+                    },
+                    "revision_id": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "uuid"
+                    },
+                    "allowed_emails": {
+                      "type": "array",
+                      "maxItems": 100,
+                      "items": {
+                        "type": "string",
+                        "format": "email"
+                      }
+                    },
+                    "expires_at": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "max_downloads": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "downloads": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing, expired or revoked API key"
+          },
+          "403": {
+            "description": "Missing scope"
+          },
+          "404": {
+            "description": "Resource inaccessible"
+          },
+          "409": {
+            "description": "Idempotency mismatch or changed upload offset"
+          },
+          "429": {
+            "description": "Rate limit"
+          },
+          "503": {
+            "description": "Capacity or storage unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "expires_in_days": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 1,
+                    "maximum": 3650
+                  },
+                  "expires_at": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "date-time"
+                  },
+                  "max_downloads": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 1,
+                    "maximum": 100000
+                  },
+                  "password": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "writeOnly": true
+                  },
+                  "allow_previews": {
+                    "type": "boolean",
+                    "default": true
+                  },
+                  "follow_updates": {
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "revision_id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "preset_id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "allowed_emails": {
+                    "type": "array",
+                    "maxItems": 100,
+                    "items": {
+                      "type": "string",
+                      "format": "email"
+                    }
+                  },
+                  "label": {
+                    "type": "string",
+                    "maxLength": 80
+                  }
+                },
+                "description": "Omit expiry/download limits or use null for unlimited. A date and duration are mutually exclusive. Password may be empty. follow_updates and revision_id are mutually exclusive. Recipient verification requires configured SMTP.",
+                "required": [
+                  "label"
+                ]
+              },
+              "example": {
+                "label": "A",
+                "expires_in_days": 30,
+                "max_downloads": 3,
+                "password": "",
+                "allow_previews": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/links/": {
+      "get": {
+        "summary": "List manageable links",
+        "operationId": "get_links",
+        "tags": [
+          "read"
+        ],
+        "description": "Required scope: read. Only currently accessible resources are returned.",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "collection_id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "label": {
+                            "type": "string"
+                          },
+                          "url": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "status": {
+                            "type": "string"
+                          },
+                          "password_protected": {
+                            "type": "boolean"
+                          },
+                          "allow_previews": {
+                            "type": "boolean"
+                          },
+                          "follow_updates": {
+                            "type": "boolean"
+                          },
+                          "revision_id": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "format": "uuid"
+                          },
+                          "allowed_emails": {
+                            "type": "array",
+                            "maxItems": 100,
+                            "items": {
+                              "type": "string",
+                              "format": "email"
+                            }
+                          },
+                          "expires_at": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "format": "date-time"
+                          },
+                          "max_downloads": {
+                            "type": [
+                              "integer",
+                              "null"
+                            ]
+                          },
+                          "downloads": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    },
+                    "next_offset": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing, expired or revoked API key"
+          },
+          "403": {
+            "description": "Missing scope"
+          },
+          "404": {
+            "description": "Resource inaccessible"
+          },
+          "409": {
+            "description": "Idempotency mismatch or changed upload offset"
+          },
+          "429": {
+            "description": "Rate limit"
+          },
+          "503": {
+            "description": "Capacity or storage unavailable"
+          }
+        }
+      }
+    },
+    "/links/{id}/": {
+      "get": {
+        "summary": "Read a link",
+        "operationId": "get_links_id",
+        "tags": [
+          "read"
+        ],
+        "description": "Required scope: read. Only currently accessible resources are returned.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "collection_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "label": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "password_protected": {
+                      "type": "boolean"
+                    },
+                    "allow_previews": {
+                      "type": "boolean"
+                    },
+                    "follow_updates": {
+                      "type": "boolean"
+                    },
+                    "revision_id": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "uuid"
+                    },
+                    "allowed_emails": {
+                      "type": "array",
+                      "maxItems": 100,
+                      "items": {
+                        "type": "string",
+                        "format": "email"
+                      }
+                    },
+                    "expires_at": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "max_downloads": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "downloads": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing, expired or revoked API key"
+          },
+          "403": {
+            "description": "Missing scope"
+          },
+          "404": {
+            "description": "Resource inaccessible"
+          },
+          "409": {
+            "description": "Idempotency mismatch or changed upload offset"
+          },
+          "429": {
+            "description": "Rate limit"
+          },
+          "503": {
+            "description": "Capacity or storage unavailable"
+          }
+        }
+      }
+    },
+    "/links/{id}/revoke/": {
+      "post": {
+        "summary": "Revoke a link",
+        "operationId": "post_links_id_revoke",
+        "tags": [
+          "links:write"
+        ],
+        "description": "Required scope: links:write. Only currently accessible resources are returned.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "collection_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "label": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "password_protected": {
+                      "type": "boolean"
+                    },
+                    "allow_previews": {
+                      "type": "boolean"
+                    },
+                    "follow_updates": {
+                      "type": "boolean"
+                    },
+                    "revision_id": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "uuid"
+                    },
+                    "allowed_emails": {
+                      "type": "array",
+                      "maxItems": 100,
+                      "items": {
+                        "type": "string",
+                        "format": "email"
+                      }
+                    },
+                    "expires_at": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "max_downloads": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "downloads": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing, expired or revoked API key"
+          },
+          "403": {
+            "description": "Missing scope"
+          },
+          "404": {
+            "description": "Resource inaccessible"
+          },
+          "409": {
+            "description": "Idempotency mismatch or changed upload offset"
+          },
+          "429": {
+            "description": "Rate limit"
+          },
+          "503": {
+            "description": "Capacity or storage unavailable"
+          }
+        }
+      }
+    },
+    "/collections/{id}/link-batches/": {
+      "post": {
+        "summary": "Create an atomic batch",
+        "operationId": "post_collections_id_link_batches",
+        "tags": [
+          "links:write"
+        ],
+        "description": "Required scope: links:write. Only currently accessible resources are returned.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_-]{8,128}$"
+            },
+            "description": "Creation requires this header. Replay lasts 24h; reusing with different input fails."
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "collection_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "count": {
+                      "type": "integer"
+                    },
+                    "state": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "completed_at": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "view_url": {
+                      "type": "string"
+                    },
+                    "api_url": {
+                      "type": "string"
+                    },
+                    "exports": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "xlsx": {
+                          "type": "string"
+                        },
+                        "csv": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "headers": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "source_rows": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "collection_id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "label": {
+                            "type": "string"
+                          },
+                          "url": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "status": {
+                            "type": "string"
+                          },
+                          "password_protected": {
+                            "type": "boolean"
+                          },
+                          "allow_previews": {
+                            "type": "boolean"
+                          },
+                          "follow_updates": {
+                            "type": "boolean"
+                          },
+                          "revision_id": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "format": "uuid"
+                          },
+                          "allowed_emails": {
+                            "type": "array",
+                            "maxItems": 100,
+                            "items": {
+                              "type": "string",
+                              "format": "email"
+                            }
+                          },
+                          "expires_at": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "format": "date-time"
+                          },
+                          "max_downloads": {
+                            "type": [
+                              "integer",
+                              "null"
+                            ]
+                          },
+                          "downloads": {
+                            "type": "integer"
+                          },
+                          "position": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing, expired or revoked API key"
+          },
+          "403": {
+            "description": "Missing scope"
+          },
+          "404": {
+            "description": "Resource inaccessible"
+          },
+          "409": {
+            "description": "Idempotency mismatch or changed upload offset"
+          },
+          "429": {
+            "description": "Rate limit"
+          },
+          "503": {
+            "description": "Capacity or storage unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 80
+                  },
+                  "names": {
+                    "type": "array",
+                    "minItems": 1,
+                    "maxItems": 200,
+                    "items": {
+                      "type": "string",
+                      "maxLength": 80
+                    }
+                  },
+                  "count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 200
+                  },
+                  "conditions": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "expires_in_days": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ],
+                        "minimum": 1,
+                        "maximum": 3650
+                      },
+                      "expires_at": {
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "format": "date-time"
+                      },
+                      "max_downloads": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ],
+                        "minimum": 1,
+                        "maximum": 100000
+                      },
+                      "password": {
+                        "type": "string",
+                        "maxLength": 128,
+                        "writeOnly": true
+                      },
+                      "allow_previews": {
+                        "type": "boolean",
+                        "default": true
+                      },
+                      "follow_updates": {
+                        "type": "boolean",
+                        "default": false
+                      },
+                      "revision_id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "preset_id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "allowed_emails": {
+                        "type": "array",
+                        "maxItems": 100,
+                        "items": {
+                          "type": "string",
+                          "format": "email"
+                        }
+                      }
+                    },
+                    "description": "Omit expiry/download limits or use null for unlimited. A date and duration are mutually exclusive. Password may be empty. follow_updates and revision_id are mutually exclusive. Recipient verification requires configured SMTP."
+                  },
+                  "recipients": {
+                    "type": "array",
+                    "minItems": 1,
+                    "maxItems": 200,
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "name",
+                        "email"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "maxLength": 80
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email"
+                        }
+                      }
+                    }
+                  },
+                  "verify_recipients": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Require an email code for each recipient's own link. Requires recipients and SMTP."
+                  }
+                },
+                "oneOf": [
+                  {
+                    "required": [
+                      "names"
+                    ],
+                    "not": {
+                      "anyOf": [
+                        {
+                          "required": [
+                            "count"
+                          ]
+                        },
+                        {
+                          "required": [
+                            "recipients"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "required": [
+                      "count"
+                    ],
+                    "not": {
+                      "anyOf": [
+                        {
+                          "required": [
+                            "names"
+                          ]
+                        },
+                        {
+                          "required": [
+                            "recipients"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "required": [
+                      "recipients"
+                    ],
+                    "not": {
+                      "anyOf": [
+                        {
+                          "required": [
+                            "names"
+                          ]
+                        },
+                        {
+                          "required": [
+                            "count"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "example": {
+                "name": "Client batch",
+                "names": [
+                  "A",
+                  "B"
+                ],
+                "conditions": {
+                  "expires_in_days": 30,
+                  "max_downloads": 3,
+                  "password": ""
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/link-batches/": {
+      "get": {
+        "summary": "List My batches",
+        "operationId": "get_link_batches",
+        "tags": [
+          "read"
+        ],
+        "description": "Required scope: read. Only currently accessible resources are returned.",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000
+            }
+          },
+          {
+            "name": "collection_id",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "collection_id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "count": {
+                            "type": "integer"
+                          },
+                          "state": {
+                            "type": "string"
+                          },
+                          "created_at": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "format": "date-time"
+                          },
+                          "completed_at": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "format": "date-time"
+                          },
+                          "view_url": {
+                            "type": "string"
+                          },
+                          "api_url": {
+                            "type": "string"
+                          },
+                          "exports": {
+                            "type": [
+                              "object",
+                              "null"
+                            ],
+                            "properties": {
+                              "xlsx": {
+                                "type": "string"
+                              },
+                              "csv": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "headers": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "source_rows": {
+                            "type": "array",
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "items": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "format": "uuid"
+                                },
+                                "collection_id": {
+                                  "type": "string",
+                                  "format": "uuid"
+                                },
+                                "label": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": "string",
+                                  "format": "uri"
+                                },
+                                "status": {
+                                  "type": "string"
+                                },
+                                "password_protected": {
+                                  "type": "boolean"
+                                },
+                                "allow_previews": {
+                                  "type": "boolean"
+                                },
+                                "follow_updates": {
+                                  "type": "boolean"
+                                },
+                                "revision_id": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ],
+                                  "format": "uuid"
+                                },
+                                "allowed_emails": {
+                                  "type": "array",
+                                  "maxItems": 100,
+                                  "items": {
+                                    "type": "string",
+                                    "format": "email"
+                                  }
+                                },
+                                "expires_at": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ],
+                                  "format": "date-time"
+                                },
+                                "max_downloads": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ]
+                                },
+                                "downloads": {
+                                  "type": "integer"
+                                },
+                                "position": {
+                                  "type": "integer"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "next_offset": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing, expired or revoked API key"
+          },
+          "403": {
+            "description": "Missing scope"
+          },
+          "404": {
+            "description": "Resource inaccessible"
+          },
+          "409": {
+            "description": "Idempotency mismatch or changed upload offset"
+          },
+          "429": {
+            "description": "Rate limit"
+          },
+          "503": {
+            "description": "Capacity or storage unavailable"
+          }
+        }
+      }
+    },
+    "/link-batches/{id}/": {
+      "get": {
+        "summary": "Read a batch and its named links",
+        "operationId": "get_link_batches_id",
+        "tags": [
+          "read"
+        ],
+        "description": "Required scope: read. Only currently accessible resources are returned.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "collection_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "count": {
+                      "type": "integer"
+                    },
+                    "state": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "completed_at": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "view_url": {
+                      "type": "string"
+                    },
+                    "api_url": {
+                      "type": "string"
+                    },
+                    "exports": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "xlsx": {
+                          "type": "string"
+                        },
+                        "csv": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "headers": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "source_rows": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "collection_id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "label": {
+                            "type": "string"
+                          },
+                          "url": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "status": {
+                            "type": "string"
+                          },
+                          "password_protected": {
+                            "type": "boolean"
+                          },
+                          "allow_previews": {
+                            "type": "boolean"
+                          },
+                          "follow_updates": {
+                            "type": "boolean"
+                          },
+                          "revision_id": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "format": "uuid"
+                          },
+                          "allowed_emails": {
+                            "type": "array",
+                            "maxItems": 100,
+                            "items": {
+                              "type": "string",
+                              "format": "email"
+                            }
+                          },
+                          "expires_at": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "format": "date-time"
+                          },
+                          "max_downloads": {
+                            "type": [
+                              "integer",
+                              "null"
+                            ]
+                          },
+                          "downloads": {
+                            "type": "integer"
+                          },
+                          "position": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing, expired or revoked API key"
+          },
+          "403": {
+            "description": "Missing scope"
+          },
+          "404": {
+            "description": "Resource inaccessible"
+          },
+          "409": {
+            "description": "Idempotency mismatch or changed upload offset"
+          },
+          "429": {
+            "description": "Rate limit"
+          },
+          "503": {
+            "description": "Capacity or storage unavailable"
+          }
+        }
+      }
+    },
+    "/link-batches/{id}/export/{format}/": {
+      "get": {
+        "summary": "Export Excel or CSV",
+        "operationId": "get_link_batches_id_export_format",
+        "tags": [
+          "read"
+        ],
+        "description": "Required scope: read. Only currently accessible resources are returned.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "format",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "xlsx",
+                "csv"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing, expired or revoked API key"
+          },
+          "403": {
+            "description": "Missing scope"
+          },
+          "404": {
+            "description": "Resource inaccessible"
+          },
+          "409": {
+            "description": "Idempotency mismatch or changed upload offset"
+          },
+          "429": {
+            "description": "Rate limit"
+          },
+          "503": {
+            "description": "Capacity or storage unavailable"
+          }
+        }
+      }
+    },
+    "/sharing-presets/": {
+      "get": {
+        "summary": "List private sharing presets",
+        "operationId": "get_sharing_presets",
+        "tags": [
+          "read"
+        ],
+        "description": "Required scope: read. Only currently accessible resources are returned.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing, expired or revoked API key"
+          },
+          "403": {
+            "description": "Missing scope"
+          },
+          "404": {
+            "description": "Resource inaccessible"
+          },
+          "409": {
+            "description": "Idempotency mismatch or changed upload offset"
+          },
+          "429": {
+            "description": "Rate limit"
+          },
+          "503": {
+            "description": "Capacity or storage unavailable"
+          }
+        }
+      }
+    },
+    "/collections/{id}/uploads/start/": {
+      "post": {
+        "summary": "Reserve a resumable upload",
+        "operationId": "post_collections_id_uploads_start",
+        "tags": [
+          "files:write"
+        ],
+        "description": "Required scope: files:write. Only currently accessible resources are returned.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_-]{8,128}$"
+            },
+            "description": "Creation requires this header. Replay lasts 24h; reusing with different input fails."
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "state": {
+                      "type": "string"
+                    },
+                    "size": {
+                      "type": "integer"
+                    },
+                    "expires_at": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "replace_existing": {
+                      "type": "boolean"
+                    },
+                    "chunk_bytes": {
+                      "type": "integer"
+                    },
+                    "parts": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string",
+                            "maxLength": 500
+                          },
+                          "size": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "fingerprint": {
+                            "type": "string",
+                            "pattern": "^[a-f0-9]{64}$",
+                            "description": "Client resume identifier, unchanged on retry. Browser uses SHA-256 of UTF-8 size:lastModified: followed by the first 64 KiB and last 64 KiB (overlap allowed). Each transmitted block has a separately verified SHA-256 checksum."
+                          },
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "offset": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing, expired or revoked API key"
+          },
+          "403": {
+            "description": "Missing scope"
+          },
+          "404": {
+            "description": "Resource inaccessible"
+          },
+          "409": {
+            "description": "Idempotency mismatch or changed upload offset"
+          },
+          "429": {
+            "description": "Rate limit"
+          },
+          "503": {
+            "description": "Capacity or storage unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "files"
+                ],
+                "properties": {
+                  "files": {
+                    "type": "array",
+                    "minItems": 1,
+                    "maxItems": 100,
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "path",
+                        "size",
+                        "fingerprint"
+                      ],
+                      "properties": {
+                        "path": {
+                          "type": "string",
+                          "maxLength": 500
+                        },
+                        "size": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "fingerprint": {
+                          "type": "string",
+                          "pattern": "^[a-f0-9]{64}$",
+                          "description": "Client resume identifier, unchanged on retry. Browser uses SHA-256 of UTF-8 size:lastModified: followed by the first 64 KiB and last 64 KiB (overlap allowed). Each transmitted block has a separately verified SHA-256 checksum."
+                        }
+                      }
+                    }
+                  },
+                  "replace_existing": {
+                    "type": "boolean",
+                    "default": false
+                  }
+                }
+              },
+              "example": {}
+            }
+          }
+        }
+      }
+    },
+    "/collections/{id}/uploads/pending/": {
+      "get": {
+        "summary": "List resumable uploads",
+        "operationId": "get_collections_id_uploads_pending",
+        "tags": [
+          "read"
+        ],
+        "description": "Required scope: read. Only currently accessible resources are returned.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "sessions": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "state": {
+                            "type": "string"
+                          },
+                          "size": {
+                            "type": "integer"
+                          },
+                          "expires_at": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "format": "date-time"
+                          },
+                          "replace_existing": {
+                            "type": "boolean"
+                          },
+                          "chunk_bytes": {
+                            "type": "integer"
+                          },
+                          "parts": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "path": {
+                                  "type": "string",
+                                  "maxLength": 500
+                                },
+                                "size": {
+                                  "type": "integer",
+                                  "minimum": 0
+                                },
+                                "fingerprint": {
+                                  "type": "string",
+                                  "pattern": "^[a-f0-9]{64}$",
+                                  "description": "Client resume identifier, unchanged on retry. Browser uses SHA-256 of UTF-8 size:lastModified: followed by the first 64 KiB and last 64 KiB (overlap allowed). Each transmitted block has a separately verified SHA-256 checksum."
+                                },
+                                "id": {
+                                  "type": "string",
+                                  "format": "uuid"
+                                },
+                                "offset": {
+                                  "type": "integer"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing, expired or revoked API key"
+          },
+          "403": {
+            "description": "Missing scope"
+          },
+          "404": {
+            "description": "Resource inaccessible"
+          },
+          "409": {
+            "description": "Idempotency mismatch or changed upload offset"
+          },
+          "429": {
+            "description": "Rate limit"
+          },
+          "503": {
+            "description": "Capacity or storage unavailable"
+          }
+        }
+      }
+    },
+    "/uploads/{id}/status/": {
+      "get": {
+        "summary": "Read durable offsets",
+        "operationId": "get_uploads_id_status",
+        "tags": [
+          "read"
+        ],
+        "description": "Required scope: read. Only currently accessible resources are returned.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "state": {
+                      "type": "string"
+                    },
+                    "size": {
+                      "type": "integer"
+                    },
+                    "expires_at": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "replace_existing": {
+                      "type": "boolean"
+                    },
+                    "chunk_bytes": {
+                      "type": "integer"
+                    },
+                    "parts": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string",
+                            "maxLength": 500
+                          },
+                          "size": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "fingerprint": {
+                            "type": "string",
+                            "pattern": "^[a-f0-9]{64}$",
+                            "description": "Client resume identifier, unchanged on retry. Browser uses SHA-256 of UTF-8 size:lastModified: followed by the first 64 KiB and last 64 KiB (overlap allowed). Each transmitted block has a separately verified SHA-256 checksum."
+                          },
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "offset": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing, expired or revoked API key"
+          },
+          "403": {
+            "description": "Missing scope"
+          },
+          "404": {
+            "description": "Resource inaccessible"
+          },
+          "409": {
+            "description": "Idempotency mismatch or changed upload offset"
+          },
+          "429": {
+            "description": "Rate limit"
+          },
+          "503": {
+            "description": "Capacity or storage unavailable"
+          }
+        }
+      }
+    },
+    "/uploads/{id}/parts/{part_id}/chunk/": {
+      "post": {
+        "summary": "Upload one checksummed block",
+        "operationId": "post_uploads_id_parts_part_id_chunk",
+        "tags": [
+          "files:write"
+        ],
+        "description": "Required scope: files:write. Only currently accessible resources are returned.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "part_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Upload-Offset",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "Upload-Checksum",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "offset": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing, expired or revoked API key"
+          },
+          "403": {
+            "description": "Missing scope"
+          },
+          "404": {
+            "description": "Resource inaccessible"
+          },
+          "409": {
+            "description": "Idempotency mismatch or changed upload offset"
+          },
+          "429": {
+            "description": "Rate limit"
+          },
+          "503": {
+            "description": "Capacity or storage unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uploads/{id}/finish/": {
+      "post": {
+        "summary": "Scan and finalize upload",
+        "operationId": "post_uploads_id_finish",
+        "tags": [
+          "files:write"
+        ],
+        "description": "Required scope: files:write. Only currently accessible resources are returned.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "type": "string"
+                    },
+                    "redirect": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing, expired or revoked API key"
+          },
+          "403": {
+            "description": "Missing scope"
+          },
+          "404": {
+            "description": "Resource inaccessible"
+          },
+          "409": {
+            "description": "Idempotency mismatch or changed upload offset"
+          },
+          "429": {
+            "description": "Rate limit"
+          },
+          "503": {
+            "description": "Capacity or storage unavailable"
+          }
+        }
+      }
+    },
+    "/uploads/{id}/cancel/": {
+      "post": {
+        "summary": "Cancel upload and release quota",
+        "operationId": "post_uploads_id_cancel",
+        "tags": [
+          "files:write"
+        ],
+        "description": "Required scope: files:write. Only currently accessible resources are returned.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing, expired or revoked API key"
+          },
+          "403": {
+            "description": "Missing scope"
+          },
+          "404": {
+            "description": "Resource inaccessible"
+          },
+          "409": {
+            "description": "Idempotency mismatch or changed upload offset"
+          },
+          "429": {
+            "description": "Rate limit"
+          },
+          "503": {
+            "description": "Capacity or storage unavailable"
+          }
+        }
+      }
+    }
+  }
+}

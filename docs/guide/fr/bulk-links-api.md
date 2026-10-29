@@ -116,3 +116,7 @@ Limites communes à l’interface et à l’API : 10 préparations par heure et 
 ## Utiliser un dossier partagé
 
 Utilisez votre propre clé API. Son périmètre et votre rôle sur le dossier se cumulent : un lecteur peut consulter les métadonnées ; un collaborateur peut importer avec `files:write`, créer des liens et lots avec `links:write`, et lire/exporter les liens et lots avec `read`. Le quota et les webhooks restent ceux du propriétaire. Les sessions d’import ne sont accessibles qu’à leur initiateur ou au propriétaire. Un retrait d’accès bloque aussi les reprises API et les réponses d’idempotence des créations dans ce dossier. Voir [Membres](team.md).
+
+## Noms et adresses ensemble (0.5)
+
+À la place de `names` ou `count`, envoyez `"recipients": [{"name":"Alice","email":"alice@example.test"},{"name":"Bob","email":"bob@example.test"}]`. Les colonnes nom/e-mail restent dans **Mes lots** et les exports Excel/CSV. Ajoutez `"verify_recipients": true` pour exiger un code e-mail propre à chaque destinataire ; cela nécessite SMTP et ne se combine pas avec une liste commune `allowed_emails`. Aucun e-mail de diffusion n’est envoyé automatiquement. Les conditions acceptent aussi `preset_id`, `follow_updates`, `revision_id` et `allowed_emails` : voir la [référence API](../../API.md) et l’[explorateur interactif](api-explorer.md).

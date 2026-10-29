@@ -14,6 +14,42 @@ from markdown_it import MarkdownIt
 
 GUIDES = [
     (
+        "workspaces",
+        _("Espaces d’équipe et groupes"),
+        _("Partager des accès, transférer la propriété et exiger la MFA."),
+    ),
+    (
+        "versions",
+        _("Versions et téléchargements sélectifs"),
+        _(
+            "Figer un partage, remplacer des fichiers et choisir les documents à télécharger."
+        ),
+    ),
+    (
+        "email",
+        _("E-mails et destinataires vérifiés"),
+        _(
+            "Préparer les envois, gérer les modèles et vérifier les destinataires par code."
+        ),
+    ),
+    (
+        "file-requests",
+        _("Recevoir des fichiers clients"),
+        _(
+            "Créer un lien de dépôt limité, suivre les fichiers reçus et révoquer l’accès."
+        ),
+    ),
+    (
+        "advanced-operations",
+        _("Hébergement avancé"),
+        _("Stockage S3, connexion d’entreprise et sauvegardes chiffrées hors serveur."),
+    ),
+    (
+        "api-explorer",
+        _("Tester l’API dans le navigateur"),
+        _("Spécification OpenAPI, appels contrôlés et export des résultats."),
+    ),
+    (
         "getting-started",
         _("Premiers pas"),
         _("Installation, connexion et langue de l’interface."),

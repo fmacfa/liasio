@@ -10,13 +10,13 @@ Liasio est une application open source de partage de fichiers à installer sur v
 
 Interface français / anglais / allemand · Licence **MIT** · Python / Django · Docker Compose
 
-> **Version 0.4 — automatisations et interface trilingue.** API à permissions limitées, webhooks signés et guides illustrés complètent les aperçus, TOTP, les envois reprenables et la corbeille. Le projet reste jeune, sans audit humain indépendant ni chiffrement de bout en bout.
+> **Version 0.5 — équipes et échanges clients.** Espaces et groupes, versions figées, dépôts clients, vérification des destinataires, e-mails validés, stockage S3 privé et connexion OIDC. Interface et guides en français, anglais et allemand. Le projet reste en phase pré-1.0 : audit humain indépendant encore à réaliser, sans chiffrement de bout en bout.
 
 ![Tableau de bord Liasio, avec des données fictives](docs/screenshots/dashboard.png)
 
 ## Ce que vous pouvez faire
 
-| Besoin | Disponible dans la version 0.4 |
+| Besoin | Disponible dans la version 0.5 |
 | --- | --- |
 | Première connexion | Deux étapes courtes : e-mail et mot de passe, puis nom et confirmation ; le premier compte devient administrateur |
 | Plusieurs comptes | Invitations personnelles, valables 7 jours, usage unique, révocables ; comptes privés avec accès Lecteur/Collaborateur par dossier |
@@ -44,6 +44,19 @@ Interface français / anglais / allemand · Licence **MIT** · Python / Django �
 - **Usage unique** : ouvrir la page ne consomme rien. Le bouton de téléchargement effectue un POST protégé par CSRF. Une réservation atomique en base empêche deux téléchargements simultanés de dépasser la limite.
 - **Révocation** : bloque les prochaines autorisations. Elle ne rappelle pas les fichiers déjà reçus et n’interrompt pas nécessairement un transfert déjà autorisé.
 
+La version 0.5 ajoute aussi :
+
+- **Équipes** : espaces, groupes, droits Lecteur/Collaborateur, transfert de propriété et MFA obligatoire en option.
+- **Documents** : versions figées ou liens suivant les mises à jour, remplacement et restauration, sélection des fichiers à télécharger. Les anciennes copies conservées comptent dans le quota.
+- **Clients** : liens de dépôt sans accès aux autres fichiers, expiration, plafonds de volume et de dépôts, reprise et antivirus.
+- **E-mails** : brouillons individuels, en lot et d’invitation, modèles, validation explicite, file d’envoi et notifications facultatives.
+- **Destinataires vérifiés** : adresses autorisées et code e-mail exigé avant consultation ou téléchargement.
+- **Comptes** : sessions actives révocables et connexion d’entreprise OIDC après association explicite.
+- **Hébergement** : stockage S3 privé facultatif, sauvegardes restic chiffrées hors serveur et restauration vérifiable.
+- **API** : spécification OpenAPI, explorateur intégré et listes nom/e-mail avec export Excel/CSV.
+
+Les **19 guides** sont disponibles dans les trois langues. Les liens de dépôt sont créés volontairement par un propriétaire ; l’inscription publique reste fermée.
+
 ## Guides et automatisations
 
 Le **[guide français illustré](docs/guide/fr/README.md)**, sa **[version anglaise](docs/guide/en/README.md)** et sa **[version allemande](docs/guide/de/README.md)** sont aussi intégrés à l’application, menu **Guide d’utilisation** (`/help/`). Le sélecteur **FR / EN / DE** traduit les formulaires, les messages, la progression et les pages destinataires.
@@ -65,7 +78,7 @@ Prévoir un serveur Linux avec **Docker Engine et Docker Compose v2**, Git et Py
 
 ### Mémoire vive et swap
 
-La **RAM**, ou mémoire vive, sert au fonctionnement des services. Les limites actuelles de [compose.yaml](compose.yaml) totalisent **6,5 Gio** : ClamAV 4 Gio, application 1 Gio, PostgreSQL et aperçus 512 Mio chacun, maintenance et webhooks 256 Mio chacun. Ce sont des plafonds individuels, pas une consommation constante ou une réservation de mémoire. Linux, Docker, Caddy, les sauvegardes et les constructions d’images ont besoin d’une marge supplémentaire. ClamAV seul [recommande 4 Gio](https://docs.clamav.net/manual/Installing/Docker.html#memory-ram-requirements), avec des pics pendant les mises à jour de signatures.
+La **RAM**, ou mémoire vive, sert au fonctionnement des services. Les limites actuelles de [compose.yaml](compose.yaml) totalisent **6,75 Gio** : ClamAV 4 Gio, application 1 Gio, PostgreSQL et aperçus 512 Mio chacun, maintenance, webhooks et e-mails 256 Mio chacun. Ce sont des plafonds individuels, pas une consommation constante ou une réservation de mémoire. Linux, Docker, Caddy, les sauvegardes et les constructions d’images ont besoin d’une marge supplémentaire. ClamAV seul [recommande 4 Gio](https://docs.clamav.net/manual/Installing/Docker.html#memory-ram-requirements), avec des pics pendant les mises à jour de signatures.
 
 Sur un **VPS partagé**, ajoutez les besoins de vos sites, bases et applications existantes, y compris leurs pics. Un serveur avec 8 Gio installés mais seulement 2 Gio disponibles n’équivaut pas à un serveur dédié de 8 Gio. CloudPanel ne réduit pas ces besoins ; prévoyez le reverse proxy et les ports déjà utilisés avec le [guide d’exploitation](docs/OPERATIONS.md#autre-reverse-proxy).
 
@@ -184,9 +197,9 @@ Limites par défaut : **1 Gio par fichier, 5 Gio par dossier et 100 fichiers**. 
 
 Lisez le [guide de mise à niveau et d’exploitation de la version 0.2](docs/RELIABILITY.md) (anglais), notamment avant toute modification des clés MFA. Le [changelog](CHANGELOG.md) et les [releases](https://github.com/fmacfa/liasio/releases) décrivent les versions publiées.
 
-Pour une image précompilée, ajoutez `LINKVAULT_IMAGE=ghcr.io/fmacfa/linkvault:0.4.0` dans `.env`, puis exécutez `docker compose pull app maintenance preview webhooks` et `docker compose up -d --no-build`.
+Pour une image précompilée, ajoutez `LINKVAULT_IMAGE=ghcr.io/fmacfa/liasio:0.5.0` dans `.env`, puis exécutez `docker compose pull app maintenance preview webhooks mail` et `docker compose up -d --no-build`.
 
-Les sources après 0.4.0 incluent les [renforcements en préparation](CHANGELOG.md#unreleased) : équité des webhooks, protection des fichiers/états et isolation des aperçus. Arrêtez les processus de webhooks avant la migration `0006`, puis redémarrez toute la pile mise à jour. Les aperçus de production exigent Linux avec Landlock ABI 3+ ; consultez le [guide d’exploitation actualisé](docs/guide/fr/operations.md). L’image 0.4.0 existante ne contient pas ces changements. Les images fournisseur sont fixées par empreinte et nécessitent des mises à jour revues ; les prochaines notes de version préciseront la vérification des attestations par workflow, tag et commit ainsi que la référence immuable de l’image.
+La version 0.5 inclut les renforcements apportés après 0.4 et les migrations jusqu’à `0017`. Suivez le [guide de mise à niveau](docs/UPGRADING_0_5.md), conservez les clés d’origine et redémarrez tous les processus avec la même image. Les aperçus exigent toujours Landlock ABI 3+ ; leur désactivation conserve les téléchargements originaux. Les releases fournissent les empreintes exactes, SBOM et attestations liées au workflow, au tag et au commit.
 
 ## Voir les fichiers avant de télécharger
 

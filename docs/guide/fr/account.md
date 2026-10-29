@@ -26,3 +26,7 @@ Sur cette page, confirmez le mot de passe et un code d’application ou de récu
 Depuis la connexion, cliquez sur **Mot de passe oublié ?**. Si SMTP est configuré et qu’un compte actif correspond, un lien personnel valable une heure est envoyé. Le message reste identique pour une adresse inconnue. Réinitialiser le mot de passe ne contourne pas la MFA.
 
 Utilisez un code de récupération si l’application est perdue. Si l’application et les codes sont tous perdus, contactez l’administrateur pour une récupération contrôlée : il n’existe pas de contournement public. Une invitation expirée nécessite une nouvelle invitation, pas une réinitialisation du mot de passe.
+
+## Sessions et protection d’équipe
+
+[Sessions actives](advanced-operations.md) affiche vos appareils et permet de déconnecter une session ou tous les autres appareils. Les sessions existantes sont reprises lors de la mise à jour ; leur appareil d’origine peut être inconnu. Si un [espace d’équipe](workspaces.md) exige la MFA, vous devez l’activer et ne pouvez pas la désactiver tant que cette obligation s’applique. La connexion d’entreprise facultative se relie explicitement depuis le compte ; une adresse identique ne fusionne jamais des identités.

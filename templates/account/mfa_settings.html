@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% load i18n %}
 {% block breadcrumb %}{% translate "Mon compte / Double authentification" %}{% endblock %}
-{% block content %}
+{% block content %}{% if mfa_required %}<p class="notice">{% translate "Votre équipe exige la double authentification." %}</p>{% endif %}
     <div class="page-heading">
         <div>
             <div class="eyebrow">{% translate "PROTÉGER VOTRE COMPTE" %}</div>
@@ -19,7 +19,7 @@
         {% if user.mfa_secret %}
             <h2>{% translate "Double authentification activée" %}</h2>
             <p>{{ user.recovery_codes|length }} {% translate "code(s) de récupération disponible(s). Attendez un nouveau code de l’application si le précédent vient d’être utilisé." %}</p>
-            <form method="post">{% csrf_token %}{% include "components/form.html" with form=password_form %}{% include "components/form.html" with form=code_form %}<div class="button-row"><button class="button" name="action" value="regenerate">{% translate "Renouveler les codes" %}</button><button class="button danger" name="action" value="disable">{% translate "Désactiver" %}</button></div></form>
+            <form method="post">{% csrf_token %}{% include "components/form.html" with form=password_form %}{% include "components/form.html" with form=code_form %}<div class="button-row"><button class="button" name="action" value="regenerate">{% translate "Renouveler les codes" %}</button>{% if not mfa_required %}<button class="button danger" name="action" value="disable">{% translate "Désactiver" %}</button>{% endif %}</div></form>
         {% elif setup_secret %}
             <h2>{% translate "Associez votre application" %}</h2><p>{% translate "Scannez ce QR code avec votre application TOTP, puis confirmez avec le code à six chiffres. La configuration expire après dix minutes." %}</p><img class="mfa-qr"
      src="{% url 'mfa_qr' %}"

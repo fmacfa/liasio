@@ -27,6 +27,10 @@ from .api_auth import (
 from .link_lists import MAX_LINKS
 
 CONDITION_FIELDS = {
+    "allowed_emails",
+    "follow_updates",
+    "revision_id",
+    "preset_id",
     "expires_at",
     "expires_in_days",
     "max_downloads",
@@ -76,17 +80,48 @@ def batch_data(batch, *, details=False):
     return data
 
 
-def inputs(data):
-    if set(data) - {"name", "names", "count", "conditions"}:
+def inputs(data, actor=None):
+    if set(data) - {
+        "name",
+        "names",
+        "count",
+        "conditions",
+        "recipients",
+        "verify_recipients",
+    }:
         raise ValidationError(_("Champs de lot inconnus."))
     if not isinstance(data.get("name"), str):
         raise ValidationError(_("Indiquez un nom de lot."))
     name = forms.CharField(max_length=80, validators=[batches.SINGLE_LINE]).clean(
         data["name"]
     )
-    if ("names" in data) == ("count" in data):
-        raise ValidationError(_("Fournissez names ou count, mais pas les deux."))
-    if "names" in data:
+    if sum(key in data for key in ("names", "count", "recipients")) != 1:
+        raise ValidationError(
+            _("Fournissez names, count ou recipients, une seule option.")
+        )
+    recipient_emails = []
+    if "recipients" in data:
+        recipients = data["recipients"]
+        if not isinstance(recipients, list) or not 1 <= len(recipients) <= MAX_LINKS:
+            raise ValidationError(
+                _("recipients doit contenir de 1 à 200 objets name/email.")
+            )
+        if any(
+            not isinstance(item, dict)
+            or set(item) != {"name", "email"}
+            or not isinstance(item["name"], str)
+            or not isinstance(item["email"], str)
+            for item in recipients
+        ):
+            raise ValidationError(
+                _("Chaque destinataire doit contenir un nom et une adresse e-mail.")
+            )
+        labels = [item["name"] for item in recipients]
+        recipient_emails = [
+            forms.EmailField(max_length=254).clean(item["email"]).lower()
+            for item in recipients
+        ]
+    elif "names" in data:
         labels = data["names"]
         if (
             not isinstance(labels, list)
@@ -110,11 +145,30 @@ def inputs(data):
     conditions = data.get("conditions", {})
     if not isinstance(conditions, dict) or set(conditions) - CONDITION_FIELDS:
         raise ValidationError(_("Conditions de lot invalides ou champs inconnus."))
-    return name, labels, link_form_values(conditions)
+    from .presets import apply_preset
+
+    if type(data.get("verify_recipients", False)) is not bool:
+        raise ValidationError(_("verify_recipients doit être un booléen."))
+    if data.get("verify_recipients") and (
+        not recipient_emails
+        or not settings.EMAIL_HOST
+        or conditions.get("allowed_emails")
+    ):
+        raise ValidationError(
+            _(
+                "La vérification individuelle exige recipients, SMTP et aucun destinataire commun."
+            )
+        )
+    return (
+        name,
+        labels,
+        link_form_values(apply_preset(actor, conditions)),
+        recipient_emails,
+    )
 
 
-def conditions_form(values):
-    form = batches.ConditionsForm(values)
+def conditions_form(values, collection=None):
+    form = batches.ConditionsForm(values, collection=collection)
     if not form.is_valid():
         raise ValidationError(
             [message for errors in form.errors.values() for message in errors]
@@ -141,8 +195,8 @@ def create(request, pk):
             return error(
                 "rate_limited", "Too many batch requests. Try again later.", 429
             )
-    name, labels, values = inputs(data)
-    conditions = conditions_form(values)
+    name, labels, values, emails = inputs(data, request.user)
+    conditions = conditions_form(values, collection)
     password = conditions.cleaned_data["password"]
     password_hash = make_password(password) if password else ""
     with transaction.atomic():
@@ -151,10 +205,18 @@ def create(request, pk):
         if previous is not None:
             return previous
         # Resolve durations at creation and reject a date that expired while waiting.
-        conditions = conditions_form(values)
+        conditions = conditions_form(values, collection)
         batch = batches.new_batch(
-            owner, collection, name, ["Name"], [[label] for label in labels]
+            owner,
+            collection,
+            name,
+            ["Name", "Email"] if emails else ["Name"],
+            [[label, email] for label, email in zip(labels, emails)]
+            if emails
+            else [[label] for label in labels],
         )
+        if data.get("verify_recipients"):
+            conditions.cleaned_data["recipient_emails"] = emails
         batches.complete_batch(
             batch, request.user, labels, conditions.cleaned_data, password_hash
         )

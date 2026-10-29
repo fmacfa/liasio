@@ -1,5 +1,19 @@
 "use strict";
 
+document.querySelectorAll("select[data-presets]").forEach((select) => {
+  const presets = JSON.parse(select.dataset.presets);
+  select.addEventListener("change", () => {
+    const policy = presets[select.value];
+    if (!policy) return;
+    const fields = select.form.elements;
+    fields.expiry_mode.value = policy.expires_in_days === null ? "none" : "days";
+    fields.expires_in_days.value = policy.expires_in_days ?? "";
+    fields.max_downloads.value = policy.max_downloads ?? "";
+    fields.allow_previews.checked = policy.allow_previews;
+    fields.expiry_mode.dispatchEvent(new Event("change", { bubbles: true }));
+  });
+});
+
 const toast = (message) => {
   const el = document.getElementById("toast");
   el.textContent = message;

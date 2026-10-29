@@ -34,3 +34,5 @@ Imported folders expand to show their files and subfolders. Each folder shows it
 ## Collections shared with your team
 
 An invitation alone does not grant collection access. The owner assigns Reader or Collaborator through **Manage access**. Shared collections appear in **My collections**; only collaborators can add files and manage links. Deletion and access management remain with the owner. See [Members and access levels](team.md).
+
+Legacy active links must first be frozen from **Versions** (or revoked). New links may keep a fixed version or follow updates. See [versions and replacements](versions.md).

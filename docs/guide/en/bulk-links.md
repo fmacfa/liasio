@@ -58,3 +58,7 @@ Lists are private to the folder's owner, never shown to recipients, and included
 [Batch creation through the API](bulk-links-api.md) accepts names or a quantity from Codex, a terminal or your website server, then returns links and Excel/CSV exports. These batches appear in **My batches** and remain accessible in the interface.
 
 [Link conditions](sharing.md) · [API and webhook automation](automation.md) · [Back to the guide](README.md)
+
+## Reuse policies and prepare email delivery
+
+Choose a sharing preset and review its duration, limits and password requirement. With SMTP configured, choose the email column and **Verify the email address on each row** to restrict each link to that recipient, or supply a common allowlist instead. After generation, **Prepare emails** prefills addresses from the source list. Preview every message and explicitly confirm the send. Templates and queue limits are covered in [email delivery](email.md).

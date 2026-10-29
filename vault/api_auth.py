@@ -31,8 +31,11 @@ def credential_version(user):
 
 
 def valid(token, user):
+    from .sessions import requires_mfa
+
     return (
         user.is_active
+        and (bool(user.mfa_secret) or not requires_mfa(user))
         and not token.revoked_at
         and (token.expires_at is None or token.expires_at > timezone.now())
         and hmac.compare_digest(token.credential_version, credential_version(user))

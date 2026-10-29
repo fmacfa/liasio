@@ -25,7 +25,7 @@ from .access import collections_for, collection_for, locked_collection
 from .models import Asset, Audit, UploadPart, UploadSession, User
 from .capacity import capacity_lock, check_capacity
 from .security import limited
-from .storage import add_files, available_links, safe_path
+from .storage import add_files, safe_path
 
 
 def json_errors(view):
@@ -63,6 +63,7 @@ def describe(session):
     return {
         "id": str(session.pk),
         "state": session.state,
+        "replace_existing": session.replace_files,
         "size": session.size,
         "expires_at": session.expires_at.isoformat(),
         "chunk_bytes": settings.UPLOAD_CHUNK_BYTES,
@@ -100,6 +101,9 @@ def locked_session(request, pk):
 
 
 def ensure_pending(session):
+    from .file_requests import validate_session
+
+    validate_session(session)
     if (
         session.state != "pending"
         or session.expires_at <= timezone.now()
@@ -123,6 +127,9 @@ def start(request, pk):
     data = json.loads(request.body)
     if not isinstance(data, dict):
         raise ValidationError(_("Envoi invalide."))
+    replace_files = data.get("replace_existing", False)
+    if type(replace_files) is not bool:
+        raise ValidationError(_("replace_existing doit être un booléen."))
     manifest = data.get("files")
     if not isinstance(manifest, list) or not 1 <= len(manifest) <= 100:
         raise ValidationError(_("Sélectionnez entre 1 et 100 fichiers."))
@@ -147,11 +154,17 @@ def start(request, pk):
         from .models import Instance
 
         Instance.objects.select_for_update().get(pk=1)
+        if getattr(request, "file_request", None):
+            from .file_requests import start_collection
+
+            pk = start_collection(request, total)
         collection, user = locked_collection(request.user, pk, request=request)
         previous = replay(request)
         if previous is not None:
             return previous
-        if not user.is_active or available_links(collection.links.all()).exists():
+        from .versions import legacy_links
+
+        if not user.is_active or legacy_links(collection).exists():
             raise ValidationError(
                 _("Révoquez les liens actifs avant d’importer des fichiers.")
             )
@@ -166,13 +179,33 @@ def start(request, pk):
                 _("Quota insuffisant, y compris la corbeille et les envois en attente.")
             )
         existing = list(
-            Asset.all_objects.filter(collection=collection).values_list("path", "size")
+            Asset.all_objects.filter(
+                collection=collection, superseded_at__isnull=True
+            ).values_list("path", "size")
         )
         pending = list(
             UploadPart.objects.filter(
                 session__collection=collection, session__state="pending"
             ).values_list("path", "size")
         )
+        if replace_files:
+            incoming = {p.casefold() for p, _, _ in normalized}
+            if any(
+                p.casefold() in incoming
+                for p in Asset.all_objects.filter(
+                    collection=collection,
+                    superseded_at__isnull=True,
+                    deleted_at__isnull=False,
+                ).values_list("path", flat=True)
+            ):
+                raise ValidationError(
+                    _(
+                        "Restaurez ou supprimez définitivement le fichier de la corbeille avant de le remplacer."
+                    )
+                )
+            existing = [
+                (p, size) for p, size in existing if p.casefold() not in incoming
+            ]
         all_paths = [p.casefold() for p, _ in existing + pending] + [
             p.casefold() for p, _, _ in normalized
         ]
@@ -195,7 +228,15 @@ def start(request, pk):
             )
         capacity_needed(total)
         session = UploadSession.objects.create(
-            owner=user, initiated_by=request.user, collection=collection, size=total
+            owner=user,
+            initiated_by=None
+            if getattr(request, "file_request", None)
+            else request.user,
+            collection=collection,
+            size=total,
+            replace_files=replace_files,
+            file_request=getattr(request, "file_request", None),
+            browser_digest=getattr(request, "file_request_browser", ""),
         )
         UploadPart.objects.bulk_create(
             [
@@ -375,7 +416,11 @@ def finish(request, pk):
                 files,
                 [p.path for p in parts],
                 upload_session=session.pk,
+                replace_files=session.replace_files,
             )
+            from .file_requests import complete
+
+            complete(session)
             transaction.on_commit(
                 lambda: shutil.rmtree(
                     settings.UPLOAD_STAGING_ROOT / str(pk), ignore_errors=True

@@ -72,9 +72,45 @@ class SourceForm(forms.Form):
 
 
 class ConditionsForm(LinkForm):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, batch=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields.pop("label")
+        self.batch = batch
+        if batch and batch.headers:
+            self.fields["verify_recipients"] = forms.BooleanField(
+                label=_("Vérifier l’adresse e-mail de chaque ligne"),
+                required=False,
+                help_text=_(
+                    "Chaque lien sera réservé à l’adresse de sa ligne, avec vérification par code e-mail."
+                ),
+            )
+            self.fields["recipient_column"] = forms.ChoiceField(
+                label=_("Colonne des adresses e-mail"),
+                required=False,
+                choices=[(str(i), h) for i, h in enumerate(batch.headers)],
+            )
+
+    def clean(self):
+        data = super().clean()
+        if data.get("verify_recipients"):
+            if not settings.EMAIL_HOST:
+                raise ValidationError(
+                    _("Configurez le serveur SMTP avant de limiter les destinataires.")
+                )
+            if data.get("allowed_emails"):
+                raise ValidationError(
+                    _(
+                        "Choisissez les destinataires communs ou les adresses de chaque ligne."
+                    )
+                )
+            column = data.get("recipient_column")
+            if column is None or column == "":
+                raise ValidationError(_("Choisissez la colonne des adresses e-mail."))
+            data["recipient_emails"] = [
+                forms.EmailField(max_length=254).clean(row[int(column)]).lower()
+                for row in self.batch.source_rows
+            ]
+        return data
 
 
 class NamesForm(forms.Form):
@@ -282,16 +318,23 @@ def complete_batch(batch, actor, labels, conditions, password_hash):
                 "Des fichiers n’ont pas été analysés par l’antivirus. Importez-les à nouveau dans un dossier avec l’antivirus activé."
             )
         )
+    from .versions import content_settings
+
+    content = content_settings(collection, actor, conditions)
     links = [
         ShareLink(
+            **content,
             collection=collection,
             label=label,
             password_hash=password_hash,
             expires_at=conditions["expires_at"],
             max_downloads=conditions["max_downloads"],
             allow_previews=conditions["allow_previews"],
+            allowed_emails=[conditions["recipient_emails"][position]]
+            if conditions.get("recipient_emails")
+            else conditions.get("allowed_emails", []),
         )
-        for label in labels
+        for position, label in enumerate(labels)
     ]
     ShareLink.objects.bulk_create(links)
     LinkBatchItem.objects.bulk_create(
@@ -334,6 +377,9 @@ def detail(request, pk):
     names = NamesForm(labels, posted)
     conditions = ConditionsForm(
         request.POST if request.method == "POST" else None,
+        user=request.user,
+        collection=batch.collection,
+        batch=batch,
         initial={"expiry_mode": "days", "expires_in_days": 7},
     )
     if request.method == "POST" and action not in ("map", "create", "rename"):

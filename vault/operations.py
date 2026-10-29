@@ -155,8 +155,75 @@ def index(request):
             or 0,
             "backup": ServiceState.objects.filter(key="backup_verified").first(),
             "mail_enabled": bool(settings.MONITOR_EMAIL and settings.EMAIL_HOST),
+            "diagnostics": diagnostics(),
         },
     )
+
+
+def diagnostics():
+    now = timezone.now()
+    worker = ServiceState.objects.filter(key="mail").first()
+    return [
+        (_("HTTPS"), settings.APP_URL.startswith("https://")),
+        (_("Mode production"), not settings.DEBUG),
+        (
+            _("Antivirus obligatoire"),
+            settings.ANTIVIRUS_REQUIRED and bool(settings.CLAMAV_HOST),
+        ),
+        (
+            _("Aperçus isolés"),
+            settings.PREVIEWS_ENABLED and bool(settings.PREVIEW_SOCKET),
+        ),
+        (_("Serveur SMTP configuré"), bool(settings.EMAIL_HOST)),
+        (
+            _("Connexion SMTP chiffrée"),
+            settings.EMAIL_USE_TLS or settings.EMAIL_USE_SSL,
+        ),
+        (
+            _("Service d’envoi e-mail actif"),
+            bool(worker and (now - worker.updated_at).total_seconds() < 120),
+        ),
+        (_("Stockage S3 privé sélectionné"), settings.STORAGE_BACKEND == "s3"),
+        (_("Connexion d’entreprise configurée"), bool(settings.OIDC_ISSUER)),
+    ]
+
+
+@staff_required
+@require_POST
+def smtp_test(request):
+    from .security import limited
+    from .mail import enqueue
+    from django.core.exceptions import ValidationError
+
+    if limited(request, "smtp-test", 3, 3600):
+        from .views import too_many
+
+        return too_many(request)
+    if not settings.EMAIL_HOST:
+        messages.error(request, _("Configurez le serveur SMTP avant l’envoi."))
+        return redirect("operations")
+    with transaction.atomic():
+        user = User.objects.select_for_update().get(pk=request.user.pk)
+        try:
+            enqueue(
+                user,
+                user.email,
+                _("Test e-mail Liasio"),
+                _(
+                    "Votre instance Liasio peut envoyer des e-mails. Ce test a été demandé depuis votre compte administrateur."
+                ),
+                kind="test",
+            )
+        except ValidationError as exc:
+            messages.error(request, " ".join(exc.messages))
+        else:
+            messages.success(
+                request,
+                _(
+                    "Test mis en file pour votre propre adresse. Consultez E-mails pour son état."
+                ),
+            )
+    return redirect("operations")
 
 
 @staff_required

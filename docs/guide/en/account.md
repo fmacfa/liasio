@@ -26,3 +26,7 @@ On the same page, confirm your password and a valid app/recovery code, then choo
 Use **Forgot your password?** on sign-in. If SMTP is configured and an active account matches, a personal reset link is sent, valid for one hour. The response is intentionally the same for unknown addresses. Resetting a password does not bypass two-factor authentication.
 
 Use a recovery code for a lost authenticator. If both the app and recovery codes are lost, contact the administrator for a controlled recovery process; there is no public MFA bypass. An expired invitation requires a new invitation, not a password reset.
+
+## Sessions and team protection
+
+[Active sessions](advanced-operations.md) lists your devices and lets you disconnect individual sessions or every other device. Existing sessions are included during the upgrade; their original device may be unknown. If a [team workspace](workspaces.md) requires MFA, you must enroll and cannot disable it while that requirement applies. Optional enterprise sign-in is linked explicitly from your account; a matching email never merges identities.

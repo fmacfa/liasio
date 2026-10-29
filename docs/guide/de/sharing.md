@@ -37,3 +37,9 @@ Klicken Sie zum Vergrößern auf eine Vorschau. Navigieren Sie mit den Buttons o
 Unter **Meine Links** können Sie suchen, nach aktiven Links filtern, Vorschauen ein- oder ausschalten, Zähler prüfen und Links **widerrufen**. Bestätigen Sie den Widerruf, um zukünftige Zugriffe zu sperren. Für ein anderes Passwort, Ablaufdatum oder Download-Limit erstellen Sie einen Ersatzlink und widerrufen den alten.
 
 Ein Seitenaufruf verbraucht keinen einmaligen Link. Ein autorisierter ZIP-Download verbraucht ihn, auch wenn die Übertragung abbricht. Widerrufene, abgelaufene oder aufgebrauchte Links erlauben keinen neuen Download; eine laufende Übertragung kann noch enden. Bereits heruntergeladene Kopien lassen sich durch Widerruf nicht zurückholen.
+
+## Vorlagen, Versionen und Empfängerprüfung
+
+Unter **Freigabevorlagen** speichern Sie Name, Gültigkeitsdauer, Downloadlimit, Vorschauen und eine optionale Passwortpflicht. Das Passwort selbst wird niemals in der Vorlage gespeichert. Wählen Sie die Vorlage für einen Link oder Stapel und prüfen Sie die endgültigen Werte. Änderungen der Vorlage wirken nicht auf bestehende Links. Unter [Versionen](versions.md) erfahren Sie, wie Sie Dateien festlegen oder Aktualisierungen übernehmen. [Bestätigte Empfänger](email.md) erklärt den E-Mail-Code zusätzlich zu einem möglichen Passwort. Empfänger können auch gezielt einzelne Dateien herunterladen.
+
+![Wiederverwendbare Freigabebedingungen](../../screenshots/user-guide/de/presets.png)

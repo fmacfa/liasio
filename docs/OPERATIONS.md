@@ -11,7 +11,7 @@ Internet :443 → Caddy → Gunicorn / Django → PostgreSQL (réseau privé)
 
 Seuls Caddy et les ports 80/443 sont accessibles depuis Internet. ClamAV dispose d’une sortie réseau pour mettre à jour ses signatures. Le service applicatif sort sur le réseau frontal pour le SMTP éventuel. Le serveur doit avoir suffisamment de disque pour les fichiers, les ZIP temporaires, la base et les sauvegardes.
 
-Visez 8 Gio de RAM et 2 vCPU pour démarrer sur un serveur dédié à la pile complète. Les plafonds des conteneurs totalisent 6,5 Gio, dont 4 Gio pour ClamAV ; prévoyez aussi les besoins du système et des opérations de maintenance. Les mises à jour de signatures peuvent augmenter temporairement la consommation. La section [Besoins serveur / VPS](../README.fr.md#besoins-serveur--vps), également disponible [en anglais](../README.md#server--vps-requirements), détaille RAM, swap, stockage, sauvegardes, noyau et contrôles de capacité. Sur un VPS partagé, ajoutez les besoins des autres applications.
+Visez 8 Gio de RAM et 2 vCPU pour démarrer sur un serveur dédié à la pile complète. Les plafonds des conteneurs totalisent 6,75 Gio, dont 4 Gio pour ClamAV ; prévoyez aussi les besoins du système et des opérations de maintenance. Les mises à jour de signatures peuvent augmenter temporairement la consommation. La section [Besoins serveur / VPS](../README.fr.md#besoins-serveur--vps), également disponible [en anglais](../README.md#server--vps-requirements), détaille RAM, swap, stockage, sauvegardes, noyau et contrôles de capacité. Sur un VPS partagé, ajoutez les besoins des autres applications.
 
 ## Démarrage et diagnostic
 
@@ -49,9 +49,11 @@ L’administrateur web peut suspendre les membres et révoquer les invitations. 
 
 ## Sauvegarder
 
+La version 0.5 propose aussi les [sauvegardes chiffrées hors serveur](OFFSITE_BACKUPS.md), le [stockage S3 et OIDC](ADVANCED_HOSTING.md) et un [guide de mise à niveau](UPGRADING_0_5.md).
+
 Les sauvegardes doivent contenir **la base PostgreSQL**, **le volume de fichiers** et une copie séparée et chiffrée de **`.env`**. Conservez la même version du code/commit. Ne placez jamais les sauvegardes dans le dépôt.
 
-Le script ci-dessous arrête les écritures applicatives et la maintenance pendant l’export puis les relance, y compris si une commande échoue :
+Le script ci-dessous arrête les écritures applicatives, la maintenance et les travailleurs webhooks/e-mails pendant l’export puis les relance, y compris si une commande échoue :
 
 ```sh
 scripts/backup-and-verify.sh

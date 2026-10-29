@@ -28,3 +28,7 @@ For the hardening upgrade from 0.4.0, stop the webhook service before migration 
 Production previews require Linux Landlock ABI 3+ (normally Linux 6.2+ with Landlock enabled). If unavailable, the decoder refuses to render and recipients see the fallback card; original downloads still work. See [preview deployment](../../PREVIEWS.md). Vendor images are pinned by digest: review and test digest updates regularly, since pulling the same digest does not fetch newer security fixes.
 
 The worker stores delivery history for 30 days; maintenance cleans it up. This release does not install itself on a VPS: configure your domain, HTTPS, capacity and backups before exposing an instance.
+
+## Configuration, email and recovery
+
+The [advanced operations guide](advanced-operations.md) covers configuration diagnostics, a self-only SMTP test, session management, OIDC, private S3 storage and encrypted off-server backup/restore. Monitor the **Emails** page for failures; SMTP handover does not confirm receipt or reading. Optional services require operator configuration.

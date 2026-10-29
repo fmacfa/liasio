@@ -39,3 +39,9 @@ Click a thumbnail to enlarge it. Use the previous/next controls or arrow keys; E
 Use **My links** to search, filter active links, show/hide previews, inspect counts or **Revoke**. Confirm revocation to block future access. To change a password, expiry or download limit, create a replacement link and revoke the old one.
 
 Opening a page does not consume a single-use link. An authorized ZIP download does, including an interrupted transfer. A revoked, expired or exhausted link cannot start a new download; a transfer already in progress may finish. Revocation cannot remove copies already downloaded.
+
+## Presets, versions and recipient verification
+
+Open **Sharing presets** to save a name, duration, download limit, preview choice and optional requirement for a password. A preset never stores the password itself. Select it when preparing a link or batch, then review the final values; changing a preset does not alter existing links. See [versions](versions.md) to freeze files or follow future changes, and [verified recipients](email.md) to require an emailed access code in addition to any password. Recipients may also download only selected files.
+
+![Reusable sharing conditions](../../screenshots/user-guide/en/presets.png)

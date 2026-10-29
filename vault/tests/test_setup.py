@@ -54,7 +54,9 @@ class SetupTests(IsolatedFiles, TestCase):
                 self.assertNotContains(response, PASSWORD)
                 for field in response.context["form"]:
                     if field.errors:
-                        self.assertContains(response, f'id="{field.auto_id}_error"', count=1)
+                        self.assertContains(
+                            response, f'id="{field.auto_id}_error"', count=1
+                        )
                 self.assertFalse(User.objects.exists())
                 self.assertFalse(Instance.objects.get(pk=1).initialized)
 
@@ -64,7 +66,8 @@ class SetupTests(IsolatedFiles, TestCase):
         self.assertFalse(User.objects.exists())
         browser.get("/setup/")
         response = browser.post(
-            "/setup/", signup_data(csrfmiddlewaretoken=browser.cookies["csrftoken"].value)
+            "/setup/",
+            signup_data(csrfmiddlewaretoken=browser.cookies["csrftoken"].value),
         )
         self.assertRedirects(response, "/")
         self.assertEqual(browser.session["_auth_user_id"], str(User.objects.get().pk))
@@ -104,9 +107,11 @@ class SetupConcurrencyTests(IsolatedFiles, TransactionTestCase):
         def attempt(index):
             close_old_connections()
             try:
-                return Client().post(
-                    "/setup/", signup_data(email=f"admin-{index}@example.com")
-                ).url
+                return (
+                    Client()
+                    .post("/setup/", signup_data(email=f"admin-{index}@example.com"))
+                    .url
+                )
             finally:
                 connections["default"].close()
 

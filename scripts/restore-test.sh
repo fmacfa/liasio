@@ -12,8 +12,8 @@ trap cleanup EXIT
 docker compose -p "$restore_project" up -d --wait db
 docker compose -p "$restore_project" exec -T db psql -v ON_ERROR_STOP=1 -U linkvault linkvault < "$backup_path/database.sql"
 docker compose -p "$restore_project" run -T --rm --no-deps --entrypoint tar app -xzf - -C /data < "$backup_path/files.tar.gz"
-docker compose -p "$restore_project" run -T --rm --no-deps app python manage.py migrate --noinput
-docker compose -p "$restore_project" run -T --rm --no-deps app python manage.py verify_storage
+docker compose -p "$restore_project" run -T --rm --no-deps -e STORAGE_BACKEND=local app python manage.py migrate --noinput
+docker compose -p "$restore_project" run -T --rm --no-deps -e STORAGE_BACKEND=local app python manage.py verify_storage
 # The source instance is changed only after the isolated restore passed.
 snapshot_time="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["created_at"])' "$backup_path/checksums.json")"
 docker compose run -T --rm --no-deps app python manage.py record_backup_check --snapshot-created-at "$snapshot_time"

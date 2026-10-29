@@ -25,3 +25,7 @@ Open **Trash**. Entire deleted collections and individually deleted files are li
 To release quota immediately, choose **Delete permanently**, review the confirmation and confirm. This removes the retained originals and cannot be undone through Liasio. Otherwise maintenance purges trash after the configured retention (30 days by default). Restoring a collection only restores files deleted with it; files deleted earlier remain in the trash.
 
 For a larger quota, ask an administrator to change it under [Operations](operations.md). Emptying trash cannot fix another application’s disk usage; server-wide shortages need server administration.
+
+## Versions and object storage
+
+Retained [versions](versions.md) also count toward quota. Replacing a document may therefore increase usage even if the current file count is unchanged. Delete obsolete versions before purging their referenced files; unreferenced superseded bytes are removed after the configured retention delay. With [S3 storage](advanced-operations.md), account quota measures stored originals while disk figures measure local staging and temporary archives; these are different resources.

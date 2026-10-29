@@ -138,6 +138,10 @@ def purge(owner, kind, identifier, *, expired_before=None):
                 **expiry,
             )
             assets = [item]
+            if item.revisions.exists():
+                raise ValidationError(
+                    _("Supprimez d’abord les versions qui conservent ce fichier.")
+                )
             preview_ids = [item.pk]
             item.delete()
         else:
@@ -169,7 +173,7 @@ def purge_expired():
     ):
         try:
             purge(asset.collection.owner, "asset", asset.pk, expired_before=cutoff)
-        except Http404:
+        except (Http404, ValidationError):
             pass
 
 
@@ -237,7 +241,11 @@ def action(request, kind, pk):
                 "trash_confirm.html",
                 {"nav": "trash", "item": item, "kind": kind},
             )
-        purge(request.user, kind, pk)
+        try:
+            purge(request.user, kind, pk)
+        except ValidationError as exc:
+            messages.error(request, " ".join(exc.messages))
+            return redirect("trash")
         messages.success(
             request, _("Élément supprimé définitivement. Le quota a été libéré.")
         )

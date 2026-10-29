@@ -2,10 +2,17 @@
 <form class="upload-zone"
       method="post"
       enctype="multipart/form-data"
-      action="{% url 'collection_upload' collection.pk %}"
       data-upload-form
+      {% if file_request %}
+      action="{% url 'file_request_public' token %}"
+      data-start-url="{% url 'request_upload_start' token %}"
+      data-pending-url="{% url 'request_upload_pending' token %}"
+      data-session-base="{% url 'file_request_public' token %}uploads/"
+      {% else %}
+      action="{% url 'collection_upload' collection.pk %}"
       data-start-url="{% url 'upload_start' collection.pk %}"
-      data-pending-url="{% url 'upload_pending' collection.pk %}">
+      data-pending-url="{% url 'upload_pending' collection.pk %}"
+      {% endif %}>
     {% csrf_token %}
     <span class="upload-icon">{% include "components/icon.html" with name="upload" %}</span>
     <h3>{% translate "Faites de la place à vos fichiers." %}</h3>
@@ -19,6 +26,7 @@
         </label>
     </div>
     <input type="hidden" name="paths" value="">
+    {% if not file_request %}<label><input type="checkbox" name="replace_existing" value="1"> {% translate "Remplacer les fichiers de même chemin et conserver leur version précédente" %}</label>{% endif %}
     <div class="upload-selection" aria-live="polite"></div>
     <ul class="selected-files file-tree" aria-label="{% translate "Fichiers sélectionnés" %}">
     </ul>
@@ -43,8 +51,8 @@
         <br>
         {% translate "Reprise disponible pendant 24 h : sélectionnez à nouveau les mêmes fichiers après une coupure." %}
         <br>
-    {% translate "Révoquez les liens actifs avant de modifier les fichiers." %}</small>
+    {% if not file_request %}{% translate "Les liens figés conservent leur version. Les liens avec suivi montrent les mises à jour. Figez les anciens liens depuis Versions avant de modifier leurs fichiers." %}{% endif %}</small>
     <noscript>
-        <p>{% translate "Sans JavaScript, la sélection de fichiers fonctionne ; la barre de progression et l’import de dossiers nécessitent JavaScript." %}</p>
+        {% if file_request %}<p>{% translate "Activez JavaScript pour effectuer ce dépôt sécurisé avec reprise." %}</p>{% else %}<p>{% translate "Sans JavaScript, la sélection de fichiers fonctionne ; la barre de progression et l’import de dossiers nécessitent JavaScript." %}</p>{% endif %}
     </noscript>
 </form>

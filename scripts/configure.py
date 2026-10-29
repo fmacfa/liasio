@@ -50,7 +50,9 @@ with os.fdopen(fd, "w") as config:
     config.write("# Configuration privée. Ne jamais publier ce fichier.\n")
     config.writelines(f"{key}={value}\n" for key, value in content.items())
 print("Configuration créée dans .env (permissions 0600).")
-print("Ouvrez votre instance et créez le premier compte avec votre e-mail et un mot de passe.")
+print(
+    "Ouvrez votre instance et créez le premier compte avec votre e-mail et un mot de passe."
+)
 if args.dev:
     print(
         "Mode local : l’antivirus est désactivé. N’y déposez pas de fichiers sensibles."

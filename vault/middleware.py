@@ -9,7 +9,12 @@ from django.http import HttpResponse
 class RedactURLs(logging.Filter):
     def filter(self, record):
         message = record.getMessage()
-        message = re.sub(r"/(s|invite|reset)/[^\s?\"']+", r"/\1/[redacted]/", message)
+        message = re.sub(
+            r"/(s|invite|reset|file-requests)/[^\s?\"']+", r"/\1/[redacted]/", message
+        )
+        message = re.sub(
+            r"/oidc/callback/[^\s\"']*", "/oidc/callback/[redacted]", message
+        )
         record.msg, record.args = message, ()
         return True
 

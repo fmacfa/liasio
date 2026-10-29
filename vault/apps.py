@@ -7,3 +7,13 @@ class VaultConfig(AppConfig):
 
     def ready(self):
         from . import checks, webhooks  # noqa: F401
+        from django.db.models.signals import post_save
+        from .mail import on_event, on_audit
+        from .models import Event, Audit
+
+        post_save.connect(
+            on_event, sender=Event, dispatch_uid="mail_download_notification"
+        )
+        post_save.connect(
+            on_audit, sender=Audit, dispatch_uid="mail_upload_notification"
+        )
