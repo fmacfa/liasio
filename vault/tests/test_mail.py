@@ -181,3 +181,46 @@ class MailTests(TestCase):
         row = MailDelivery.objects.get()
         self.assertEqual(row.recipient, self.user.email)
         self.assertNotIn("/s/", payload(row)["body"])
+
+
+class MailWorkerShutdownTests(TestCase):
+    def test_sigterm_stops_idle_and_active_workers_without_forced_kill(self):
+        import os
+        import subprocess
+        import sys
+        from django.conf import settings
+
+        # A real child process exercises the installed signal handler and thread drain.
+        # No database or SMTP connection is opened; only the queue adapters are replaced.
+        program = """
+import os, signal, threading, time
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'linkvault.settings')
+import django
+django.setup()
+from django.conf import settings
+from unittest.mock import patch
+from vault.management.commands.deliver_mail import Command
+settings.EMAIL_HOST = 'smtp.example.test' if os.environ['TEST_MAIL_ACTIVE'] == '1' else ''
+state = {'finished': 0}
+def send():
+    time.sleep(0.2)
+    state['finished'] += 1
+    return True
+def heartbeat(**kwargs):
+    threading.Timer(0.05, lambda: os.kill(os.getpid(), signal.SIGTERM)).start()
+with patch('vault.management.commands.deliver_mail.ServiceState.objects.update_or_create', side_effect=heartbeat), patch('vault.management.commands.deliver_mail.deliver_one', side_effect=send):
+    Command().handle(loop=True, workers=2)
+assert state['finished'] == (2 if settings.EMAIL_HOST else 0)
+print('graceful stop')
+"""
+        for active in ("0", "1"):
+            result = subprocess.run(
+                [sys.executable, "-c", program],
+                cwd=settings.BASE_DIR,
+                env={**os.environ, "TEST_MAIL_ACTIVE": active},
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("graceful stop", result.stdout)

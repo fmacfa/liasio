@@ -1,4 +1,5 @@
-import time
+import signal
+import threading
 from concurrent.futures import ThreadPoolExecutor
 
 from django.conf import settings
@@ -27,17 +28,28 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if not settings.EMAIL_HOST and not options["loop"]:
             raise CommandError("EMAIL_HOST is not configured.")
-        with ThreadPoolExecutor(max_workers=options["workers"]) as executor:
-            while True:
-                ServiceState.objects.update_or_create(
-                    key="mail", defaults={"data": {"version": settings.APP_VERSION}}
-                )
-                results = (
-                    list(executor.map(lambda _: worker(), range(options["workers"])))
-                    if settings.EMAIL_HOST
-                    else [False]
-                )
-                if not options["loop"]:
-                    break
-                if not any(results):
-                    time.sleep(5)
+        stopping = threading.Event()
+
+        def stop(_signum, _frame):
+            stopping.set()
+
+        previous = signal.signal(signal.SIGTERM, stop)
+        try:
+            with ThreadPoolExecutor(max_workers=options["workers"]) as executor:
+                while not stopping.is_set():
+                    ServiceState.objects.update_or_create(
+                        key="mail", defaults={"data": {"version": settings.APP_VERSION}}
+                    )
+                    results = (
+                        list(
+                            executor.map(lambda _: worker(), range(options["workers"]))
+                        )
+                        if settings.EMAIL_HOST
+                        else [False]
+                    )
+                    if not options["loop"]:
+                        break
+                    if not any(results):
+                        stopping.wait(5)
+        finally:
+            signal.signal(signal.SIGTERM, previous)
