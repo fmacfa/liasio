@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Liasio 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-28 23:07+0100\n"
+"POT-Creation-Date: 2026-10-29 08:58+0100\n"
 "PO-Revision-Date: 2026-10-27 13:00+0100\n"
 "Last-Translator: Liasio contributors\n"
 "Language-Team: German\n"
@@ -14,15 +14,96 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: static/api-explorer.js:46
+#: static/api-explorer.js:9
+msgid "Lister les dossiers accessibles"
+msgstr "Zugängliche Ordner auflisten"
+
+#: static/api-explorer.js:10
+msgid "Créer un dossier"
+msgstr "Ordner erstellen"
+
+#: static/api-explorer.js:11
+msgid "Consulter un dossier et ses fichiers"
+msgstr "Ordner und Dateien anzeigen"
+
+#: static/api-explorer.js:12
+msgid "Créer un lien avec ses conditions"
+msgstr "Link mit Bedingungen erstellen"
+
+#: static/api-explorer.js:13
+msgid "Lister les liens gérables"
+msgstr "Verwaltbare Links auflisten"
+
+#: static/api-explorer.js:14
+msgid "Consulter un lien"
+msgstr "Link anzeigen"
+
+#: static/api-explorer.js:15
+msgid "Révoquer un lien"
+msgstr "Link widerrufen"
+
+#: static/api-explorer.js:16
+#| msgid "Création des liens…"
+msgid "Créer un lot de liens"
+msgstr "Link-Stapel erstellen"
+
+#: static/api-explorer.js:17
+msgid "Lister Mes lots"
+msgstr "Meine Stapel auflisten"
+
+#: static/api-explorer.js:18
+msgid "Consulter un lot et ses liens nommés"
+msgstr "Stapel und benannte Links anzeigen"
+
+#: static/api-explorer.js:19
+msgid "Exporter en Excel ou CSV"
+msgstr "Als Excel oder CSV exportieren"
+
+#: static/api-explorer.js:20
+msgid "Lister mes modèles de partage"
+msgstr "Meine Freigabevorlagen auflisten"
+
+#: static/api-explorer.js:21
+msgid "Préparer un import avec reprise"
+msgstr "Fortsetzbaren Upload vorbereiten"
+
+#: static/api-explorer.js:22
+msgid "Lister les imports reprenables"
+msgstr "Fortsetzbare Uploads auflisten"
+
+#: static/api-explorer.js:23
+msgid "Consulter la progression enregistrée"
+msgstr "Gespeicherten Fortschritt anzeigen"
+
+#: static/api-explorer.js:24
+msgid "Envoyer un bloc avec son empreinte"
+msgstr "Block mit Prüfsumme senden"
+
+#: static/api-explorer.js:25
+msgid "Analyser et terminer l’import"
+msgstr "Upload prüfen und abschließen"
+
+#: static/api-explorer.js:26
+msgid "Annuler l’import et libérer le quota"
+msgstr "Upload abbrechen und Kontingent freigeben"
+
+#: static/api-explorer.js:39
+msgid "Permission requise :"
+msgstr "Erforderliche Berechtigung:"
+
+#: static/api-explorer.js:39
+msgid "Seules les ressources actuellement accessibles sont renvoyées."
+msgstr "Es werden nur aktuell zugängliche Ressourcen zurückgegeben."
+
+#: static/api-explorer.js:70
 msgid "Impossible de charger la spécification API."
 msgstr "Die API-Spezifikation konnte nicht geladen werden."
 
-#: static/api-explorer.js:52
+#: static/api-explorer.js:76
 msgid "Confirmez cette action avant de l’exécuter."
 msgstr "Bestätigen Sie diese Aktion vor der Ausführung."
 
-#: static/api-explorer.js:76
+#: static/api-explorer.js:101
 msgid ""
 "Requête impossible. Vérifiez le JSON et la connexion. Réutilisez la même clé"
 " d’idempotence en cas de doute."

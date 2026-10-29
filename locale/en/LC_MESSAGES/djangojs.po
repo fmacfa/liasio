@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Liasio 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-28 23:07+0100\n"
+"POT-Creation-Date: 2026-10-29 08:58+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Liasio contributors\n"
 "Language-Team: English\n"
@@ -14,15 +14,96 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: static/api-explorer.js:46
+#: static/api-explorer.js:9
+msgid "Lister les dossiers accessibles"
+msgstr "List accessible collections"
+
+#: static/api-explorer.js:10
+msgid "Créer un dossier"
+msgstr "Create a collection"
+
+#: static/api-explorer.js:11
+msgid "Consulter un dossier et ses fichiers"
+msgstr "Read collection and files"
+
+#: static/api-explorer.js:12
+msgid "Créer un lien avec ses conditions"
+msgstr "Create a controlled share link"
+
+#: static/api-explorer.js:13
+msgid "Lister les liens gérables"
+msgstr "List manageable links"
+
+#: static/api-explorer.js:14
+msgid "Consulter un lien"
+msgstr "Read a link"
+
+#: static/api-explorer.js:15
+msgid "Révoquer un lien"
+msgstr "Revoke a link"
+
+#: static/api-explorer.js:16
+#| msgid "Création des liens…"
+msgid "Créer un lot de liens"
+msgstr "Create an atomic batch"
+
+#: static/api-explorer.js:17
+msgid "Lister Mes lots"
+msgstr "List My batches"
+
+#: static/api-explorer.js:18
+msgid "Consulter un lot et ses liens nommés"
+msgstr "Read a batch and its named links"
+
+#: static/api-explorer.js:19
+msgid "Exporter en Excel ou CSV"
+msgstr "Export Excel or CSV"
+
+#: static/api-explorer.js:20
+msgid "Lister mes modèles de partage"
+msgstr "List private sharing presets"
+
+#: static/api-explorer.js:21
+msgid "Préparer un import avec reprise"
+msgstr "Reserve a resumable upload"
+
+#: static/api-explorer.js:22
+msgid "Lister les imports reprenables"
+msgstr "List resumable uploads"
+
+#: static/api-explorer.js:23
+msgid "Consulter la progression enregistrée"
+msgstr "Read durable offsets"
+
+#: static/api-explorer.js:24
+msgid "Envoyer un bloc avec son empreinte"
+msgstr "Upload one checksummed block"
+
+#: static/api-explorer.js:25
+msgid "Analyser et terminer l’import"
+msgstr "Scan and finalize upload"
+
+#: static/api-explorer.js:26
+msgid "Annuler l’import et libérer le quota"
+msgstr "Cancel upload and release quota"
+
+#: static/api-explorer.js:39
+msgid "Permission requise :"
+msgstr "Required scope:"
+
+#: static/api-explorer.js:39
+msgid "Seules les ressources actuellement accessibles sont renvoyées."
+msgstr "Only currently accessible resources are returned."
+
+#: static/api-explorer.js:70
 msgid "Impossible de charger la spécification API."
 msgstr "Unable to load the API specification."
 
-#: static/api-explorer.js:52
+#: static/api-explorer.js:76
 msgid "Confirmez cette action avant de l’exécuter."
 msgstr "Confirm this action before executing it."
 
-#: static/api-explorer.js:76
+#: static/api-explorer.js:101
 msgid ""
 "Requête impossible. Vérifiez le JSON et la connexion. Réutilisez la même clé"
 " d’idempotence en cas de doute."

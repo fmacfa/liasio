@@ -5,6 +5,26 @@
   const byId = id => document.getElementById(id);
   const select = byId("api-operation"), body = byId("api-body"), key = byId("api-key");
   const status = byId("api-status"), result = byId("api-result"), download = byId("api-export");
+  const summaries = {
+    "List accessible collections": gettext("Lister les dossiers accessibles"),
+    "Create a collection": gettext("Créer un dossier"),
+    "Read collection and files": gettext("Consulter un dossier et ses fichiers"),
+    "Create a controlled share link": gettext("Créer un lien avec ses conditions"),
+    "List manageable links": gettext("Lister les liens gérables"),
+    "Read a link": gettext("Consulter un lien"),
+    "Revoke a link": gettext("Révoquer un lien"),
+    "Create an atomic batch": gettext("Créer un lot de liens"),
+    "List My batches": gettext("Lister Mes lots"),
+    "Read a batch and its named links": gettext("Consulter un lot et ses liens nommés"),
+    "Export Excel or CSV": gettext("Exporter en Excel ou CSV"),
+    "List private sharing presets": gettext("Lister mes modèles de partage"),
+    "Reserve a resumable upload": gettext("Préparer un import avec reprise"),
+    "List resumable uploads": gettext("Lister les imports reprenables"),
+    "Read durable offsets": gettext("Consulter la progression enregistrée"),
+    "Upload one checksummed block": gettext("Envoyer un bloc avec son empreinte"),
+    "Scan and finalize upload": gettext("Analyser et terminer l’import"),
+    "Cancel upload and release quota": gettext("Annuler l’import et libérer le quota"),
+  };
   let operations = [], objectUrl = null;
   const clear = () => {
     result.textContent = ""; status.textContent = ""; download.hidden = true;
@@ -16,7 +36,7 @@
   window.addEventListener("pagehide", () => { key.value = ""; clear(); });
   const choose = () => {
     clear(); const operation = operations[select.selectedIndex];
-    byId("api-description").textContent = operation.schema.description;
+    byId("api-description").textContent = gettext("Permission requise :") + " " + operation.schema.tags[0] + ". " + gettext("Seules les ressources actuellement accessibles sont renvoyées.");
     const parameters = byId("api-parameters"); parameters.replaceChildren();
     for (const parameter of operation.schema.parameters.filter(p => p.in === "path" || p.in === "query")) {
       const label = document.createElement("label"), input = document.createElement("input");
@@ -43,7 +63,7 @@
     for (const [path, methods] of Object.entries(spec.paths)) for (const [method, schema] of Object.entries(methods)) {
       if (!['get', 'post'].includes(method) || schema.requestBody?.content?.["application/octet-stream"]) continue;
       operations.push({path, method, schema});
-      const option = document.createElement("option"); option.textContent = `${method.toUpperCase()} ${path} — ${schema.summary}`;
+      const option = document.createElement("option"); option.textContent = `${method.toUpperCase()} ${path} — ${summaries[schema.summary] || schema.summary}`;
       select.append(option);
     }
     choose();
