@@ -14,6 +14,12 @@ Interface français / anglais / allemand · Licence **MIT** · Python / Django �
 
 ![Tableau de bord Liasio, avec des données fictives](docs/screenshots/dashboard.png)
 
+## Tutoriels vidéo
+
+[Voir la présentation](https://youtu.be/fNS7tQkZM5k) · [Parcours complet](https://youtu.be/HfYVWaYB8vc) · [Playlist YouTube](https://www.youtube.com/playlist?list=PLCLPN5G0TwTo)
+
+Le [sommaire des tutoriels vidéo](docs/VIDEOS.fr.md) couvre les imports, liens indépendants, règles d’accès, personnalisation, lots Excel/CSV, réception, activité et stockage. Voix off et sous-titres en anglais ; vidéos enregistrées avec la version 0.4 et des données fictives.
+
 ## Ce que vous pouvez faire
 
 | Besoin | Disponible dans la version 0.5 |

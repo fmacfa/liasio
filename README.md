@@ -14,6 +14,12 @@ French / English / German interface · **MIT** license · Python / Django · Doc
 
 ![Liasio dashboard with fictional demo data](docs/screenshots/dashboard.png)
 
+## Video tutorials
+
+[Watch the overview](https://youtu.be/fNS7tQkZM5k) · [Complete walkthrough](https://youtu.be/HfYVWaYB8vc) · [YouTube playlist](https://www.youtube.com/playlist?list=PLCLPN5G0TwTo)
+
+The [video tutorial index](docs/VIDEOS.md) covers uploads, independent links, access rules, branding, Excel/CSV batches, the recipient experience, activity and storage. English narration and captions; recorded with version 0.4 and fictional demo data.
+
 ## Features
 
 | Need | Available in version 0.5 |
