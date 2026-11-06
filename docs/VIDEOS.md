@@ -2,7 +2,7 @@
 
 **English** · [Français](VIDEOS.fr.md)
 
-[Watch the Liasio tutorial playlist](https://www.youtube.com/playlist?list=PLCLPN5G0TwTo). All videos have English narration and English captions.
+[Liasio YouTube channel — @liasio-com](https://www.youtube.com/@liasio-com) · [Watch the Liasio tutorial playlist](https://www.youtube.com/playlist?list=PLCLPN5G0TwTo). All videos have English narration and English captions.
 
 These demonstrations were recorded with Liasio 0.4 and fictional local data. The current interface may differ; use the written guides for the latest version.
 

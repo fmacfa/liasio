@@ -16,7 +16,7 @@ Interface français / anglais / allemand · Licence **MIT** · Python / Django �
 
 ## Tutoriels vidéo
 
-[Voir la présentation](https://youtu.be/fNS7tQkZM5k) · [Parcours complet](https://youtu.be/HfYVWaYB8vc) · [Playlist YouTube](https://www.youtube.com/playlist?list=PLCLPN5G0TwTo)
+[Voir la présentation](https://youtu.be/fNS7tQkZM5k) · [Parcours complet](https://youtu.be/HfYVWaYB8vc) · [Playlist YouTube](https://www.youtube.com/playlist?list=PLCLPN5G0TwTo) · [Chaîne Liasio](https://www.youtube.com/@liasio-com)
 
 Le [sommaire des tutoriels vidéo](docs/VIDEOS.fr.md) couvre les imports, liens indépendants, règles d’accès, personnalisation, lots Excel/CSV, réception, activité et stockage. Voix off et sous-titres en anglais ; vidéos enregistrées avec la version 0.4 et des données fictives.
 
