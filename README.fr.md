@@ -2,7 +2,7 @@
 
 Liasio est le nouveau nom de LinkVault. Le dépôt se trouve désormais sous `fmacfa/liasio`. Les images de conteneur LinkVault déjà publiées, les identifiants de déploiement et les en-têtes de l’API v1 conservent leurs noms pour assurer la continuité des installations et intégrations existantes.
 
-[English](README.md) · **Français**
+[English](README.md) · **Français** · [Deutsch](README.de.md)
 
 **Vos fichiers, votre domaine, vos conditions.**
 
@@ -13,6 +13,14 @@ Interface français / anglais / allemand · Licence **MIT** · Python / Django �
 > **Version 0.5 — équipes et échanges clients.** Espaces et groupes, versions figées, dépôts clients, vérification des destinataires, e-mails validés, stockage S3 privé et connexion OIDC. Interface et guides en français, anglais et allemand. Le projet reste en phase pré-1.0 : audit humain indépendant encore à réaliser, sans chiffrement de bout en bout.
 
 ![Tableau de bord Liasio, avec des données fictives](docs/screenshots/dashboard.png)
+
+[Toutes les langues de la documentation](docs/README.fr.md).
+
+## Tutoriels vidéo
+
+[Voir la présentation](https://youtu.be/fNS7tQkZM5k) · [Parcours complet](https://youtu.be/HfYVWaYB8vc) · [Playlist YouTube](https://www.youtube.com/playlist?list=PLCLPN5G0TwTo) · [Chaîne Liasio](https://www.youtube.com/@liasio-com)
+
+Le [sommaire des tutoriels vidéo](docs/VIDEOS.fr.md) couvre les imports, liens indépendants, règles d’accès, personnalisation, lots Excel/CSV, réception, activité, stockage et automatisation par API/webhooks. Voix off et sous-titres en anglais ; vidéos enregistrées avec la version 0.4 et des données fictives.
 
 ## Ce que vous pouvez faire
 
@@ -80,7 +88,7 @@ Prévoir un serveur Linux avec **Docker Engine et Docker Compose v2**, Git et Py
 
 La **RAM**, ou mémoire vive, sert au fonctionnement des services. Les limites actuelles de [compose.yaml](compose.yaml) totalisent **6,75 Gio** : ClamAV 4 Gio, application 1 Gio, PostgreSQL et aperçus 512 Mio chacun, maintenance, webhooks et e-mails 256 Mio chacun. Ce sont des plafonds individuels, pas une consommation constante ou une réservation de mémoire. Linux, Docker, Caddy, les sauvegardes et les constructions d’images ont besoin d’une marge supplémentaire. ClamAV seul [recommande 4 Gio](https://docs.clamav.net/manual/Installing/Docker.html#memory-ram-requirements), avec des pics pendant les mises à jour de signatures.
 
-Sur un **VPS partagé**, ajoutez les besoins de vos sites, bases et applications existantes, y compris leurs pics. Un serveur avec 8 Gio installés mais seulement 2 Gio disponibles n’équivaut pas à un serveur dédié de 8 Gio. CloudPanel ne réduit pas ces besoins ; prévoyez le reverse proxy et les ports déjà utilisés avec le [guide d’exploitation](docs/OPERATIONS.md#autre-reverse-proxy).
+Sur un **VPS partagé**, ajoutez les besoins de vos sites, bases et applications existantes, y compris leurs pics. Un serveur avec 8 Gio installés mais seulement 2 Gio disponibles n’équivaut pas à un serveur dédié de 8 Gio. CloudPanel ne réduit pas ces besoins ; prévoyez le reverse proxy et les ports déjà utilisés avec le [guide d’exploitation](docs/OPERATIONS.fr.md#autre-reverse-proxy).
 
 Le **swap** utilise de l’espace disque comme réserve de mémoire plus lente. Une zone facultative de **2 à 4 Gio** peut amortir une pression occasionnelle ; elle ne permet pas de dimensionner la pile complète sur un VPS trop petit. Des lectures/écritures fréquentes dans le swap pendant les transferts appellent davantage de RAM ou moins d’applications concurrentes. Le swap réellement accessible à Docker dépend de l’hôte et des réglages des conteneurs ; ce fichier Compose ne définit pas `memswap_limit`. Voir les [limites de mémoire et de swap Docker](https://docs.docker.com/engine/containers/resource_constraints/#--memory-swap-details).
 
@@ -135,7 +143,7 @@ docker compose ps
 
 Le script crée `.env` avec des permissions `0600` et refuse de l’écraser. Le fichier contient des secrets : ne le publiez jamais. La première personne qui termine l’installation devient administrateur : initialisez l’instance avant de diffuser son adresse. L’assistant se ferme définitivement après la création de ce compte ; les autres utilisateurs rejoignent l’espace sur invitation.
 
-Caddy obtient et renouvelle le certificat TLS. Si vous utilisez un autre proxy, consultez le [guide d’exploitation](docs/OPERATIONS.md) avant de modifier la topologie.
+Caddy obtient et renouvelle le certificat TLS. Si vous utilisez un autre proxy, consultez le [guide d’exploitation](docs/OPERATIONS.fr.md) avant de modifier la topologie.
 
 ## Essayer en local
 
@@ -225,7 +233,7 @@ Les aperçus sont des JPEG réduits, sans métadonnées, générés par un moteu
 
 Les fichiers sont lisibles par l’administrateur du système d’exploitation : **ce n’est pas du chiffrement de bout en bout**. Utilisez un volume et des sauvegardes chiffrés si nécessaire. Un antivirus ne garantit pas l’absence de menace. Le contrôle d’extension n’est pas une validation complète du contenu de tous les formats acceptés. L’application n’est pas conçue pour des dépôts anonymes massifs.
 
-[Politique de sécurité](SECURITY.fr.md) · [Modèle de sécurité](docs/SECURITY_MODEL.md) · [Sauvegarde, restauration, maintenance](docs/OPERATIONS.md)
+[Politique de sécurité](SECURITY.fr.md) · [Modèle de sécurité](docs/SECURITY_MODEL.fr.md) · [Sauvegarde, restauration, maintenance](docs/OPERATIONS.fr.md)
 
 ## Vérifier et contribuer
 
@@ -244,7 +252,7 @@ Voir [la contribution en français](CONTRIBUTING.fr.md), [la feuille de route](R
 
 ## Inspirations et positionnement
 
-Nous avons étudié [Pingvin Share](https://github.com/stonith404/pingvin-share), [ProjectSend](https://github.com/projectsend/projectsend), [Gokapi](https://github.com/Forceu/Gokapi) et [Send](https://github.com/timvisee/send). Le [comparatif](docs/COMPARISON.md) décrit ce que ces projets apportent et les choix de Liasio.
+Nous avons étudié [Pingvin Share](https://github.com/stonith404/pingvin-share), [ProjectSend](https://github.com/projectsend/projectsend), [Gokapi](https://github.com/Forceu/Gokapi) et [Send](https://github.com/timvisee/send). Le [comparatif](docs/COMPARISON.fr.md) décrit ce que ces projets apportent et les choix de Liasio.
 
 Liasio privilégie les dossiers réutilisables, la présentation et des règles de liens explicites dans une application compacte. Cette version ne prétend pas remplacer toutes les fonctions de ces projets plus anciens. Le code applicatif et les éléments graphiques de Liasio ont été créés pour ce projet ; aucun code de ces quatre projets n’a été repris.
 

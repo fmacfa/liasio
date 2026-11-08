@@ -1,32 +1,37 @@
-# Projets étudiés et décisions de conception
+# Projects reviewed and design decisions
 
-Étude documentaire du 21 octobre 2026, basée sur les README et documentations officiels. Il ne s’agit ni d’un audit de sécurité des projets cités ni d’un test comparatif de performances.
+**English** · [Français](COMPARISON.fr.md)
 
-| Projet | Ce qui nous intéresse | Décision pour Liasio |
+Documentary review dated October 21, 2026, based on official READMEs and documentation. This is neither a security audit of the projects listed nor a comparative performance test.
+
+| Project | What interests us | Decision for Liasio |
 | --- | --- | --- |
-| [Pingvin Share](https://github.com/stonith404/pingvin-share) | Partage rapide, expiration, mots de passe, limites de visiteurs, partages inversés, ClamAV, stockage local/S3 | Conserver un parcours simple ; distinguer clairement visite et autorisation de téléchargement. Le README de l’original indique son archivage et renvoie vers un fork ; ne pas dépendre de ce code. |
-| [ProjectSend](https://github.com/projectsend/projectsend) | Gestion de clients et groupes, journaux, thèmes, quotas, arborescences et téléchargements ZIP | Séparer les comptes et leurs ressources ; donner aux dossiers une présentation utilisable pour des échanges professionnels. |
-| [Gokapi](https://github.com/Forceu/Gokapi) | Expiration selon le temps ou les téléchargements, rôles, demandes de fichiers, déduplication, options de chiffrement et S3 | Mettre expiration, quota et consommation au centre du modèle ; prévoir demandes de fichiers et gros volumes dans la suite du projet. |
-| [Send](https://github.com/timvisee/send) | Chiffrement de bout en bout et partage éphémère, continuation communautaire de Firefox Send | Documenter franchement le modèle de confiance. Le serveur Liasio v0.1 lit les fichiers pour analyser et assembler le ZIP ; un mode E2EE demanderait une architecture distincte. |
+| [Pingvin Share](https://github.com/stonith404/pingvin-share) | Quick sharing, expiry, passwords, visitor limits, reverse shares, ClamAV and local/S3 storage | Keep the workflow simple; distinguish a visit from download authorization. The original README says the project is archived and points to a fork; do not depend on this code. |
+| [ProjectSend](https://github.com/projectsend/projectsend) | Client/group management, logs, themes, quotas, directory trees and ZIP downloads | Separate accounts and their resources; give collections a presentation suited to professional exchanges. |
+| [Gokapi](https://github.com/Forceu/Gokapi) | Time/download expiry, roles, file requests, deduplication, encryption options and S3 | Put expiry, quotas and consumption at the center of the model; plan file requests and large volumes for later work. |
+| [Send](https://github.com/timvisee/send) | End-to-end encryption and ephemeral sharing; community continuation of Firefox Send | Document the trust model candidly. The Liasio v0.1 server reads files to scan them and assemble ZIPs; E2EE would require a separate architecture. |
 
-## Apport visé
+<a id="apport-visé"></a>
+## Intended contribution
 
-Liasio réunit un dossier conservé dans une bibliothèque, plusieurs liens avec des conditions indépendantes, une page de présentation par compte et un journal qui nomme précisément ce qu’il mesure. Ces choix répondent à notre usage ; leur présence ici n’implique pas leur absence dans les projets cités.
+Liasio combines a collection kept in a library, multiple links with independent conditions, per-account presentation and an activity log that names exactly what it measures. These choices meet our needs; listing them here does not imply they are absent from the other projects.
 
-La page **Stockage** complète le parcours : voir les fichiers réels, trier les plus volumineux, mesurer l’espace récupérable et confirmer une suppression qui révoque aussi les accès concernés.
+The **Storage** page completes the workflow: inspect real files, sort the largest, measure recoverable space and confirm deletion that also revokes the affected access.
 
-La vérification porte sur les contrats fonctionnels difficiles : autorisations entre comptes, courses sur les quotas, usage unique simultané, révocation avant l’envoi, échec de l’antivirus, arrêt des imports avant lecture pour les visiteurs non connectés.
+Verification targets difficult functional contracts: cross-account authorization, quota races, simultaneous single-use access, revocation before delivery, antivirus failure and rejection of unauthenticated uploads before reading their bodies.
 
-## Licences et provenance
+<a id="licences-et-provenance"></a>
+## Licenses and provenance
 
-Le README de ProjectSend indique GPLv2 ou ultérieure, celui de Gokapi AGPL3, et celui de Send MPL 2.0. Nous n’avons repris ni code, ni captures, ni éléments graphiques de ces projets. Les interfaces et l’implémentation de Liasio sont nouvelles et distribuées sous MIT ; les bibliothèques tierces conservent leur licence.
+ProjectSend's README specifies GPLv2 or later, Gokapi's AGPL3 and Send's MPL 2.0. We reused no code, screenshots or graphic assets from these projects. Liasio's interfaces and implementation are new and distributed under MIT; third-party libraries retain their own licenses.
 
-## Références de sécurité utilisées
+<a id="références-de-sécurité-utilisées"></a>
+## Security references used
 
-- [Django — sécurité](https://docs.djangoproject.com/en/5.2/topics/security/) : échappement, CSRF, hôtes et HTTPS.
-- [Django — CSRF et politique de référent](https://docs.djangoproject.com/en/5.2/ref/csrf/#removing-the-referer-header) : préserver les vérifications du même site tout en évitant la fuite des liens vers des sites tiers.
-- [OWASP — File Upload Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html) : stockage privé, tailles, noms et défense en profondeur.
-- [OWASP — Password Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html) : hachage adaptatif Argon2id.
-- [ClamAV — protocole et analyse](https://docs.clamav.net/manual/Usage/Scanning.html) : analyse en flux et protection du port du démon.
-- [ClamAV — Docker](https://docs.clamav.net/manual/Installing/Docker.html) : mémoire, signatures et version d’image.
-- [Caddy — limite du corps de requête](https://caddyserver.com/docs/caddyfile/directives/request_body) : plafonnement de l’import au proxy.
+- [Django — security](https://docs.djangoproject.com/en/5.2/topics/security/): escaping, CSRF, hosts and HTTPS.
+- [Django — CSRF and referrer policy](https://docs.djangoproject.com/en/5.2/ref/csrf/#removing-the-referer-header): retain same-site checks while preventing links leaking to third-party sites.
+- [OWASP — File Upload Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html): private storage, sizes, names and defense in depth.
+- [OWASP — Password Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html): adaptive Argon2id hashing.
+- [ClamAV — protocol and scanning](https://docs.clamav.net/manual/Usage/Scanning.html): streaming scans and daemon-port protection.
+- [ClamAV — Docker](https://docs.clamav.net/manual/Installing/Docker.html): memory, signatures and image versions.
+- [Caddy — request body limits](https://caddyserver.com/docs/caddyfile/directives/request_body): proxy-level upload limits.

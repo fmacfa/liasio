@@ -1,6 +1,6 @@
 # Security policy
 
-**English** · [Français](SECURITY.fr.md)
+**English** · [Français](SECURITY.fr.md) · [Deutsch](SECURITY.de.md)
 
 The latest published 0.5 release receives fixes; older minor releases should be upgraded. This pre-1.0 project has not undergone an independent human security audit. See [maintenance and release policy](docs/MAINTENANCE.md).
 

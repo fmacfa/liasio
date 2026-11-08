@@ -1,82 +1,91 @@
-# Modèle de sécurité de Liasio 0.3
+# Liasio 0.3 security model
 
-## Frontières de confiance
+**English** · [Français](SECURITY_MODEL.fr.md) · [Deutsches Kontosicherheitshandbuch](guide/de/account.md)
 
-- Le navigateur et les fichiers importés sont non fiables. Les titres, descriptions et noms restent du texte échappé.
-- Un membre est autorisé à administrer ses propres ressources ; il n’obtient des droits sur celles d’un autre compte que par une autorisation explicite du propriétaire, jamais en devinant leurs UUID.
-- Un administrateur de l’application invite/suspend des comptes et voit leurs volumes de stockage. Les routes de bibliothèque vérifient le propriétaire ou une autorisation Lecteur/Collaborateur explicite.
-- L’administrateur du serveur et les opérateurs de sauvegarde peuvent lire fichiers et base. Chiffrer le disque/sauvegardes relève de l’hébergement ; aucun secret de chiffrement côté navigateur n’est implémenté.
-- Le reverse proxy est fiable seulement s’il est isolé comme dans Compose. Il remplace `X-Real-IP` et `X-Forwarded-Proto`. Ne jamais exposer le port Gunicorn avec `TRUST_PROXY=true`.
+<a id="frontières-de-confiance"></a>
+## Trust boundaries
 
-## Comptes
+- The browser and uploaded files are untrusted. Titles, descriptions and names remain escaped text.
+- Members may administer their own resources. Access to another account's resources requires an explicit owner grant, never merely guessing their UUIDs.
+- Application administrators invite/suspend accounts and see storage usage. Library routes check ownership or an explicit Reader/Collaborator grant.
+- Server administrators and backup operators can read files and the database. Disk/backup encryption is a hosting responsibility; no browser-side encryption secret is implemented.
+- The reverse proxy is trusted only when isolated as in Compose. It replaces `X-Real-IP` and `X-Forwarded-Proto`. Never expose the Gunicorn port with `TRUST_PROXY=true`.
 
-Sur une instance neuve, la première inscription par e-mail et mot de passe crée l’administrateur, sans clé d’installation. Toute personne ayant accès à l’instance non initialisée peut revendiquer ce premier compte ; l’exploitant doit donc terminer l’assistant avant de diffuser l’adresse ou d’ouvrir l’accès à d’autres personnes. Cette inscription ne vérifie pas la maîtrise de la boîte e-mail. Un singleton précréé et verrouillé empêche deux créations administrateur simultanées. La présence d’un compte ou l’état initialisé ferme l’assistant, y compris après suppression du dernier compte. CSRF, limitation des tentatives et validation des mots de passe restent actifs. Les deux étapes ne transmettent les identifiants qu’à la validation finale ; aucun mot de passe n’est conservé dans le stockage du navigateur.
+<a id="comptes"></a>
+## Accounts
 
-Les invitations lient une adresse fixée par l’administrateur à une capacité signée. Leur acceptation consomme la ligne dans une transaction. Elles ne prouvent pas la maîtrise de la boîte e-mail si l’administrateur transmet le lien à la mauvaise personne. La vérification e-mail dédiée est prévue dans la roadmap.
+On a fresh instance, the first email/password registration creates the administrator without an installation key. Anyone with access to the uninitialized instance can claim this account. The operator must complete the wizard before distributing the address or opening access to others. This registration does not verify control of the email inbox. A pre-created, locked singleton prevents concurrent administrator creation. The existence of an account or initialized state closes the wizard, even after deletion of the last account. CSRF, rate limits and password validation remain active. The two steps submit credentials only at final confirmation; no password is retained in browser storage.
 
-Les mots de passe utilisent Argon2id via Django. La réinitialisation SMTP utilise les jetons Django, valables une heure et invalidés après changement. Un changement invalide les autres sessions ; une suspension supprime aussi les sessions et révoque les liens. Le dernier administrateur ne peut pas être suspendu ou supprimé via les écrans membres.
+Invitations bind an administrator-selected email address to a signed capability. Acceptance consumes the row in a transaction. They do not prove inbox control if the administrator gives the link to the wrong person. Dedicated email verification is planned in the roadmap.
 
-## Liens
+Passwords use Argon2id through Django. SMTP reset uses Django tokens, valid for one hour and invalidated by a password change. A change invalidates other sessions; suspension also deletes sessions and revokes links. The last administrator cannot be suspended or deleted through the member screens.
 
-Une capacité est l’UUID du lien accompagné d’un HMAC-SHA256 lié à son usage (partage ou invitation), calculé avec `SECRET_KEY`. Connaître la seule base ne permet pas de reconstruire les liens. Connaître la clé et la base le permet : protégez-les ensemble. La rotation de la clé invalide les anciens liens et invitations.
+<a id="liens"></a>
+## Links
 
-Les fichiers et métadonnées d’un lien avec mot de passe ne sont visibles qu’après déverrouillage. La permission de session expire après une heure. Les statuts et l’activité du propriétaire sont revérifiés au téléchargement.
+A capability is the link UUID accompanied by a purpose-bound HMAC-SHA256 (sharing or invitation), calculated with `SECRET_KEY`. Knowing the database alone does not reconstruct links. Knowing both the key and database does: protect them together. Key rotation invalidates old links and invitations.
 
-Le ZIP est créé sur disque, puis une mise à jour conditionnelle atomique réserve une utilisation et écrit l’événement dans la même transaction. Si un fichier manque, aucune utilisation n’est consommée. Si le navigateur abandonne ensuite, l’utilisation reste consommée. Deux demandes concurrentes ne peuvent obtenir une autorisation unique.
+Files and metadata behind a password-protected link are visible only after unlocking. Session permission expires after one hour. Link state and owner activity are checked again at download.
 
-La révocation et la réservation ont un ordre atomique en base : si la révocation gagne, le téléchargement est bloqué ; si la réservation a déjà gagné, le transfert peut se poursuivre. L’ajout de fichiers est bloqué tant qu’un lien actif existe. Supprimer un ou plusieurs fichiers révoque tous les liens non révoqués des dossiers concernés.
+The ZIP is created on disk, then an atomic conditional update reserves one use and writes the event in the same transaction. A missing file consumes no use. If the browser subsequently abandons the transfer, that use remains consumed. Two concurrent requests cannot obtain the same single-use authorization.
 
-## Fichiers et disponibilité
+Revocation and reservation have an atomic database ordering: if revocation wins, the download is blocked; if reservation has already won, the transfer may continue. Adding files is blocked while an active link exists. Deleting files revokes all non-revoked links for the affected collections.
 
-Les limites sont appliquées à plusieurs niveaux : proxy, corps de requête, réception par blocs, fichier, dossier, nombre de fichiers et quota utilisateur sous verrou. Les imports non connectés ou sans droit Collaborateur sur le dossier sont refusés avant le parsing multipart.
+<a id="fichiers-et-disponibilité"></a>
+## Files and availability
 
-L’extension est une première règle, pas une preuve du type réel. L’antivirus analyse les octets. Les archives ne sont jamais extraites par l’application. Les téléchargements sont `application/octet-stream` et `attachment` ; aucun contenu utilisateur actif n’est exécuté. La version 0.4 ne fait pas de validation sémantique intégrale de tous les formats.
+Limits apply at multiple levels: proxy, request body, chunk reception, file, collection, file count and locked user quota. Unauthenticated uploads, or uploads without Collaborator access to the collection, are rejected before multipart parsing.
 
-ClamAV utilise INSTREAM sur un réseau Docker privé. Toute réponse autre que `stream: OK` bloque l’enregistrement. Les limites dépassées et archives chiffrées sont signalées via la configuration du démon. L’application n’enregistre un fichier comme analysé qu’après un résultat accepté.
+The extension is an initial rule, not proof of actual type. Antivirus scans the bytes. The application never extracts archives. Downloads use `application/octet-stream` and `attachment`; no active user content executes. Version 0.4 does not fully validate the semantics of every accepted format.
 
-Les ZIP temporaires sont bornés par la taille d’un dossier (5 Gio par défaut). Chaque requête nécessite une réservation d’espace temporaire avant création, conservée jusqu’à la fermeture du transfert. Un verrou POSIX partagé sérialise les admissions sur le même hôte et tient compte des autres ZIP, imports classiques et réservations reprenables. Les imports classiques contrôlent aussi quota et capacité avant le parsing puis pendant la réception. La limitation de fréquence par IP et les limites du serveur réduisent l’abus sans remplacer une protection DDoS. Il n’y a pas encore de budget global de bande passante ni de file d’attente de génération d’archives.
+ClamAV uses INSTREAM on a private Docker network. Any response other than `stream: OK` blocks saving. Daemon configuration reports exceeded limits and encrypted archives. The application marks a file scanned only after an accepted result.
 
-La suppression SQL et la suppression physique ne forment pas une transaction distribuée. Les blobs sont supprimés après validation SQL ; un échec système peut laisser un blob inaccessible. La maintenance supprime les blobs orphelins vieux de plus de 24 h. Après un crash pendant import, le même mécanisme récupère les fichiers écrits avant un rollback.
+Temporary ZIPs are bounded by collection size (5 GiB by default). Each request needs a temporary-space reservation before creation, retained until the transfer closes. A shared POSIX lock serializes admission on the same host and accounts for other ZIPs, classic uploads and resumable reservations. Classic uploads check quota and capacity before parsing and during reception. Per-IP rate limits and server limits reduce abuse without replacing DDoS protection. There is no global bandwidth budget or archive-generation queue yet.
 
-## Vie privée et logs
+SQL deletion and physical deletion do not form a distributed transaction. Blobs are removed after SQL commit; a system failure can leave an inaccessible blob. Maintenance deletes orphan blobs older than 24 hours. After an upload crash, the same mechanism recovers files written before a rollback.
 
-Le journal métier conserve type d’événement et date, pas l’IP, le navigateur ou une identité prétendue du destinataire. Les cookies servent aux sessions, au CSRF, au déverrouillage et à la déduplication des ouvertures. Ils ne constituent pas une mesure fiable d’audience humaine.
+<a id="vie-privée-et-logs"></a>
+## Privacy and logs
 
-Les clés de limitation contiennent un HMAC de l’IP ou de l’adresse de connexion avec fenêtre temporelle ; elles sont purgées. Les historiques sont purgés après 90 jours par défaut. Les compteurs de téléchargements sont conservés pour continuer à appliquer les limites. Les fichiers persistent jusqu’à suppression explicite ; l’expiration d’un lien ne supprime pas sa bibliothèque.
+The activity log retains event type and time, not IP addresses, browser identity or a claimed recipient identity. Cookies support sessions, CSRF, unlocking and deduplication of opens. They are not a reliable measure of human audience.
 
-Les logs d’accès Caddy/Gunicorn sont désactivés par défaut. Les logs Django expurgent les URL de partage, invitation et récupération. N’ajoutez pas une journalisation de requêtes, corps, cookies ou variables d’environnement en production. Les liens sortants n’envoient pas de référent ; la politique `same-origin` conserve les contrôles CSRF à l’intérieur de l’application.
+Rate-limit keys contain a time-windowed HMAC of the IP or login address and are purged. Histories are purged after 90 days by default. Download counters remain to enforce limits. Files persist until explicitly deleted; link expiry does not delete its library.
 
-## Vérifications
+Caddy/Gunicorn access logs are disabled by default. Django logs redact sharing, invitation and recovery URLs. Do not add request, body, cookie or environment-variable logging in production. Outbound links send no referrer; the `same-origin` policy retains CSRF checks within the application.
 
-Tests automatisés sur le modèle d’autorisations, mots de passe, invitations, quotas, CSRF, chemins, absence de consommation sur GET/HEAD, révocation, concurrence, suppression et export CSV. Tests du protocole ClamAV avec réponses propres, malveillantes et invalides ; test d’intégration EICAR en CI.
+<a id="vérifications"></a>
+## Verification
 
-Ces tests ne remplacent ni un audit indépendant, ni une surveillance des versions, ni un test de charge adapté à votre hébergement.
+Automated tests cover permissions, passwords, invitations, quotas, CSRF, paths, no consumption on GET/HEAD, revocation, concurrency, deletion and CSV exports. ClamAV protocol tests cover clean, malicious and invalid responses; CI includes an EICAR integration test.
 
+These tests replace neither an independent audit, version monitoring nor load testing appropriate to your hosting.
 
-## Protection et fiabilité ajoutées en 0.2
+<a id="protection-et-fiabilité-ajoutées-en-02"></a>
+## Protection and reliability added in 0.2
 
-TOTP utilise une clé chiffrée avec Fernet, des étapes temporelles non réutilisables et des codes de récupération hachés à usage unique. La connexion par mot de passe ne crée qu’une session provisoire de cinq minutes. Les changements de MFA révoquent les autres sessions.
+TOTP uses a Fernet-encrypted key, non-reusable time steps and hashed, single-use recovery codes. Password login creates only a five-minute provisional session. MFA changes revoke other sessions.
 
-Les fichiers supprimés restent privés dans la corbeille et dans le quota. La restauration ne réactive jamais les liens. Les envois par blocs réservent leur quota sous verrou, contrôlent leurs empreintes et publient le lot uniquement après analyse antivirus. Les blocs temporaires expirent après 24 h. Les noms de fichiers de la corbeille restent réservés.
+Deleted files remain private in trash and count toward quota. Restoration never reactivates links. Chunked uploads reserve quota under lock, check hashes and publish the batch only after antivirus scanning. Temporary chunks expire after 24 hours. Trash filenames remain reserved.
 
-La surveillance n’expose les métriques que sur une route à jeton Bearer ; les alertes e-mail nécessitent une configuration explicite. Les sauvegardes sont restaurées dans une instance isolée pour vérifier les octets, les compteurs et les clés MFA. Voir [RELIABILITY.md](RELIABILITY.md) pour les limites et hypothèses d’exploitation.
+Monitoring exposes metrics only on a Bearer-token route; email alerts require explicit configuration. Backups are restored into an isolated instance to check bytes, counters and MFA keys. See [RELIABILITY.md](RELIABILITY.md) for operational assumptions and limits.
 
-La [revue de code préalable à 0.2](SECURITY_REVIEW.md) décrit les corrections et leurs tests.
+The [pre-0.2 code review](SECURITY_REVIEW.md) describes fixes and their tests.
 
-## Aperçus ajoutés en 0.3
+<a id="aperçus-ajoutés-en-03"></a>
+## Previews added in 0.3
 
-La galerie est optionnelle par lien et désactivée pour les liens créés avant la migration. Chaque dérivé est autorisé avant lecture du cache et après son rendu : mot de passe, appartenance du fichier, état du compte, corbeille, révocation, expiration et nombre de téléchargements. Consulter un aperçu ne consomme pas un téléchargement ; une copie du contenu affiché reste possible.
+The gallery is optional per link and disabled for links created before migration. Each derivative is authorized before cache access and after rendering: password, file membership, account state, trash, revocation, expiry and download count. Viewing a preview consumes no download; displayed content can still be copied.
 
-Les originaux ne sont jamais renvoyés par la route d’aperçu. Pillow et PDFium produisent un JPEG réduit sans métadonnées dans un conteneur sans réseau, sans secret, sans volume de fichiers et avec racine en lecture seule. Le processus de rendu, le cache, les dimensions, les tailles et les durées sont bornés. Le [guide des aperçus](PREVIEWS.md) précise ces limites et le mode local de développement, qui ne possède pas l’isolation Docker. Cette nouvelle surface nécessite le maintien à jour des décodeurs natifs.
+The preview route never returns originals. Pillow and PDFium produce a reduced, metadata-free JPEG in a container without network, secrets or file volume, with a read-only root. Renderer processes, cache, dimensions, sizes and durations are bounded. The [preview guide](PREVIEWS.md) explains these limits and local development mode, which lacks Docker isolation. This new surface requires native decoders to be kept up to date.
 
+<a id="automatisations-ajoutées-en-04"></a>
+## Automations added in 0.4
 
-## Automatisations ajoutées en 0.4
+The API accepts only an explicit Bearer header, never session cookies. Every key belongs to an account, has permissions and expiry, and is stored only as an HMAC digest. Writes recheck the key under the same user lock as revocation. Password/MFA changes invalidate existing keys; suspension revokes them permanently and pauses webhooks. Uploads reuse the interface's file, antivirus and quota checks. Idempotency receipts are encrypted, bounded and removed after 24 hours.
 
-L’API accepte uniquement un en-tête Bearer explicite, jamais les cookies de session. Chaque clé appartient à un compte, possède des permissions et une expiration, et n’est conservée que sous empreinte HMAC. Les écritures revérifient la clé sous le même verrou utilisateur que sa révocation. Un changement de mot de passe/MFA invalide les clés existantes ; une suspension les révoque définitivement et met les webhooks en pause. Les imports réutilisent les contrôles de fichiers, antivirus et quotas de l’interface. Les reçus d’idempotence sont chiffrés, bornés et supprimés après 24 heures.
+Webhooks transmit only identifiers and event type. URLs and signing secrets are encrypted with the instance encryption key. Each attempt resolves and checks every DNS address, pins a public IP for TLS with the original hostname, forbids redirects and ignores environment proxies. The dedicated process has PostgreSQL and outbound HTTPS access without a file volume. HMAC signatures, timestamps and identifiers let recipients verify origin and reject replays; they must implement those checks. Queues, durations, attempts and retention are bounded. See the [API reference](API.md) for the contract and limits.
 
-Les webhooks transmettent uniquement des identifiants et le type d’événement. URL et secrets de signature sont chiffrés avec la clé de chiffrement de l’instance. Chaque tentative résout et vérifie toutes les adresses DNS, fixe une IP publique pour la connexion TLS au nom d’origine, interdit les redirections et ignore les proxys d’environnement. Le processus dédié dispose de PostgreSQL et d’un accès HTTPS sortant, sans volume de fichiers. Les signatures HMAC, horodatages et identifiants permettent au destinataire de vérifier l’origine et de rejeter les répétitions ; il doit implémenter ces vérifications. Files d’attente, durées, tentatives et rétention sont bornées. Voir la [référence API](API.md) pour le contrat et ses limites.
-
-Les guides affichés dans l’application proviennent uniquement de Markdown versionné dans le dépôt, avec HTML brut désactivé. Les traductions portent sur l’interface, pas sur les contenus des utilisateurs.
+In-application guides come only from versioned repository Markdown with raw HTML disabled. Translations cover the interface, not users' content.
 
 ## Branding images
 
@@ -96,21 +105,22 @@ Exports construct a new workbook from plain values, never reuse the imported ZIP
 
 API batch creation accepts at most 256 KiB of JSON and 200 single-line names (80 characters each), or an integer quantity. It reuses the same completion and export code, saved-batch ceiling and preparation/export budgets as the browser. Password hashing happens between two short authorization checks, outside transactions; token validity, ownership, quotas and conditions are rechecked under the owner/collection locks before committing the batch and encrypted receipt. Replay is checked before quota/rate/date validation and again under the final lock. A failed transaction rolls back the entire batch and its webhook deliveries/receipt. List responses are paginated summaries; details and exports require ownership or Collaborator access, exclude trashed collections and never bypass rate limits. No CORS credential exposure or incoming unauthenticated webhook is introduced. The example CLI refuses redirects and existing export paths, writes downloads with mode 0600 and reads secrets from the environment.
 
-Les clés API peuvent avoir une expiration de 1 à 365 jours ou explicitement aucune expiration. Les clés sans expiration comptent dans la limite de 10 clés non expirées/non révoquées et restent soumises aux permissions, à la révocation et à la version des identifiants (mot de passe/MFA). La maintenance conserve les clés sans expiration actives et purge les clés expirées ou révoquées depuis plus de 30 jours. L’URL complète d’un webhook est consultable uniquement dans sa fiche par son propriétaire connecté, sous `Cache-Control: no-store, private` ; elle n’est pas diffusée dans les événements. Les commandes proposées n’intègrent jamais de clé API.
+API keys can expire in 1–365 days or explicitly have no expiry. Non-expiring keys count toward the limit of ten non-expired/non-revoked keys and remain subject to permissions, revocation and credential version (password/MFA). Maintenance retains active non-expiring keys and purges keys expired or revoked for more than 30 days. Only a signed-in owner can view a full webhook URL in its detail page, with `Cache-Control: no-store, private`; events never include it. Suggested commands never embed an API key.
 
-## Partage des dossiers entre membres
+<a id="partage-des-dossiers-entre-membres"></a>
+## Sharing collections between members
 
-Les dossiers restent privés par défaut. Seul leur propriétaire peut accorder, modifier ou retirer un rôle Lecteur/Collaborateur par POST avec session et CSRF. Le statut administrateur ne contourne pas cette frontière. Un lecteur consulte les fichiers et télécharge un ZIP authentifié sans accéder aux liens, lots, destinataires ou historiques. Un collaborateur peut ajouter des fichiers, modifier la présentation et gérer les liens/lots, mais ne peut ni supprimer les fichiers/dossiers, ni modifier les autorisations, comptes, secrets ou personnalisation du propriétaire.
+Collections remain private by default. Only their owner can grant, change or remove Reader/Collaborator access through a session-authenticated, CSRF-protected POST. Administrator status does not bypass this boundary. Readers can inspect files and download an authenticated ZIP without accessing links, batches, recipients or histories. Collaborators can add files, edit presentation and manage links/batches, but cannot delete files/collections or change the owner's permissions, accounts, secrets or branding.
 
-Les mutations verrouillent les comptes acteur/propriétaire dans l’ordre de leurs identifiants puis le dossier, et revérifient la permission et les identifiants API sous ces verrous. Les changements de rôle utilisent le même ordre. Le téléchargement membre revérifie l’accès et la liste des fichiers après préparation du ZIP ; il ne modifie pas les compteurs destinataires. Une autorisation déjà accordée à un transfert ne peut pas rappeler les octets déjà transmis.
+Mutations lock actor/owner accounts in identifier order, then the collection, and recheck permission and API credentials under those locks. Role changes use the same order. Member downloads recheck access and the file list after ZIP preparation; they do not change recipient counters. A previously authorized transfer cannot recall bytes already transmitted.
 
-Stockage, quota, limite de cinq sessions en attente et cent lots conservés restent rattachés au propriétaire. Les sessions ajoutent un initiateur distinct et ne sont contrôlables que par lui ou le propriétaire. Retirer le rôle Collaborateur annule les sessions en attente de cet acteur sur le dossier et libère le quota réservé. Les traces portent l’acteur réel ; les webhooks sont ceux du propriétaire du dossier. Les lectures/reprises API et reçus de création restent soumis au rôle courant. Les liens publics existants restent accessibles selon leurs propres conditions et doivent être révoqués séparément.
+Storage, quota, the five-pending-session limit and the hundred-retained-batch limit remain attached to the owner. Sessions add a separate initiator and can be controlled only by that initiator or the owner. Removing Collaborator access cancels that actor's pending collection sessions and releases reserved quota. Events record the actual actor; webhooks belong to the collection owner. API reads/resumes and creation receipts remain subject to the current role. Existing public links remain accessible under their own conditions and must be revoked separately.
 
+<a id="compléments-05"></a>
+## Additions in 0.5
 
-## Compléments 0.5
+Group access requires a shared workspace. Group managers choose members but do not automatically receive files. Changes lock the workspace, then accounts in a stable order, then the collection. Transfers move the complete quota (including versions and trash) and cancel pending uploads. Existing sessions are inventoried during migration; a team's MFA policy also applies to API keys.
 
-Les accès de groupe exigent un espace commun ; le responsable du groupe choisit ses membres, mais ne reçoit pas automatiquement les fichiers. Les modifications verrouillent l’espace puis les comptes dans un ordre stable avant le dossier. Les transferts déplacent le quota complet (versions et corbeille comprises) et annulent les imports en attente. Les sessions antérieures sont inventoriées pendant la migration ; une politique MFA d’équipe s’applique aussi aux clés API.
+Versions freeze file bytes; following links explicitly accept changes. Public links can combine an opaque capability, password and session-bound email code. Client deposits grant no read access, use lifetime quotas and pass through the same antivirus checks. Distribution emails require review/confirmation; deliveries recheck permissions and expire, with a per-sender limit.
 
-Les versions figent les octets des fichiers ; les liens avec suivi acceptent explicitement les changements. Les liens publics peuvent cumuler capacité opaque, mot de passe et code e-mail lié à une session. Les dépôts clients ne donnent aucun droit de lecture, utilisent des quotas de durée de vie et passent par le même contrôle antivirus. Les e-mails de diffusion nécessitent une relecture/confirmation ; les livraisons revérifient les permissions et expirent, avec une limite par expéditeur.
-
-OIDC exige une association préalable, state/nonce/PKCE et un jeton signé pour l’émetteur/audience attendus ; aucune association par égalité d’e-mail. Les originaux S3 restent privés, sans URL directe. Les sauvegardes restic chiffrées sont facultatives et nécessitent une configuration externe ainsi qu’un test de restauration. La [préparation d’audit indépendant](INDEPENDENT_AUDIT.md) détaille les frontières à vérifier ; aucun audit humain indépendant n’est revendiqué.
+OIDC requires prior explicit linking, state/nonce/PKCE and a signed token for the expected issuer/audience; matching email addresses never link accounts automatically. S3 originals stay private without direct URLs. Encrypted restic backups are optional and require external configuration and a restoration test. The [independent audit brief](INDEPENDENT_AUDIT.md) details boundaries to examine; no independent human audit is claimed.
