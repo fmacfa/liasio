@@ -18,7 +18,7 @@ French / English / German interface · **MIT** license · Python / Django · Doc
 
 [Watch the overview](https://youtu.be/fNS7tQkZM5k) · [Complete walkthrough](https://youtu.be/HfYVWaYB8vc) · [YouTube playlist](https://www.youtube.com/playlist?list=PLCLPN5G0TwTo) · [Liasio channel](https://www.youtube.com/@liasio-com)
 
-The [video tutorial index](docs/VIDEOS.md) covers uploads, independent links, access rules, branding, Excel/CSV batches, the recipient experience, activity and storage. English narration and captions; recorded with version 0.4 and fictional demo data.
+The [video tutorial index](docs/VIDEOS.md) covers uploads, independent links, access rules, branding, Excel/CSV batches, the recipient experience, activity, storage, and API/webhook automation. English narration and captions; recorded with version 0.4 and fictional demo data.
 
 ## Features
 

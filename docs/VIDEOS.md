@@ -18,5 +18,4 @@ These demonstrations were recorded with Liasio 0.4 and fictional local data. The
 | 08 | [Preview and download without an account](https://youtu.be/HuPgsYSUKso) | [Read the guide](guide/en/sharing.md) |
 | 09 | [Link activity and CSV export](https://youtu.be/DdRxqeBnD38) | [Read the guide](guide/en/activity.md) |
 | 10 | [Storage, trash and file recovery](https://youtu.be/VG97ph0dRCo) | [Read the guide](guide/en/storage.md) |
-
-The API and webhooks video is coming next. The [automation guide](guide/en/automation.md) is already available.
+| 11 | [Automate with the API and webhooks](https://youtu.be/-PsOBtKRo_Y) | [Read the guide](guide/en/automation.md) |

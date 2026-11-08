@@ -18,5 +18,4 @@ Ces démonstrations ont été enregistrées avec Liasio 0.4 et des données loca
 | 08 | [Prévisualiser et télécharger sans compte](https://youtu.be/HuPgsYSUKso) | [Lire le guide](guide/fr/sharing.md) |
 | 09 | [Activité des liens et export CSV](https://youtu.be/DdRxqeBnD38) | [Lire le guide](guide/fr/activity.md) |
 | 10 | [Stockage, corbeille et restauration](https://youtu.be/VG97ph0dRCo) | [Lire le guide](guide/fr/storage.md) |
-
-La vidéo API et webhooks sera ajoutée prochainement. Le [guide des automatisations](guide/fr/automation.md) est déjà disponible.
+| 11 | [Automatiser avec l’API et les webhooks](https://youtu.be/-PsOBtKRo_Y) | [Lire le guide](guide/fr/automation.md) |
