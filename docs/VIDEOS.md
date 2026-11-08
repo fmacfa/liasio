@@ -1,6 +1,6 @@
 # Video tutorials
 
-**English** · [Français](VIDEOS.fr.md)
+**English** · [Français](VIDEOS.fr.md) · [Deutsch](VIDEOS.de.md)
 
 [Liasio YouTube channel — @liasio-com](https://www.youtube.com/@liasio-com) · [Watch the Liasio tutorial playlist](https://www.youtube.com/playlist?list=PLCLPN5G0TwTo). All videos have English narration and English captions.
 

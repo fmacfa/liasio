@@ -1,5 +1,7 @@
 # Guide d’utilisation Liasio
 
+[English](../en/README.md) · [Français](../fr/README.md) · [Deutsch](../de/README.md) · [API reference](../../API.md)
+
 Version 0.5 · Ces mêmes guides sont accessibles dans votre instance via **Guide d’utilisation**. Les captures proviennent réellement de l’application locale, avec des données fictives et la langue correspondante. Elles montrent un environnement de développement ; l’antivirus et les services dépendent du déploiement. Aucun identifiant secret réel n’est visible.
 
 ![Liasio guide](../../screenshots/user-guide/fr/help.png)
@@ -23,5 +25,3 @@ Version 0.5 · Ces mêmes guides sont accessibles dans votre instance via **Guid
 17. [Recevoir des fichiers clients](file-requests.md)
 18. [Hébergement avancé et sécurité du compte](advanced-operations.md)
 19. [Explorateur API](api-explorer.md)
-
-[English](../en/README.md) · [Français](../fr/README.md) · [Deutsch](../de/README.md) · [API reference](../../API.md)

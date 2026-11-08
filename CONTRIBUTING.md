@@ -1,6 +1,6 @@
 # Contributing to Liasio
 
-**English** · [Français](CONTRIBUTING.fr.md)
+**English** · [Français](CONTRIBUTING.fr.md) · [Deutsch](CONTRIBUTING.de.md)
 
 Submit reproducible issues and focused changes. Report vulnerabilities privately through [SECURITY.md](SECURITY.md). Contributions are under MIT; no CLA is required.
 
@@ -46,3 +46,5 @@ uv run python scripts/check_documentation.py
 ```
 
 Include `.po` and `.mo` files with no empty/fuzzy entries. Guides in `docs/guide/{fr,en,de}` are rendered directly in the app and on GitHub; update all languages and real screenshots with fictional data. Use the new feature guide's screenshots, not unrelated placeholders. Validate desktop/mobile layout, visible labels, keyboard use and reduced-motion preferences. The OpenAPI build must match the checked-in contract and implemented routes.
+
+The GitHub entry page and technical references default to English. Preserve French editions and keep language links consistent across the three READMEs, policies, video indexes and user guides.

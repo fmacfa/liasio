@@ -1,6 +1,6 @@
 # Tutoriels vidéo
 
-[English](VIDEOS.md) · **Français**
+[English](VIDEOS.md) · **Français** · [Deutsch](VIDEOS.de.md)
 
 [Chaîne YouTube Liasio — @liasio-com](https://www.youtube.com/@liasio-com) · [Voir la playlist des tutoriels Liasio](https://www.youtube.com/playlist?list=PLCLPN5G0TwTo). Toutes les vidéos ont une voix off et des sous-titres en anglais.
 

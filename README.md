@@ -2,7 +2,7 @@
 
 Liasio is the new name of LinkVault. The repository is now `fmacfa/liasio`. Published LinkVault container images, deployment identifiers and API v1 headers keep their existing names so existing installations and integrations continue to work.
 
-**English** · [Français](README.fr.md)
+**English** · [Français](README.fr.md) · [Deutsch](README.de.md)
 
 **Your files. Your domain. Your rules.**
 
@@ -63,7 +63,7 @@ The [video tutorial index](docs/VIDEOS.md) covers uploads, independent links, ac
 
 ## User guides and automations
 
-Start with the **[illustrated English guide](docs/guide/en/README.md)**, the **[guide français](docs/guide/fr/README.md)** or the **[deutsches Benutzerhandbuch](docs/guide/de/README.md)**. The same pages and screenshots are built into `/help/`.
+Start with the **[illustrated English guide](docs/guide/en/README.md)**, the **[guide français](docs/guide/fr/README.md)** or the **[deutsches Benutzerhandbuch](docs/guide/de/README.md)**. The same pages and screenshots are built into `/help/`. The [documentation index](docs/README.md) lists the available languages.
 
 For n8n, scripts and other tools, see the [API reference](docs/API.md), the [automation walkthrough](docs/guide/en/automation.md), the [Python upload client](examples/upload.py) and the [webhook signature verifier](examples/verify_webhook.py). Public registration stays closed. Anonymous uploads require an owner-created, expiring file-request capability.
 
@@ -84,7 +84,7 @@ Use a Linux server with **Docker Engine and Docker Compose v2**, Git, and Python
 
 **RAM** is working memory for the running services. The limits in [compose.yaml](compose.yaml) currently total **6.75 GiB**: ClamAV 4 GiB, application 1 GiB, PostgreSQL and previews 512 MiB each, maintenance, webhooks and email workers 256 MiB each. These are individual ceilings, not reserved or constant consumption. Linux, Docker, Caddy and backup/build processes need additional memory. ClamAV alone [recommends 4 GiB](https://docs.clamav.net/manual/Installing/Docker.html#memory-ram-requirements), with temporary peaks during signature updates.
 
-On a **shared VPS**, add the needs of your existing sites, databases and applications, including their peaks. A server with 8 GiB installed but only 2 GiB available is not equivalent to a dedicated 8 GiB server. CloudPanel does not reduce these requirements; plan the reverse proxy and existing port bindings using the [operations guide](docs/OPERATIONS.md#autre-reverse-proxy).
+On a **shared VPS**, add the needs of your existing sites, databases and applications, including their peaks. A server with 8 GiB installed but only 2 GiB available is not equivalent to a dedicated 8 GiB server. CloudPanel does not reduce these requirements; plan the reverse proxy and existing port bindings using the [operations guide](docs/OPERATIONS.md#another-reverse-proxy).
 
 **Swap** uses disk space as a slower memory buffer. An optional **2–4 GiB** swap area is a starting allowance for occasional pressure, not a way to fit the complete stack onto an undersized VPS. Frequent swap reads/writes during transfers call for more RAM or less competing workload. Docker's effective swap allowance depends on the host and container settings; this Compose file does not set `memswap_limit`. See [Docker memory and swap limits](https://docs.docker.com/engine/containers/resource_constraints/#--memory-swap-details).
 
@@ -139,7 +139,7 @@ docker compose ps
 
 The configuration script creates `.env` with `0600` permissions and refuses to overwrite an existing file. It contains secrets: never publish it. The first person to complete setup becomes the administrator: initialize the instance before sharing its address. Setup permanently closes after this account is created; other users join by invitation.
 
-Caddy obtains and renews the TLS certificate. If you use another reverse proxy, read the [operations guide](docs/OPERATIONS.md) (French) before changing the topology.
+Caddy obtains and renews the TLS certificate. If you use another reverse proxy, read the [operations guide](docs/OPERATIONS.md) before changing the topology.
 
 ### Prebuilt images and upgrades
 
@@ -200,10 +200,10 @@ Invitations generate a link to copy and share. With SMTP configured, choose **Pr
 
 ## Reliability
 
-- **MFA:** enable an authenticator app from **Mon compte** and securely save the ten recovery codes.
+- **MFA:** enable an authenticator app from **My account** and securely save the ten recovery codes.
 - **Trash:** restore a file or folder for 30 days; permanently purging it frees the quota.
 - **Resumable transfers:** reselect the same files after a pause or reload; confirmed blocks are retained for 24 hours.
-- **Administration:** adjust quotas and inspect capacity, alerts and backup checks in **Exploitation**.
+- **Administration:** adjust quotas and inspect capacity, alerts and backup checks in **Operations**.
 - **Backups:** `scripts/backup-and-verify.sh` creates a backup and proves it can be restored in isolated Docker volumes. Schedule it on your server and keep encrypted off-server copies.
 - **Monitoring:** optional SMTP alerts and a bearer-protected `/ready/` endpoint; `/health/` remains a minimal liveness probe.
 
@@ -211,7 +211,7 @@ See [RELIABILITY.md](docs/RELIABILITY.md) for configuration, limits, failure beh
 
 ## Preview files before downloading
 
-Enable previews when creating a link, or from **Mes liens** for an existing one. Recipients see image thumbnails and the first page of PDFs, and can open them in a large viewer before downloading the ZIP. JPEG, PNG, WebP, GIF and PDF files up to 20 MiB are eligible; other files retain their name, type and size.
+Enable previews when creating a link, or from **My links** for an existing one. Recipients see image thumbnails and the first page of PDFs, and can open them in a large viewer before downloading the ZIP. JPEG, PNG, WebP, GIF and PDF files up to 20 MiB are eligible; other files retain their name, type and size.
 
 Previews are reduced, metadata-free JPEGs generated by an isolated renderer. They honor passwords, revocation, expiry and download exhaustion, and never consume a download. **Visible previews can be copied.** Disable them when content should remain hidden until download. Existing links stay opted out after upgrading. See [preview limits and deployment](docs/PREVIEWS.md).
 
@@ -235,7 +235,7 @@ Previews are reduced, metadata-free JPEGs generated by an isolated renderer. The
 
 The operating-system administrator can read stored files: **this is not end-to-end encryption**. Use encrypted volumes and backups where needed. Antivirus scanning does not guarantee that a file is harmless. Extension checks do not fully validate the contents of every accepted format. This application is not designed for large-scale anonymous uploads.
 
-See the English [security policy](SECURITY.md), French [security model](docs/SECURITY_MODEL.md) and [operations reference](docs/OPERATIONS.md), plus the illustrated guides in all three interface languages.
+See the English [security policy](SECURITY.md), [security model](docs/SECURITY_MODEL.md) and [operations reference](docs/OPERATIONS.md), plus the illustrated guides in all three interface languages.
 
 ## Testing and contributing
 
@@ -250,11 +250,11 @@ The [pre-release review summary](docs/SECURITY_REVIEW.md) records the automated 
 
 The test suite covers account isolation, upload limits, invitations, CSRF, link passwords, path traversal, deletion, and concurrent access. The GitHub workflow tests SQLite and PostgreSQL, builds the container image, and checks antivirus behavior using the EICAR test signature.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the code organization and [ROADMAP.md](ROADMAP.md) for planned improvements. The contribution and security policies include preserved French versions. [Maintenance policy](docs/MAINTENANCE.md) · [Measured load checks](docs/benchmarks/README.md) · [Independent audit brief](docs/INDEPENDENT_AUDIT.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the code organization and [ROADMAP.md](ROADMAP.md) for planned improvements. The contribution and security policies are available in English, French and German. [Maintenance policy](docs/MAINTENANCE.md) · [Measured load checks](docs/benchmarks/README.md) · [Independent audit brief](docs/INDEPENDENT_AUDIT.md).
 
 ## Inspiration and scope
 
-We reviewed [Pingvin Share](https://github.com/stonith404/pingvin-share), [ProjectSend](https://github.com/projectsend/projectsend), [Gokapi](https://github.com/Forceu/Gokapi), and [Send](https://github.com/timvisee/send). The [comparison](docs/COMPARISON.md) (French) describes their strengths and Liasio's design choices.
+We reviewed [Pingvin Share](https://github.com/stonith404/pingvin-share), [ProjectSend](https://github.com/projectsend/projectsend), [Gokapi](https://github.com/Forceu/Gokapi), and [Send](https://github.com/timvisee/send). The [comparison](docs/COMPARISON.md) describes their strengths and Liasio's design choices.
 
 Liasio focuses on reusable folders, presentation, and explicit link rules in a compact application. This release does not aim to replace every feature in these more established projects. Liasio's application code and visual assets were created for this project; no code was copied from those four repositories.
 

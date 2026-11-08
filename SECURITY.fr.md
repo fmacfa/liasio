@@ -1,6 +1,6 @@
 # Politique de sécurité
 
-[English](SECURITY.md) · **Français**
+[English](SECURITY.md) · **Français** · [Deutsch](SECURITY.de.md)
 
 La dernière version mineure publiée de Liasio 0.5 reçoit les correctifs ; les versions antérieures doivent être mises à niveau. Le projet est jeune et n’a pas encore fait l’objet d’un audit humain indépendant.
 

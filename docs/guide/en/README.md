@@ -1,5 +1,7 @@
 # Liasio user guide
 
+[English](../en/README.md) · [Français](../fr/README.md) · [Deutsch](../de/README.md) · [API reference](../../API.md)
+
 Version 0.5 · The same guides are available inside your instance under **User guide**. Screenshots are actual local application captures with fictional demonstration data, in the matching interface language. They show a local development environment; antivirus and operational services depend on deployment configuration. No real credentials are shown.
 
 ![Liasio guide](../../screenshots/user-guide/en/help.png)
@@ -23,5 +25,3 @@ Version 0.5 · The same guides are available inside your instance under **User g
 17. [Receive client files](file-requests.md)
 18. [Advanced hosting and account controls](advanced-operations.md)
 19. [API explorer](api-explorer.md)
-
-[English](../en/README.md) · [Français](../fr/README.md) · [Deutsch](../de/README.md) · [API reference](../../API.md)

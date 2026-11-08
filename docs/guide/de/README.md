@@ -1,5 +1,7 @@
 # Liasio-Benutzerhandbuch
 
+[English](../en/README.md) · [Français](../fr/README.md) · **Deutsch** · [API-Referenz (Englisch)](../../API.md)
+
 Version 0.5 · Dieselben Anleitungen finden Sie in Ihrer Instanz unter **Benutzerhandbuch**. Die Bilder sind echte Aufnahmen einer lokalen Entwicklungsumgebung mit ausschließlich fiktiven Daten. Virenschutz und Betriebsdienste hängen von der Serverkonfiguration ab. Es werden keine echten Zugangsdaten gezeigt.
 
 ![Das deutsche Benutzerhandbuch](../../screenshots/user-guide/de/help.png)
@@ -23,5 +25,3 @@ Version 0.5 · Dieselben Anleitungen finden Sie in Ihrer Instanz unter **Benutze
 17. [Kundendateien empfangen](file-requests.md)
 18. [Erweitertes Hosting und Kontosicherheit](advanced-operations.md)
 19. [API-Explorer](api-explorer.md)
-
-[English](../en/README.md) · [Français](../fr/README.md) · **Deutsch** · [API-Referenz (Englisch)](../../API.md)

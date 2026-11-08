@@ -1,5 +1,7 @@
 # Contribuer à Liasio
 
+[English](CONTRIBUTING.md) · **Français** · [Deutsch](CONTRIBUTING.de.md)
+
 Merci de contribuer avec des problèmes reproductibles et des modifications ciblées. Pour une vulnérabilité, utilisez le canal privé décrit dans [SECURITY.md](SECURITY.md).
 
 ## Développement
@@ -57,3 +59,5 @@ Incluez `.po` et `.mo`, sans entrée vide ou fuzzy. Les guides de `docs/guide/{f
 ## Contrôles de la version 0.5
 
 Exécutez également `ruff check` / `ruff format --check`, `scripts/build_openapi.py` et les tests Chromium `python manage.py test scripts.browser_tests`. Les tests S3/OIDC utilisent des services simulés ; la CI PostgreSQL vérifie les verrous. Les tests restic n’utilisent qu’un dépôt local jetable. Le [guide anglais](CONTRIBUTING.md) donne les commandes complètes.
+
+La page d’entrée GitHub et les références techniques utilisent l’anglais par défaut. Conservez les éditions françaises et harmonisez les liens de langue des trois README, politiques, sommaires vidéo et guides.
