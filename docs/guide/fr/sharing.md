@@ -28,7 +28,9 @@ Le bouton **Télécharger les fichiers** apparaît directement sous le titre du 
 
 ![Galerie du destinataire](../../screenshots/user-guide/fr/preview.png)
 
-La liste montre les dossiers et sous-dossiers dépliables, dans leur ordre d’ajout. Avec les aperçus activés, ouvrez **Voir les aperçus des fichiers** : les JPEG, PNG, WebP et GIF (première image), ainsi que les PDF (première page), se consultent avant téléchargement. L’original doit peser au maximum 20 Mio ; les images sont limitées à 24 mégapixels. Les aperçus sont des JPEG réduits et sans métadonnées. Les autres formats affichent leur nom, leur type et leur taille. Un aperçu indisponible n’empêche pas le téléchargement autorisé de l’original.
+À chaque niveau, les dossiers apparaissent d’abord, puis les fichiers. Chaque groupe est trié par nom. Pour récupérer un seul original, cliquez sur **Télécharger** sur sa ligne. Pour plusieurs fichiers, cochez-les puis cliquez sur **Télécharger la sélection**. Le lien décompte un téléchargement par action.
+
+Avec les aperçus activés, ouvrez **Voir les aperçus des fichiers** : les JPEG, PNG, WebP et GIF (première image), ainsi que les PDF (première page), se consultent avant téléchargement. L’original doit peser au maximum 20 Mio ; les images sont limitées à 24 mégapixels. Les aperçus sont des JPEG réduits et sans métadonnées. Les autres formats affichent leur nom, leur type et leur taille. Un aperçu indisponible n’empêche pas le téléchargement autorisé de l’original.
 
 Cliquez sur une miniature pour l’agrandir. Utilisez les boutons précédent/suivant ou les flèches du clavier ; Échap ferme la fenêtre. Les aperçus exigent le même mot de passe et un lien valide. Ils ne consomment pas de téléchargement, mais restent copiables. Voir le [fonctionnement technique](../../PREVIEWS.md).
 
@@ -38,4 +40,4 @@ Cliquez sur une miniature pour l’agrandir. Utilisez les boutons précédent/su
 
 Dans **Mes liens**, recherchez, filtrez les liens actifs, activez ou masquez les aperçus, consultez les compteurs ou cliquez sur **Révoquer**. Confirmez pour bloquer les prochains accès. Pour changer un mot de passe, une expiration ou une limite, créez un nouveau lien et révoquez l’ancien.
 
-L’ouverture d’une page ne consomme pas un lien à usage unique. Un téléchargement ZIP autorisé le consomme, même interrompu. Un lien révoqué, expiré ou épuisé ne peut plus démarrer un téléchargement ; un transfert déjà en cours peut se terminer. La révocation n’efface pas les copies déjà téléchargées.
+L’ouverture d’une page ne consomme pas un lien à usage unique. Un téléchargement autorisé, individuel ou en ZIP, le consomme, même interrompu. Un lien révoqué, expiré ou épuisé ne peut plus démarrer un téléchargement ; un transfert déjà en cours peut se terminer. La révocation n’efface pas les copies déjà téléchargées.

@@ -59,7 +59,7 @@ from .models import (
 )
 from .security import limited, rate_allowed, verify_capability
 from .mfa import begin_login, complete_login
-from .file_tree import file_tree
+from .file_tree import file_tree, files_in_tree
 from .access import collections_for, collection_for, locked_collection, role_for
 from .storage import (
     add_files,
@@ -948,13 +948,17 @@ def share(request, token):
         seen = {k: v for k, v in seen.items() if v > now - 1800}
         seen[str(link.pk)] = now
         request.session["seen_links"] = dict(list(seen.items())[-100:])
+    tree = file_tree(link.collection.files.all())
+    shared_files = list(files_in_tree(tree))
     return render(
         request,
         "share/page.html",
         {
             "link": link,
             "collection": link.collection,
-            "file_tree": file_tree(link.collection.files.all()),
+            "file_tree": tree,
+            "share_files": shared_files,
+            "share_size": sum(f.size for f in shared_files),
             "branding": getattr(link.collection.owner, "branding", None),
             "token": token,
         },
@@ -1002,8 +1006,24 @@ def download(request, token):
             {"form": UnlockForm(), "token": token},
             status=403,
         )
+    identifiers = (
+        request.POST.getlist("assets") if request.POST.get("selection") else None
+    )
+    raw = identifiers is not None and len(identifiers) == 1
+    filename = (slugify(link.collection.title) or "dossier") + ".zip"
     try:
-        bundle = download_bundle(link)
+        if raw:
+            from .storage import selected_files
+
+            filename = selected_files(link.collection.files.all(), identifiers)[
+                0
+            ].path.rsplit("/", 1)[-1]
+        bundle = download_bundle(
+            link,
+            identifiers,
+            raw=raw,
+            authorize=lambda current: can_open(request, current),
+        )
     except CapacityUnavailable:
         return render(
             request,
@@ -1033,7 +1053,7 @@ def download(request, token):
     return FileResponse(
         bundle,
         as_attachment=True,
-        filename=(slugify(link.collection.title) or "dossier") + ".zip",
+        filename=filename,
         content_type="application/octet-stream",
     )
 

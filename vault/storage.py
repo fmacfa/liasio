@@ -256,18 +256,30 @@ def delete_assets(owner, identifiers):
     return trash_assets(owner, identifiers)
 
 
-def member_bundle(actor, collection_id):
-    """Authenticated download, independent of recipient links and their counters."""
-    collection = collection_for(actor, collection_id)
-    files = list(collection.files.all())
-    if not files:
-        raise ValidationError(_("Ce dossier est vide."))
+def selected_files(queryset, identifiers=None):
+    if identifiers is not None:
+        try:
+            identifiers = [uuid.UUID(str(value)) for value in identifiers]
+        except (ValueError, TypeError, AttributeError):
+            raise ValidationError(_("Sélection de fichiers invalide.")) from None
+        if not 1 <= len(identifiers) <= 100 or len(set(identifiers)) != len(
+            identifiers
+        ):
+            raise ValidationError(_("Sélectionnez au moins un fichier, sans doublon."))
+        queryset = queryset.filter(pk__in=identifiers)
+    files = list(queryset)
+    if not files or identifiers is not None and len(files) != len(identifiers):
+        raise ValidationError(_("Un fichier sélectionné n’est plus disponible."))
+    return files
+
+
+def build_bundle(files, owner_id, *, raw=False):
     if settings.ANTIVIRUS_REQUIRED and any(not f.scanned for f in files):
         raise ValidationError(_("Ce dossier contient des fichiers non analysés."))
     size = (
         sum(f.size + 2 * len(f.path.encode("utf-8")) + 256 for f in files) + 1024 * 1024
     )
-    lease = reserve_temporary(size, owner_id=collection.owner_id)
+    lease = reserve_temporary(size, owner_id=owner_id)
     try:
         bundle = LeasedFile(
             tempfile.TemporaryFile(dir=settings.FILE_UPLOAD_TEMP_DIR), lease
@@ -276,15 +288,46 @@ def member_bundle(actor, collection_id):
         lease.close()
         raise
     try:
-        with zipfile.ZipFile(
-            bundle, "w", compression=zipfile.ZIP_STORED, allowZip64=True
-        ) as archive:
-            for asset in files:
-                archive.write(asset.blob.path, arcname=asset.path)
+        if raw:
+            if len(files) != 1:
+                raise ValidationError(_("Sélection de fichiers invalide."))
+            with files[0].blob.open("rb") as source:
+                copy_original(source, bundle, files[0].size)
+        else:
+            with zipfile.ZipFile(
+                bundle, "w", compression=zipfile.ZIP_STORED, allowZip64=True
+            ) as archive:
+                for asset in files:
+                    archive.write(asset.blob.path, arcname=asset.path)
         bundle.seek(0)
+        return bundle
+    except BaseException:
+        bundle.close()
+        raise
+
+
+def copy_original(source, destination, size):
+    remaining = size
+    while remaining:
+        block = source.read(min(1024 * 1024, remaining))
+        if not block:
+            raise ValidationError(_("Le fichier stocké est incomplet."))
+        destination.write(block)
+        remaining -= len(block)
+    if source.read(1):
+        raise ValidationError(_("La taille du fichier stocké a changé."))
+
+
+def member_bundle(actor, collection_id):
+    """Authenticated download, independent of recipient links and their counters."""
+    collection = collection_for(actor, collection_id)
+    files = selected_files(collection.files.all())
+    bundle = build_bundle(files, collection.owner_id)
+    try:
         with transaction.atomic():
             locked, _owner = locked_collection(actor, collection_id, write=False)
-            if set(locked.files.values_list("pk", flat=True)) != {f.pk for f in files}:
+            current = selected_files(locked.files.all())
+            if {f.pk for f in current} != {f.pk for f in files}:
                 raise ValidationError(
                     _("Le dossier a changé. Relancez le téléchargement.")
                 )
@@ -297,48 +340,36 @@ def member_bundle(actor, collection_id):
         raise
 
 
-def download_bundle(link):
-    """Build before claiming: a missing file must not consume a one-use link."""
-    files = list(link.collection.files.all())
-    if not files:
-        raise ValidationError(_("Ce dossier est vide."))
-    if settings.ANTIVIRUS_REQUIRED and any(not f.scanned for f in files):
-        raise ValidationError(_("Ce dossier contient des fichiers non analysés."))
-    # Always a disk temporary file: memory usage is independent of bundle size.
-    # ZIP_STORED requires payload bytes plus two UTF-8 names and headers per
-    # entry. The extra 1 MiB safely covers ZIP64 and all bounded metadata.
-    size = (
-        sum(asset.size + 2 * len(asset.path.encode("utf-8")) + 256 for asset in files)
-        + 1024 * 1024
-    )
-    lease = reserve_temporary(size, owner_id=link.collection.owner_id)
+def download_bundle(link, identifiers=None, *, raw=False, authorize=None):
+    """Build before claiming; recheck content and access before consuming a use."""
+    files = selected_files(link.collection.files.all(), identifiers)
+    bundle = build_bundle(files, link.collection.owner_id, raw=raw)
     try:
-        bundle = LeasedFile(
-            tempfile.TemporaryFile(dir=settings.FILE_UPLOAD_TEMP_DIR), lease
-        )
-    except BaseException:
-        lease.close()
-        raise
-    try:
-        with zipfile.ZipFile(
-            bundle, "w", compression=zipfile.ZIP_STORED, allowZip64=True
-        ) as archive:
-            for asset in files:
-                archive.write(asset.blob.path, arcname=asset.path)
-        bundle.seek(0)
         with transaction.atomic():
-            # Same lock order as uploads/deletes/suspension; re-check revocation,
-            # expiration, owner state and count immediately before authorization.
             owner = User.objects.select_for_update().get(pk=link.collection.owner_id)
-            if not owner.is_active:
+            current = ShareLink.objects.select_related("collection__owner").get(
+                pk=link.pk
+            )
+            if (
+                not owner.is_active
+                or current.collection.owner_id != owner.pk
+                or current.status_code != "active"
+            ):
                 raise ValidationError(_("Ce lien n’est plus disponible."))
+            if authorize is not None and not authorize(current):
+                raise ValidationError(_("Ce lien n’est plus disponible."))
+            current_files = selected_files(current.collection.files.all(), identifiers)
+            if {f.pk for f in current_files} != {f.pk for f in files}:
+                raise ValidationError(
+                    _("Le dossier a changé. Relancez le téléchargement.")
+                )
             changed = available_links(ShareLink.objects.filter(pk=link.pk)).update(
                 downloads=F("downloads") + 1
             )
             if not changed:
                 raise ValidationError(_("Ce lien n’est plus disponible."))
-            Event.objects.create(link=link, kind="download_started")
+            Event.objects.create(link=current, kind="download_started")
         return bundle
-    except Exception:
+    except BaseException:
         bundle.close()
         raise

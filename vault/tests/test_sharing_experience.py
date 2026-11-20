@@ -1,4 +1,5 @@
 import hashlib
+import io
 import json
 import struct
 import zipfile
@@ -104,13 +105,15 @@ class ShareExperienceTests(IsolatedFiles, TestCase):
             owner=self.user, title="Mixed files"
         )
 
-    def test_mixed_batches_keep_structure_order_and_zip_paths(self):
+    def test_mixed_batches_show_sorted_folders_then_files_at_every_level(self):
         for paths in (
-            ["Z-note.txt"],
+            ["Z-note.txt", "Projet/Zèbre/fiche.txt", "Projet/annexe.txt"],
             [
-                "Project/Plans/Level-2.txt",
-                "Project/Plans/Level-1.txt",
-                "Project/Readme.txt",
+                "Projet/équipe/Plan 10.txt",
+                "Projet/équipe/plan 2.txt",
+                "État/sommaire.txt",
+                "à lire.txt",
+                "Projet/Dessin.txt",
             ],
         ):
             add_files(
@@ -121,23 +124,116 @@ class ShareExperienceTests(IsolatedFiles, TestCase):
             )
         assets = list(self.collection.files.all())
         tree = file_tree(assets)
-        self.assertEqual([n["name"] for n in tree], ["Z-note.txt", "Project"])
         self.assertEqual(
-            [n["name"] for n in tree[1]["children"]], ["Plans", "Readme.txt"]
+            [n["name"] for n in tree], ["État", "Projet", "à lire.txt", "Z-note.txt"]
         )
-        self.assertEqual(tree[1]["count"], 3)
-        self.assertEqual(tree[1]["size"], 12)
-        link = ShareLink.objects.create(collection=self.collection, label="Delivery")
+        self.assertEqual(
+            [n["name"] for n in tree[1]["children"]],
+            ["équipe", "Zèbre", "annexe.txt", "Dessin.txt"],
+        )
+        plans = tree[1]["children"][0]["children"]
+        self.assertEqual([n["name"] for n in plans], ["plan 2.txt", "Plan 10.txt"])
+        self.assertEqual(file_tree(reversed(assets)), tree)
+        self.assertEqual(tree[1]["count"], 5)
+        self.assertEqual(tree[1]["size"], 20)
+        link = ShareLink.objects.create(
+            collection=self.collection, label="Delivery", allow_previews=True
+        )
         with download_bundle(link) as archive:
             with zipfile.ZipFile(archive) as bundle:
                 self.assertEqual(bundle.namelist(), [asset.path for asset in assets])
-        for url in (
-            f"/collections/{self.collection.pk}/",
-            f"/s/{capability('share', link.pk)}/",
-        ):
-            response = self.client.get(url)
+        owner_view = self.client.get(f"/collections/{self.collection.pk}/")
+        public_view = Client().get(f"/s/{capability('share', link.pk)}/")
+        for response in (owner_view, public_view):
+            self.assertEqual(response.context["file_tree"], tree)
             self.assertContains(response, 'class="file-folder" open')
-            self.assertContains(response, "Level-2.txt")
+        self.assertNotContains(owner_view, 'form="single-download"')
+        self.assertContains(public_view, 'form="single-download"', count=len(assets))
+        self.assertEqual(
+            [f.path for f in public_view.context["share_files"]],
+            [
+                "État/sommaire.txt",
+                "Projet/équipe/plan 2.txt",
+                "Projet/équipe/Plan 10.txt",
+                "Projet/Zèbre/fiche.txt",
+                "Projet/annexe.txt",
+                "Projet/Dessin.txt",
+                "à lire.txt",
+                "Z-note.txt",
+            ],
+        )
+
+    def test_file_action_returns_only_the_chosen_original_and_uses_one_download(self):
+        paths = ["A/brief.txt", "B/brief.txt"]
+        add_files(
+            self.user,
+            self.collection.pk,
+            [SimpleUploadedFile("brief.txt", path.encode()) for path in paths],
+            paths,
+        )
+        link = ShareLink.objects.create(
+            collection=self.collection,
+            password_hash=make_password("x"),
+            max_downloads=1,
+        )
+        guest = Client()
+        page = f"/s/{capability('share', link.pk)}/"
+        action = page + "download/"
+        chosen = self.collection.files.get(path=paths[1])
+        payload = {"selection": "1", "assets": str(chosen.pk)}
+        self.assertNotContains(guest.get(page), 'form="single-download"')
+        self.assertEqual(guest.post(action, payload).status_code, 403)
+        self.assertEqual(
+            guest.post(page + "unlock/", {"password": "x"}).status_code, 302
+        )
+        other = Collection.objects.create(owner=self.user, title="Other folder")
+        add_files(
+            self.user, other.pk, [SimpleUploadedFile("other.txt", b"x")], ["other.txt"]
+        )
+        invalid = guest.post(
+            action, {"selection": "1", "assets": str(other.files.get().pk)}
+        )
+        self.assertNotEqual(invalid.status_code, 200)
+        link.refresh_from_db()
+        self.assertEqual(link.downloads, 0)
+        response = guest.post(action, payload)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response["Content-Disposition"], 'attachment; filename="brief.txt"'
+        )
+        self.assertEqual(b"".join(response.streaming_content), b"B/brief.txt")
+        self.assertNotEqual(guest.post(action, payload).status_code, 200)
+        self.assertNotEqual(guest.post(action).status_code, 200)
+        link.refresh_from_db()
+        self.assertEqual(link.downloads, 1)
+        self.assertEqual(link.events.filter(kind="download_started").count(), 1)
+
+    def test_selected_zip_and_whole_folder_keep_their_respective_paths(self):
+        paths = ["A/brief.txt", "B/brief.txt", "cover.txt"]
+        add_files(
+            self.user,
+            self.collection.pk,
+            [SimpleUploadedFile("file.txt", path.encode()) for path in paths],
+            paths,
+        )
+        link = ShareLink.objects.create(collection=self.collection, max_downloads=2)
+        action = f"/s/{capability('share', link.pk)}/download/"
+        ids = [str(a.pk) for a in self.collection.files.exclude(path="cover.txt")]
+        guest = Client()
+        for payload, expected in (
+            ({"selection": "1", "assets": ids}, paths[:2]),
+            ({}, paths),
+        ):
+            response = guest.post(action, payload)
+            self.assertEqual(response.status_code, 200)
+            with zipfile.ZipFile(
+                io.BytesIO(b"".join(response.streaming_content))
+            ) as archive:
+                self.assertEqual(archive.namelist(), expected)
+                for path in expected:
+                    self.assertEqual(archive.read(path), path.encode())
+        link.refresh_from_db()
+        self.assertEqual(link.downloads, 2)
 
     def test_resumable_upload_preserves_manifest_order_and_durable_offsets(self):
         paths = ["Z-root.txt", "Folder/B.txt", "Folder/Nested/A.txt"]

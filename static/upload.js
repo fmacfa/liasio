@@ -65,6 +65,7 @@
     fileInput.disabled = folderInput.disabled = clear.disabled = busy || selecting;
     list.querySelectorAll("button").forEach(button => { button.disabled = busy || selecting; });
   };
+  const fileNames = new Intl.Collator(document.documentElement.lang, {numeric: true, sensitivity: "base"});
   const render = () => {
     list.replaceChildren(); clear.hidden = !files.length;
     summary.textContent = interpolate(gettext("%(count)s fichier(s) · %(size)s"), {count: files.length, size: sizeLabel(files.reduce((n, item) => n + item.file.size, 0))}, true);
@@ -80,7 +81,12 @@
       branch.set(parts.at(-1), {item});
     }
     const draw = (tree, parent) => {
-      for (const [name, node] of tree) {
+      // Sort the display only. Manifest positions remain stable when an upload resumes.
+      const entries = [...tree].sort(([nameA, a], [nameB, b]) => {
+        if (Boolean(a.children) !== Boolean(b.children)) return a.children ? -1 : 1;
+        return fileNames.compare(nameA, nameB) || nameA.localeCompare(nameB);
+      });
+      for (const [name, node] of entries) {
         const row = document.createElement("li");
         if (node.children) {
           const folder = document.createElement("details"), heading = document.createElement("summary"), children = document.createElement("ul");

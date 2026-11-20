@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Collections and recipient pages list folders first, then files, alphabetically at each level. Recipients can download the original directly from any file row. A file or ZIP download uses one allowance.
+
+## Unreleased
+
 - Add explicit per-folder team access: Readers can browse and download; Collaborators can also edit the presentation, upload files, and manage links, batches, exports and recipient activity. Owners manage grants and retain file/folder deletion rights. Invitations and administrator status do not automatically reveal another account's folders. The same grants and API-key scopes apply to API calls, with owner storage quotas and actor audit attribution.
 - Add owner controls under **Members → Manage access** and inside each folder, plus illustrated French, English and German guides. Permission removal or downgrade cancels the member's pending uploads and blocks subsequent operations, including cached API creation responses. Existing recipient links remain valid until separately revoked.
 - Migration `0011` adds collection grants and a nullable upload initiator without changing existing ownership or sharing any existing folders. Back up first and restart application and worker processes together after migration.

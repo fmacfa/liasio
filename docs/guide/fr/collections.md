@@ -29,7 +29,7 @@ Une fois les fichiers prêts, choisissez **Créer un lien**. Vous pouvez créer 
 
 ## Arborescence des fichiers
 
-Les dossiers importés sont dépliables. Leur nom, le nombre de fichiers et leur taille sont affichés ; les fichiers individuels restent au niveau où ils ont été ajoutés. Le même chemin est conservé dans le ZIP et sur la page destinataire. Les dossiers vides ne sont pas stockés.
+Les dossiers importés sont dépliables. À chaque niveau, les dossiers apparaissent d’abord, puis les fichiers. Chaque groupe est trié par nom. Leur nom, le nombre de fichiers et leur taille sont affichés ; les fichiers individuels restent au niveau où ils ont été ajoutés. Le même chemin est conservé dans le ZIP et sur la page destinataire. Les dossiers vides ne sont pas stockés.
 
 ## Dossiers partagés avec l’équipe
 

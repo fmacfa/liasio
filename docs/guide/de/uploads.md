@@ -9,7 +9,7 @@
 3. Weitere Elemente ergänzen die bestehende Auswahl. Ein bereits ausgewählter Pfad wird nicht ersetzt. **×** entfernt eine Datei aus der Auswahl. **Auswahl leeren** beginnt neu, ohne gespeicherte Dateien zu löschen.
 4. Prüfen Sie Struktur, Größen und Gesamtumfang und wählen Sie **Dateien hochladen**. Der Browser kann den Zugriff auf den ausgewählten Ordner bestätigen lassen.
 
-Pfade bleiben in der eigenen Ansicht, auf der Empfängerseite und im ZIP erhalten. Versteckte Dateien wie `.DS_Store` und leere Ordner werden ausgelassen. Unterstützt Ihr Browser das Ablegen von Ordnern nicht, verwenden Sie **Ordner hinzufügen**.
+Pfade bleiben in der eigenen Ansicht, auf der Empfängerseite und im ZIP erhalten. Auf jeder Ebene erscheinen zuerst die Ordner, danach die Dateien. Beide Gruppen sind alphabetisch sortiert. Versteckte Dateien wie `.DS_Store` und leere Ordner werden ausgelassen. Unterstützt Ihr Browser das Ablegen von Ordnern nicht, verwenden Sie **Ordner hinzufügen**.
 
 Standardlimits: 1 GiB pro Datei, 5 GiB pro Sammlung und 100 Dateien, einschließlich Papierkorb und ausstehender Uploads. Die tatsächlichen Instanzlimits stehen auf der Seite. Unsichere relative Pfade, Datei-/Ordnerkollisionen und verbotene Dateiendungen werden abgelehnt. Pfade dürfen höchstens 20 Komponenten enthalten.
 

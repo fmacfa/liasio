@@ -4416,3 +4416,44 @@ msgid ""
 msgstr ""
 "Use a public HTTPS URL on port 443, without credentials, query parameters or"
 " fragments."
+
+#: templates/components/file_tree.html:17
+#, python-format
+msgid "Télécharger %(name)s"
+msgstr "Download %(name)s"
+
+#: templates/components/file_tree.html:18
+msgid "Télécharger"
+msgstr "Download"
+
+#: templates/share/page.html:47
+msgid "Télécharger la sélection"
+msgstr "Download selection"
+
+#: templates/share/page.html:47
+msgid ""
+"Une sélection consomme un téléchargement. Un seul fichier est envoyé "
+"directement ; plusieurs fichiers sont regroupés en ZIP."
+msgstr ""
+"A selection counts as one download. A single file is delivered directly; "
+"multiple files are combined in a ZIP."
+
+#: vault/storage.py:264
+msgid "Sélection de fichiers invalide."
+msgstr "Invalid file selection."
+
+#: vault/storage.py:268
+msgid "Sélectionnez au moins un fichier, sans doublon."
+msgstr "Select at least one file, without duplicates."
+
+#: vault/storage.py:272
+msgid "Un fichier sélectionné n’est plus disponible."
+msgstr "A selected file is no longer available."
+
+#: vault/storage.py:314
+msgid "Le fichier stocké est incomplet."
+msgstr "The stored file is incomplete."
+
+#: vault/storage.py:318
+msgid "La taille du fichier stocké a changé."
+msgstr "The stored file size has changed."
