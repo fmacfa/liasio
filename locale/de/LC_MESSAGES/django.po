@@ -5815,3 +5815,12 @@ msgstr "Eigentum übertragen. Bestehende Dateien und Links bleiben erhalten."
 
 #~ msgid "Révoquez les liens actifs avant de modifier les fichiers."
 #~ msgstr "Widerrufen Sie aktive Links, bevor Sie die Dateien ändern."
+
+#: templates/components/file_tree.html:17
+#, python-format
+msgid "Télécharger %(name)s"
+msgstr "%(name)s herunterladen"
+
+#: templates/components/file_tree.html:18
+msgid "Télécharger"
+msgstr "Herunterladen"

@@ -9,7 +9,7 @@
 3. Add more items whenever needed; they accumulate in the existing selection. An already selected path is kept without replacement. **×** removes one file from the selection; **Clear selection** starts over without deleting stored files.
 4. Review the directory tree, sizes and total, then choose **Upload files**. Your browser may ask you to confirm access to the selected folder.
 
-Paths are retained in the owner’s view, recipient page and ZIP. Folders are grouped in first-appearance order; later imports follow earlier ones. Hidden files (including `.DS_Store`) and empty folders are excluded. If your browser cannot drop folders, use **Add a folder**.
+Paths are retained in the owner’s view, recipient page and ZIP. At every level, folders appear first, followed by files. Each group is sorted by name. Hidden files (including `.DS_Store`) and empty folders are excluded. If your browser cannot drop folders, use **Add a folder**.
 
 Defaults: 1 GiB per file, 5 GiB per collection and 100 files, including trash and pending uploads. Your instance limits appear on the page. Unsafe relative paths, file/folder collisions and forbidden extensions are rejected. Paths allow at most 20 components.
 

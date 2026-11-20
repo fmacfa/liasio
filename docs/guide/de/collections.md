@@ -29,7 +29,7 @@ Sobald die Dateien bereit sind, wählen Sie **Link erstellen** oder **Mehrere Li
 
 ## Ordnerstruktur
 
-Hochgeladene Ordner lassen sich aufklappen und zeigen Dateien und Unterordner. Jeder Ordner zeigt Dateianzahl und Größe. Einzelne Dateien bleiben auf ihrer ursprünglichen Ebene. Die Reihenfolge der Ordner richtet sich nach ihrem ersten Auftreten; spätere Uploads folgen früheren. ZIP-Archiv und Empfängerseite behalten diese Pfade. Leere Ordner werden nicht gespeichert.
+Hochgeladene Ordner lassen sich aufklappen und zeigen Dateien und Unterordner. Jeder Ordner zeigt Dateianzahl und Größe. Einzelne Dateien bleiben auf ihrer ursprünglichen Ebene. Auf jeder Ebene erscheinen zuerst die Ordner, danach die Dateien. Beide Gruppen sind alphabetisch sortiert. ZIP-Archiv und Empfängerseite behalten diese Pfade. Leere Ordner werden nicht gespeichert.
 
 ## Sammlungen im Team teilen
 

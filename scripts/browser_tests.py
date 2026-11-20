@@ -6,10 +6,13 @@ from pathlib import Path
 from unittest.mock import patch
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import override_settings
 from playwright.sync_api import sync_playwright, expect
 
 from vault.models import Collection, Instance, ShareLink, User
+from vault.security import capability
+from vault.storage import add_files
 
 
 @override_settings(
@@ -114,14 +117,66 @@ class BrowserTests(StaticLiveServerTestCase):
         expect(page.locator("html")).to_have_attribute("lang", "de")
         page.locator("[name=password]").fill("x")
         page.locator("form[action$='/unlock/'] button").click()
-        expect(page.locator("[name=assets]")).to_have_count(1)
-        page.locator("[name=assets]").check()
+        expect(page.get_by_role("checkbox")).to_have_count(1)
+        page.get_by_role("checkbox").check()
         with page.expect_download() as download:
             page.locator("#selected-download button").click()
         self.assertEqual(download.value.suggested_filename, "brief.txt")
         self.assertEqual(Path(download.value.path()).read_bytes(), contents)
         visitor.close()
         self.assertEqual(self.errors, [])
+
+    def test_individual_download_with_other_checkbox_selected_without_javascript(self):
+        folder = Collection.objects.create(owner=self.user, title="Plans")
+        paths = ["z.txt", "Plans/plan 10.txt", "Plans/plan 2.txt", "à lire.txt"]
+        add_files(
+            self.user,
+            folder.pk,
+            [SimpleUploadedFile("document.txt", path.encode()) for path in paths],
+            paths,
+        )
+        self.page.goto(self.live_server_url + f"/collections/{folder.pk}/")
+        self.page.locator("[data-file-input]").set_input_files(
+            [
+                {"name": name, "mimeType": "text/plain", "buffer": b"preview"}
+                for name in ("Z.txt", "plan 10.txt", "État.txt", "Plan 2.txt")
+            ]
+        )
+        expect(self.page.locator(".selection-file > span")).to_have_text(
+            ["État.txt", "Plan 2.txt", "plan 10.txt", "Z.txt"]
+        )
+        link = ShareLink.objects.create(collection=folder, max_downloads=2)
+        with self.browser.new_context(
+            locale="fr-FR",
+            java_script_enabled=False,
+            viewport={"width": 360, "height": 780},
+        ) as guest:
+            page = guest.new_page()
+            page.goto(f"{self.live_server_url}/s/{capability('share', link.pk)}/")
+            expect(page.locator(".file-info strong")).to_have_text(
+                ["plan 2.txt", "plan 10.txt", "à lire.txt", "z.txt"]
+            )
+            page.get_by_role("checkbox", name="Sélectionner z.txt", exact=True).check()
+            button = page.get_by_role(
+                "button", name="Télécharger Plans/plan 2.txt", exact=True
+            )
+            button.scroll_into_view_if_needed()
+            expect(button).to_be_in_viewport()
+            self.assertLessEqual(
+                button.bounding_box()["x"] + button.bounding_box()["width"], 360
+            )
+            with page.expect_download() as single:
+                button.click()
+            self.assertEqual(single.value.suggested_filename, "plan 2.txt")
+            self.assertEqual(
+                Path(single.value.path()).read_bytes(), b"Plans/plan 2.txt"
+            )
+            with page.expect_download() as selection:
+                page.get_by_role("button", name="Télécharger la sélection").click()
+            self.assertEqual(selection.value.suggested_filename, "z.txt")
+            self.assertEqual(Path(selection.value.path()).read_bytes(), b"z.txt")
+        link.refresh_from_db()
+        self.assertEqual(link.downloads, 2)
 
     def test_mobile_forms_navigation_and_accessible_labels(self):
         self.page.set_viewport_size({"width": 390, "height": 844})

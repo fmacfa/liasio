@@ -28,7 +28,9 @@ The **Download files** button is visible directly below the collection title, be
 
 ![Recipient gallery](../../screenshots/user-guide/en/preview.png)
 
-The list shows expandable folders and subfolders in their order of addition. With previews enabled, expand **View file previews**: JPEG, PNG, WebP and GIF images (first frame), and PDFs (first page), can be viewed before downloading. The original must be at most 20 MiB; images are limited to 24 megapixels. Previews are smaller, metadata-free JPEGs. Other file types display their name, type and size. A missing preview never prevents an authorized original download.
+At every level, folders appear first, followed by files. Each group is sorted by name. To get one original, choose **Download** beside its name. To get several files together, tick their checkboxes and choose **Download selection**. Each action uses one download from the link’s allowance.
+
+With previews enabled, expand **View file previews**: JPEG, PNG, WebP and GIF images (first frame), and PDFs (first page), can be viewed before downloading. The original must be at most 20 MiB; images are limited to 24 megapixels. Previews are smaller, metadata-free JPEGs. Other file types display their name, type and size. A missing preview never prevents an authorized original download.
 
 Click a thumbnail to enlarge it. Use the previous/next controls or arrow keys; Escape closes the viewer. Previews require the same password and valid link as the share page. They do not consume a download, and visible previews can be copied. See the [technical preview model](../../PREVIEWS.md).
 
@@ -38,7 +40,7 @@ Click a thumbnail to enlarge it. Use the previous/next controls or arrow keys; E
 
 Use **My links** to search, filter active links, show/hide previews, inspect counts or **Revoke**. Confirm revocation to block future access. To change a password, expiry or download limit, create a replacement link and revoke the old one.
 
-Opening a page does not consume a single-use link. An authorized ZIP download does, including an interrupted transfer. A revoked, expired or exhausted link cannot start a new download; a transfer already in progress may finish. Revocation cannot remove copies already downloaded.
+Opening a page does not consume a single-use link. An authorized file or ZIP download does, including an interrupted transfer. A revoked, expired or exhausted link cannot start a new download; a transfer already in progress may finish. Revocation cannot remove copies already downloaded.
 
 ## Presets, versions and recipient verification
 

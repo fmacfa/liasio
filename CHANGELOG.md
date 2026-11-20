@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Collections and recipient pages list folders first, then files, alphabetically at each level. Recipients can download the original directly from any file row. A file or ZIP download uses one allowance.
+
 ## 0.5.0 — 2026-10-29
 
 ### Team and client workflows
