@@ -19,6 +19,7 @@ from vault.models import (
     FileRequest,
     GroupAccess,
     MailBatch,
+    ServiceState,
     ShareLink,
     SharingPreset,
     TeamGroup,
@@ -149,4 +150,37 @@ class GuideScreenshots(BrowserTests):
                     full_page=True,
                     animations="disabled",
                 )
+        self.assertFalse(self.errors)
+
+    @override_settings(APP_VERSION="0.5.0")
+    def test_updates(self):
+        now = timezone.now().isoformat()
+        ServiceState.objects.create(key="update_host", data={"seen": now})
+        ServiceState.objects.create(
+            key="update_check", data={"tag": "v0.5.1", "checked": now}
+        )
+        root = Path(__file__).resolve().parents[1] / "docs/screenshots/user-guide"
+        for language, name in (
+            ("en", "Liasio updates"),
+            ("fr", "Mises à jour de Liasio"),
+            ("de", "Liasio-Updates"),
+        ):
+            self.context.add_cookies(
+                [
+                    {
+                        "name": "django_language",
+                        "value": language,
+                        "url": self.live_server_url,
+                    }
+                ]
+            )
+            self.page.goto(self.live_server_url + "/links/")
+            self.page.get_by_role("link", name=name, exact=True).click()
+            expect(self.page.get_by_role("heading", name=name)).to_be_visible()
+            expect(self.page.locator('button[value="install"]')).to_be_visible()
+            self.page.screenshot(
+                path=str(root / language / "updates.png"),
+                full_page=True,
+                animations="disabled",
+            )
         self.assertFalse(self.errors)

@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% load i18n %}
+{% block breadcrumb %}<a href="{% url 'operations' %}">{% translate "Exploitation" %}</a> / {% translate "Mises à jour de Liasio" %}{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div><h1>{% translate "Mises à jour de Liasio" %}</h1><p>{% translate "Recherchez les versions stables publiées sur GitHub et choisissez quand les installer." %}</p></div>
+  <a class="button secondary" href="{% url 'links' %}">{% translate "Mes liens" %}</a>
+</div>
+<section class="panel spaced">
+  <h2>{% translate "Version installée" %} · {{ current }}</h2>
+  {% if info.tag %}<p>{% translate "Dernière version stable" %} · <a href="https://github.com/fmacfa/liasio/releases/tag/{{ info.tag }}">{{ info.tag }}</a></p>{% endif %}
+  {% if checked %}<p>{% translate "Dernière vérification réussie" %} · {{ checked|date:"SHORT_DATETIME_FORMAT" }}</p>{% endif %}
+  {% if info.error %}<p role="status">{% translate "GitHub est momentanément inaccessible. Réessayez dans une minute." %}</p>
+  {% elif info.tag and not newer %}<p>{% translate "Votre instance est à jour." %}</p>
+  {% elif newer %}<p>{% translate "Une nouvelle version est disponible." %}</p>{% endif %}
+  <form method="post" action="{% url 'update_action' %}">{% csrf_token %}
+    <button class="button secondary" name="action" value="check">{% translate "Vérifier sur GitHub" %}</button>
+  </form>
+</section>
+<section class="panel spaced">
+  <h2>{% translate "Installation" %}</h2>
+  {% if job.state == "queued" %}<p role="status">{% translate "Installation en attente. L’agent attend la fin des transferts en cours." %} {{ job.tag }}</p>
+  {% elif job.state == "installing" %}<p role="status">{% translate "Installation en cours. Le site peut être brièvement indisponible." %} {{ job.tag }}</p>
+  {% elif job.state == "failed" %}<p role="status">{% translate "L’installation a échoué. Consultez le journal du service liasio-updates sur le serveur avant de réessayer." %} {{ job.tag }}</p>
+  {% elif job.state == "installed" %}<p>{% translate "Dernière installation réussie" %} · {{ job.tag }}</p>
+  {% endif %}
+  {% if busy %}<a class="button secondary" href="{% url 'updates' %}">{% translate "Actualiser l’état" %}</a>{% endif %}
+  {% if not online and not busy %}<p>{% translate "L’agent de mise à jour du serveur est hors ligne. Le guide d’exploitation explique comment l’activer." %} <a href="{% url 'guide' 'operations' %}">{% translate "Exploitation" %}</a></p>{% endif %}
+  {% if can_install %}<p>{% translate "L’agent vérifie la signature et teste la restauration avant le redémarrage de Liasio." %}</p>
+  <form method="post" action="{% url 'update_action' %}">{% csrf_token %}
+    <input type="hidden" name="tag" value="{{ info.tag }}">
+    <button class="button" name="action" value="install">{% translate "Installer" %} {{ info.tag }}</button>
+  </form>{% endif %}
+</section>
+<section class="panel spaced">
+  <h2>{% translate "Mises à jour automatiques" %}</h2>
+  <p>{% translate "L’agent vérifie GitHub chaque jour à 03 h 00 UTC. Si vous activez l’installation automatique, il installe les correctifs de votre branche, par exemple de 0.5.1 à 0.5.2. Vous choisissez quand passer à la branche suivante." %}</p>
+  <form method="post" action="{% url 'update_action' %}">{% csrf_token %}
+    {% if auto %}<button class="button secondary" name="action" value="disable">{% translate "Désactiver l’installation automatique" %}</button>
+    {% elif online %}<button class="button secondary" name="action" value="enable">{% translate "Activer l’installation automatique" %}</button>{% endif %}
+  </form>
+</section>
+{% endblock %}

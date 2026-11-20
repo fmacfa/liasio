@@ -151,6 +151,10 @@ Before upgrading from 0.1, preserve your original keys and take a complete backu
 
 Version 0.5 includes the hardening changes made after 0.4, together with additive migrations through `0017`. Follow the [0.5 upgrade guide](docs/UPGRADING_0_5.md), preserve the original keys and restart every writer with the same image. Production previews still require Linux Landlock ABI 3+; disabling previews keeps original downloads available. Release assets include exact image digests, SBOM and workflow/tag/commit-bound attestations.
 
+## Updating an existing server
+
+Administrators can check GitHub from **My links → Liasio updates**. The optional host agent installs verified releases on request and supports scheduled patch updates. [Set up managed updates](docs/MANAGED_UPDATES.md).
+
 ## Try it locally
 
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/), then run:

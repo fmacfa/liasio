@@ -4,6 +4,14 @@
 
 La page **Exploitation** est réservée aux administrateurs. Elle réunit le nombre de fichiers conservés, l’espace disque, la corbeille, la vérification des restaurations, les contrôles de base/antivirus et les alertes.
 
+## Mettre Liasio à jour
+
+![Vérification et installation d’une mise à jour de Liasio](../../screenshots/user-guide/fr/updates.png)
+
+Depuis **Mes liens** ou **Exploitation**, ouvrez **Mises à jour de Liasio** avec un compte administrateur. Cliquez sur **Vérifier sur GitHub**, lisez les notes de la version stable, puis cliquez sur **Installer**. Actualisez la page pour voir le résultat. L’agent vérifie l’image et teste la restauration avant la courte interruption.
+
+Le serveur vérifie les versions chaque jour à 03 h 00 UTC. L’installation reste manuelle jusqu’à ce que vous choisissiez **Activer l’installation automatique**. Les correctifs de la branche installée sont alors appliqués automatiquement. Vous gardez la main sur les changements de branche. Consultez le [guide d’installation de l’agent](../../MANAGED_UPDATES.md).
+
 ## Régler le quota d’un membre
 
 Dans **Quotas des membres**, indiquez une taille en Gio puis cliquez sur **Mettre à jour**. Un Gio représente 1 073 741 824 octets. Le quota ne peut pas descendre sous les fichiers, la corbeille et les envois réservés. L’augmenter ne crée pas d’espace disque : vérifiez d’abord la capacité disponible.

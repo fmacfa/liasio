@@ -5824,3 +5824,108 @@ msgstr "%(name)s herunterladen"
 #: templates/components/file_tree.html:18
 msgid "Télécharger"
 msgstr "Herunterladen"
+
+msgid "Mises à jour de Liasio"
+msgstr "Liasio-Updates"
+
+msgid ""
+"Recherchez les versions stables publiées sur GitHub et choisissez quand les "
+"installer."
+msgstr ""
+"Prüfen Sie stabile Releases auf GitHub und wählen Sie den "
+"Installationszeitpunkt."
+
+msgid "Version installée"
+msgstr "Installierte Version"
+
+msgid "Dernière version stable"
+msgstr "Neueste stabile Version"
+
+msgid "Dernière vérification réussie"
+msgstr "Letzte erfolgreiche Prüfung"
+
+msgid "GitHub est momentanément inaccessible. Réessayez dans une minute."
+msgstr ""
+"GitHub ist vorübergehend nicht erreichbar. Versuchen Sie es in einer Minute "
+"erneut."
+
+msgid "Votre instance est à jour."
+msgstr "Ihre Instanz ist auf dem neuesten Stand."
+
+msgid "Une nouvelle version est disponible."
+msgstr "Ein Update ist verfügbar."
+
+msgid "Vérifier sur GitHub"
+msgstr "Auf GitHub prüfen"
+
+msgid "Installation"
+msgstr "Installation"
+
+msgid ""
+"Installation en attente. L’agent attend la fin des transferts en cours."
+msgstr ""
+"Installation vorgemerkt. Der Agent wartet auf das Ende laufender "
+"Übertragungen."
+
+msgid "Installation en cours. Le site peut être brièvement indisponible."
+msgstr "Installation läuft. Die Seite kann kurzzeitig nicht erreichbar sein."
+
+msgid ""
+"L’installation a échoué. Consultez le journal du service liasio-updates sur "
+"le serveur avant de réessayer."
+msgstr ""
+"Die Installation ist fehlgeschlagen. Prüfen Sie vor einem erneuten Versuch "
+"das Protokoll des Dienstes liasio-updates auf dem Server."
+
+msgid "Dernière installation réussie"
+msgstr "Letzte erfolgreiche Installation"
+
+msgid "Actualiser l’état"
+msgstr "Status aktualisieren"
+
+msgid ""
+"L’agent de mise à jour du serveur est hors ligne. Le guide d’exploitation "
+"explique comment l’activer."
+msgstr ""
+"Der Update-Agent des Servers ist offline. Die Betriebsanleitung beschreibt, "
+"wie Sie ihn aktivieren."
+
+msgid ""
+"L’agent vérifie la signature et teste la restauration avant le redémarrage "
+"de Liasio."
+msgstr ""
+"Der Agent prüft die Signatur und testet die Wiederherstellung vor dem "
+"Neustart von Liasio."
+
+msgid "Installer"
+msgstr "Installieren"
+
+msgid "Mises à jour automatiques"
+msgstr "Automatische Updates"
+
+msgid ""
+"L’agent vérifie GitHub chaque jour à 03 h 00 UTC. Si vous activez "
+"l’installation automatique, il installe les correctifs de votre branche, par"
+" exemple de 0.5.1 à 0.5.2. Vous choisissez quand passer à la branche "
+"suivante."
+msgstr ""
+"Der Agent prüft GitHub täglich um 03:00 Uhr UTC. Bei aktivierter "
+"automatischer Installation spielt er Korrekturversionen Ihres Zweigs ein, "
+"etwa von 0.5.1 auf 0.5.2. Sie wählen den Zeitpunkt für den Wechsel zum "
+"nächsten Versionszweig."
+
+msgid "Désactiver l’installation automatique"
+msgstr "Automatische Installation deaktivieren"
+
+msgid "Activer l’installation automatique"
+msgstr "Automatische Installation aktivieren"
+
+msgid ""
+"Vérifiez la version disponible et l’état de l’agent avant de relancer "
+"l’installation."
+msgstr ""
+"Prüfen Sie die verfügbare Version und den Status des Agenten, bevor Sie die "
+"Installation erneut anfordern."
+
+msgid "Mise à jour en cours. Réessayez dans un instant."
+msgstr "Update läuft. Bitte versuchen Sie es gleich noch einmal."

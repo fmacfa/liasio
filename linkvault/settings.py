@@ -49,6 +49,7 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
+    "vault.updates.MaintenanceGate",
     "vault.middleware.RequestBoundaryMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -231,7 +232,7 @@ LOGGING = {
 }
 
 # Reliability and account protection (v0.2).
-APP_VERSION = "0.5.0"
+APP_VERSION = "0.5.1"
 MFA_ENCRYPTION_KEY = os.environ.get("MFA_ENCRYPTION_KEY", "")
 OIDC_ISSUER = os.environ.get("OIDC_ISSUER", "").strip()
 OIDC_CLIENT_ID = os.environ.get("OIDC_CLIENT_ID", "")

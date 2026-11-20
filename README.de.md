@@ -151,6 +151,10 @@ Bewahren Sie vor einem Update von 0.1 die ursprünglichen Schlüssel auf und ers
 
 Version 0.5 enthält die Härtungen nach 0.4 und additive Migrationen bis `0017`. Befolgen Sie die [Updateanleitung für 0.5](docs/UPGRADING_0_5.md), behalten Sie die Schlüssel und starten Sie alle schreibenden Dienste mit demselben Image neu. Produktive Vorschauen benötigen weiterhin Linux Landlock ABI 3+; ohne Vorschauen bleiben Originaldownloads verfügbar. Releaseartefakte enthalten genaue Imagedigests, SBOM und an Workflow, Tag und Commit gebundene Attestierungen.
 
+## Einen bestehenden Server aktualisieren
+
+Administratoren können unter **Meine Links → Liasio-Updates** nach neuen Versionen suchen. Der optionale Server-Agent installiert geprüfte Releases auf Wunsch und unterstützt automatische nächtliche Patch-Updates. [Anleitung für Updates](docs/guide/de/operations.md).
+
 ## Lokal ausprobieren
 
 Installieren Sie [uv](https://docs.astral.sh/uv/getting-started/installation/) und führen Sie aus:

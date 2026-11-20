@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.5.1 — 2026-11-20
+
+- Administrators can check official GitHub releases from My links or Operations, queue a verified installation and opt in to nightly patch updates on a managed Docker host.
 
 - Collections and recipient pages list folders first, then files, alphabetically at each level. Recipients can download the original directly from any file row. A file or ZIP download uses one allowance.
 

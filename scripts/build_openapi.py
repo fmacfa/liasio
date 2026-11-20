@@ -466,7 +466,7 @@ def build():
         "openapi": "3.1.0",
         "info": {
             "title": "Liasio API",
-            "version": "0.5.0",
+            "version": "0.5.1",
             "description": "Self-hosted file sharing. API keys are sent only as Authorization: Bearer. Browser cookies are never API credentials. A download event means authorization, not confirmed receipt.",
         },
         "servers": [{"url": "/api/v1"}],

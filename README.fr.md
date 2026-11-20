@@ -145,6 +145,10 @@ Le script crée `.env` avec des permissions `0600` et refuse de l’écraser. Le
 
 Caddy obtient et renouvelle le certificat TLS. Si vous utilisez un autre proxy, consultez le [guide d’exploitation](docs/OPERATIONS.fr.md) avant de modifier la topologie.
 
+## Mettre à jour un serveur existant
+
+Les administrateurs peuvent consulter GitHub depuis **Mes liens → Mises à jour de Liasio**. L’agent du serveur installe les versions vérifiées à la demande et peut appliquer les correctifs chaque nuit. [Guide de mise à jour](docs/guide/fr/operations.md).
+
 ## Essayer en local
 
 Installer [uv](https://docs.astral.sh/uv/getting-started/installation/), puis :
