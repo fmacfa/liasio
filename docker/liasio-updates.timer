@@ -1,0 +1,10 @@
+[Unit]
+Description=Process Liasio update requests and the daily release check
+
+[Timer]
+OnBootSec=45s
+OnUnitInactiveSec=60s
+AccuracySec=5s
+
+[Install]
+WantedBy=timers.target

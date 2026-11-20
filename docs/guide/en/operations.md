@@ -4,6 +4,12 @@
 
 The **Operations** page is administrator-only. It summarizes retained file count, free disk space, trash, backup-restore verification, database/antivirus checks and operational alerts.
 
+## Updating Liasio
+
+From **My links** or **Operations**, open **Liasio updates** as an administrator. Click **Check GitHub**, read the stable release notes, then click **Install**. Refresh the page to see the result. The host agent verifies the image and tests a restore before the short interruption.
+
+The server checks daily at 03:00 UTC. Installation is manual until you choose **Enable automatic installation**. Only patch releases in the current branch install automatically. A new minor or major release needs your approval. See the [server agent installation guide](../../MANAGED_UPDATES.md).
+
 ## Set a member’s quota
 
 Find the member under **Member quotas**, enter a size in GiB and choose **Update**. One GiB is 1,073,741,824 bytes. The quota cannot go below stored files, trash and reserved uploads. An increase does not create physical disk space; check available capacity first.

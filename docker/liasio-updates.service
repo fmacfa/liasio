@@ -1,0 +1,11 @@
+[Unit]
+Description=Liasio release checks and approved updates
+After=docker.service network-online.target
+Requires=docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /usr/local/lib/liasio-updates/managed_update.py tick
+UMask=0077
+TimeoutStartSec=90min

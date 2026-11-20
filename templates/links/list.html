@@ -11,6 +11,7 @@
       <p>{% translate "Chaque destinataire, chaque condition, chaque accès : tout est ici." %}</p>
     </div>
     <div class="actions">
+      {% if user.is_staff %}<a class="button secondary" href="{% url 'updates' %}">{% translate "Mises à jour de Liasio" %}</a>{% endif %}
       <a class="button secondary" href="{% url 'link_batches' %}">{% translate "Créer plusieurs liens" %}</a>
       <a class="button" href="{% url 'collections' %}">{% include "components/icon.html" with name="plus" %}{% translate "Créer un lien" %}</a>
     </div>
