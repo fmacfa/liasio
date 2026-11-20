@@ -28,7 +28,9 @@ Freigabe-URLs enthalten nach `/s/` einen nicht vorhersagbaren Code mit 22 Zeiche
 
 Die Seite erkennt die bevorzugte unterstützte **Browsersprache** automatisch, einschließlich `de-DE`, `de-AT` und `de-CH`. **FR / EN / DE** erlaubt eine manuelle, gespeicherte Auswahl. Das gilt auch für Passwortabfrage und abgelaufene Links. Mehr dazu unter [Sprache](getting-started.md). Ihre selbst verfassten Beschreibungen und Dateinamen werden nicht übersetzt.
 
-Die Dateiliste zeigt aufklappbare Ordner in ihrer ursprünglichen Reihenfolge. Bei aktivierten Vorschauen öffnen Sie **Dateivorschauen anzeigen**. JPEG, PNG, WebP und GIF (erstes Bild) sowie PDF (erste Seite) lassen sich vor dem Download betrachten. Originale dürfen höchstens 20 MiB groß sein; Bilder sind auf 24 Megapixel begrenzt. Vorschauen sind verkleinerte JPEGs ohne Metadaten. Andere Dateitypen zeigen Name, Typ und Größe. Fehlende Vorschauen verhindern keinen erlaubten Download.
+Auf jeder Ebene erscheinen zuerst die Ordner, danach die Dateien. Beide Gruppen sind alphabetisch sortiert. Für eine einzelne Originaldatei klicken Sie neben ihrem Namen auf **Herunterladen**. Für mehrere Dateien markieren Sie die Kontrollkästchen und wählen **Auswahl herunterladen**. Jeder Vorgang zählt als ein Download des Links.
+
+Bei aktivierten Vorschauen öffnen Sie **Dateivorschauen anzeigen**. JPEG, PNG, WebP und GIF (erstes Bild) sowie PDF (erste Seite) lassen sich vor dem Download betrachten. Originale dürfen höchstens 20 MiB groß sein; Bilder sind auf 24 Megapixel begrenzt. Vorschauen sind verkleinerte JPEGs ohne Metadaten. Andere Dateitypen zeigen Name, Typ und Größe. Fehlende Vorschauen verhindern keinen erlaubten Download.
 
 Klicken Sie zum Vergrößern auf eine Vorschau. Navigieren Sie mit den Buttons oder Pfeiltasten; Escape schließt die Ansicht. Vorschauen benötigen denselben gültigen Link und gegebenenfalls dasselbe Passwort. Sie verbrauchen keinen Download und können kopiert werden. Die [technische Vorschau-Dokumentation (Englisch)](../../PREVIEWS.md) beschreibt den isolierten Renderer. Ist dieser auf dem Server deaktiviert, bleiben die Originaldownloads verfügbar.
 
@@ -36,7 +38,7 @@ Klicken Sie zum Vergrößern auf eine Vorschau. Navigieren Sie mit den Buttons o
 
 Unter **Meine Links** können Sie suchen, nach aktiven Links filtern, Vorschauen ein- oder ausschalten, Zähler prüfen und Links **widerrufen**. Bestätigen Sie den Widerruf, um zukünftige Zugriffe zu sperren. Für ein anderes Passwort, Ablaufdatum oder Download-Limit erstellen Sie einen Ersatzlink und widerrufen den alten.
 
-Ein Seitenaufruf verbraucht keinen einmaligen Link. Ein autorisierter ZIP-Download verbraucht ihn, auch wenn die Übertragung abbricht. Widerrufene, abgelaufene oder aufgebrauchte Links erlauben keinen neuen Download; eine laufende Übertragung kann noch enden. Bereits heruntergeladene Kopien lassen sich durch Widerruf nicht zurückholen.
+Ein Seitenaufruf verbraucht keinen einmaligen Link. Ein autorisierter Download einer Datei oder eines ZIP-Archivs verbraucht ihn, auch wenn die Übertragung abbricht. Widerrufene, abgelaufene oder aufgebrauchte Links erlauben keinen neuen Download; eine laufende Übertragung kann noch enden. Bereits heruntergeladene Kopien lassen sich durch Widerruf nicht zurückholen.
 
 ## Vorlagen, Versionen und Empfängerprüfung
 

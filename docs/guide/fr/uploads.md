@@ -9,7 +9,7 @@
 3. Ajoutez d’autres éléments autant de fois que nécessaire : ils s’ajoutent à la sélection précédente. Un chemin déjà sélectionné est conservé sans être remplacé. Le bouton **×** retire un fichier de la sélection ; **Vider la sélection** recommence la préparation sans supprimer les fichiers déjà enregistrés.
 4. Vérifiez l’arborescence, les tailles et le total, puis cliquez sur **Importer les fichiers**. Le navigateur peut demander de confirmer l’accès au dossier choisi.
 
-Les fichiers restent dans leurs sous-dossiers, dans la page du propriétaire, chez le destinataire et dans le ZIP. Les dossiers sont regroupés dans leur ordre de première apparition ; les nouveaux envois s’ajoutent après les précédents. Les fichiers cachés (notamment `.DS_Store`) et les dossiers vides ne sont pas importés. Si le navigateur ne permet pas le dépôt de dossiers, utilisez **Ajouter un dossier**.
+Les fichiers restent dans leurs sous-dossiers, dans la page du propriétaire, chez le destinataire et dans le ZIP. À chaque niveau, les dossiers apparaissent d’abord, puis les fichiers. Chaque groupe est trié par nom. Les fichiers cachés (notamment `.DS_Store`) et les dossiers vides ne sont pas importés. Si le navigateur ne permet pas le dépôt de dossiers, utilisez **Ajouter un dossier**.
 
 Par défaut : 1 Gio par fichier, 5 Gio par collection et 100 fichiers maximum, y compris la corbeille et les envois en attente. Les limites de votre instance sont affichées sur la page. Les chemins relatifs dangereux, les collisions entre fichiers et dossiers et les extensions interdites sont refusés. La profondeur maximale est de 20 composants de chemin.
 

@@ -5645,3 +5645,12 @@ msgstr "Ownership transferred. Existing files and links are retained."
 
 #~ msgid "Révoquez les liens actifs avant de modifier les fichiers."
 #~ msgstr "Revoke active links before changing the files."
+
+#: templates/components/file_tree.html:17
+#, python-format
+msgid "Télécharger %(name)s"
+msgstr "Download %(name)s"
+
+#: templates/components/file_tree.html:18
+msgid "Télécharger"
+msgstr "Download"

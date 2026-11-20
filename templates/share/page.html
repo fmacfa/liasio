@@ -40,7 +40,10 @@
         <h2>{% translate "Votre dossier" %}</h2>
         <span>{% blocktranslate count count=share_files|length %}{{ count }} fichier{% plural %}{{ count }} fichiers{% endblocktranslate %} · {{ share_size|filesizeformat }}</span>
       </div>
-      {% include "components/file_tree.html" with nodes=file_tree selectable=True selection_form="selected-download" %}
+      <form id="single-download" method="post" action="{% url 'download' token %}" hidden>
+        {% csrf_token %}<input type="hidden" name="selection" value="1">
+      </form>
+      {% include "components/file_tree.html" with nodes=file_tree selectable=True selection_form="selected-download" single_download_form="single-download" %}
       <form id="selected-download" method="post" action="{% url 'download' token %}">{% csrf_token %}<input type="hidden" name="selection" value="1"><button class="button secondary">{% translate "Télécharger la sélection" %}</button><p class="footnote">{% translate "Une sélection consomme un téléchargement. Un seul fichier est envoyé directement ; plusieurs fichiers sont regroupés en ZIP." %}</p></form>
       {% if link.allow_previews %}
       <details class="gallery-details"><summary>{% translate "Voir les aperçus des fichiers" %}</summary>

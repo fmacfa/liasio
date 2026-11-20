@@ -11,6 +11,13 @@
             <small>{% if node.file.scanned %}{% translate "Analysé par l’antivirus" %}{% else %}{% translate "Non analysé · développement" %}{% endif %}</small>
           </div>
           <span class="file-size">{{ node.file.size|filesizeformat }}</span>
+          {% if single_download_form %}
+            <button type="submit" class="button secondary file-download" form="{{ single_download_form }}"
+                    name="assets" value="{{ node.file.pk }}"
+                    aria-label="{% blocktranslate with name=node.file.path %}Télécharger {{ name }}{% endblocktranslate %}">
+              {% include "components/icon.html" with name="download" %}{% translate "Télécharger" %}
+            </button>
+          {% endif %}
         </div>
       {% else %}
         <details class="file-folder" open>

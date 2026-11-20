@@ -2891,6 +2891,11 @@ summary { cursor: pointer; font-weight: 600; padding: 12px 0; }
 .file-folder > summary small { color: var(--muted); font-size: 11px; }
 .file-tree .file-row { gap: 12px; }
 .file-tree .file-info strong { overflow-wrap: anywhere; }
+.file-download { padding: 7px 11px; min-height: 36px; }
+@media (max-width: 600px) {
+  .share-files .file-info { flex-basis: 7rem; }
+  .file-download { margin-inline-start: auto; min-height: 44px; }
+}
 .selected-files { max-height: 340px; overflow: auto; margin: 16px 0; }
 .selected-files .selection-file { display: flex; gap: 10px; align-items: center; padding: 7px 0; }
 .selection-file > span { flex: 1; overflow-wrap: anywhere; min-width: 0; }
