@@ -453,8 +453,17 @@ class Host:
         release = channel.latest_release()
         if tag != release["tag_name"]:
             raise ValueError("The published release has changed. Check again.")
-        if shutil.disk_usage(self.root).free < 5 * 1024**3:
-            raise ValueError("At least 5 GiB of available space is required.")
+        stored, db_size = map(
+            int,
+            self.db(
+                "SELECT coalesce(sum(size),0),pg_database_size(current_database()) FROM vault_asset",
+                "linkvault",
+            ).split("|"),
+        )
+        if shutil.disk_usage(self.root).free < 5 * 1024**3 + 2 * stored + 3 * db_size:
+            raise ValueError(
+                "Insufficient free space for the backup, temporary restore and database copies."
+            )
         if (
             self.app(
                 "shell",
@@ -479,6 +488,19 @@ class Host:
             ].get(service, {}).get("image"):
                 raise ValueError(
                     "Infrastructure image change requires the operator upgrade guide."
+                )
+        for config in (old_cfg, new_cfg):
+            database = config["services"]["app"]["environment"]
+            if any(
+                database.get(key) != value
+                for key, value in (
+                    ("POSTGRES_HOST", "db"),
+                    ("POSTGRES_DB", "linkvault"),
+                    ("POSTGRES_USER", "linkvault"),
+                )
+            ):
+                raise ValueError(
+                    "Managed updates require the project's dedicated PostgreSQL service."
                 )
         svc = old_cfg["services"]["app"]
         if svc.get("environment", {}).get("STORAGE_BACKEND", "local") != "local":
@@ -614,6 +636,8 @@ class Host:
             with exclusive(self.cfg / "backup.lock"):
                 self.recover(json.loads(self.journal.read_text()))
                 receipt.unlink(missing_ok=True)
+        if "app" not in self.dc("ps", "--status", "running", "--services").split():
+            return  # The existing backup service may have paused the application.
         job = (
             json.loads(receipt.read_text())
             if receipt.exists()

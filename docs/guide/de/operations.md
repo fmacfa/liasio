@@ -6,6 +6,8 @@
 
 ## Liasio aktualisieren
 
+![Ein Liasio-Update prüfen und installieren](../../screenshots/user-guide/de/updates.png)
+
 Öffnen Sie als Administrator unter **Meine Links** oder **Betrieb** die Seite **Liasio-Updates**. Klicken Sie auf **Auf GitHub prüfen**, lesen Sie die Versionshinweise und wählen Sie **Installieren**. Laden Sie die Seite erneut, um das Ergebnis zu sehen. Der Agent prüft das Abbild und testet die Wiederherstellung vor der kurzen Unterbrechung.
 
 Der Server prüft täglich um 03:00 Uhr UTC, ob Updates vorliegen. Über **Automatische Installation aktivieren** lassen sich Korrekturversionen des installierten Versionszweigs automatisch einspielen. Für den Wechsel zu einer neuen Neben- oder Hauptversion ist Ihre Freigabe erforderlich. Siehe [Installationsanleitung für den Server-Agenten](../../MANAGED_UPDATES.md).

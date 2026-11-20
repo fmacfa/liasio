@@ -6,6 +6,8 @@ The **Operations** page is administrator-only. It summarizes retained file count
 
 ## Updating Liasio
 
+![Checking and installing a verified Liasio update](../../screenshots/user-guide/en/updates.png)
+
 From **My links** or **Operations**, open **Liasio updates** as an administrator. Click **Check GitHub**, read the stable release notes, then click **Install**. Refresh the page to see the result. The host agent verifies the image and tests a restore before the short interruption.
 
 The server checks daily at 03:00 UTC. Installation is manual until you choose **Enable automatic installation**. Only patch releases in the current branch install automatically. A new minor or major release needs your approval. See the [server agent installation guide](../../MANAGED_UPDATES.md).
